@@ -1,0 +1,661 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Architecture Decisions — Marlex Programme</title>
+<style>
+:root{
+  --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f;
+  --spine:#922B21; --good:#196F3D; --draft:#8a94a0;
+  --maxw:820px; --nav:290px;
+  --p-atsrb:#922B21; --p-share:#7D3C98; --p-axstd:#AF601A; --p-axerp:#B9770E;
+  --p-mule:#196F3D; --p-portal:#1F618D; --p-exp:#76448A; --p-mkt:#C0287B; --p-evol:#4a5b6b;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+    --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f;
+    --good:#5fbf87; --draft:#6b7681; }
+}
+:root[data-theme="light"]{ --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f; --spine:#922B21; --good:#196F3D; --draft:#8a94a0; }
+:root[data-theme="dark"]{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+  --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f; --good:#5fbf87; --draft:#6b7681; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* layout */
+.layout{display:flex;min-height:100vh}
+nav.side{width:var(--nav);flex:0 0 var(--nav);background:var(--surface);border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 0 40px}
+nav.side .brand{padding:0 22px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}
+nav.side .brand .t{font-weight:700;font-size:15px;color:var(--brand);letter-spacing:.01em}
+nav.side .brand .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+nav.side a.nl{display:flex;align-items:center;gap:9px;padding:8px 22px;color:var(--ink-soft);font-size:14.5px;border-left:3px solid transparent}
+nav.side a.nl:hover{background:var(--surface-2);text-decoration:none;color:var(--ink)}
+nav.side a.nl.active{color:var(--brand);border-left-color:var(--brand);background:var(--brand-soft);font-weight:600}
+nav.side a.nl .ic{width:16px;text-align:center;opacity:.8;font-size:13px}
+nav.side .grp{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--draft);padding:16px 22px 6px;font-weight:700}
+nav.side a.nl.proj .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+
+main{flex:1;min-width:0;padding:40px 48px 120px;display:flex;justify-content:center}
+.col{width:100%;max-width:var(--maxw)}
+
+/* header controls */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.crumb{font-size:13px;color:var(--ink-soft)}
+.themebtn{background:var(--surface);border:1px solid var(--line);color:var(--ink-soft);border-radius:20px;
+  padding:5px 13px;font-size:12.5px;cursor:pointer}
+.themebtn:hover{border-color:var(--brand);color:var(--brand)}
+
+h1{font-size:31px;line-height:1.2;margin:.15em 0 .1em;letter-spacing:-.01em}
+h1 .kicker{display:block;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px}
+.lede{font-size:19px;line-height:1.5;color:var(--ink-soft);margin:.4em 0 1.4em;font-weight:400}
+h2{font-size:22px;margin:1.9em 0 .5em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
+h3{font-size:17.5px;margin:1.6em 0 .3em}
+p{margin:.7em 0}
+.stamp{font-size:12.5px;color:var(--draft);margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line)}
+.source-note{font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--line);
+  padding:10px 14px;border-radius:0 6px 6px 0;margin:1.2em 0}
+
+/* inline id chips */
+.id{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.82em;background:var(--surface-2);
+  color:var(--ink-soft);padding:.06em .38em;border-radius:4px;white-space:nowrap;border:1px solid var(--line)}
+
+/* stat row */
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:1.6em 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;min-width:110px;flex:1}
+.stat .n{font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+.stat .l{font-size:12.5px;color:var(--ink-soft);margin-top:5px}
+
+/* project cards on index */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;margin:1.4em 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  border-top:4px solid var(--pc,var(--brand));display:block;color:inherit;transition:transform .12s,box-shadow .12s}
+.card:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,71,97,.10);color:inherit}
+.card .k{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--pc,var(--brand));font-weight:700;letter-spacing:.03em}
+.card .t{font-size:16px;font-weight:600;margin:5px 0 8px}
+.card .d{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+.card .m{font-size:12px;color:var(--draft);margin-top:11px;display:flex;gap:14px}
+
+/* critical chain */
+.chain{list-style:none;padding:0;margin:1.4em 0;border-left:2px solid var(--spine)}
+.chain li{position:relative;padding:0 0 16px 26px}
+.chain li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;
+  background:var(--spine);border:2px solid var(--surface)}
+.chain .step{font-weight:700;color:var(--spine);font-size:14px}
+.chain .chain-proj{font-size:11px;color:var(--ink-soft);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:1px 8px;margin-left:4px;white-space:nowrap}
+.chain .what{color:var(--ink-soft);font-size:14.5px}
+
+/* epic list */
+.epic{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;
+  border-left:4px solid var(--pc,var(--brand))}
+.epic .eh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.epic .eid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:700;color:var(--pc,var(--brand))}
+.epic .en{font-size:16.5px;font-weight:600}
+.epic .cnt{font-size:12px;color:var(--draft);white-space:nowrap}
+.epic p{font-size:14.5px;color:var(--ink-soft);margin:.5em 0 0}
+details.delivs{margin-top:10px}
+details.delivs>summary{cursor:pointer;font-size:13px;color:var(--brand);list-style:none;user-select:none}
+details.delivs>summary::-webkit-details-marker{display:none}
+details.delivs>summary::before{content:"▸ ";font-size:11px}
+details.delivs[open]>summary::before{content:"▾ "}
+details.delivs ul{margin:10px 0 4px;padding-left:4px;list-style:none}
+details.delivs li{font-size:13.5px;color:var(--ink-soft);padding:6px 0 6px 0;border-top:1px dashed var(--line)}
+details.delivs li .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--pc,var(--brand));font-weight:600}
+details.delivs li .dn{color:var(--ink);font-weight:600}
+.wtag{font-size:10.5px;padding:1px 6px;border-radius:9px;font-weight:700;margin-left:6px;vertical-align:middle}
+.wtag.A{background:#D6EAF8;color:#1F618D} .wtag.B{background:#E8DAEF;color:#7D3C98} .wtag.C{background:#D5F5E3;color:#196F3D}
+@media (prefers-color-scheme:dark){.wtag.A{background:#17303c;color:#7ec8e8}.wtag.B{background:#2a1f36;color:#c39be0}.wtag.C{background:#12321f;color:#7fdca8}}
+
+/* decision cards */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:1.2em 0}
+.fbtn{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer;color:var(--ink-soft)}
+.fbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.dec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:18px 0;scroll-margin-top:20px}
+.dec .dh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:2px}
+.dec .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--brand)}
+.dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
+.badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
+.badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
+.dec p{font-size:15px;margin:.6em 0}
+.dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
+.qa{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.qa .chip{font-size:11.5px;background:var(--brand-soft);color:var(--brand);padding:2px 9px;border-radius:5px}
+.openbox{background:var(--surface-2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
+.openbox b{color:var(--accent)}
+
+/* methodology two-board flow diagram */
+.flow-diagram{margin:1.6em 0 2em}
+.flow-diagram svg{width:100%;height:auto;display:block}
+.flow-diagram .fd-board{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.flow-diagram .fd-analysis{stroke:var(--p-share)}
+.flow-diagram .fd-build{stroke:var(--good)}
+.flow-diagram .fd-eyebrow{fill:var(--ink-soft);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.flow-diagram .fd-boardname{fill:var(--ink);font-size:19px;font-weight:700}
+.flow-diagram .fd-stage{fill:var(--surface-2);stroke:var(--p-share);stroke-width:1}
+.flow-diagram .fd-stage2{fill:var(--surface-2);stroke:var(--good);stroke-width:1}
+.flow-diagram .fd-stagetxt,.flow-diagram .fd-stagetxt2{fill:var(--ink);font-size:12.5px;text-anchor:middle;dominant-baseline:middle}
+.flow-diagram .fd-mini{stroke:var(--p-share);stroke-width:1.5}
+.flow-diagram .fd-arrow{stroke:var(--brand);stroke-width:2.5}
+.flow-diagram .fd-handoff{fill:var(--brand);font-size:13px;font-weight:700;text-anchor:middle}
+.flow-diagram .fd-verdict-h{fill:var(--ink-soft);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.flow-diagram .fd-verdict{fill:var(--ink);font-size:13.5px;font-weight:600}
+.flow-diagram .fd-cap{font-size:13.5px;color:var(--ink-soft);margin:.6em 2px 0}
+
+/* diagram viewer */
+.diagram-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:1.4em 0}
+.diagram-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);font-size:13px;color:var(--ink-soft)}
+.diagram-bar button{background:var(--surface);border:1px solid var(--line);border-radius:6px;width:30px;height:28px;cursor:pointer;color:var(--ink);font-size:15px}
+.diagram-bar button:hover{border-color:var(--brand);color:var(--brand)}
+.diagram-bar .hint{margin-left:auto;font-size:12px;color:var(--draft)}
+.diagram-view{overflow:hidden;position:relative;height:560px;cursor:grab;background:var(--surface-2)}
+.diagram-view.grabbing{cursor:grabbing}
+.diagram-view img{position:absolute;top:0;left:0;transform-origin:0 0;user-select:none;-webkit-user-drag:none;max-width:none}
+/* Inline-SVG diagram. The mermaid diagram is a fixed light-palette graphic (dark
+   text on light nodes); render it on a constant light backdrop in BOTH themes so
+   it always reads, rather than trying to recolour every node for dark mode. */
+.diagram-view .dv-svgwrap{position:absolute;top:0;left:0;transform-origin:0 0;background:#FFFFFF;border-radius:8px;line-height:0}
+.diagram-view .dv-svgwrap svg.dv-svg{display:block;max-width:none}
+@media (prefers-color-scheme: dark){.diagram-view{background:#0d1013}}
+:root[data-theme="light"] .diagram-view{background:var(--surface-2)}
+:root[data-theme="dark"] .diagram-view{background:#0d1013}
+
+/* toc for decisions */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:1.4em 0}
+.toc .th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--draft);font-weight:700;margin-bottom:10px}
+/* uniform Jump-to cards — same width + height, no overlap, no clipped text (A2).
+   One clean line: the client-facing slug (which is already a meaningful name),
+   truncated with an ellipsis. The full title is on the card below. */
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.toc-grid a{display:flex;align-items:center;min-height:40px;
+  padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);
+  overflow:hidden;transition:border-color .12s,background .12s}
+.toc-grid a:hover{text-decoration:none;border-color:var(--brand);background:var(--brand-soft)}
+.toc-grid a .tid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--brand);font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.toc-grid a .tt{display:none}
+
+@media (max-width:860px){
+  .layout{flex-direction:column}
+  nav.side{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:24px 18px 80px}
+  h1{font-size:26px}
+}
+</style>
+<script>
+(function(){
+  var KEY='marlex-readable-theme';
+  var saved=null; try{saved=localStorage.getItem(KEY)}catch(e){}
+  if(saved){document.documentElement.setAttribute('data-theme',saved);}
+  window.__toggleTheme=function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    if(!cur){cur=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    var nxt=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem(KEY,nxt)}catch(e){}
+  };
+})();
+</script>
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+<div class="brand"><div class="t">Marlex Programme</div><div class="s">Readable roadmap &amp; decisions</div></div>
+<a class="nl" href="index.html"><span class="ic">◆</span>Overview</a>
+<a class="nl" href="roadmap.html"><span class="ic">▤</span>Programme roadmap</a>
+<a class="nl" href="risks.html"><span class="ic">▲</span>Risks &amp; assumptions</a>
+<div class="grp">Projects</div>
+<a class="nl proj" href="project-ats-rb.html"><span class="dot" style="background:var(--p-atsrb)"></span>ATS-RB</a>
+<a class="nl proj" href="project-share.html"><span class="dot" style="background:var(--p-share)"></span>SHARE</a>
+<a class="nl proj" href="project-ax-std.html"><span class="dot" style="background:var(--p-axstd)"></span>AX-STD</a>
+<a class="nl proj" href="project-mule.html"><span class="dot" style="background:var(--p-mule)"></span>MULE</a>
+<a class="nl proj" href="project-portal.html"><span class="dot" style="background:var(--p-portal)"></span>PORTAL</a>
+<a class="nl proj" href="project-exp.html"><span class="dot" style="background:var(--p-exp)"></span>EXP</a>
+<a class="nl proj" href="project-mkt.html"><span class="dot" style="background:var(--p-mkt)"></span>MKT</a>
+<a class="nl proj" href="project-evol.html"><span class="dot" style="background:var(--p-evol)"></span>EVOL</a>
+<a class="nl" href="methodology.html"><span class="ic">✎</span>How specs are defined</a>
+<a class="nl active" href="adrs.html"><span class="ic">⬡</span>Architecture decisions (ADR)</a>
+<a class="nl" href="pdrs.html"><span class="ic">⬢</span>Programme decisions (PDR)</a>
+</nav>
+<main><div class="col">
+<div class="topbar"><div class="crumb"><a href="index.html">Overview</a> › Architecture Decisions</div>
+<button class="themebtn" onclick="window.__toggleTheme()">◑ Theme</button></div>
+<h1><span class="kicker">ADR — irreversible technology choices</span>Architecture Decisions</h1>
+<p class="lede">The hard-to-reverse technology choices that shape the build. This page is the complete index of them; where a decision belongs to a subject that has its own detailed decision record, the entry summarises it and points to that record for the full context, options and consequences. The cross-cutting foundation decisions, which have no separate record, are set out in full here.</p>
+<div class="filters" id="filters">
+      <button class="fbtn on" data-f="all" onclick="__filter('all',this)">All</button>
+      <button class="fbtn" data-f="accepted" onclick="__filter('accepted',this)">Accepted</button>
+      <button class="fbtn" data-f="proposed" onclick="__filter('proposed',this)">Proposed</button>
+      <button class="fbtn" data-f="draft" onclick="__filter('draft',this)">Draft</button>
+    </div>
+<div class="toc"><div class="th">Jump to</div><div class="toc-grid">
+<a href="#MIG-001" data-estado="proposed" title="Marlex-owned canonical model — the real schema in the rebuild, a decoupling layer only during transition"><span class="tid">ADR · Canonical Model (Marlex-owned schema)</span></a>
+<a href="#MIG-002" data-estado="proposed" title="Anti-Corruption Layer (ACL) pattern — integration-edge only"><span class="tid">ADR · Anti-Corruption Layer (edge-only)</span></a>
+<a href="#MIG-035" data-estado="proposed" title="Data-access seam during coexistence — repository confinement, not full ACL"><span class="tid">ADR · Seam de acceso a datos durante la coexistencia con TargetRecruit</span></a>
+<a href="#MIG-003" data-estado="accepted" title="Mandatory anti-corruption-layer rule on vendor package objects"><span class="tid">ADR · ACL Entry-Point Rule</span></a>
+<a href="#INT-001" data-estado="proposed" title="API-led integration architecture with a middleware layer"><span class="tid">ADR · API-led Integration with Middleware</span></a>
+<a href="#INT-002" data-estado="proposed" title="Canonical contracts and Salesforce-middleware integration patterns"><span class="tid">ADR · Canonical Integration Contracts</span></a>
+<a href="#MIG-008" data-estado="proposed" title="Marlex Spain Git repository and CI/CD pipeline"><span class="tid">ADR · Git Repository &amp; CI/CD</span></a>
+<a href="#MIG-009" data-estado="proposed" title="Release and branching strategy for migration"><span class="tid">ADR · Release &amp; Branching Strategy</span></a>
+<a href="#INT-004" data-estado="proposed" title="Swappable adapter pattern to decouple MIG from the middleware platform decision"><span class="tid">ADR · Swappable Adapter Pattern</span></a>
+<a href="#INT-003" data-estado="proposed" title="Integration scope and responsibilities for portals and external systems"><span class="tid">ADR · Portal &amp; External-System Integration Scope</span></a>
+<a href="#EXP-001" data-estado="accepted" title="Naming and regionalisation strategy (MA_ = Marlex Standard, MG_ = Group, prefixes optional)"><span class="tid">ADR · Naming &amp; Regionalisation Strategy</span></a>
+<a href="#GOV-001" data-estado="proposed" title="Ownership boundary doctrine — governance, naming convention, and business-logic decoupling"><span class="tid">ADR · Ownership-Boundary Doctrine</span></a>
+<a href="#GOV-002" data-estado="proposed" title="Sharing model doctrine — data isolation for single-org multi-region operation"><span class="tid">ADR · Sharing Model Doctrine</span></a>
+<a href="#EXP-008" data-estado="accepted" title="Capability classification and promotion model (scope ladder)"><span class="tid">ADR · Capability Classification &amp; Promotion (Scope Ladder)</span></a>
+<a href="#EXP-009" data-estado="accepted" title="Repository and ownership-boundary strategy (4 repos)"><span class="tid">ADR · Repository &amp; Ownership-Boundary Strategy</span></a>
+<a href="#EXP-010" data-estado="accepted" title="Package-free deployment and manifest strategy"><span class="tid">ADR · Package-free Deployment &amp; Manifests</span></a>
+<a href="#EXP-011" data-estado="accepted" title="Configuration and variability framework (config-driven)"><span class="tid">ADR · Configuration &amp; Variability Framework</span></a>
+<a href="#EXP-012" data-estado="accepted" title="Dependency management (governance-driven, package-free)"><span class="tid">ADR · Dependency Management</span></a>
+<a href="#EXP-013" data-estado="accepted" title="Enforcement model and governance catalogue"><span class="tid">ADR · Enforcement Model &amp; Governance Catalogue</span></a>
+<a href="#EXP-014" data-estado="proposed" title="Component scope strategy: Group-first vs Local-first and the promotion/downgrade cycle"><span class="tid">ADR · Component-Scope Strategy (Group vs Local)</span></a>
+<a href="#INT-005" data-estado="accepted" title="Middleware / integration platform selection"><span class="tid">ADR · Middleware Platform Selection (MuleSoft)</span></a>
+<a href="#MIG-014" data-estado="draft" title="Data-migration tooling, backup, and rollback strategy"><span class="tid">ADR · Data-Migration Tooling, Backup &amp; Rollback</span></a>
+<a href="#MIG-015" data-estado="draft" title="Testing strategy and quality gates"><span class="tid">ADR · Testing &amp; Quality Gates</span></a>
+<a href="#MIG-016" data-estado="draft" title="Environment and sandbox strategy"><span class="tid">ADR · Environments &amp; Sandboxes</span></a>
+<a href="#MIG-017" data-estado="draft" title="ATS fit-gap (SME: the ATS Product Owner) and target data-model freeze"><span class="tid">ADR · Fit-Gap &amp; Target-Model Freeze</span></a>
+<a href="#MKT-001" data-estado="draft" title="Data Cloud (Data 360) and Marketing Cloud Next architecture"><span class="tid">ADR · Data Cloud &amp; Marketing Cloud Architecture</span></a>
+<a href="#MIG-018" data-estado="proposed" title="The rebuild is a custom-native ATS rebuild plus an independent capability-preservation baseline"><span class="tid">ADR · Custom-Native Rebuild + Capability-Preservation Baseline</span></a>
+<a href="#SEC-001" data-estado="draft" title="AI-assistant data governance (MarlexOne / Groq) and data residency"><span class="tid">ADR · AI-Assistant Data Governance</span></a>
+<a href="#RPT-001" data-estado="draft" title="Target-state reporting and BI strategy — native SF plus Data Cloud plus external Power BI"><span class="tid">ADR · Reporting &amp; BI Target-State</span></a>
+<a href="#GOV-003" data-estado="draft" title="Making Apex-managed sharing country-aware (closes the sharing model&#x27;s implicit leak path)"><span class="tid">ADR · Country-aware Apex Managed Sharing</span></a>
+<a href="#MIG-021" data-estado="proposed" title="ATS rebuild strategy — custom-native plus whole-surface buy-versus-build (Standard &gt; AppExchange &gt; Custom)"><span class="tid">ADR · ATS Rebuild Strategy (custom-native + buy-vs-build)</span></a>
+<a href="#MIG-024" data-estado="proposed" title="Rebuild target-org topology — in-place (same org as TR) vs new org"><span class="tid">ADR · Rebuild Org Topology (in-place)</span></a>
+</div></div>
+<div class="dec" id="MIG-001" data-estado="proposed">
+<div class="dh">
+<h3>Marlex-owned canonical model — the real schema in the rebuild, a decoupling layer only during transition</h3>
+<span class="did">ADR · Canonical Model (Marlex-owned schema)</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Marlex defines and owns its own Salesforce objects as the canonical model of the business — objects like Placement and ScratchSheet belong to Marlex, not to a licensed product. How that model is used differs between two moments, and the distinction matters.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-002" data-estado="proposed">
+<div class="dh">
+<h3>Anti-Corruption Layer (ACL) pattern — integration-edge only</h3>
+<span class="did">ADR · Anti-Corruption Layer (edge-only)</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">Where Apex must touch the vendor&#x27;s objects — now only at the integration edges and the transitional read seam while the old system coexists — it goes through an Anti-Corruption Layer (ACL) built from ports (Apex interfaces), adapters (translation classes) and mapping DTOs between the vendor&#x27;s objects and Marlex&#x27;s canonical model. Under the custom-native rebuild the ATS core is built natively on the canonical model, so the ACL is an edge concern, not a pervasive layer over a packaged vendor.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-035" data-estado="proposed">
+<div class="dh">
+<h3>Data-access seam during coexistence — repository confinement, not full ACL</h3>
+<span class="did">ADR · Seam de acceso a datos durante la coexistencia con TargetRecruit</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">During the months the new native system runs alongside TargetRecruit, rebuilt code still has to read and write the old package&#x27;s objects. This decision sets how: code that touches the package splits into two kinds, treated in opposite ways. Throwaway bridge code — dual-writes and syncs whose only job is to keep the package fed until switch-off — is written directly, kept cheap, and deleted at cutover. Surviving logic — the controllers and services that read jobs, applications and candidate data today and will keep doing so afterwards — has all of its old-package queries penned into one small repository class per business entity, so at cutover that single class is re-pointed at the native object and the business logic above it never moves.</p>
+<p>The rebuild once planned for two recruitment vendors sitting behind one shared, vendor-neutral model, which justified a full translation layer at every seam. The programme then chose a single custom build, and the new model became the neutral model. With no second vendor to translate to, a translation layer on a natively-owned entity would map a record to an identical copy of itself — ceremony for no gain. The seam still needs discipline; it no longer needs the ceremony.</p>
+<p>A full translation layer everywhere was rejected because, under one model, the native-side translation is an identity map — extra classes, indirection and test surface for zero portability. Direct package access scattered through the logic was rejected because it turns cutover into a rewrite inside the very code that must not move on the switch-off weekend. The two-kinds rule was chosen because it matches the treatment to the code&#x27;s lifespan: throwaway code stays cheap, surviving logic pays one small confinement cost and collects the whole payoff at cutover as a one-line re-point.</p>
+<p>The decisive factor is that what makes cutover cheap is confinement, not abstraction: one named place per entity for the package&#x27;s queries means cutover edits that place and stops. The cost accepted is honest — each seam must be tagged correctly, and a bridge mistaken for surviving logic (or the reverse) is coupling debt. A separate, unavoidable item is schema coupling: the lookup fields on new objects that point at package objects cannot be hidden by any code pattern and are re-pointed at cutover as a new field plus data migration, tracked as model work rather than code work. The coupled-code metric is restated as two action lists — delete at cutover, re-point at cutover — so it reads as a runbook.</p>
+<p>For developers, the surviving-logic classes are named after the entity with a Repository suffix and deliberately carry no ACL prefix, keeping them visually distinct from the full translation-layer components that are now reserved for a genuine second vendor only. A repository holds the package SOQL and DML and returns platform records and fields — no wrapper types, no mappers. This is the Selector/Repository pattern used for its intended purpose: isolate the query, not translate the schema.</p>
+<div class="qa"><span class="chip">Maintainability</span><span class="chip">Modifiability</span><span class="chip">Simplicity</span><span class="chip">Testability</span><span class="chip">Cost-Effectiveness</span></div>
+<div class="openbox"><b>Still open:</b> Recorded direction, not yet ratified — pending confirmation with Marlex after the reference-org discussion. The full per-entity assignment of each package touch point to delete-at-cutover or re-point-at-cutover is filled in as capabilities are built; whether a class has confined all its package access with none leaking into callers is a review item.</div>
+</div>
+<div class="dec" id="MIG-003" data-estado="accepted">
+<div class="dh">
+<h3>Mandatory anti-corruption-layer rule on vendor package objects</h3>
+<span class="did">ADR · ACL Entry-Point Rule</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">On the TargetRecruit package objects (AVTRRT__), the only valid entry point for database-triggered business logic is a thin Apex trigger dispatcher that immediately delegates to the ACL. Record-Triggered Flows on those objects are banned as a business-logic entry point; a Flow that only calls an invocable Apex action passing through the ACL is still acceptable, because the Flow is only an orchestration surface.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="INT-001" data-estado="proposed">
+<div class="dh">
+<h3>API-led integration architecture with a middleware layer</h3>
+<span class="did">ADR · API-led Integration with Middleware</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">MULE · Platform Confirmation &amp; Foundations</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Integration logic will live in an external middleware, not in Salesforce, structured as an API-led architecture in three layers: Experience APIs (consumer-facing contracts), Process APIs (business-process orchestration), and System APIs (access to concrete systems). Salesforce only exposes and consumes APIs through the Marlex canonical model, with no embedded integration logic. The specific middleware platform is decided separately.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>integration layer</i> decision record.</div>
+</div>
+<div class="dec" id="INT-002" data-estado="proposed">
+<div class="dh">
+<h3>Canonical contracts and Salesforce-middleware integration patterns</h3>
+<span class="did">ADR · Canonical Integration Contracts</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">MULE · Integration Registry</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">Every integration between Salesforce and the middleware operates on canonical contracts: API schemas independent of both the Salesforce object model and the ATS vendor model, aligned to the Marlex canonical model. Standard patterns also define when to use synchronous callouts, when to go event-driven, and which Salesforce layer owns the call to the middleware. All in-scope integrations pass through a single API Gateway.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>integration layer</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-008" data-estado="proposed">
+<div class="dh">
+<h3>Marlex Spain Git repository and CI/CD pipeline</h3>
+<span class="did">ADR · Git Repository &amp; CI/CD</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">All of the Spain org&#x27;s code will live in a repository Marlex owns inside its own GitHub organisation, with a mandatory release and CI/CD pipeline from day one. Partners connect their release tools (for example Copado) to this repository; implementer-owned repositories are not allowed, and no per-region repositories are created in this phase.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-009" data-estado="proposed">
+<div class="dh">
+<h3>Release and branching strategy for migration</h3>
+<span class="did">ADR · Release &amp; Branching Strategy</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">The programme uses a production branch (main) and a UAT/pre-production branch, with feature branches cut from main and no long-lived develop branches. Pull requests go through the Marlex CoE before merge. Releases are grouped by sprint as the base cadence, with intermediate releases allowed for hotfixes or justified business need, and hotfixes take a direct path to main with mandatory CoE review.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="INT-004" data-estado="proposed">
+<div class="dh">
+<h3>Swappable adapter pattern to decouple MIG from the middleware platform decision</h3>
+<span class="did">ADR · Swappable Adapter Pattern</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">MULE · Integration Registry</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">The programme defines ports (Apex interfaces) for each external integration (NET4Port, InfoJobsPort, PortalPort) as an extension of the ACL pattern into the integration domain, and ships default direct adapters that call the external systems over OAuth/SOAP exactly as today. The middleware adapters are built in parallel, and a Custom Metadata selector decides at runtime which adapter loads. Switching between direct and middleware is configuration, not an Apex redeployment. The same pattern applies to the Axxon NET4 build and cutover.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>integration layer</i> decision record.</div>
+</div>
+<div class="dec" id="INT-003" data-estado="proposed">
+<div class="dh">
+<h3>Integration scope and responsibilities for portals and external systems</h3>
+<span class="did">ADR · Portal &amp; External-System Integration Scope</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">MULE · Integration Registry</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The systems in integration scope are the Recruiters Portal, the Candidates/Interim Portal, InfoJobs, and the NET4 ERP, all implemented exclusively through the middleware following the API-led architecture and the canonical contracts. Building the portals themselves is out of scope; the Salesforce-to-middleware integration layer is this project&#x27;s responsibility. No point-to-point integrations between these systems and Salesforce are built.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>integration layer</i> decision record.</div>
+</div>
+<div class="dec" id="EXP-001" data-estado="accepted">
+<div class="dh">
+<h3>Naming and regionalisation strategy (MA_ = Marlex Standard, MG_ = Group, prefixes optional)</h3>
+<span class="did">ADR · Naming &amp; Regionalisation Strategy</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The repository a component lives in (global, marlex, axon, ph) is the source of truth for its scope and ownership; prefixes are optional visual aids, not enforced. MA_ means Marlex Standard (ES/IT/PT) and is optional, with existing MA_ names kept and no mass rename. The only prefix applied actively from now on is MG_ (Marlex Group) on new Group-Shared components, so that when deployed in another org they read as group-owned. Per-country override prefixes are deferred until ES/IT/PT have distinct governance teams.</p>
+<p>With multiple regions and partners building on the same base, there was no clear way to tell which components are shared and which are region-specific, creating a risk of unauthorised edits to global components. This decision defines the full structural convention for the expansion phase.</p>
+<p>MA_ was chosen to stay Marlex Standard (not Group) because MA_ is already in use for Marlex components today; making MA_ mean Group would have mislabelled existing components and forced a mass rename that breaks integrations querying by API name. Using the repo as the scope source avoids that cost and risk, rather than renaming to a scope prefix (a regression bomb that enforces nothing) or relying on repos alone with no in-org marker.</p>
+<p>The trade-off is inconsistent naming (MA_, unprefixed, and new components coexist) and ownership that is not always readable from the API name, so it depends on the catalogue and code review rather than platform enforcement. In return there is no renaming regression, the scheme is honest about what a prefix does (visibility, not enforcement), MG_ identifies group-owned components in any org, and the cost is minimal.</p>
+<div class="qa"><span class="chip">Understandability</span><span class="chip">Maintainability</span><span class="chip">Portability</span></div>
+<div class="openbox"><b>Still open:</b> The Group prefix letters (MG_) still need confirming with the group, and per-country override prefixes remain deferred until Italy and Portugal arrive.</div>
+</div>
+<div class="dec" id="GOV-001" data-estado="proposed">
+<div class="dh">
+<h3>Ownership boundary doctrine — governance, naming convention, and business-logic decoupling</h3>
+<span class="did">ADR · Ownership-Boundary Doctrine</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Governance + Solution</span></div>
+<p class="bluf">This decision establishes the ownership boundary as the governance unit: a line that defines who has autonomous change rights over a set of components and who must approve changes that cross it. A component belongs to exactly one boundary — brand and product together (the commercial platform, the recruitment platform, the back-office platform, for Marlex and for Axxon). No component in one boundary reads another boundary&#x27;s data directly; cross-boundary access goes through a documented service interface, and the canonical model is the one layer every boundary may share. Marlex-shared components are owned by the Centre of Excellence and inherited as-is by all regions; a region may hold its own override, and a shared component must never depend on a regional override.</p>
+<p>The Marlex Spain org was built Spain-only. As the programme moves to a shared org that becomes the template for other countries and that Axxon adapts referentially, the codebase must structurally enforce who owns what. Without this, cross-boundary object access, division-hardcoded logic, and dozens of near-duplicate division-specific process copies would propagate into every derived org. The 2026-05-21 coupling analysis confirmed product separation is emergent, not enforced, and that both vertical and region logic are hardcoded.</p>
+<p>The boundary was set by brand and product because that maps to how ownership actually works at Marlex — the Centre of Excellence owns the shared components and each country&#x27;s product team owns its own — whereas splitting by vertical or division was rejected, since no team is organised that way. Vertical variation is therefore configuration, carried by metadata records rather than by separate components, collapsing the hardcoded per-division logic and the near-duplicate division processes into a single configurable pattern with a routing table.</p>
+<p>On naming, the settled rule (2026-07-23) is that new native components use a plain English API name with no owner prefix. An owner marker stamped on almost every component partitions nothing — the old org already shows this, where the historical Marlex prefix sits on the large majority of fields and no longer signals anything — and true cross-org ownership, when a component is promoted to another Marlex Group org, is carried by the platform&#x27;s packaging namespace applied automatically, which makes a hand-typed prefix redundant. A shared group prefix is added to a component only when the Centre of Excellence confirms genuine group-wide scope, as a deliberate choice rather than a default. Existing production objects that already carry the historical prefix or Spanish names are not retro-renamed; a carried-over field keeps its prefix only to avoid breaking live dependencies. What endures from the original scheme is the governance content — who owns a component and what it may depend on — enforced now by folder organisation, documentation, and pull-request review rather than by a mandatory prefix on every name.</p>
+<p>The doctrine is topology-independent. It holds unchanged whether regions live as overrides inside one shared Marlex org or as brand-orgs (Axxon and the Philippines) that run their own orgs and consume the standard referentially — only where a component physically lives differs. Under the native rebuild the ownership boundary and the cross-boundary coupling rules survive intact; the earlier requirement to wall the recruitment platform off behind a mandatory product prefix relaxes, because once the vendor package is gone there are no vendor objects left to isolate at the naming layer.</p>
+<div class="qa"><span class="chip">Understandability</span><span class="chip">Maintainability</span><span class="chip">Portability</span><span class="chip">Modifiability</span><span class="chip">Accountability</span></div>
+<div class="openbox"><b>Still open:</b> The boundary axis and cross-boundary coupling rules were ratified at the 2026-06-04 standardisation session. The naming approach was settled on 2026-07-23 as prefix-free for new native components, superseding the earlier mandatory-prefix scheme; the group-scope prefix is applied per component only when group-wide scope is confirmed.</div>
+</div>
+<div class="dec" id="GOV-002" data-estado="proposed">
+<div class="dh">
+<h3>Sharing model doctrine — data isolation for single-org multi-region operation</h3>
+<span class="did">ADR · Sharing Model Doctrine</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Governance + Solution</span></div>
+<p class="bluf">The sharing model enforces data isolation between business units (brand by region) in the shared Marlex org: OWD is Private for all SObjects carrying regional business data, an MA_Country__c picklist (ES/PT/IT/PH) is added to those objects and defaults from the creating user, a Region role layer is inserted above the Spanish office hierarchy, and criteria-based sharing rules keyed on MA_Country__c replace the existing rules. Crucially, the sharing rules deploy inert at cutover so Spain users see no access change until historical data is back-populated in the data-dependent activation wave.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>sharing &amp; access model</i> decision record.</div>
+</div>
+<div class="dec" id="EXP-008" data-estado="accepted">
+<div class="dh">
+<h3>Capability classification and promotion model (scope ladder)</h3>
+<span class="did">ADR · Capability Classification &amp; Promotion (Scope Ladder)</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Every capability is classified on a nested scope ladder: Country → Marlex Standard → Group Candidate → Group Shared, where Group contains Marlex Standard contains Country. The default is Marlex Standard, and the burden of proof sits on promotion. A component reaches Group Shared only under the proven-reuse gate (Option A): at least two brands consume it, ownership passes to the Group CoE, and there is a common roadmap. Promotion is executed by physically moving the component to the global repo, renaming it to MG_, and running a standardisation pass at that point.</p>
+<p>It is not yet known which capabilities Axxon or Philippines will adopt or which will become group standards. A binary Marlex-vs-Global classification would force premature decisions, so the ladder reflects the real &quot;we don&#x27;t know yet&quot; state.</p>
+<p>The nested ladder avoids premature globalisation and gives a clear, auditable promotion path, rather than treating multi-country and cross-org as orthogonal axes, defaulting to Group when in doubt (which pays a reuse cost that may never materialise), or designating standards top-down by leadership instead of by proven reuse.</p>
+<p>The cost is more governance than a binary split, a Group Candidate tier that is a watchlist with no deployment semantics, and a risk of ossification if nothing ever gets promoted (mitigated by periodic CoE review). The payoff is no premature globalisation, a clear promotion path, and a conservative, auditable default.</p>
+<div class="qa"><span class="chip">Adaptability</span><span class="chip">Cost-efficiency</span><span class="chip">Governability</span></div>
+<div class="openbox"><b>Still open:</b> The CoE&#x27;s review cadence for Group Candidates still needs to be set.</div>
+</div>
+<div class="dec" id="EXP-009" data-estado="accepted">
+<div class="dh">
+<h3>Repository and ownership-boundary strategy (4 repos)</h3>
+<span class="did">ADR · Repository &amp; Ownership-Boundary Strategy</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Repositories are organised by ownership, governance, and deployment scope, not by business domain: global, marlex, axon, ph. A component lives in exactly one repo, and CRM/ATS/BO are catalogue attributes rather than repo boundaries. A single Marlex Group CoE governs all four repos and arbitrates both Group scope and Marlex-Standard scope across countries.</p>
+<p>CRM, ATS, and BO are governance and classification boundaries under the boundary doctrine, not stable deployment or repository boundaries.</p>
+<p>Aligning repos to ownership and org topology gives clear ownership, avoids duplicating or forking, and makes promotion a deliberate repo-move that gates standardisation, rather than splitting repos by business domain (which are not stable deployment boundaries and create a Conway mismatch) or using a single monorepo (which gives no ownership or cross-org deployment separation).</p>
+<p>The cost is cross-repo coordination when several orgs consume shared components via manifests, and a risk of duplicating a component across repos (mitigated by the exactly-one-repo rule plus review). The payoff is clear ownership, alignment with the org topology, and deliberate promotion.</p>
+<div class="qa"><span class="chip">Modularity</span><span class="chip">Governability</span><span class="chip">Deployability</span></div>
+</div>
+<div class="dec" id="EXP-010" data-estado="accepted">
+<div class="dh">
+<h3>Package-free deployment and manifest strategy</h3>
+<span class="did">ADR · Package-free Deployment &amp; Manifests</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">The programme goes package-free: the global repo has module folders, each with its own deployment manifest (a package.xml deploy list, not a managed package), versioned by git tag. One manifest per org, plus optional manifests, select which modules deploy. Modules can graduate to packages later as a change of mechanism. Brand-specific business-process layers stay referential; only identical modules deploy from global. This refines the boundary doctrine, it is not a reversal of packaging.</p>
+<p>Salesforce packaging adds dependency-management cost that is not yet justified, but cross-org reuse still needs a single source of truth, because copying or rebuilding creates drift and forks.</p>
+<p>Package-free with manifests gives that single source of truth without the packaging cost and keeps an incremental path to packages, rather than adopting unlocked/2GP packages now (premature dependency and namespace overhead), copying/rebuilding per org (identical modules fork), or deploying the whole global repo to every org (ungovernable manual cherry-picking).</p>
+<p>The cost is that without package version identity or a platform edit-lock, enforcement is governance plus review, and manifests and hand-declared dependencies must be maintained. The payoff is a single source of truth without packaging cost, an incremental path, and clear per-org manifests.</p>
+<div class="qa"><span class="chip">Reusability</span><span class="chip">Maintainability</span><span class="chip">Operability</span></div>
+</div>
+<div class="dec" id="EXP-011" data-estado="accepted">
+<div class="dh">
+<h3>Configuration and variability framework (config-driven)</h3>
+<span class="did">ADR · Configuration &amp; Variability Framework</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Business variation is data and configuration, not hardcoded logic. Standardisation patterns are defined per layer (Data, Logic, UI, Security, Integration, Reporting, Automation), and a fixed set of dimensions must never be hardcoded: country, brand, region/sub-region, office, business unit, vertical, contract type, legal entity, language, currency, ATS vendor, integration endpoint, and legal basis/consent. Being config-driven for Spain, Italy, and Portugal also makes a component eligible for promotion to a group-wide shared component, so the variability model is treated as a primary architecture artefact.</p>
+<p>The decisive architectural lever is the variability model, not the code repository structure. Hardcoded business variation blocks multi-country reuse and promotion.</p>
+<p>Treating variation as configuration makes components multi-country-safe and promotion-ready by construction, with one discipline serving both goals, rather than defaulting to country-specific components (which fragments the standard) or over-configuring everything (which creates configuration sprawl; a separate component is used only when a team must own the divergence).</p>
+<p>The cost is more build effort than hardcoding, Custom Metadata and record-type machinery to maintain, and a risk of hidden Marlex/Spain assumptions (mitigated by an audit for hardcoded assumptions). The payoff is components reusable across countries and promotable, with a single discipline serving both multi-country and cross-org goals.</p>
+<p>On 2026-07-02 this became a binding principle for Marlex&#x27;s custom-native rebuild: the model is built portable and config-driven by construction (Custom Metadata, Custom Settings, Record Types, Global Value Sets, no hardcoding) so that promotion to a group-wide shared component is parameterisation, not refactoring.</p>
+<div class="qa"><span class="chip">Adaptability</span><span class="chip">Reusability</span><span class="chip">Localizability</span></div>
+<div class="openbox"><b>Still open:</b> This is a binding principle for the custom-native rebuild so that promotion to a group-wide shared component is parameterisation rather than refactoring; the per-track sequence is covered by the Axxon standardisation decision.</div>
+</div>
+<div class="dec" id="EXP-012" data-estado="accepted">
+<div class="dh">
+<h3>Dependency management (governance-driven, package-free)</h3>
+<span class="did">ADR · Dependency Management</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">Dependencies are managed through governance, manifests, and the deployment pipeline: understand relationships, define deployment order, validate deployability, and prevent uncontrolled cross-dependencies. A future move to unlocked packages is a change of deployment mechanism, not the moment modular architecture begins. The core rule is that a group-wide shared component depends on nothing org-local or country-specific; the reverse is allowed.</p>
+<p>Going package-free avoids the mechanics of packaging but not the architectural work that packaging would otherwise force.</p>
+<p>Doing the dependency work by governance from day one enforces modular discipline regardless of mechanism, rather than deferring dependency management until packaging (the dependencies already exist) or adopting packages now for enforcement (which the package-free deployment decision defers).</p>
+<p>The cost is that governed tracking is weaker than package-enforced tracking and depends on the governance catalogue and review (mitigated by the governance catalogue). The payoff is modular discipline from the start.</p>
+<div class="qa"><span class="chip">Modularity</span><span class="chip">Deployability</span><span class="chip">Maintainability</span></div>
+</div>
+<div class="dec" id="EXP-013" data-estado="accepted">
+<div class="dh">
+<h3>Enforcement model and governance catalogue</h3>
+<span class="did">ADR · Enforcement Model &amp; Governance Catalogue</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">Enforcement is governance: code review (a purely Marlex release must not touch a group-wide shared component), release-process validation, and Centre of Excellence ownership and arbitration. A governance catalogue is mandatory from the start, with one row per component or group recording repository/scope, owner, functional area, Salesforce layer, dependencies, consuming orgs, and configuration dimensions. The pipeline overwriting local edits is a reactive aid, not enforcement.</p>
+<p>Without packaging there is no platform-level &quot;do not touch&quot;, and the naming prefix enforces nothing on its own.</p>
+<p>Governance-based enforcement works without packaging and is auditable, and the catalogue is the source of truth precisely because prefixes are optional, rather than trusting the prefix (which enforces nothing) or adopting managed packages for a platform lock (which the package-free deployment decision defers, to be revisited only if review proves insufficient).</p>
+<p>The cost is that it depends on a human process and the catalogue can go stale (mitigated by updating the row on every pull request). The payoff is enforcement that works without packaging and stays auditable.</p>
+<div class="qa"><span class="chip">Governability</span><span class="chip">Traceability</span><span class="chip">Security</span></div>
+</div>
+<div class="dec" id="EXP-014" data-estado="proposed">
+<div class="dh">
+<h3>Component scope strategy: Group-first vs Local-first and the promotion/downgrade cycle</h3>
+<span class="did">ADR · Component-Scope Strategy (Group vs Local)</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The programme designs local-first: everything is born a Marlex Standard component (config-driven) in its owning brand and rises to a group-wide shared component (cross-brand) only under the proven-reuse gate defined in the capability scope ladder. Only a small technical and governance core is born group-shared (frameworks, the canonical and common-integration model, logging and error handling, the anti-corruption-layer pattern, configuration schemas, governance); the sharing and security layer and functional components are not. A downgrade process is added, along with a cost model that explains why the default works.</p>
+<p>Marlex is multi-brand (Marlex Spain, Italy, and Portugal plus the Axxon and Philippines brand-orgs consuming referentially), with no external deadline forcing components up to group-wide. The capability scope ladder set the tiers and the Marlex Standard default but never modelled the cost or defined the reverse process. Orgs split by brand, not region, so the real axis is the breadth of reuse on the ladder.</p>
+<p>Local-first was chosen over group-first (born cross-brand) because of the downgrade risk, and this decision quantifies why: promotion is additive and gated, while downgrade is subtractive across every consumer that holds a &quot;group-owned&quot; contract, plus the sunk standardisation cost. That asymmetry justifies the conservative default.</p>
+<p>The cost is a duplication risk if nothing is promoted, an expensive downgrade path (the very cost the default avoids), and dependence on a human process and a Centre of Excellence whose members are not yet confirmed. The payoff is no premature globalisation, a complete up-and-down cycle, an explicit safeguard against a Spain-default bias, and brand divergence absorbed without forced refactoring.</p>
+<div class="qa"><span class="chip">Adaptability</span><span class="chip">Cost-efficiency</span><span class="chip">Governability</span><span class="chip">Maintainability</span></div>
+<div class="openbox"><b>Still open:</b> The Centre of Excellence&#x27;s group-candidate review cadence, its membership and whether a group-wide tier splits off, and the tie-breaker for a contested downgrade remain open.</div>
+</div>
+<div class="dec" id="INT-005" data-estado="accepted">
+<div class="dh">
+<h3>Middleware / integration platform selection</h3>
+<span class="did">ADR · Middleware Platform Selection (MuleSoft)</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">MULE · Middleware Provisioning</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">MuleSoft (Anypoint Platform) is selected as the middleware platform, running the three API-led layers with a MuleSoft-managed API Gateway. Demonstrations completed in June 2026 and licensing is in progress. The selection is closed as decided (2026-07-03).</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>integration layer</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-014" data-estado="draft">
+<div class="dh">
+<h3>Data-migration tooling, backup, and rollback strategy</h3>
+<span class="did">ADR · Data-Migration Tooling, Backup &amp; Rollback</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Data Migration</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The draft direction covers three things: use a proven Salesforce-aware loader (Bulk API 2.0 via Data Loader, dataloader.io, or Gearset, or middleware-driven loading if the integration platform lands first) rather than custom Apex ETL; adopt a third-party backup tool (Own, Gearset, or Spanning) for point-in-time restore before and during cutover, since native Salesforce backup is limited; and define a cutover rollback runbook with a go/no-go gate. The tools are illustrative, pending evaluation.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-015" data-estado="draft">
+<div class="dh">
+<h3>Testing strategy and quality gates</h3>
+<span class="did">ADR · Testing &amp; Quality Gates</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Testing</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">The draft direction sets four quality gates: minimum Apex coverage above Salesforce&#x27;s 75% floor (targeting around 85% on new or refactored code) enforced as a continuous-integration gate on pull requests; continuous-integration gates combining test execution, static analysis (PMD/ApexGuru), and the with-sharing declaration gate already defined in the sharing model; acceptance tests for the division decoupling as regression guards; and user-acceptance testing owned by Marlex Product during the UAT phase as a single cycle validating both the data migration and the standardisation waves. The thresholds are illustrative, pending agreement.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-016" data-estado="draft">
+<div class="dh">
+<h3>Environment and sandbox strategy</h3>
+<span class="did">ADR · Environments &amp; Sandboxes</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">The draft direction defines a sandbox ladder: at least one full-copy sandbox for the cutover rehearsals, data-dependent activation, and user-acceptance testing; partial-copy and developer sandboxes for build; a refresh cadence aligned to the standardisation-wave gates; and Marlex IT as the provisioner. Counts and cadence are illustrative, pending sizing.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-017" data-estado="draft">
+<div class="dh">
+<h3>ATS fit-gap (SME: the ATS Product Owner) and target data-model freeze</h3>
+<span class="did">ADR · Fit-Gap &amp; Target-Model Freeze</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The draft direction is to commission the fit-gap analysis from the ATS Product Owner (Marlex Product) as a named programme deliverable feeding the ATS build, and to freeze the target data model (the canonical object catalogue) before the ATS build starts, with a controlled change process after the freeze. Owner and timing are to be confirmed.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="MKT-001" data-estado="draft">
+<div class="dh">
+<h3>Data Cloud (Data 360) and Marketing Cloud Next architecture</h3>
+<span class="did">ADR · Data Cloud &amp; Marketing Cloud Architecture</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Epic <span class="id">MKT · Marketing Cloud — Wave A</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The draft direction captures the Marketing Cloud Wave B target architecture for ratification: a home Data Cloud in the Spain org pinned to the EU Operating Zone (Hyperforce EU), a hub-and-spoke topology via Data Cloud One and Companion Connections with Spain as home plus one companion (Axxon), Spain, Italy, and Portugal as Data Spaces inside the home and the Philippines out of scope for now, a Consent Data Model per space, identity resolution over Individual, Data Kit for the software development lifecycle, and Data Cloud as the group&#x27;s cross-org reporting layer. The positions are illustrative, pending ratification.</p>
+<p>The Marketing Cloud sequencing decision (closed 2026-05-13) decided only the sequencing into two waves (finite campaigns in TargetRecruit first, rebuilt after cutover). The roughly ten target-architecture decisions in the considerations document are not yet ratified, and that document predates both the sequencing decision and the decision to put the Philippines out of scope, so its topology and licensing are outdated.</p>
+<p>This topology was chosen over one Data Cloud per org (which breaks consolidated reporting), Marketing Cloud Engagement/Pardot (rejected in favour of Marketing Cloud Next), and deferring all architecture to build (GDPR rework risk). The reasoning is that residency, consent, and identity resolution are GDPR-load-bearing and hard to reverse after ingestion, and the topology is the answer to cross-org reporting.</p>
+<p>The cost is unquantified companion and credits licensing, an open edition choice (Growth versus Advanced), and obsolete figures in the considerations document (to be recomputed without the Philippines). The payoff is a GDPR-correct home and consent, one profile per person across brands, and cross-org reporting via the companion.</p>
+<p>Under the custom-native rebuild the home Data Cloud moves from the Spain packaged org to the Spain custom-native org (the same in-place org); the hub-and-spoke topology is unchanged. The rebuild is a source-connector change for Spain, not a change to the Data Cloud model: the candidate stays a standard Contact record, so identity resolution and the consent model are untouched, and only the recruitment-activity data streams (jobs, applications, placements, interviews) re-point onto the rebuilt object names at cutover. Because of this split, the person and consent layer can be built now, independent of the rebuild, while the activity streams follow the cutover — and any marketing flow built now on recruitment-activity data carries a re-point at cutover, which belongs on the cutover plan.</p>
+<div class="qa"><span class="chip">Privacy</span><span class="chip">Security</span><span class="chip">Interoperability</span><span class="chip">Reusability</span></div>
+<div class="openbox"><b>Still open:</b> To advance, EU residency and the Philippines transfer legal basis, the Marketing Cloud Next edition, identity-resolution rulesets, consent ownership, the Data Spaces list (recomputed without the Philippines), and topology licensing cost must be confirmed.</div>
+</div>
+<div class="dec" id="MIG-018" data-estado="proposed">
+<div class="dh">
+<h3>The rebuild is a custom-native ATS rebuild plus an independent capability-preservation baseline</h3>
+<span class="did">ADR · Custom-Native Rebuild + Capability-Preservation Baseline</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The programme is named explicitly as an ATS rebuild plus standardisation, not a lift-and-shift, and a separate functional-preservation baseline is carved out: behaviour-based, derived from the capability inventory, data reconciliation, and traceable user-acceptance testing, and governed independently of the transformation so that parity has a clean checkpoint.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="SEC-001" data-estado="draft">
+<div class="dh">
+<h3>AI-assistant data governance (MarlexOne / Groq) and data residency</h3>
+<span class="did">ADR · AI-Assistant Data Governance</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Governance</span></div>
+<p class="bluf">The draft direction treats the MarlexOne AI assistant as a compliance gate before cutover: confirm what data leaves and where (Groq in the US); then either remediate (a data-processing agreement plus standard contractual clauses plus data minimisation plus an EU LLM region or EU provider), retire the feature, or formally risk-accept with legal sign-off. The flow is not carried forward as-is without one of the three. It also defines the residency policy for future AI features, aligned to the EU home Data Cloud.</p>
+<p>The functional inventory flags the MarlexOne AI assistant for data-governance review: business data (potentially personal, EU) may be sent to a US-hosted LLM, and the data-processing basis for that transfer needs to be confirmed. The programme treats this flow as one to review and remediate before it is carried forward, and it is a possible legal gate before cutover.</p>
+<p>Gating the feature was chosen over carrying it forward as-is (unresolved GDPR question), retiring it (losing the AI capability), remediating with an EU provider/region and a data-processing agreement (rework cost), or risk-accepting with legal sign-off. The reasoning is that an EU personal-data flow to a US-hosted LLM needs a confirmed data-processing basis, cheap to decide now but costly if carried into the new org and propagated to Axxon and the Philippines.</p>
+<p>The cost is that it needs legal input (data-processing agreement, legal basis), remediation may delay or re-cost the feature, and it depends on EU AI provider alternatives. The payoff is closing an open GDPR question, setting a reusable AI residency policy, and a cheap decision made before cutover.</p>
+<div class="qa"><span class="chip">Privacy</span><span class="chip">Security</span><span class="chip">Compliance</span></div>
+<div class="openbox"><b>Still open:</b> To advance, the real data flow must be confirmed with Marlex IT, legal input obtained (data-processing agreement and legal basis), and a remediate/retire/risk-accept choice made.</div>
+</div>
+<div class="dec" id="RPT-001" data-estado="draft">
+<div class="dh">
+<h3>Target-state reporting and BI strategy — native SF plus Data Cloud plus external Power BI</h3>
+<span class="did">ADR · Reporting &amp; BI Target-State</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Solution</span></div>
+<p class="bluf">The draft direction defines three reporting layers: native Salesforce reports and dashboards for in-org operational reporting, respecting the per-country sharing model; Data Cloud Companion as the group&#x27;s consolidated cross-brand and cross-region reporting layer; and external Power BI kept outside Salesforce as corporate business intelligence, not moved. The programme inventories current reports and decides which move to native Salesforce, get rebuilt, or are retired, treating reporting as its own wave.</p>
+<p>The programme has no target-state reporting decision. The facts are that Spain&#x27;s roughly seven-million-row Power BI table is external to Salesforce and out of scope for the data move, Data Cloud Companion is the group&#x27;s cross-org reporting layer, and reporting has no epic of its own, appearing only as a &quot;reports respect scope&quot; item in the data-dependent activation wave.</p>
+<p>Three defined layers were chosen over all-reporting-in-Salesforce (ignores corporate Power BI), all-in-external-Power BI (underuses Data Cloud), or not deciding (reporting lost at cutover). The reasoning is that without an explicit strategy, reporting is either lost in the cutover or rebuilt ad hoc, and the three planes have distinct owners and mechanisms.</p>
+<p>The cost is that it requires a current reports inventory (which does not exist), coordinates three tools and owners, and carries the Data Cloud Companion cost. The payoff is reporting that survives the cutover, clear boundaries between Salesforce, Data Cloud, and Power BI, and respect for per-country sharing.</p>
+<div class="qa"><span class="chip">Usability</span><span class="chip">Maintainability</span><span class="chip">Interoperability</span></div>
+<div class="openbox"><b>Still open:</b> To advance, current reports must be inventoried and the Salesforce, Data Cloud, and Power BI boundaries confirmed with Marlex IT and the business.</div>
+</div>
+<div class="dec" id="GOV-003" data-estado="draft">
+<div class="dh">
+<h3>Making Apex-managed sharing country-aware (closes the sharing model&#x27;s implicit leak path)</h3>
+<span class="did">ADR · Country-aware Apex Managed Sharing</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution + Technical</span></div>
+<p class="bluf">For MA_Oferta__Share and MA_Factura__Share, the Apex Managed Sharing classes must be made country-aware or retired before isolation is activated in the data-dependent activation wave. The default recommendation is to keep the classes but add a country guard, creating a share only if the target user and the record resolve to the same MA_Country__c or an explicit named exception. A build deliverable is added so the fix travels with the model rather than surfacing after a leak in user-acceptance testing. The sharing-model doctrine is unchanged; this decision covers the mechanism it left implicit.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>sharing &amp; access model</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-021" data-estado="proposed">
+<div class="dh">
+<h3>ATS rebuild strategy — custom-native plus whole-surface buy-versus-build (Standard &gt; AppExchange &gt; Custom)</h3>
+<span class="did">ADR · ATS Rebuild Strategy (custom-native + buy-vs-build)</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The direction is to rebuild the in-use TargetRecruit capabilities as custom-native on the canonical model (which becomes the real data model), building from scratch and retiring the TargetRecruit-coupled code at cutover rather than refactoring it in place, and to evaluate buy-versus-build across the whole ATS surface before committing, not just for the Textkernel engine. Custom-native may still mean a custom shell plus retained or licensed vendor capabilities (Textkernel, LinkedIn Recruiter System Connect).</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="MIG-024" data-estado="proposed">
+<div class="dh">
+<h3>Rebuild target-org topology — in-place (same org as TR) vs new org</h3>
+<span class="did">ADR · Rebuild Org Topology (in-place)</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The topology is in-place: the custom-native rebuild happens in the same org as TargetRecruit, not a new org. This was decided 2026-07-03 and promoted to Proposed, alongside the direction to co-decide topology together with the rebuild feasibility and the cutover activation as a single combined decision of {viable?} x {in-place or new org} x {big-bang or phased}, because resolving the pieces separately produces incoherent downstream plans.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<script>
+window.__filter=function(f,btn){
+  document.querySelectorAll('#filters .fbtn').forEach(function(b){b.classList.remove('on')});
+  btn.classList.add('on');
+  var show=function(el){el.style.display=(f==='all'||el.getAttribute('data-estado')===f)?'':'none';};
+  document.querySelectorAll('.dec').forEach(show);
+  document.querySelectorAll('.toc-grid a').forEach(function(a){
+    a.style.display=(f==='all'||a.getAttribute('data-estado')===f)?'':'none';
+  });
+};
+</script>
+<div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
+</div></main>
+</div>
+</body></html>

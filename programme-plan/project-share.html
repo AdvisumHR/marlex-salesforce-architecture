@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The sharing &amp; access model — Marlex Programme</title>
+<style>
+:root{
+  --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f;
+  --spine:#922B21; --good:#196F3D; --draft:#8a94a0;
+  --maxw:820px; --nav:290px;
+  --p-atsrb:#922B21; --p-share:#7D3C98; --p-axstd:#AF601A; --p-axerp:#B9770E;
+  --p-mule:#196F3D; --p-portal:#1F618D; --p-exp:#76448A; --p-mkt:#C0287B; --p-evol:#4a5b6b;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+    --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f;
+    --good:#5fbf87; --draft:#6b7681; }
+}
+:root[data-theme="light"]{ --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f; --spine:#922B21; --good:#196F3D; --draft:#8a94a0; }
+:root[data-theme="dark"]{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+  --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f; --good:#5fbf87; --draft:#6b7681; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* layout */
+.layout{display:flex;min-height:100vh}
+nav.side{width:var(--nav);flex:0 0 var(--nav);background:var(--surface);border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 0 40px}
+nav.side .brand{padding:0 22px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}
+nav.side .brand .t{font-weight:700;font-size:15px;color:var(--brand);letter-spacing:.01em}
+nav.side .brand .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+nav.side a.nl{display:flex;align-items:center;gap:9px;padding:8px 22px;color:var(--ink-soft);font-size:14.5px;border-left:3px solid transparent}
+nav.side a.nl:hover{background:var(--surface-2);text-decoration:none;color:var(--ink)}
+nav.side a.nl.active{color:var(--brand);border-left-color:var(--brand);background:var(--brand-soft);font-weight:600}
+nav.side a.nl .ic{width:16px;text-align:center;opacity:.8;font-size:13px}
+nav.side .grp{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--draft);padding:16px 22px 6px;font-weight:700}
+nav.side a.nl.proj .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+
+main{flex:1;min-width:0;padding:40px 48px 120px;display:flex;justify-content:center}
+.col{width:100%;max-width:var(--maxw)}
+
+/* header controls */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.crumb{font-size:13px;color:var(--ink-soft)}
+.themebtn{background:var(--surface);border:1px solid var(--line);color:var(--ink-soft);border-radius:20px;
+  padding:5px 13px;font-size:12.5px;cursor:pointer}
+.themebtn:hover{border-color:var(--brand);color:var(--brand)}
+
+h1{font-size:31px;line-height:1.2;margin:.15em 0 .1em;letter-spacing:-.01em}
+h1 .kicker{display:block;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px}
+.lede{font-size:19px;line-height:1.5;color:var(--ink-soft);margin:.4em 0 1.4em;font-weight:400}
+h2{font-size:22px;margin:1.9em 0 .5em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
+h3{font-size:17.5px;margin:1.6em 0 .3em}
+p{margin:.7em 0}
+.stamp{font-size:12.5px;color:var(--draft);margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line)}
+.source-note{font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--line);
+  padding:10px 14px;border-radius:0 6px 6px 0;margin:1.2em 0}
+
+/* inline id chips */
+.id{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.82em;background:var(--surface-2);
+  color:var(--ink-soft);padding:.06em .38em;border-radius:4px;white-space:nowrap;border:1px solid var(--line)}
+
+/* stat row */
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:1.6em 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;min-width:110px;flex:1}
+.stat .n{font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+.stat .l{font-size:12.5px;color:var(--ink-soft);margin-top:5px}
+
+/* project cards on index */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;margin:1.4em 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  border-top:4px solid var(--pc,var(--brand));display:block;color:inherit;transition:transform .12s,box-shadow .12s}
+.card:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,71,97,.10);color:inherit}
+.card .k{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--pc,var(--brand));font-weight:700;letter-spacing:.03em}
+.card .t{font-size:16px;font-weight:600;margin:5px 0 8px}
+.card .d{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+.card .m{font-size:12px;color:var(--draft);margin-top:11px;display:flex;gap:14px}
+
+/* critical chain */
+.chain{list-style:none;padding:0;margin:1.4em 0;border-left:2px solid var(--spine)}
+.chain li{position:relative;padding:0 0 16px 26px}
+.chain li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;
+  background:var(--spine);border:2px solid var(--surface)}
+.chain .step{font-weight:700;color:var(--spine);font-size:14px}
+.chain .chain-proj{font-size:11px;color:var(--ink-soft);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:1px 8px;margin-left:4px;white-space:nowrap}
+.chain .what{color:var(--ink-soft);font-size:14.5px}
+
+/* epic list */
+.epic{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;
+  border-left:4px solid var(--pc,var(--brand))}
+.epic .eh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.epic .eid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:700;color:var(--pc,var(--brand))}
+.epic .en{font-size:16.5px;font-weight:600}
+.epic .cnt{font-size:12px;color:var(--draft);white-space:nowrap}
+.epic p{font-size:14.5px;color:var(--ink-soft);margin:.5em 0 0}
+details.delivs{margin-top:10px}
+details.delivs>summary{cursor:pointer;font-size:13px;color:var(--brand);list-style:none;user-select:none}
+details.delivs>summary::-webkit-details-marker{display:none}
+details.delivs>summary::before{content:"▸ ";font-size:11px}
+details.delivs[open]>summary::before{content:"▾ "}
+details.delivs ul{margin:10px 0 4px;padding-left:4px;list-style:none}
+details.delivs li{font-size:13.5px;color:var(--ink-soft);padding:6px 0 6px 0;border-top:1px dashed var(--line)}
+details.delivs li .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--pc,var(--brand));font-weight:600}
+details.delivs li .dn{color:var(--ink);font-weight:600}
+.wtag{font-size:10.5px;padding:1px 6px;border-radius:9px;font-weight:700;margin-left:6px;vertical-align:middle}
+.wtag.A{background:#D6EAF8;color:#1F618D} .wtag.B{background:#E8DAEF;color:#7D3C98} .wtag.C{background:#D5F5E3;color:#196F3D}
+@media (prefers-color-scheme:dark){.wtag.A{background:#17303c;color:#7ec8e8}.wtag.B{background:#2a1f36;color:#c39be0}.wtag.C{background:#12321f;color:#7fdca8}}
+
+/* decision cards */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:1.2em 0}
+.fbtn{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer;color:var(--ink-soft)}
+.fbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.dec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:18px 0;scroll-margin-top:20px}
+.dec .dh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:2px}
+.dec .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--brand)}
+.dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
+.badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
+.badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
+.dec p{font-size:15px;margin:.6em 0}
+.dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
+.qa{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.qa .chip{font-size:11.5px;background:var(--brand-soft);color:var(--brand);padding:2px 9px;border-radius:5px}
+.openbox{background:var(--surface-2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
+.openbox b{color:var(--accent)}
+
+/* methodology two-board flow diagram */
+.flow-diagram{margin:1.6em 0 2em}
+.flow-diagram svg{width:100%;height:auto;display:block}
+.flow-diagram .fd-board{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.flow-diagram .fd-analysis{stroke:var(--p-share)}
+.flow-diagram .fd-build{stroke:var(--good)}
+.flow-diagram .fd-eyebrow{fill:var(--ink-soft);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.flow-diagram .fd-boardname{fill:var(--ink);font-size:19px;font-weight:700}
+.flow-diagram .fd-stage{fill:var(--surface-2);stroke:var(--p-share);stroke-width:1}
+.flow-diagram .fd-stage2{fill:var(--surface-2);stroke:var(--good);stroke-width:1}
+.flow-diagram .fd-stagetxt,.flow-diagram .fd-stagetxt2{fill:var(--ink);font-size:12.5px;text-anchor:middle;dominant-baseline:middle}
+.flow-diagram .fd-mini{stroke:var(--p-share);stroke-width:1.5}
+.flow-diagram .fd-arrow{stroke:var(--brand);stroke-width:2.5}
+.flow-diagram .fd-handoff{fill:var(--brand);font-size:13px;font-weight:700;text-anchor:middle}
+.flow-diagram .fd-verdict-h{fill:var(--ink-soft);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.flow-diagram .fd-verdict{fill:var(--ink);font-size:13.5px;font-weight:600}
+.flow-diagram .fd-cap{font-size:13.5px;color:var(--ink-soft);margin:.6em 2px 0}
+
+/* diagram viewer */
+.diagram-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:1.4em 0}
+.diagram-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);font-size:13px;color:var(--ink-soft)}
+.diagram-bar button{background:var(--surface);border:1px solid var(--line);border-radius:6px;width:30px;height:28px;cursor:pointer;color:var(--ink);font-size:15px}
+.diagram-bar button:hover{border-color:var(--brand);color:var(--brand)}
+.diagram-bar .hint{margin-left:auto;font-size:12px;color:var(--draft)}
+.diagram-view{overflow:hidden;position:relative;height:560px;cursor:grab;background:var(--surface-2)}
+.diagram-view.grabbing{cursor:grabbing}
+.diagram-view img{position:absolute;top:0;left:0;transform-origin:0 0;user-select:none;-webkit-user-drag:none;max-width:none}
+/* Inline-SVG diagram. The mermaid diagram is a fixed light-palette graphic (dark
+   text on light nodes); render it on a constant light backdrop in BOTH themes so
+   it always reads, rather than trying to recolour every node for dark mode. */
+.diagram-view .dv-svgwrap{position:absolute;top:0;left:0;transform-origin:0 0;background:#FFFFFF;border-radius:8px;line-height:0}
+.diagram-view .dv-svgwrap svg.dv-svg{display:block;max-width:none}
+@media (prefers-color-scheme: dark){.diagram-view{background:#0d1013}}
+:root[data-theme="light"] .diagram-view{background:var(--surface-2)}
+:root[data-theme="dark"] .diagram-view{background:#0d1013}
+
+/* toc for decisions */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:1.4em 0}
+.toc .th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--draft);font-weight:700;margin-bottom:10px}
+/* uniform Jump-to cards — same width + height, no overlap, no clipped text (A2).
+   One clean line: the client-facing slug (which is already a meaningful name),
+   truncated with an ellipsis. The full title is on the card below. */
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.toc-grid a{display:flex;align-items:center;min-height:40px;
+  padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);
+  overflow:hidden;transition:border-color .12s,background .12s}
+.toc-grid a:hover{text-decoration:none;border-color:var(--brand);background:var(--brand-soft)}
+.toc-grid a .tid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--brand);font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.toc-grid a .tt{display:none}
+
+@media (max-width:860px){
+  .layout{flex-direction:column}
+  nav.side{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:24px 18px 80px}
+  h1{font-size:26px}
+}
+</style>
+<script>
+(function(){
+  var KEY='marlex-readable-theme';
+  var saved=null; try{saved=localStorage.getItem(KEY)}catch(e){}
+  if(saved){document.documentElement.setAttribute('data-theme',saved);}
+  window.__toggleTheme=function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    if(!cur){cur=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    var nxt=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem(KEY,nxt)}catch(e){}
+  };
+})();
+</script>
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+<div class="brand"><div class="t">Marlex Programme</div><div class="s">Readable roadmap &amp; decisions</div></div>
+<a class="nl" href="index.html"><span class="ic">◆</span>Overview</a>
+<a class="nl" href="roadmap.html"><span class="ic">▤</span>Programme roadmap</a>
+<a class="nl" href="risks.html"><span class="ic">▲</span>Risks &amp; assumptions</a>
+<div class="grp">Projects</div>
+<a class="nl proj" href="project-ats-rb.html"><span class="dot" style="background:var(--p-atsrb)"></span>ATS-RB</a>
+<a class="nl proj active" href="project-share.html"><span class="dot" style="background:var(--p-share)"></span>SHARE</a>
+<a class="nl proj" href="project-ax-std.html"><span class="dot" style="background:var(--p-axstd)"></span>AX-STD</a>
+<a class="nl proj" href="project-mule.html"><span class="dot" style="background:var(--p-mule)"></span>MULE</a>
+<a class="nl proj" href="project-portal.html"><span class="dot" style="background:var(--p-portal)"></span>PORTAL</a>
+<a class="nl proj" href="project-exp.html"><span class="dot" style="background:var(--p-exp)"></span>EXP</a>
+<a class="nl proj" href="project-mkt.html"><span class="dot" style="background:var(--p-mkt)"></span>MKT</a>
+<a class="nl proj" href="project-evol.html"><span class="dot" style="background:var(--p-evol)"></span>EVOL</a>
+<a class="nl" href="methodology.html"><span class="ic">✎</span>How specs are defined</a>
+<a class="nl" href="adrs.html"><span class="ic">⬡</span>Architecture decisions (ADR)</a>
+<a class="nl" href="pdrs.html"><span class="ic">⬢</span>Programme decisions (PDR)</a>
+</nav>
+<main><div class="col">
+<div class="topbar"><div class="crumb"><a href="index.html">Overview</a> › SHARE</div>
+<button class="themebtn" onclick="window.__toggleTheme()">◑ Theme</button></div>
+<div style="--pc:var(--p-share)">
+<h1><span class="kicker" style="color:var(--p-share)">Project SHARE</span>The sharing &amp; access model</h1>
+<p class="lede">Bringing the internal HR team onto the recruitment platform and making the access model private where it must be — the two are one initiative, because HR&#x27;s confidential work cannot sit in an open model even briefly. More than a sharing change: it builds what HR needs on the new platform and refactors who can see which records, whether the boundary is a country or an internal team.</p>
+<div class="stats"><div class="stat" style="--brand:var(--p-share)"><div class="n">3</div><div class="l">Epics</div></div>
+      <div class="stat" style="--brand:var(--p-share)"><div class="n">11</div><div class="l">Deliverables</div></div></div>
+<h2>How it fits together</h2>
+<p>This project has two inseparable halves. The first is onboarding the internal HR team so they run internal recruitment — backfills, internal moves, onboarding — on the same platform the business uses for external hiring, instead of separate tools. The second is the access model that makes it safe: privatising the records that matter and giving each the right visibility, whether the boundary is a country or an internal business unit. They are one initiative because HR&#x27;s work is confidential by nature — a hiring process can be to replace a specific manager, and must not be visible to the person being replaced — so the moment HR is on the platform, the open model everyone uses today is no longer acceptable for their records. The clearest case is the HR team&#x27;s own records: salaries, interview notes, clock-ins, internal candidates, which the rest of the business should not see. Alongside it runs the country dimension: isolating records by country as the group grows into new markets.</p>
+<p>Because it onboards a team, this is not only a sharing flip — it builds. HR needs their own kind of record set apart from external hiring, a management structure so a leader sees their team&#x27;s internal processes and no one sees upward, their own access profile, and whatever onboarding-specific screens the requirements turn out to need. All of it is built on the new owned platform, never on the rented product being retired. The HR requirements are still being gathered, so the shape is set at the level of decisions with the details left open until the HR team confirms them.</p>
+<p>The private, country-keyed model is the target, and one business decision governs when it lands. By default the switch to the new platform changes nothing about who sees what — the new records carry today&#x27;s access model forward exactly as it is, so the move touches no boundary in the most sensitive window, and the tightening runs deliberately afterwards, on its own quiet timing with its own rehearsal and its own way back. But that default holds only while nothing confidential is on the platform. If the business chooses to bring the HR team on at the same moment as the switch, the private model has to be in place from day one — HR&#x27;s records cannot be open even briefly — so the tightening moves into the switch rather than following it. The recommendation is to bring HR on after the switch, keeping that window clean; the decision belongs to the person responsible for People, and the platform is built so either path works. Opening access back up if something is wrong is cheap, which is what keeps both paths safe.</p>
+<p>Everything follows a replicate-then-extend principle: reproduce today&#x27;s access first so nobody loses anything, then narrow it and extend it deliberately. Two small pieces of access hygiene are the exception and do happen while the records are built, because neither depends on the open-versus-private choice: the records get real owners instead of the single placeholder that holds most of them today, and the inbound job-board door is rebuilt as a controlled entry. Everything else — the country field, the roles, the groups, the rules, and the per-record privatisation — is the post-go-live stage.</p>
+<p>The dependency is clear: the doctrine and the per-record design can start early, but when the tightening and the HR onboarding land is a single business decision — after the switch by default, or at the switch if the HR need is immediate — and it must be owned and dated so that &#x27;later&#x27; does not quietly become &#x27;never&#x27;.</p>
+<h2>Epics, in order</h2>
+<div class="epic" style="--pc:var(--p-share)">
+<div class="eh"><div><span class="eid">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></div><div class="cnt">1 deliverable</div></div>
+<p>In this project, the foundation decisions contribute the sharing-model doctrine — the dimensional design for record-level access and data isolation. The Spain org has no explicit country dimension today: access is built almost entirely on the geography of offices. The doctrine defines the access dimensions (country, business unit, office hierarchy), how they compose, and the replicate-then-extend principle. It is design-and-decision work, authored early as the input the post-go-live privatisation stage executes against.</p>
+<details class="delivs"><summary>Show 1 deliverable</summary><ul><li><span class="dn">Std Foundations / Sharing-model doctrine</span><br><span>Set the doctrine for record-level access — who can see and edit which records, and the data-isolation pattern that lets one org serve several countries safely. It defines the dimensions access is keyed on (country, business unit, office hierarchy), how those compose, and the replicate-then-extend principle the build follows. This is the security-layer input the country-keyed build and the privatisation refactor both execute against; it can be authored early, before the objects exist.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-share)">
+<div class="eh"><div><span class="eid">SHARE · New-Object Access Hygiene</span></div><div class="cnt">2 deliverables</div></div>
+<p>The two pieces of access hygiene that happen while the records are built, because neither depends on the open-versus-private choice. The rebuilt records get real owners instead of the single placeholder that holds most candidate records today, so ownership means something from the moment a record is created. And the inbound job-board door — the anonymous path that writes applications in — is rebuilt as a controlled entry with an explicit field list. The country dimension and the private model are not built here; they are the deliberate stage after go-live.</p>
+<details class="delivs"><summary>Show 2 deliverables</summary><ul><li><span class="dn">Access Hygiene / Real record owners at cutover</span><br><span>Assign real owners to the rebuilt records instead of the single placeholder that holds most candidate records today — over seven hundred thousand sit on one unassigned owner. It produces the ownership map and applies it as the records are built, so ownership carries meaning from creation. Independent of the open-versus-private choice.</span></li><li><span class="dn">Access Hygiene / Rebuilt controlled inbound job-board door</span><br><span>Rebuild the anonymous job-board door — the guest path that writes applications into the system — as a controlled entry: an explicit list of the fields it may set, matching on a stable key, immediate owner assignment, and capture of the channel and country on the way in. New-record hygiene that happens while the records are built, closed behind a security review before it goes live.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-share)">
+<div class="eh"><div><span class="eid">SHARE · HR Rollout + Sharing-Model Refactor</span></div><div class="cnt">8 deliverables</div></div>
+<p>Onboards the internal HR team and makes the access model private in one move, because the two cannot be separated. It builds what HR needs on the new platform — their own kind of record, a management structure so a leader sees their team&#x27;s internal work and no one sees upward, their own access profile — and refactors record-level access: back-populates the country dimension, flips the records that matter to private with one rule each, and locks the confidential HR records (salaries, interview notes, clock-ins, internal candidates) to the HR team, extending access on replicate-then-extend so nobody loses what they legitimately had. By default it runs as a stage after the switch, on quiet timing; if the business needs HR on at the switch, the private model is in place from day one instead. It carries its own dress rehearsal and its own way back, and proves zero access loss and clean isolation on a full copy of the data before it touches production. It must be owned and dated so it does not slip indefinitely.</p>
+<details class="delivs"><summary>Show 8 deliverables</summary><ul><li><span class="dn">HR &amp; Privatisation / Country dimension added across records, roles, groups &amp; permission sets</span><br><span>As a task after go-live, add the whole country dimension in one pass: put the country value on every record type that needs it (drawn from the existing office data), insert a country layer above the office hierarchy, give the location-based groups a country context, and regroup the permission sets into country-scoped bundles. Capability access stays country-neutral; location-sensitive access gains the country key. The structural anchor the country-aware rules key on.</span></li><li><span class="dn">HR &amp; Privatisation / Country-aware sharing rules authored &amp; activated</span><br><span>Author and switch on the country-aware sharing rules as part of the post-go-live stage: existing rules re-keyed onto the country value, new rules granting access by country and by office within a country — on real data, in a deliberate rehearsed change rather than crammed into the switch window.</span></li><li><span class="dn">HR &amp; Privatisation / Critical-record list &amp; per-record privatisation model</span><br><span>Confirm, with the recruitment and Axxon owners, the focused set of records that genuinely must become private — not all of the roughly three hundred and eighty objects — and, for each, design how it becomes private: closed by default, a visibility marker (by country, by business unit such as an HR-internal boundary, or group-wide), and the rules that extend access to the people who should keep it. The design can start early; the change lands after go-live.</span></li><li><span class="dn">HR &amp; Privatisation / Internal-HR confidentiality model</span><br><span>The headline case: internal-HR records — salaries, interview notes, clock-ins — and internal-candidate applications must be confidential, visible and manageable only by the HR team. This designs and applies that boundary as a specific instance of the per-record model, and is why the privatisation is built into the programme rather than piloted on the old system.</span></li><li><span class="dn">HR &amp; Privatisation / Privatisation flip</span><br><span>Flip the confirmed records to closed-by-default and author the rules that extend visibility, plus the visibility marker — on the live records after go-live. Built to work together with the country model, not against it. This is the deliberate flip, carrying its own rehearsal and its own way back.</span></li><li><span class="dn">HR &amp; Privatisation / Country isolation proven on the live system</span><br><span>Prove the country model on the live system after go-live: no record leaks across countries, and no one lost access they legitimately had. This is where the rules become live and are shown to work on real data, as part of the privatisation stage&#x27;s own validation — not a gate before business sign-off.</span></li><li><span class="dn">HR &amp; Privatisation / Cross-country experience, localisation &amp; reporting smoke</span><br><span>One integrated check on the live system — experience, localisation and reporting together: language fallback behaves per country, per-country settings resolve, and reports respect the country scope. Confirms the country model holds end to end. Part of the post-go-live stage.</span></li><li><span class="dn">HR &amp; Privatisation / Zero-access-loss validation</span><br><span>Prove that reproduce-then-extend held — no one lost access they legitimately had before the flip — and that the confidential records are genuinely restricted to the right people. The check that closes the privatisation stage.</span></li></ul></details>
+</div>
+</div>
+<div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
+</div></main>
+</div>
+</body></html>

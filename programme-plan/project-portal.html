@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The candidate &amp; recruiter portals — Marlex Programme</title>
+<style>
+:root{
+  --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f;
+  --spine:#922B21; --good:#196F3D; --draft:#8a94a0;
+  --maxw:820px; --nav:290px;
+  --p-atsrb:#922B21; --p-share:#7D3C98; --p-axstd:#AF601A; --p-axerp:#B9770E;
+  --p-mule:#196F3D; --p-portal:#1F618D; --p-exp:#76448A; --p-mkt:#C0287B; --p-evol:#4a5b6b;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+    --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f;
+    --good:#5fbf87; --draft:#6b7681; }
+}
+:root[data-theme="light"]{ --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f; --spine:#922B21; --good:#196F3D; --draft:#8a94a0; }
+:root[data-theme="dark"]{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+  --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f; --good:#5fbf87; --draft:#6b7681; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* layout */
+.layout{display:flex;min-height:100vh}
+nav.side{width:var(--nav);flex:0 0 var(--nav);background:var(--surface);border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 0 40px}
+nav.side .brand{padding:0 22px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}
+nav.side .brand .t{font-weight:700;font-size:15px;color:var(--brand);letter-spacing:.01em}
+nav.side .brand .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+nav.side a.nl{display:flex;align-items:center;gap:9px;padding:8px 22px;color:var(--ink-soft);font-size:14.5px;border-left:3px solid transparent}
+nav.side a.nl:hover{background:var(--surface-2);text-decoration:none;color:var(--ink)}
+nav.side a.nl.active{color:var(--brand);border-left-color:var(--brand);background:var(--brand-soft);font-weight:600}
+nav.side a.nl .ic{width:16px;text-align:center;opacity:.8;font-size:13px}
+nav.side .grp{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--draft);padding:16px 22px 6px;font-weight:700}
+nav.side a.nl.proj .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+
+main{flex:1;min-width:0;padding:40px 48px 120px;display:flex;justify-content:center}
+.col{width:100%;max-width:var(--maxw)}
+
+/* header controls */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.crumb{font-size:13px;color:var(--ink-soft)}
+.themebtn{background:var(--surface);border:1px solid var(--line);color:var(--ink-soft);border-radius:20px;
+  padding:5px 13px;font-size:12.5px;cursor:pointer}
+.themebtn:hover{border-color:var(--brand);color:var(--brand)}
+
+h1{font-size:31px;line-height:1.2;margin:.15em 0 .1em;letter-spacing:-.01em}
+h1 .kicker{display:block;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px}
+.lede{font-size:19px;line-height:1.5;color:var(--ink-soft);margin:.4em 0 1.4em;font-weight:400}
+h2{font-size:22px;margin:1.9em 0 .5em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
+h3{font-size:17.5px;margin:1.6em 0 .3em}
+p{margin:.7em 0}
+.stamp{font-size:12.5px;color:var(--draft);margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line)}
+.source-note{font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--line);
+  padding:10px 14px;border-radius:0 6px 6px 0;margin:1.2em 0}
+
+/* inline id chips */
+.id{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.82em;background:var(--surface-2);
+  color:var(--ink-soft);padding:.06em .38em;border-radius:4px;white-space:nowrap;border:1px solid var(--line)}
+
+/* stat row */
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:1.6em 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;min-width:110px;flex:1}
+.stat .n{font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+.stat .l{font-size:12.5px;color:var(--ink-soft);margin-top:5px}
+
+/* project cards on index */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;margin:1.4em 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  border-top:4px solid var(--pc,var(--brand));display:block;color:inherit;transition:transform .12s,box-shadow .12s}
+.card:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,71,97,.10);color:inherit}
+.card .k{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--pc,var(--brand));font-weight:700;letter-spacing:.03em}
+.card .t{font-size:16px;font-weight:600;margin:5px 0 8px}
+.card .d{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+.card .m{font-size:12px;color:var(--draft);margin-top:11px;display:flex;gap:14px}
+
+/* critical chain */
+.chain{list-style:none;padding:0;margin:1.4em 0;border-left:2px solid var(--spine)}
+.chain li{position:relative;padding:0 0 16px 26px}
+.chain li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;
+  background:var(--spine);border:2px solid var(--surface)}
+.chain .step{font-weight:700;color:var(--spine);font-size:14px}
+.chain .chain-proj{font-size:11px;color:var(--ink-soft);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:1px 8px;margin-left:4px;white-space:nowrap}
+.chain .what{color:var(--ink-soft);font-size:14.5px}
+
+/* epic list */
+.epic{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;
+  border-left:4px solid var(--pc,var(--brand))}
+.epic .eh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.epic .eid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:700;color:var(--pc,var(--brand))}
+.epic .en{font-size:16.5px;font-weight:600}
+.epic .cnt{font-size:12px;color:var(--draft);white-space:nowrap}
+.epic p{font-size:14.5px;color:var(--ink-soft);margin:.5em 0 0}
+details.delivs{margin-top:10px}
+details.delivs>summary{cursor:pointer;font-size:13px;color:var(--brand);list-style:none;user-select:none}
+details.delivs>summary::-webkit-details-marker{display:none}
+details.delivs>summary::before{content:"▸ ";font-size:11px}
+details.delivs[open]>summary::before{content:"▾ "}
+details.delivs ul{margin:10px 0 4px;padding-left:4px;list-style:none}
+details.delivs li{font-size:13.5px;color:var(--ink-soft);padding:6px 0 6px 0;border-top:1px dashed var(--line)}
+details.delivs li .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--pc,var(--brand));font-weight:600}
+details.delivs li .dn{color:var(--ink);font-weight:600}
+.wtag{font-size:10.5px;padding:1px 6px;border-radius:9px;font-weight:700;margin-left:6px;vertical-align:middle}
+.wtag.A{background:#D6EAF8;color:#1F618D} .wtag.B{background:#E8DAEF;color:#7D3C98} .wtag.C{background:#D5F5E3;color:#196F3D}
+@media (prefers-color-scheme:dark){.wtag.A{background:#17303c;color:#7ec8e8}.wtag.B{background:#2a1f36;color:#c39be0}.wtag.C{background:#12321f;color:#7fdca8}}
+
+/* decision cards */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:1.2em 0}
+.fbtn{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer;color:var(--ink-soft)}
+.fbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.dec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:18px 0;scroll-margin-top:20px}
+.dec .dh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:2px}
+.dec .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--brand)}
+.dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
+.badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
+.badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
+.dec p{font-size:15px;margin:.6em 0}
+.dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
+.qa{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.qa .chip{font-size:11.5px;background:var(--brand-soft);color:var(--brand);padding:2px 9px;border-radius:5px}
+.openbox{background:var(--surface-2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
+.openbox b{color:var(--accent)}
+
+/* methodology two-board flow diagram */
+.flow-diagram{margin:1.6em 0 2em}
+.flow-diagram svg{width:100%;height:auto;display:block}
+.flow-diagram .fd-board{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.flow-diagram .fd-analysis{stroke:var(--p-share)}
+.flow-diagram .fd-build{stroke:var(--good)}
+.flow-diagram .fd-eyebrow{fill:var(--ink-soft);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.flow-diagram .fd-boardname{fill:var(--ink);font-size:19px;font-weight:700}
+.flow-diagram .fd-stage{fill:var(--surface-2);stroke:var(--p-share);stroke-width:1}
+.flow-diagram .fd-stage2{fill:var(--surface-2);stroke:var(--good);stroke-width:1}
+.flow-diagram .fd-stagetxt,.flow-diagram .fd-stagetxt2{fill:var(--ink);font-size:12.5px;text-anchor:middle;dominant-baseline:middle}
+.flow-diagram .fd-mini{stroke:var(--p-share);stroke-width:1.5}
+.flow-diagram .fd-arrow{stroke:var(--brand);stroke-width:2.5}
+.flow-diagram .fd-handoff{fill:var(--brand);font-size:13px;font-weight:700;text-anchor:middle}
+.flow-diagram .fd-verdict-h{fill:var(--ink-soft);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.flow-diagram .fd-verdict{fill:var(--ink);font-size:13.5px;font-weight:600}
+.flow-diagram .fd-cap{font-size:13.5px;color:var(--ink-soft);margin:.6em 2px 0}
+
+/* diagram viewer */
+.diagram-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:1.4em 0}
+.diagram-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);font-size:13px;color:var(--ink-soft)}
+.diagram-bar button{background:var(--surface);border:1px solid var(--line);border-radius:6px;width:30px;height:28px;cursor:pointer;color:var(--ink);font-size:15px}
+.diagram-bar button:hover{border-color:var(--brand);color:var(--brand)}
+.diagram-bar .hint{margin-left:auto;font-size:12px;color:var(--draft)}
+.diagram-view{overflow:hidden;position:relative;height:560px;cursor:grab;background:var(--surface-2)}
+.diagram-view.grabbing{cursor:grabbing}
+.diagram-view img{position:absolute;top:0;left:0;transform-origin:0 0;user-select:none;-webkit-user-drag:none;max-width:none}
+/* Inline-SVG diagram. The mermaid diagram is a fixed light-palette graphic (dark
+   text on light nodes); render it on a constant light backdrop in BOTH themes so
+   it always reads, rather than trying to recolour every node for dark mode. */
+.diagram-view .dv-svgwrap{position:absolute;top:0;left:0;transform-origin:0 0;background:#FFFFFF;border-radius:8px;line-height:0}
+.diagram-view .dv-svgwrap svg.dv-svg{display:block;max-width:none}
+@media (prefers-color-scheme: dark){.diagram-view{background:#0d1013}}
+:root[data-theme="light"] .diagram-view{background:var(--surface-2)}
+:root[data-theme="dark"] .diagram-view{background:#0d1013}
+
+/* toc for decisions */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:1.4em 0}
+.toc .th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--draft);font-weight:700;margin-bottom:10px}
+/* uniform Jump-to cards — same width + height, no overlap, no clipped text (A2).
+   One clean line: the client-facing slug (which is already a meaningful name),
+   truncated with an ellipsis. The full title is on the card below. */
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.toc-grid a{display:flex;align-items:center;min-height:40px;
+  padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);
+  overflow:hidden;transition:border-color .12s,background .12s}
+.toc-grid a:hover{text-decoration:none;border-color:var(--brand);background:var(--brand-soft)}
+.toc-grid a .tid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--brand);font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.toc-grid a .tt{display:none}
+
+@media (max-width:860px){
+  .layout{flex-direction:column}
+  nav.side{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:24px 18px 80px}
+  h1{font-size:26px}
+}
+</style>
+<script>
+(function(){
+  var KEY='marlex-readable-theme';
+  var saved=null; try{saved=localStorage.getItem(KEY)}catch(e){}
+  if(saved){document.documentElement.setAttribute('data-theme',saved);}
+  window.__toggleTheme=function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    if(!cur){cur=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    var nxt=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem(KEY,nxt)}catch(e){}
+  };
+})();
+</script>
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+<div class="brand"><div class="t">Marlex Programme</div><div class="s">Readable roadmap &amp; decisions</div></div>
+<a class="nl" href="index.html"><span class="ic">◆</span>Overview</a>
+<a class="nl" href="roadmap.html"><span class="ic">▤</span>Programme roadmap</a>
+<a class="nl" href="risks.html"><span class="ic">▲</span>Risks &amp; assumptions</a>
+<div class="grp">Projects</div>
+<a class="nl proj" href="project-ats-rb.html"><span class="dot" style="background:var(--p-atsrb)"></span>ATS-RB</a>
+<a class="nl proj" href="project-share.html"><span class="dot" style="background:var(--p-share)"></span>SHARE</a>
+<a class="nl proj" href="project-ax-std.html"><span class="dot" style="background:var(--p-axstd)"></span>AX-STD</a>
+<a class="nl proj" href="project-mule.html"><span class="dot" style="background:var(--p-mule)"></span>MULE</a>
+<a class="nl proj active" href="project-portal.html"><span class="dot" style="background:var(--p-portal)"></span>PORTAL</a>
+<a class="nl proj" href="project-exp.html"><span class="dot" style="background:var(--p-exp)"></span>EXP</a>
+<a class="nl proj" href="project-mkt.html"><span class="dot" style="background:var(--p-mkt)"></span>MKT</a>
+<a class="nl proj" href="project-evol.html"><span class="dot" style="background:var(--p-evol)"></span>EVOL</a>
+<a class="nl" href="methodology.html"><span class="ic">✎</span>How specs are defined</a>
+<a class="nl" href="adrs.html"><span class="ic">⬡</span>Architecture decisions (ADR)</a>
+<a class="nl" href="pdrs.html"><span class="ic">⬢</span>Programme decisions (PDR)</a>
+</nav>
+<main><div class="col">
+<div class="topbar"><div class="crumb"><a href="index.html">Overview</a> › PORTAL</div>
+<button class="themebtn" onclick="window.__toggleTheme()">◑ Theme</button></div>
+<div style="--pc:var(--p-portal)">
+<h1><span class="kicker" style="color:var(--p-portal)">Project PORTAL</span>The candidate &amp; recruiter portals</h1>
+<p class="lede">The candidate and recruiter portals — the web front-ends that live today on the platform the programme is retiring. The Salesforce programme owns the connection to them, not the portals themselves; the build sits with an external partner, and its scope, owner and — above all — its timing against the platform switchover are still open.</p>
+<h2>What this track is</h2>
+<p>Marlex runs public-facing portals for candidates and recruiters. Today these portals are hosted on the recruitment platform that the rebuild replaces, so they cannot simply carry over untouched — when that platform is retired, whatever it was hosting goes with it. This makes the portals a distinct piece of work with its own owner and its own timing, not a detail inside the rebuild.</p>
+<p>The division of labour is settled: the Salesforce programme owns the connection — the integration layer and the Salesforce-side that feed a portal with data and receive what a candidate or recruiter submits. It does not own the portals as products. Building the portals themselves is an external partner&#x27;s job, on a front-end platform outside this programme. So this page tracks a track the programme depends on but does not itself deliver — which is exactly why its decisions need to be visible in one place.</p>
+<p>Two things about the portals are still genuinely open. First, their shape: whether they are Spain-only or serve the wider group, and whether every country gets the same portal or a version tailored to local needs. Second — and this is the decision that drives the plan — when the new portals need to be built and operational relative to the platform switchover. That timing question is set out on its own below, because it is not yet decided and it changes the critical path either way.</p>
+<h2>When do the new portals have to be live?</h2>
+<div class="source-note">The current portals disappear when the old platform is switched off. The new portals, built by the partner on the connection this programme provides, have to appear on the other side. The open question is how those two events line up — and it is a real choice, not a formality, because each option trades continuity against time and risk. This is the decision to close before the plan can commit a portal date.</div>
+<div class="epic" style="--pc:var(--p-portal)">
+          <div class="eh"><div><span class="en">Built and live before the switchover</span></div></div>
+          <p>The new portals are finished and operational first, then the platform switchover happens with the portals already in place. Candidates and recruiters see no interruption. The cost is that the portal build joins the critical path ahead of go-live: the switchover cannot happen until the partner has delivered, so a slip on the portals becomes a slip on the whole cutover.</p>
+        </div>
+<div class="epic" style="--pc:var(--p-portal)">
+          <div class="eh"><div><span class="en">Switched over at the same time</span></div></div>
+          <p>The portal switch happens inside the same cutover window as the platform switch — the old portals go dark and the new ones come up together. There is no separate portal go-live to schedule, but the window is tighter and carries more at once, so it needs the partner&#x27;s delivery and the programme&#x27;s cutover to be tightly synchronised.</p>
+        </div>
+<div class="epic" style="--pc:var(--p-portal)">
+          <div class="eh"><div><span class="en">Built and live after the switchover</span></div></div>
+          <p>The platform switches over first and the new portals follow later. This keeps the platform cutover simple and off the portal partner&#x27;s timeline, but it accepts a gap: for a period after go-live there is no portal, or only a stop-gap, so candidate- and recruiter-facing self-service is interrupted until the partner delivers.</p>
+        </div>
+<div class="openbox"><b>Open —</b> No option is ratified yet, but the choice is leaning. On 2026-07-23 the product side signalled that the portal is not critical on day one and can follow the switchover — a short period without the rebuilt portal is acceptable to the business (&#x27;we can wait&#x27;), which points toward the built-and-live-after option. Treat that as a lean, not a decision: the portal&#x27;s owner, the partner&#x27;s schedule, and whether it serves Spain alone or the wider group are all still open, and the option needs product-owner sign-off to close. The choice still depends on when the partner can deliver, how much portal downtime the business will accept, and how much the programme is willing to add to the cutover&#x27;s critical path. Once it is made, the roadmap gains a portal milestone and the critical chain may change with it.</div>
+<h2>Decisions on this track</h2>
+<p>A running record of what is settled about the portals and what is still open. It grows as each point is decided.</p>
+<h3>Settled</h3>
+<div class="epic" style="--pc:var(--good)">
+          <div class="eh"><div><span class="en">The programme owns the connection, not the portals</span></div></div>
+          <p>The integration layer and the Salesforce-side that serve the portals are in the programme&#x27;s scope. The portals themselves are built by an external partner on a front-end platform outside the programme. This boundary is agreed.</p>
+        </div>
+<div class="epic" style="--pc:var(--good)">
+          <div class="eh"><div><span class="en">The connection is anchored on the shared data model</span></div></div>
+          <p>The contract that carries data to and from a portal is drafted against the programme&#x27;s shared data model, so it is designed to survive the platform switchover rather than being tied to the platform that is leaving.</p>
+        </div>
+<h3>Still open</h3>
+<div class="epic" style="--pc:var(--accent)">
+          <div class="eh"><div><span class="en">Who owns and funds the portal build</span></div></div>
+          <p>The build sits with an external partner, but the specific owner, the commercial arrangement, and whether it needs a budget or initiative outside the Salesforce programme are not yet confirmed. Until they are, the build has no committed start.</p>
+        </div>
+<div class="epic" style="--pc:var(--accent)">
+          <div class="eh"><div><span class="en">Spain-only or group-wide, standard or tailored</span></div></div>
+          <p>Whether the portals serve only Spain or the wider group, and whether every country shares one portal or gets a tailored version, is still open. This shapes both the build effort and the connection the programme has to provide.</p>
+        </div>
+<div class="epic" style="--pc:var(--accent)">
+          <div class="eh"><div><span class="en">Timing against the platform switchover</span></div></div>
+          <p>The before / same-time / after choice set out above. This is the decision that most affects the plan and is not yet made.</p>
+        </div>
+<h2>What it connects to</h2>
+<div class="epic" style="--pc:var(--p-portal)">
+          <div class="eh"><div><span class="en">The integration layer</span></div></div>
+          <p>The portal connection is one of the integration lanes — a portal-facing service on the middleware plus a Salesforce-side adapter. The lane builds only the connection; it sits behind the portal shape and the timing decision, because there is no point finishing the pipe before it is known what it feeds and when.</p>
+        </div>
+<div class="epic" style="--pc:var(--p-portal)">
+          <div class="eh"><div><span class="en">Axxon go-live</span></div></div>
+          <p>Axxon&#x27;s go-live depends on portals being available. Because the portal build currently has no confirmed owner or date, that dependency rests on something unscheduled — which is the main reason to keep this track visible and its decisions current, so it does not become a surprise blocker at go-live.</p>
+        </div>
+</div>
+<div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
+</div></main>
+</div>
+</body></html>

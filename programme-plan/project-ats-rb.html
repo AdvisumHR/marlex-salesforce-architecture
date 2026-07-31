@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>The recruitment-platform rebuild — Marlex Programme</title>
+<style>
+:root{
+  --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f;
+  --spine:#922B21; --good:#196F3D; --draft:#8a94a0;
+  --maxw:820px; --nav:290px;
+  --p-atsrb:#922B21; --p-share:#7D3C98; --p-axstd:#AF601A; --p-axerp:#B9770E;
+  --p-mule:#196F3D; --p-portal:#1F618D; --p-exp:#76448A; --p-mkt:#C0287B; --p-evol:#4a5b6b;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+    --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f;
+    --good:#5fbf87; --draft:#6b7681; }
+}
+:root[data-theme="light"]{ --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f; --spine:#922B21; --good:#196F3D; --draft:#8a94a0; }
+:root[data-theme="dark"]{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+  --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f; --good:#5fbf87; --draft:#6b7681; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* layout */
+.layout{display:flex;min-height:100vh}
+nav.side{width:var(--nav);flex:0 0 var(--nav);background:var(--surface);border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 0 40px}
+nav.side .brand{padding:0 22px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}
+nav.side .brand .t{font-weight:700;font-size:15px;color:var(--brand);letter-spacing:.01em}
+nav.side .brand .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+nav.side a.nl{display:flex;align-items:center;gap:9px;padding:8px 22px;color:var(--ink-soft);font-size:14.5px;border-left:3px solid transparent}
+nav.side a.nl:hover{background:var(--surface-2);text-decoration:none;color:var(--ink)}
+nav.side a.nl.active{color:var(--brand);border-left-color:var(--brand);background:var(--brand-soft);font-weight:600}
+nav.side a.nl .ic{width:16px;text-align:center;opacity:.8;font-size:13px}
+nav.side .grp{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--draft);padding:16px 22px 6px;font-weight:700}
+nav.side a.nl.proj .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+
+main{flex:1;min-width:0;padding:40px 48px 120px;display:flex;justify-content:center}
+.col{width:100%;max-width:var(--maxw)}
+
+/* header controls */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.crumb{font-size:13px;color:var(--ink-soft)}
+.themebtn{background:var(--surface);border:1px solid var(--line);color:var(--ink-soft);border-radius:20px;
+  padding:5px 13px;font-size:12.5px;cursor:pointer}
+.themebtn:hover{border-color:var(--brand);color:var(--brand)}
+
+h1{font-size:31px;line-height:1.2;margin:.15em 0 .1em;letter-spacing:-.01em}
+h1 .kicker{display:block;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px}
+.lede{font-size:19px;line-height:1.5;color:var(--ink-soft);margin:.4em 0 1.4em;font-weight:400}
+h2{font-size:22px;margin:1.9em 0 .5em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
+h3{font-size:17.5px;margin:1.6em 0 .3em}
+p{margin:.7em 0}
+.stamp{font-size:12.5px;color:var(--draft);margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line)}
+.source-note{font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--line);
+  padding:10px 14px;border-radius:0 6px 6px 0;margin:1.2em 0}
+
+/* inline id chips */
+.id{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.82em;background:var(--surface-2);
+  color:var(--ink-soft);padding:.06em .38em;border-radius:4px;white-space:nowrap;border:1px solid var(--line)}
+
+/* stat row */
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:1.6em 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;min-width:110px;flex:1}
+.stat .n{font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+.stat .l{font-size:12.5px;color:var(--ink-soft);margin-top:5px}
+
+/* project cards on index */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;margin:1.4em 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  border-top:4px solid var(--pc,var(--brand));display:block;color:inherit;transition:transform .12s,box-shadow .12s}
+.card:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,71,97,.10);color:inherit}
+.card .k{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--pc,var(--brand));font-weight:700;letter-spacing:.03em}
+.card .t{font-size:16px;font-weight:600;margin:5px 0 8px}
+.card .d{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+.card .m{font-size:12px;color:var(--draft);margin-top:11px;display:flex;gap:14px}
+
+/* critical chain */
+.chain{list-style:none;padding:0;margin:1.4em 0;border-left:2px solid var(--spine)}
+.chain li{position:relative;padding:0 0 16px 26px}
+.chain li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;
+  background:var(--spine);border:2px solid var(--surface)}
+.chain .step{font-weight:700;color:var(--spine);font-size:14px}
+.chain .chain-proj{font-size:11px;color:var(--ink-soft);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:1px 8px;margin-left:4px;white-space:nowrap}
+.chain .what{color:var(--ink-soft);font-size:14.5px}
+
+/* epic list */
+.epic{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;
+  border-left:4px solid var(--pc,var(--brand))}
+.epic .eh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.epic .eid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:700;color:var(--pc,var(--brand))}
+.epic .en{font-size:16.5px;font-weight:600}
+.epic .cnt{font-size:12px;color:var(--draft);white-space:nowrap}
+.epic p{font-size:14.5px;color:var(--ink-soft);margin:.5em 0 0}
+details.delivs{margin-top:10px}
+details.delivs>summary{cursor:pointer;font-size:13px;color:var(--brand);list-style:none;user-select:none}
+details.delivs>summary::-webkit-details-marker{display:none}
+details.delivs>summary::before{content:"▸ ";font-size:11px}
+details.delivs[open]>summary::before{content:"▾ "}
+details.delivs ul{margin:10px 0 4px;padding-left:4px;list-style:none}
+details.delivs li{font-size:13.5px;color:var(--ink-soft);padding:6px 0 6px 0;border-top:1px dashed var(--line)}
+details.delivs li .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--pc,var(--brand));font-weight:600}
+details.delivs li .dn{color:var(--ink);font-weight:600}
+.wtag{font-size:10.5px;padding:1px 6px;border-radius:9px;font-weight:700;margin-left:6px;vertical-align:middle}
+.wtag.A{background:#D6EAF8;color:#1F618D} .wtag.B{background:#E8DAEF;color:#7D3C98} .wtag.C{background:#D5F5E3;color:#196F3D}
+@media (prefers-color-scheme:dark){.wtag.A{background:#17303c;color:#7ec8e8}.wtag.B{background:#2a1f36;color:#c39be0}.wtag.C{background:#12321f;color:#7fdca8}}
+
+/* decision cards */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:1.2em 0}
+.fbtn{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer;color:var(--ink-soft)}
+.fbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.dec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:18px 0;scroll-margin-top:20px}
+.dec .dh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:2px}
+.dec .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--brand)}
+.dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
+.badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
+.badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
+.dec p{font-size:15px;margin:.6em 0}
+.dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
+.qa{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.qa .chip{font-size:11.5px;background:var(--brand-soft);color:var(--brand);padding:2px 9px;border-radius:5px}
+.openbox{background:var(--surface-2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
+.openbox b{color:var(--accent)}
+
+/* methodology two-board flow diagram */
+.flow-diagram{margin:1.6em 0 2em}
+.flow-diagram svg{width:100%;height:auto;display:block}
+.flow-diagram .fd-board{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.flow-diagram .fd-analysis{stroke:var(--p-share)}
+.flow-diagram .fd-build{stroke:var(--good)}
+.flow-diagram .fd-eyebrow{fill:var(--ink-soft);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.flow-diagram .fd-boardname{fill:var(--ink);font-size:19px;font-weight:700}
+.flow-diagram .fd-stage{fill:var(--surface-2);stroke:var(--p-share);stroke-width:1}
+.flow-diagram .fd-stage2{fill:var(--surface-2);stroke:var(--good);stroke-width:1}
+.flow-diagram .fd-stagetxt,.flow-diagram .fd-stagetxt2{fill:var(--ink);font-size:12.5px;text-anchor:middle;dominant-baseline:middle}
+.flow-diagram .fd-mini{stroke:var(--p-share);stroke-width:1.5}
+.flow-diagram .fd-arrow{stroke:var(--brand);stroke-width:2.5}
+.flow-diagram .fd-handoff{fill:var(--brand);font-size:13px;font-weight:700;text-anchor:middle}
+.flow-diagram .fd-verdict-h{fill:var(--ink-soft);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.flow-diagram .fd-verdict{fill:var(--ink);font-size:13.5px;font-weight:600}
+.flow-diagram .fd-cap{font-size:13.5px;color:var(--ink-soft);margin:.6em 2px 0}
+
+/* diagram viewer */
+.diagram-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:1.4em 0}
+.diagram-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);font-size:13px;color:var(--ink-soft)}
+.diagram-bar button{background:var(--surface);border:1px solid var(--line);border-radius:6px;width:30px;height:28px;cursor:pointer;color:var(--ink);font-size:15px}
+.diagram-bar button:hover{border-color:var(--brand);color:var(--brand)}
+.diagram-bar .hint{margin-left:auto;font-size:12px;color:var(--draft)}
+.diagram-view{overflow:hidden;position:relative;height:560px;cursor:grab;background:var(--surface-2)}
+.diagram-view.grabbing{cursor:grabbing}
+.diagram-view img{position:absolute;top:0;left:0;transform-origin:0 0;user-select:none;-webkit-user-drag:none;max-width:none}
+/* Inline-SVG diagram. The mermaid diagram is a fixed light-palette graphic (dark
+   text on light nodes); render it on a constant light backdrop in BOTH themes so
+   it always reads, rather than trying to recolour every node for dark mode. */
+.diagram-view .dv-svgwrap{position:absolute;top:0;left:0;transform-origin:0 0;background:#FFFFFF;border-radius:8px;line-height:0}
+.diagram-view .dv-svgwrap svg.dv-svg{display:block;max-width:none}
+@media (prefers-color-scheme: dark){.diagram-view{background:#0d1013}}
+:root[data-theme="light"] .diagram-view{background:var(--surface-2)}
+:root[data-theme="dark"] .diagram-view{background:#0d1013}
+
+/* toc for decisions */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:1.4em 0}
+.toc .th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--draft);font-weight:700;margin-bottom:10px}
+/* uniform Jump-to cards — same width + height, no overlap, no clipped text (A2).
+   One clean line: the client-facing slug (which is already a meaningful name),
+   truncated with an ellipsis. The full title is on the card below. */
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.toc-grid a{display:flex;align-items:center;min-height:40px;
+  padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);
+  overflow:hidden;transition:border-color .12s,background .12s}
+.toc-grid a:hover{text-decoration:none;border-color:var(--brand);background:var(--brand-soft)}
+.toc-grid a .tid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--brand);font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.toc-grid a .tt{display:none}
+
+@media (max-width:860px){
+  .layout{flex-direction:column}
+  nav.side{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:24px 18px 80px}
+  h1{font-size:26px}
+}
+</style>
+<script>
+(function(){
+  var KEY='marlex-readable-theme';
+  var saved=null; try{saved=localStorage.getItem(KEY)}catch(e){}
+  if(saved){document.documentElement.setAttribute('data-theme',saved);}
+  window.__toggleTheme=function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    if(!cur){cur=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    var nxt=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem(KEY,nxt)}catch(e){}
+  };
+})();
+</script>
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+<div class="brand"><div class="t">Marlex Programme</div><div class="s">Readable roadmap &amp; decisions</div></div>
+<a class="nl" href="index.html"><span class="ic">◆</span>Overview</a>
+<a class="nl" href="roadmap.html"><span class="ic">▤</span>Programme roadmap</a>
+<a class="nl" href="risks.html"><span class="ic">▲</span>Risks &amp; assumptions</a>
+<div class="grp">Projects</div>
+<a class="nl proj active" href="project-ats-rb.html"><span class="dot" style="background:var(--p-atsrb)"></span>ATS-RB</a>
+<a class="nl proj" href="project-share.html"><span class="dot" style="background:var(--p-share)"></span>SHARE</a>
+<a class="nl proj" href="project-ax-std.html"><span class="dot" style="background:var(--p-axstd)"></span>AX-STD</a>
+<a class="nl proj" href="project-mule.html"><span class="dot" style="background:var(--p-mule)"></span>MULE</a>
+<a class="nl proj" href="project-portal.html"><span class="dot" style="background:var(--p-portal)"></span>PORTAL</a>
+<a class="nl proj" href="project-exp.html"><span class="dot" style="background:var(--p-exp)"></span>EXP</a>
+<a class="nl proj" href="project-mkt.html"><span class="dot" style="background:var(--p-mkt)"></span>MKT</a>
+<a class="nl proj" href="project-evol.html"><span class="dot" style="background:var(--p-evol)"></span>EVOL</a>
+<a class="nl" href="methodology.html"><span class="ic">✎</span>How specs are defined</a>
+<a class="nl" href="adrs.html"><span class="ic">⬡</span>Architecture decisions (ADR)</a>
+<a class="nl" href="pdrs.html"><span class="ic">⬢</span>Programme decisions (PDR)</a>
+</nav>
+<main><div class="col">
+<div class="topbar"><div class="crumb"><a href="index.html">Overview</a> › ATS-RB</div>
+<button class="themebtn" onclick="window.__toggleTheme()">◑ Theme</button></div>
+<div style="--pc:var(--p-atsrb)">
+<h1><span class="kicker" style="color:var(--p-atsrb)">Project ATS-RB</span>The recruitment-platform rebuild</h1>
+<p class="lede">The core rebuild — Marlex&#x27;s recruitment platform is re-created as its own native Salesforce build, in the same org as the rented product, one component at a time until the rented product can be switched off. The scope is what is coupled to that product plus the recruitment features still needed; the requirements gate draws the line.</p>
+<div class="stats"><div class="stat" style="--brand:var(--p-atsrb)"><div class="n">15</div><div class="l">Epics</div></div>
+      <div class="stat" style="--brand:var(--p-atsrb)"><div class="n">50</div><div class="l">Deliverables</div></div></div>
+<h2>How it fits together</h2>
+<p>This is the programme&#x27;s core and its largest project. It re-creates, natively, every part of the recruitment platform that is tied to the rented product&#x27;s objects and fields, plus the product features the business still needs — matching what works today and improving how people actually use it, not copying the old tool screen-for-screen. Nothing is dropped up front: the business keeps everything for now, and the requirements gate decides later what is genuinely no longer needed. The work moves fast — components are rebuilt in large numbers, often several in a day — so the real unit of tracking is not this list of headings but a component register: for each component being replaced, its native replacement, how it is switched on, and the exact end-to-end behaviour to test. There is no feature freeze while this runs; new work is built on the new model from day one so the rebuild never falls behind the live system.</p>
+<p>One thing about today&#x27;s setup makes the rebuild simpler than it might appear. Almost everyone already works inside a single standard Salesforce app and reaches the recruitment product as tabs within it, rather than the business running on a patchwork of separate applications maintained per team. There is no tangle of parallel apps to unwind, so the rebuild starts from a clean single-app footprint, and the main design question is simply how the new native experience takes the place of that one app.</p>
+<p>The native data model is settled first and becomes the real foundation everything else is built against. Then the platform is rebuilt on top of it, in the same org as the rented product, while everyone keeps working on that product untouched — the existing screens, logic and data are not changed, and each new component is built alongside its old counterpart and left switched off. Rebuilding a component includes rebuilding its access: the same people keep the same access they have today, reproduced first so nobody gains or loses anything by the switch. As each component is finished it is tested to prove it matches the behaviour it replaces, deployed to a validation environment for the business to accept, and then released to production — where it sits dormant, in place, until activation.</p>
+<p>Around the build sit the enablers. Foundation comes first — the tooling, the glossary, and the requirements inventory that sizes the whole rebuild and decides what is rebuilt, what is bought, and what is later evolution. The current org is cleaned of dead functionality and technical debt so nothing broken is carried forward, and the design decisions the build needs are settled (naming, ownership, the routing pattern, the build standards, the standard processes) without pre-locking a group-wide standard. The one capability deliberately not built is the matching-and-search engine — it is selected and bought, and plugged in behind a Marlex-owned interface. Monitoring is built into the rebuild itself, because today&#x27;s visibility belongs to the rented product and would leave with it. Integrations ship with direct connections first and a switch that lets the integration platform join later, so nothing waits on it.</p>
+<p>When everything is deployed and dormant, the switch is proven before it is taken. The build&#x27;s correctness has already been proven continuously through the build — the full test suite runs automatically every night against the switched-off build, so drift is caught within a day rather than saved up for a single weekend. The rehearsal does not re-test the functionality; it proves the switch. A sandbox is refreshed from production, and the activation is rehearsed end to end; then a full roll-back is rehearsed the other way — until both the activation and the roll-back are timed and stable, at least twice. The data move is rehearsed the same way on a full copy of the data, so the load times are known before the real freeze. The business signs the whole thing off in a single acceptance cycle — running the critical-path scripts against the migrated data — then the switch happens in place: a freeze on every source that writes the old data, the data move, the identity switch, and endpoint re-targeting. Records carry today&#x27;s access model forward unchanged at the switch — it moves no privacy boundary. The rented product is kept installed underneath as a real fallback with a dated expiry, so there is a clean way back, and close support runs until there are no critical incidents.</p>
+<p>After go-live the work finishes in a deliberate order. First the rented product is uninstalled — its dependencies removed and its components deleted — as a separate, gated, later step against written criteria, never folded into the switch. Then the lower-priority and evolutive features that were held back are built on the now-native platform. Last comes the privacy tightening: making the records that matter private and adding the country dimension, as its own stage with its own rehearsal and its own roll-back. Two things gate the whole thing: the bought engine&#x27;s quality against real Marlex data is a go/no-go criterion at the switch — it does not proceed on hope — and the rented product&#x27;s contractual runway ending in November 2027 is the date the rebuild plans to beat with margin — a renewal point with a paid fallback, not a hard lights-out. Whether the switch is one go-live or staged by area is still open.</p>
+<h2>Epics, in order</h2>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Foundation — Infrastructure &amp; Governance</span></div><div class="cnt">6 deliverables</div></div>
+<p>Stands up the programme&#x27;s infrastructure and the artefacts every later phase depends on: the repositories and CI/CD, the governance gate, the glossary, the multi-region readiness playbook, and the functional inventory and buy-versus-build classification. That inventory is the requirements gate — it sizes the rebuild, deciding which capabilities are built native, bought, or left as later evolution. It also stands up the component deprecation-and-activation register — the component-level record of what each replacement is, how it is switched on, and the end-to-end behaviour to test old-versus-new — which is the unit the rebuild is actually tracked by.</p>
+<details class="delivs"><summary>Show 6 deliverables</summary><ul><li><span class="dn">Foundation / Programme tooling &amp; CI/CD</span><br><span>Establish the programme tooling: the Marlex-owned repositories with team permissions and branch protection, the automated build-and-release pipeline covering pull-request validation and sandbox and production deployments, the branching strategy, and the delta tracking that keeps the rebuild scope visible sprint by sprint.</span></li><li><span class="dn">Foundation / Governance gate</span><br><span>The quality-gate governance framework — how a change is reviewed and approved before it merges: who reviews, what the standard-before-custom gate checks, the approval workflow, and the escalation path when a ruling is disputed. It is a build-quality control process, not an org chart.</span></li><li><span class="dn">Foundation / Business glossary</span><br><span>The bilingual mapping from Spanish business terms to English technical names, feeding the canonical model and the naming work so the whole build speaks one vocabulary.</span></li><li><span class="dn">Foundation / Functional inventory &amp; buy-versus-build</span><br><span>Catalogue the recruitment capabilities in use on the current system and classify each one — kept and rebuilt native, bought, or dropped as later evolution — following standard-before-AppExchange-before-custom. This is the requirements gate that sizes the rebuild: the build band is scoped against this inventory, and the committed capability list is what it produces, not a list fixed in advance. Matching and CV parsing are expected to be bought.</span></li><li><span class="dn">Foundation / Component deprecation &amp; activation register</span><br><span>The living register that runs the rebuild at component level: for every component being replaced, its native replacement, the step-by-step activation instructions — the switch to flip, the old automation to turn off, the order — and the critical end-to-end behaviour to test, written up in both the current system and the new build so activation can prove it matches. Because components are rebuilt many in a day, this register is the real unit of tracking; the activation rehearsals and the cutover are run from it.</span></li><li><span class="dn">Foundation / Multi-region readiness &amp; configuration playbook</span><br><span>Confirm the shared-org in-org expansion holds against the platform&#x27;s constraints and each country&#x27;s regulatory requirements (fiscal-year alignment, multi-currency, data residency), and produce the reusable regional configuration playbook that the country rollouts execute rather than redesigning each time.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Deprecation</span></div><div class="cnt">2 deliverables</div></div>
+<p>Removes functionality the business no longer needs from the current org before the build starts — chiefly the Lead object and retired metadata — so dead weight is not carried into the new native standard. It runs off the foundation inventory and must finish before the build kicks off.</p>
+<details class="delivs"><summary>Show 2 deliverables</summary><ul><li><span class="dn">Deprecation / Lead-object deprecation</span><br><span>Remove the Lead object from the current org once the inventory confirms nothing still depends on it — a targeted deprecation so the retired functionality is not carried into the rebuild.</span></li><li><span class="dn">Deprecation / Retired-metadata removal</span><br><span>Remove the metadata the inventory classifies as retired from the current org, so dead components are not carried into the native build.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Tech-Debt Remediation</span></div><div class="cnt">2 deliverables</div></div>
+<p>Fixes the technical debt on the current org before the build begins — the security findings and the structural debt the inventory surfaces — so the rebuild inherits a clean baseline rather than carrying known problems forward.</p>
+<details class="delivs"><summary>Show 2 deliverables</summary><ul><li><span class="dn">Tech-Debt / Security fixes</span><br><span>Fix the security findings the inventory surfaces on the current org before the build begins.</span></li><li><span class="dn">Tech-Debt / Structural-debt remediation</span><br><span>Remediate the structural technical debt the inventory identifies on the current org, so the rebuild inherits a clean baseline.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Automation Modernisation</span></div><div class="cnt">1 deliverable</div></div>
+<p>Converts the surviving Workflow Rules and Process Builders to Flow, since the platform has retired both older technologies. Only the automation that survives the rebuild is converted — logic rebuilt natively is not converted first.</p>
+<details class="delivs"><summary>Show 1 deliverable</summary><ul><li><span class="dn">Automation / Workflow Rules and Process Builders converted to Flow</span><br><span>Convert the surviving Workflow Rules and Process Builders to Flow on the current org — only the automation that is not rebuilt natively — since the platform has retired both older technologies.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></div><div class="cnt">5 deliverables</div></div>
+<p>Settles the solution-design decisions and requirements the build needs before it starts — the naming convention, the ownership-boundary doctrine, the dynamic-routing pattern, the build standards, and the standard business-process definition. It is decision-and-document work, no code, and deliberately not a gate that locks a group-wide standard up front. (The sharing-doctrine and country-keyed rows belong to the sharing-and-access project.)</p>
+<details class="delivs"><summary>Show 5 deliverables</summary><ul><li><span class="dn">Std Foundations / Naming convention</span><br><span>Decide the naming and regionalisation convention for the build — the prefixes that mark Marlex-standard and group-shared components and how country context is carried — closing the naming decision the build needs before it starts.</span></li><li><span class="dn">Std Foundations / Ownership-boundary doctrine &amp; classification criteria</span><br><span>Define how the solution is decomposed into ownership boundaries and the criteria for classifying each boundary and its country-level overrides, plus the cross-boundary change-approval process. This is the single ownership-boundary decision the build respects — it absorbs the boundary classification criteria and the governance matrix into one doctrine rather than three separate documents.</span></li><li><span class="dn">Std Foundations / Dynamic Flow routing pattern</span><br><span>The reference pattern for routing behaviour by division or vertical through configuration rather than duplicated Flows — the pattern the inline build applies so one master Flow serves many variants.</span></li><li><span class="dn">Std Foundations / Build-standards reference</span><br><span>The Marlex-standard build-standards reference the inline build is held to — configuration-first, no hard-coded values, text in Custom Labels, no direct cross-boundary dependencies — the definition of what &#x27;built to-standard&#x27; means.</span></li><li><span class="dn">Std Foundations / Standard business-process definition</span><br><span>Define the standard business processes and functional configuration the Marlex standard encodes — standard CRM, back-office and recruitment processes — with an explicit Marlex-standard versus country-override classification per process. This is the foundational input that makes the standard meaningful and lets the other brands and countries scope their adaptations.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Canonical Model</span></div><div class="cnt">2 deliverables</div></div>
+<p>Makes the Marlex-owned native schema the real canonical model — the actual object model, not a wrapper over a vendor — with the shared core frozen first so every capability wires against a stable model. The anti-corruption layer shrinks to the integration edges only, plus a transitional read seam so the native model and the old package can coexist in the same org during the window.</p>
+<details class="delivs"><summary>Show 2 deliverables</summary><ul><li><span class="dn">Canonical Model / Canonical data model design</span><br><span>Design the Marlex-owned native object model that becomes the real canonical model. The shared core every capability touches — candidate, contact, job, application, placement, account — is designed and frozen first so the capability builds wire against a stable model; capability-specific objects and fields are designed as needed when that capability is built, not all up front. The user interface is a rebuild input derived from requirements, not lifted from the old metadata.</span></li><li><span class="dn">Canonical Model / Integration-edge ACL &amp; coexistence read seam</span><br><span>Build the anti-corruption layer at the integration edges only — the adapter and contract seam at the middleware, ERP and job-board boundaries — plus a reference implementation of the pattern and the transitional read seam that lets the native model read from and coexist with the still-live old package during the in-place rebuild window, retired domain by domain as the old objects are decommissioned. It is a thin edge seam, not a pervasive layer.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Delivering While Rebuilding</span></div><div class="cnt">2 deliverables</div></div>
+<p>The rule that keeps the business moving without letting the two systems drift apart. There is no feature freeze during the rebuild, so new work is built native-first from day one — on the new model, never extending the old product — and any change to an already-rebuilt component is carried into its switched-off replacement in the same stroke. A register makes that mirror-work visible, dated and owned, and the tightening pre-cutover freeze forces it to zero. The hard prerequisite is that the native foundation is stood up early, or new work reaches for the old product by default.</p>
+<details class="delivs"><summary>Show 2 deliverables</summary><ul><li><span class="dn">Continuous Delivery / Native-first intake rule &amp; ticket triage</span><br><span>The rule that stops new work deepening the dependency on the old product: every incoming request is sorted at intake into work built new-native-only, work that needs old data through the shared reading seam, and a change to something already rebuilt. New work is built on the new model from day one, never extending the old product. The prerequisite is that the new foundation exists early.</span></li><li><span class="dn">Continuous Delivery / Paired-component register &amp; same-change rule</span><br><span>Register every component due to be retired that already has a switched-off replacement, and enforce one rule: if the live one is touched after its replacement was built, the same change is carried into the replacement in the same stroke — ideally by the same person, otherwise logged as dated, owned work-to-do that stays visible. The tightening freeze before go-live forces it all to zero.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Native Build</span></div><div class="cnt">8 deliverables</div></div>
+<p>Builds the recruitment platform natively against the canonical model, in place, one domain at a time — CRM, back office, recruitment — plus the native pipeline and the primary recruitment objects, which stay on their standard Salesforce records rather than being reincarnated as custom ones. The specialist matching-and-search engine is selected and bought here — decided early because the choice shapes the candidate model — and the rebuild&#x27;s own observability is built in, so the new system can be watched once the old package&#x27;s monitoring leaves with it. It is capability-shaped: each capability is designed, built, tested and validated as a self-contained unit, and the exact set comes from the requirements gate, not a fixed list. Standardisation happens inline — the code is built to-standard as each surface is opened, so it is born compliant rather than reworked in a later audit pass.</p>
+<details class="delivs"><summary>Show 8 deliverables</summary><ul><li><span class="dn">Native Build / Native build &amp; deploy pipeline</span><br><span>Define and configure the native build-and-deploy pipeline that underpins the domain builds — the retrieve scope, the tooling, the package definition and the destructive/coexistence manifest the in-place rebuild needs.</span></li><li><span class="dn">Native Build / Primary recruitment objects &amp; standard-object handling</span><br><span>Build the two Marlex-owned objects that are the primary native recruitment objects — already Marlex-owned and directly reusable — in the canonical model, with the vendor lookups flipped to native references. The anchor the rest of the recruitment domain builds onto.</span></li><li><span class="dn">Native Build / CRM domain build</span><br><span>Build the CRM domain natively against the canonical model, in place, built to-standard inline as each surface is opened. It is delivered capability by capability — each capability designed, built, tested and validated as a self-contained unit. Components with no vendor coupling reuse existing Marlex-owned metadata.</span></li><li><span class="dn">Native Build / Back-office domain build</span><br><span>Build the back-office domain natively against the canonical model, in place, built to-standard inline, capability by capability. Components with no vendor coupling reuse existing Marlex-owned metadata.</span></li><li><span class="dn">Native Build / Recruitment domain build</span><br><span>Build the recruitment domain natively on the canonical model, in place, built to-standard inline, capability by capability. This is the deliberate user-experience and process redesign for parity plus better adoption — the sharing and country-keyed surfaces are opened here, so the sharing-and-access work composes with it, not a copy of the old tool.</span></li><li><span class="dn">Native Build / Matching &amp; search engine integration</span><br><span>Integrate the bought candidate-and-vacancy matching and CV-parsing engine into the native recruitment domain — the capability the buy-versus-build classification sets as bought rather than rebuilt — including the index shape it needs on the canonical objects.</span></li><li><span class="dn">Native Build / Matching-engine selection &amp; evaluation</span><br><span>Select and evaluate the specialist matching-and-CV-parsing engine, decided early because the choice shapes the candidate model and the feed it needs. The buy is firm but conditional on an engine that plugs in as a service reading Marlex&#x27;s own records, rather than one that brings its own data model behind it; parse quality on Spanish-language CVs is tested against real Marlex CVs and vacancies before the design is frozen, and a short contract term is preferred to keep the freedom to switch later.</span></li><li><span class="dn">Native Build / Marlex-owned observability built into the rebuild</span><br><span>Build targeted, Marlex-owned monitoring into the rebuild itself, because today&#x27;s operational visibility belongs to the old product and would leave with it. One place every new automation records failures, alerts routed by severity to named owners, a small set of go-live dashboards on the flows that matter, and a scheduled check that the fallback stays untouched. It ships switched off with the build so the rehearsals exercise the instruments, not just install them.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Integration Adapters</span></div><div class="cnt">2 deliverables</div></div>
+<p>Defines the Apex integration ports the build calls and ships direct adapters as the default, with a configuration-driven selector that swaps in the middleware version per integration with no redeployment. This is what decouples the cutover from middleware readiness.</p>
+<details class="delivs"><summary>Show 2 deliverables</summary><ul><li><span class="dn">Integration Adapters / Integration ports &amp; direct adapters</span><br><span>Define the Apex integration ports the build calls (for the ERP, the job board and the portals) and build the direct adapters as the default implementation, using the canonical model.</span></li><li><span class="dn">Integration Adapters / Swappable adapter selector</span><br><span>The configuration-driven selector that chooses between the direct adapter and the middleware adapter per integration at runtime, with no redeployment — what lets the middleware lanes swap in when ready without holding up cutover.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Testing</span></div><div class="cnt">3 deliverables</div></div>
+<p>Technical quality engineering for the native build: the test strategy, the critical-path scripts for the declarative automation, and Apex coverage uplift on the built code. It also builds the proof harness that keeps the switched-off build correct through the months it waits — a full suite run automatically against the dormant build so any drift surfaces within a day. It closes before the data rehearsals because its scripts and coverage are the technical input to business acceptance — it is not the acceptance itself.</p>
+<details class="delivs"><summary>Show 3 deliverables</summary><ul><li><span class="dn">Testing / Test strategy &amp; critical-path scripts</span><br><span>The test strategy and the critical-path test scripts for the declarative automation (Flows, validation rules, layouts, record types, sharing rules) — the technical input to business acceptance, scoped by the inventory.</span></li><li><span class="dn">Testing / Apex test-coverage uplift</span><br><span>Lift the Apex test coverage on the built code to the required threshold, on the stabilised post-build codebase.</span></li><li><span class="dn">Testing / Continuous-proof harness for the dormant build</span><br><span>The harness that keeps the switched-off build correct through the months it waits: a shared way to generate test data, a quality bar that checks outcomes rather than lines of code, the full suite run automatically against the dormant build so any drift shows within a day, and scripted walkthroughs for the parts that have no automated tests. It enforces the rule that any change to a live component is mirrored into its replacement.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Data Migration</span></div><div class="cnt">4 deliverables</div></div>
+<p>Moves the data off the old objects onto the native model — field-level mapping from the current system and a repeatable idempotent pipeline with reconciliation. It designs the write-freeze that makes the move clean (every source that writes the old objects stops, timed to open right after the fortnightly bulk candidate job), and stands up a governed cold store for the records that do not board the live system — the roughly 43% of candidates who never applied to anything, plus finished placements and closed jobs. The rehearsals are at least two full-copy dress runs that drill the switch in both directions — a timed activation and a timed roll-back — because the cutover date cannot honestly be set until both are proven; the deployment itself is not rehearsed, since the build is already in production, switched off. It closes leaving the data ready for acceptance — it does not include the production cutover.</p>
+<details class="delivs"><summary>Show 4 deliverables</summary><ul><li><span class="dn">Data Migration / Data mapping &amp; migration pipeline</span><br><span>The field-level mapping from the current system as the source onto the native model, and the repeatable, idempotent migration pipeline with reconciliation that moves the data across.</span></li><li><span class="dn">Data Migration / Full-copy dress rehearsals</span><br><span>Rehearse the data move domain by domain (CRM, then back office, then recruitment) on a full-copy sandbox until each runs cleanly, leaving production-shaped data ready for business acceptance.</span></li><li><span class="dn">Data Migration / The freeze</span><br><span>Design the write-freeze that makes the data move clean: every source that writes the old records stops — scheduled jobs, automation, inbound feeds, and people editing — timed to open right after the background job that rewrites the whole candidate pool every week or two, so the freeze does not fight that bulk load.</span></li><li><span class="dn">Data Migration / Governed cold-store archive from the cutover extract</span><br><span>A governed cold store, built from the same extract the migration takes, for the records that do not board the live system: roughly four hundred and sixty thousand candidates who never applied to anything (about forty-three per cent of the pool, a business call staged with the owners), plus tens of thousands of finished placements and closed jobs. Data-protection erasures run against the store, and any record can be recalled through the same repeatable load the migration uses, matched on its original identity.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · UAT</span></div><div class="cnt">1 deliverable</div></div>
+<p>One business acceptance cycle against pre-loaded data: because the bulk data move runs ahead of the switch, the business runs the critical-path scripts against real migrated data weeks early, validating the data move and all the standardisation together, with per-domain sign-off gating progression. A final pass is the prerequisite for cutover — the business signs exactly the state it will receive. It is not gated on the record-privacy model, which is a deliberate stage after go-live.</p>
+<details class="delivs"><summary>Show 1 deliverable</summary><ul><li><span class="dn">UAT / Business acceptance cycle</span><br><span>The single business acceptance cycle against pre-loaded data: because the bulk data move runs ahead of the switch, the business can run the critical-path scripts against real migrated data weeks early, validating the data move and all the standardisation together, with per-domain sign-off gating progression and a final pass gating cutover.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Cutover &amp; Hypercare</span></div><div class="cnt">6 deliverables</div></div>
+<p>Delivers to production in place: the cutover runbook (freeze, delta load, validation, identity and endpoint switch, go/no-go, roll-back), user provisioning and single sign-on, and end-user training delivered on the switched-off system beforehand. At the switch, records carry today&#x27;s access model forward unchanged, and the bought engine&#x27;s parity against real Marlex data is a written go/no-go criterion. The old product is kept installed underneath as a dated fallback, held read-only and verified, so there is a clean way back. It also maps the external systems that call in directly and decides how each is re-pointed, and runs technical hypercare on the rebuild&#x27;s own observability — two to four weeks of close support to zero critical incidents. Because the topology is in-place, inbound endpoints stay put — the only inbound change is re-targeting internal handlers to the rebuilt objects per domain. Big-bang versus staged activation is still open for the coupled core (the candidate and vacancy records), but the lower-coupling edges are already being taken progressively ahead of it: as confirmed on 2026-07-23, the interview, talent-pool and placement capabilities go live before the main switchover — rebuilt as independent objects and released one at a time, with a September target — while the tightly-coupled core is what still has to cross in one move or in stages.</p>
+<details class="delivs"><summary>Show 6 deliverables</summary><ul><li><span class="dn">Cutover / Production cutover</span><br><span>Execute the cutover to production in place: hard freeze, delta load, validation, the identity and endpoint switch, go/no-go, and the rollback plan. Whether it is one big go-live or staged by domain is still open.</span></li><li><span class="dn">Cutover / Hypercare &amp; stabilisation</span><br><span>Two to four weeks of close post-go-live support with daily triage until there are no critical incidents; adoption reinforcement is built into this window.</span></li><li><span class="dn">Cutover / Inbound caller census &amp; re-point plan</span><br><span>Map the external systems that call Salesforce directly — the inbound surface the in-place approach leaves in place — and decide for each whether to leave it as it is, re-point it to a Marlex-owned address, or map and re-point it at the switch, re-authenticating only the connections deliberately re-cut. Not yet fully mapped, and the cutover runbook and the external-caller roll-back finalise against it.</span></li><li><span class="dn">Cutover / End-user enablement, training &amp; change management</span><br><span>End-user training, documentation and change management with a named owner: super-users per office, awareness and reinforcement communications, and clear communication of the activation date per domain so users know when a capability switches from the old system to the new. Under staged activation, training is delivered per domain as each cuts over.</span></li><li><span class="dn">Cutover / Per-capability rollback, fallback &amp; back-out runbook</span><br><span>The per-capability rollback and back-out runbook for the in-place cutover — for each capability, switching the flag off and re-activating the old automation, up to the point of no return for that capability.</span></li><li><span class="dn">Cutover / Technical hypercare thresholds &amp; observability go-live</span><br><span>Switch on the rebuild&#x27;s own monitoring at go-live and run technical close-support with written thresholds tied directly to the roll-back criteria, so the decision to hold or reverse is made on dashboard evidence rather than feel. The first weeks watch the flows that matter, on instruments that were proven in rehearsal.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Standardisation — Classification</span></div><div class="cnt">3 deliverables</div></div>
+<p>On the stabilised codebase, defines the group standard where it can honestly be defined — on real, proven components. It classifies every component as group-shared, Marlex-standard or country-specific (the catalogue the other brands and countries reuse) and produces the reporting artefacts the regions consume. There is no separate audit-and-refactor pass — the build is done to-standard inline and validated capability by capability.</p>
+<details class="delivs"><summary>Show 3 deliverables</summary><ul><li><span class="dn">Std Post-Build / Reporting &amp; outbound-email regional handover</span><span class="wtag B">Wave B</span><br><span>The reporting-and-communications handover the regions consume: the per-region outbound-email identity pattern and the template inventory, packaged as the handover artefact each country rollout picks up.</span></li><li><span class="dn">Std Post-Build / Standard KPI catalogue</span><span class="wtag B">Wave B</span><br><span>The standard KPI report catalogue per persona and domain (recruiter productivity, account-manager pipeline, back-office invoicing) plus the dashboard regionalisation pattern the countries reuse.</span></li><li><span class="dn">Std Post-Build / Component classification</span><span class="wtag B">Wave B</span><br><span>Classify every component of the finished build as group-shared, Marlex-standard or country-specific — one entry per component or group, with its repository, scope, owner and functional area. This is where the group standard is actually defined, on real proven components, and it is the catalogue the other brands and countries reuse to know what to adopt.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-atsrb)">
+<div class="eh"><div><span class="eid">ATS-RB · Package Uninstall</span></div><div class="cnt">3 deliverables</div></div>
+<p>The one-way door, held separate and last. The old product stays installed as the fallback through the switch and its dated expiry; removing it is a distinct, deliberately-later change. This writes the removal go-criteria — nothing references it, nothing writes it, no data is lost, the new system has earned it, the fallback has expired — and executes the removal as a scheduled, evidenced change once they are met.</p>
+<details class="delivs"><summary>Show 3 deliverables</summary><ul><li><span class="dn">Uninstall / Package-uninstall go-criteria</span><br><span>Write the criteria the final removal of the old product must meet: nothing still refers to it, nothing still writes it, no data is lost, the new system has earned it, and the dated fallback has expired. One prerequisite has already been checked and cleared: the configuration mappings that point at the old product&#x27;s fields have been reviewed against the platform&#x27;s own capacity, and both the switch-over that runs them side by side and the eventual clean-up sit well within it, so this part of the removal is bounded and carries no capacity risk. The removal becomes a scheduled, evidenced change rather than a leap.</span></li><li><span class="dn">Uninstall / Gated package uninstall executed</span><br><span>Remove the old product as a scheduled change once the criteria are met and the post-go-live privatisation is complete. Any data still held in its fields is extracted and checksummed first. This is the one-way door — held separate and deliberately last.</span></li><li><span class="dn">Uninstall / User-licence &amp; TR-permission teardown</span><br><span>At cutover each recruiter is granted their persona-based permission sets but deliberately KEEPS their TargetRecruit user licence and their permissions on the old AVTRRT__ objects, so the fallback stays usable.</span></li></ul></details>
+</div>
+</div>
+<div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
+</div></main>
+</div>
+</body></html>

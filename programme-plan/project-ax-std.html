@@ -1,0 +1,289 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Axxon onboarding (CRM, recruitment, back office and NET4) — Marlex Programme</title>
+<style>
+:root{
+  --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f;
+  --spine:#922B21; --good:#196F3D; --draft:#8a94a0;
+  --maxw:820px; --nav:290px;
+  --p-atsrb:#922B21; --p-share:#7D3C98; --p-axstd:#AF601A; --p-axerp:#B9770E;
+  --p-mule:#196F3D; --p-portal:#1F618D; --p-exp:#76448A; --p-mkt:#C0287B; --p-evol:#4a5b6b;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+    --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f;
+    --good:#5fbf87; --draft:#6b7681; }
+}
+:root[data-theme="light"]{ --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f; --spine:#922B21; --good:#196F3D; --draft:#8a94a0; }
+:root[data-theme="dark"]{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+  --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f; --good:#5fbf87; --draft:#6b7681; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* layout */
+.layout{display:flex;min-height:100vh}
+nav.side{width:var(--nav);flex:0 0 var(--nav);background:var(--surface);border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 0 40px}
+nav.side .brand{padding:0 22px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}
+nav.side .brand .t{font-weight:700;font-size:15px;color:var(--brand);letter-spacing:.01em}
+nav.side .brand .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+nav.side a.nl{display:flex;align-items:center;gap:9px;padding:8px 22px;color:var(--ink-soft);font-size:14.5px;border-left:3px solid transparent}
+nav.side a.nl:hover{background:var(--surface-2);text-decoration:none;color:var(--ink)}
+nav.side a.nl.active{color:var(--brand);border-left-color:var(--brand);background:var(--brand-soft);font-weight:600}
+nav.side a.nl .ic{width:16px;text-align:center;opacity:.8;font-size:13px}
+nav.side .grp{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--draft);padding:16px 22px 6px;font-weight:700}
+nav.side a.nl.proj .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+
+main{flex:1;min-width:0;padding:40px 48px 120px;display:flex;justify-content:center}
+.col{width:100%;max-width:var(--maxw)}
+
+/* header controls */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.crumb{font-size:13px;color:var(--ink-soft)}
+.themebtn{background:var(--surface);border:1px solid var(--line);color:var(--ink-soft);border-radius:20px;
+  padding:5px 13px;font-size:12.5px;cursor:pointer}
+.themebtn:hover{border-color:var(--brand);color:var(--brand)}
+
+h1{font-size:31px;line-height:1.2;margin:.15em 0 .1em;letter-spacing:-.01em}
+h1 .kicker{display:block;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px}
+.lede{font-size:19px;line-height:1.5;color:var(--ink-soft);margin:.4em 0 1.4em;font-weight:400}
+h2{font-size:22px;margin:1.9em 0 .5em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
+h3{font-size:17.5px;margin:1.6em 0 .3em}
+p{margin:.7em 0}
+.stamp{font-size:12.5px;color:var(--draft);margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line)}
+.source-note{font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--line);
+  padding:10px 14px;border-radius:0 6px 6px 0;margin:1.2em 0}
+
+/* inline id chips */
+.id{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.82em;background:var(--surface-2);
+  color:var(--ink-soft);padding:.06em .38em;border-radius:4px;white-space:nowrap;border:1px solid var(--line)}
+
+/* stat row */
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:1.6em 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;min-width:110px;flex:1}
+.stat .n{font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+.stat .l{font-size:12.5px;color:var(--ink-soft);margin-top:5px}
+
+/* project cards on index */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;margin:1.4em 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  border-top:4px solid var(--pc,var(--brand));display:block;color:inherit;transition:transform .12s,box-shadow .12s}
+.card:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,71,97,.10);color:inherit}
+.card .k{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--pc,var(--brand));font-weight:700;letter-spacing:.03em}
+.card .t{font-size:16px;font-weight:600;margin:5px 0 8px}
+.card .d{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+.card .m{font-size:12px;color:var(--draft);margin-top:11px;display:flex;gap:14px}
+
+/* critical chain */
+.chain{list-style:none;padding:0;margin:1.4em 0;border-left:2px solid var(--spine)}
+.chain li{position:relative;padding:0 0 16px 26px}
+.chain li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;
+  background:var(--spine);border:2px solid var(--surface)}
+.chain .step{font-weight:700;color:var(--spine);font-size:14px}
+.chain .chain-proj{font-size:11px;color:var(--ink-soft);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:1px 8px;margin-left:4px;white-space:nowrap}
+.chain .what{color:var(--ink-soft);font-size:14.5px}
+
+/* epic list */
+.epic{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;
+  border-left:4px solid var(--pc,var(--brand))}
+.epic .eh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.epic .eid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:700;color:var(--pc,var(--brand))}
+.epic .en{font-size:16.5px;font-weight:600}
+.epic .cnt{font-size:12px;color:var(--draft);white-space:nowrap}
+.epic p{font-size:14.5px;color:var(--ink-soft);margin:.5em 0 0}
+details.delivs{margin-top:10px}
+details.delivs>summary{cursor:pointer;font-size:13px;color:var(--brand);list-style:none;user-select:none}
+details.delivs>summary::-webkit-details-marker{display:none}
+details.delivs>summary::before{content:"▸ ";font-size:11px}
+details.delivs[open]>summary::before{content:"▾ "}
+details.delivs ul{margin:10px 0 4px;padding-left:4px;list-style:none}
+details.delivs li{font-size:13.5px;color:var(--ink-soft);padding:6px 0 6px 0;border-top:1px dashed var(--line)}
+details.delivs li .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--pc,var(--brand));font-weight:600}
+details.delivs li .dn{color:var(--ink);font-weight:600}
+.wtag{font-size:10.5px;padding:1px 6px;border-radius:9px;font-weight:700;margin-left:6px;vertical-align:middle}
+.wtag.A{background:#D6EAF8;color:#1F618D} .wtag.B{background:#E8DAEF;color:#7D3C98} .wtag.C{background:#D5F5E3;color:#196F3D}
+@media (prefers-color-scheme:dark){.wtag.A{background:#17303c;color:#7ec8e8}.wtag.B{background:#2a1f36;color:#c39be0}.wtag.C{background:#12321f;color:#7fdca8}}
+
+/* decision cards */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:1.2em 0}
+.fbtn{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer;color:var(--ink-soft)}
+.fbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.dec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:18px 0;scroll-margin-top:20px}
+.dec .dh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:2px}
+.dec .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--brand)}
+.dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
+.badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
+.badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
+.dec p{font-size:15px;margin:.6em 0}
+.dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
+.qa{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.qa .chip{font-size:11.5px;background:var(--brand-soft);color:var(--brand);padding:2px 9px;border-radius:5px}
+.openbox{background:var(--surface-2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
+.openbox b{color:var(--accent)}
+
+/* methodology two-board flow diagram */
+.flow-diagram{margin:1.6em 0 2em}
+.flow-diagram svg{width:100%;height:auto;display:block}
+.flow-diagram .fd-board{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.flow-diagram .fd-analysis{stroke:var(--p-share)}
+.flow-diagram .fd-build{stroke:var(--good)}
+.flow-diagram .fd-eyebrow{fill:var(--ink-soft);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.flow-diagram .fd-boardname{fill:var(--ink);font-size:19px;font-weight:700}
+.flow-diagram .fd-stage{fill:var(--surface-2);stroke:var(--p-share);stroke-width:1}
+.flow-diagram .fd-stage2{fill:var(--surface-2);stroke:var(--good);stroke-width:1}
+.flow-diagram .fd-stagetxt,.flow-diagram .fd-stagetxt2{fill:var(--ink);font-size:12.5px;text-anchor:middle;dominant-baseline:middle}
+.flow-diagram .fd-mini{stroke:var(--p-share);stroke-width:1.5}
+.flow-diagram .fd-arrow{stroke:var(--brand);stroke-width:2.5}
+.flow-diagram .fd-handoff{fill:var(--brand);font-size:13px;font-weight:700;text-anchor:middle}
+.flow-diagram .fd-verdict-h{fill:var(--ink-soft);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.flow-diagram .fd-verdict{fill:var(--ink);font-size:13.5px;font-weight:600}
+.flow-diagram .fd-cap{font-size:13.5px;color:var(--ink-soft);margin:.6em 2px 0}
+
+/* diagram viewer */
+.diagram-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:1.4em 0}
+.diagram-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);font-size:13px;color:var(--ink-soft)}
+.diagram-bar button{background:var(--surface);border:1px solid var(--line);border-radius:6px;width:30px;height:28px;cursor:pointer;color:var(--ink);font-size:15px}
+.diagram-bar button:hover{border-color:var(--brand);color:var(--brand)}
+.diagram-bar .hint{margin-left:auto;font-size:12px;color:var(--draft)}
+.diagram-view{overflow:hidden;position:relative;height:560px;cursor:grab;background:var(--surface-2)}
+.diagram-view.grabbing{cursor:grabbing}
+.diagram-view img{position:absolute;top:0;left:0;transform-origin:0 0;user-select:none;-webkit-user-drag:none;max-width:none}
+/* Inline-SVG diagram. The mermaid diagram is a fixed light-palette graphic (dark
+   text on light nodes); render it on a constant light backdrop in BOTH themes so
+   it always reads, rather than trying to recolour every node for dark mode. */
+.diagram-view .dv-svgwrap{position:absolute;top:0;left:0;transform-origin:0 0;background:#FFFFFF;border-radius:8px;line-height:0}
+.diagram-view .dv-svgwrap svg.dv-svg{display:block;max-width:none}
+@media (prefers-color-scheme: dark){.diagram-view{background:#0d1013}}
+:root[data-theme="light"] .diagram-view{background:var(--surface-2)}
+:root[data-theme="dark"] .diagram-view{background:#0d1013}
+
+/* toc for decisions */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:1.4em 0}
+.toc .th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--draft);font-weight:700;margin-bottom:10px}
+/* uniform Jump-to cards — same width + height, no overlap, no clipped text (A2).
+   One clean line: the client-facing slug (which is already a meaningful name),
+   truncated with an ellipsis. The full title is on the card below. */
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.toc-grid a{display:flex;align-items:center;min-height:40px;
+  padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);
+  overflow:hidden;transition:border-color .12s,background .12s}
+.toc-grid a:hover{text-decoration:none;border-color:var(--brand);background:var(--brand-soft)}
+.toc-grid a .tid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--brand);font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.toc-grid a .tt{display:none}
+
+@media (max-width:860px){
+  .layout{flex-direction:column}
+  nav.side{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:24px 18px 80px}
+  h1{font-size:26px}
+}
+</style>
+<script>
+(function(){
+  var KEY='marlex-readable-theme';
+  var saved=null; try{saved=localStorage.getItem(KEY)}catch(e){}
+  if(saved){document.documentElement.setAttribute('data-theme',saved);}
+  window.__toggleTheme=function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    if(!cur){cur=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    var nxt=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem(KEY,nxt)}catch(e){}
+  };
+})();
+</script>
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+<div class="brand"><div class="t">Marlex Programme</div><div class="s">Readable roadmap &amp; decisions</div></div>
+<a class="nl" href="index.html"><span class="ic">◆</span>Overview</a>
+<a class="nl" href="roadmap.html"><span class="ic">▤</span>Programme roadmap</a>
+<a class="nl" href="risks.html"><span class="ic">▲</span>Risks &amp; assumptions</a>
+<div class="grp">Projects</div>
+<a class="nl proj" href="project-ats-rb.html"><span class="dot" style="background:var(--p-atsrb)"></span>ATS-RB</a>
+<a class="nl proj" href="project-share.html"><span class="dot" style="background:var(--p-share)"></span>SHARE</a>
+<a class="nl proj active" href="project-ax-std.html"><span class="dot" style="background:var(--p-axstd)"></span>AX-STD</a>
+<a class="nl proj" href="project-mule.html"><span class="dot" style="background:var(--p-mule)"></span>MULE</a>
+<a class="nl proj" href="project-portal.html"><span class="dot" style="background:var(--p-portal)"></span>PORTAL</a>
+<a class="nl proj" href="project-exp.html"><span class="dot" style="background:var(--p-exp)"></span>EXP</a>
+<a class="nl proj" href="project-mkt.html"><span class="dot" style="background:var(--p-mkt)"></span>MKT</a>
+<a class="nl proj" href="project-evol.html"><span class="dot" style="background:var(--p-evol)"></span>EVOL</a>
+<a class="nl" href="methodology.html"><span class="ic">✎</span>How specs are defined</a>
+<a class="nl" href="adrs.html"><span class="ic">⬡</span>Architecture decisions (ADR)</a>
+<a class="nl" href="pdrs.html"><span class="ic">⬢</span>Programme decisions (PDR)</a>
+</nav>
+<main><div class="col">
+<div class="topbar"><div class="crumb"><a href="index.html">Overview</a> › AX-STD</div>
+<button class="themebtn" onclick="window.__toggleTheme()">◑ Theme</button></div>
+<div style="--pc:var(--p-axstd)">
+<h1><span class="kicker" style="color:var(--p-axstd)">Project AX-STD</span>Axxon onboarding (CRM, recruitment, back office and NET4)</h1>
+<p class="lede">Axxon onboards onto the group standard by reuse-by-default — replicate the Marlex build and deploy the group-shared capabilities, building Axxon-specific only where a real business need or French regulation demands it — on its own separate Salesforce org, across CRM, recruitment, back office and the NET4 finance connection.</p>
+<div class="stats"><div class="stat" style="--brand:var(--p-axstd)"><div class="n">8</div><div class="l">Epics</div></div>
+      <div class="stat" style="--brand:var(--p-axstd)"><div class="n">50</div><div class="l">Deliverables</div></div></div>
+<h2>How it fits together</h2>
+<p>Axxon is an acquired brand, so this is M&amp;A onboarding, not a regional rollout. It keeps its own separate Salesforce org, and the governing rule is reuse-by-default: reuse a group-shared capability whenever Axxon&#x27;s requirement is equivalent, and build an Axxon-specific extension only where a genuine business need or French regulation requires it. Divergence is the exception and has to be justified — which keeps the two brands consistent and Axxon cheaper to run.</p>
+<p>The onboarding is deliberately sequenced so the components are made reusable before any of them reach Axxon. Foundations come first (repositories, governance, pipeline, inventory, glossary, and the full Salesforce licence upgrade). Discovery then produces the reuse map — for every Axxon requirement, the decision to reuse, adapt, or build-new — driven by a point-by-point map of where Axxon&#x27;s processes differ from Marlex&#x27;s.</p>
+<p>Then a distinct global-readiness phase makes the reuse set genuinely reusable: it takes the components Axxon will reuse — including the stable CRM, back-office and recruitment parts the Marlex rebuild never standardised — refactors them to be configuration-first with no Marlex-specific hardcoding, promotes the qualifying ones into the group repository, and consolidates the Global Template. Its exit gate is that the capabilities Axxon plans to reuse are confirmed global-ready. Only then do the adoption tracks run.</p>
+<p>The finance connection to NET4 is the one track that can start early — it is independent of the recruitment rebuild and reuses the shared Marlex-to-NET4 integration, driven by a finance-reporting target treated as an ideal rather than a hard deadline. CRM onboarding reuses the group CRM and adapts only the confirmed delta, gated on the licence upgrade and the CRM capabilities being global-ready. Recruitment replicates the Marlex build (held until the rebuild defines it), extends only Axxon&#x27;s verticals and French regulation, then cuts over and retires Eolia. Back-office onboarding follows the NET4 go-live and closes out the residual ERP.</p>
+<p>The main risk is coexistence cost — running Axxon&#x27;s legacy systems alongside the new stack gets expensive after about twelve months, with a legacy-licence cliff in 2028 — which is exactly why reuse-by-default matters: reusing proven group capabilities is faster to stand up than a bespoke build, so Axxon spends less time running two systems at once.</p>
+<h2>Epics, in order</h2>
+<div class="epic" style="--pc:var(--p-axstd)">
+<div class="eh"><div><span class="eid">AX-STD · Foundation &amp; Governance</span></div><div class="cnt">6 deliverables</div></div>
+<p>Stands up everything Axxon needs before onboarding: its own Marlex-owned repositories, the shared governance body extended to Axxon, the CI/CD pipeline, a full inventory of the current Axxon org, a glossary delta, and the upgrade from limited Platform licences to full Salesforce licences (the hard prerequisite for adopting the CRM). It equips Axxon to reuse the group standard rather than build in isolation.</p>
+<details class="delivs"><summary>Show 6 deliverables</summary><ul><li><span class="dn">Foundation / Axxon repositories</span><br><span>Marlex-owned GitHub repositories for the Axxon org — one tracking the current org and one for the target org — inside the Marlex GitHub organisation, so Axxon&#x27;s code control matches the group model from day one.</span></li><li><span class="dn">Foundation / Center of Excellence extended to Axxon</span><br><span>Extend the shared programme governance body to cover Axxon: add Axxon product owners per vertical and define how Axxon-side decisions are reviewed and how divergence from the standard is approved.</span></li><li><span class="dn">Foundation / Axxon CI/CD pipeline</span><br><span>An automated release pipeline for the Axxon repositories, mirroring the branching and CI/CD pattern used on the Marlex build and enforcing the same quality gates.</span></li><li><span class="dn">Foundation / Axxon functional inventory</span><br><span>A catalogue of all metadata in the current Axxon Salesforce org (CRM-only today), classifying each item as keep, migrate, or retire, and flagging anything that must integrate with or block the onboarding.</span></li><li><span class="dn">Foundation / Axxon glossary delta</span><br><span>A terminology delta layered on the Marlex business glossary, capturing Axxon&#x27;s vertical names, its process taxonomy (temporary work and selection), and any French-regulatory terms — so the reuse map and the build speak one vocabulary.</span></li><li><span class="dn">Foundation / Full Salesforce licence upgrade</span><br><span>The plan and execution to upgrade Axxon from limited Platform licences to full Salesforce licences — the hard prerequisite for adopting the group CRM. Without it, CRM onboarding cannot start.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-axstd)">
+<div class="eh"><div><span class="eid">AX-STD · Discovery &amp; Reuse Mapping</span></div><div class="cnt">5 deliverables</div></div>
+<p>Discovers the Axxon estate and produces the reuse map — for every Axxon requirement, the decision to reuse a group-shared capability as-is, adapt one, or build an Axxon-specific extension (with a business justification required for any build-new). It captures the recruitment-system feasibility, the legacy sunset constraints, the coexistence plan, and the point-by-point map of where Axxon&#x27;s processes differ from Marlex&#x27;s — the input that makes reuse-by-default operational.</p>
+<details class="delivs"><summary>Show 5 deliverables</summary><ul><li><span class="dn">Discovery / Recruitment-system integration feasibility</span><br><span>Assess Axxon&#x27;s current recruitment system (Eolia): its API surface, how data can be extracted, and whether it is integrated during coexistence or simply retired at cutover. Feeds the recruitment build and the coexistence plan.</span></li><li><span class="dn">Discovery / Legacy sunset constraints</span><br><span>Capture the constraints on retiring Axxon&#x27;s legacy systems (Eolia, e-Oer, the current Salesforce org) — data-retention, regulatory, and operational — that bound the coexistence window and the cutover sequencing.</span></li><li><span class="dn">Discovery / Coexistence plan</span><br><span>How Axxon runs its legacy systems alongside the new stack during onboarding, and for how long — the plan that keeps the coexistence window short, since running two systems in parallel is the project&#x27;s dominant cost (expensive after roughly a year, legacy-licence cliff in 2028).</span></li><li><span class="dn">Discovery / Reuse map</span><br><span>The governing artefact of reuse-by-default: for every Axxon requirement, the decision to reuse a group-shared capability as-is, adapt one, or build an Axxon-specific extension — with the business justification required for any build-new. Derived from the process delta; it is what the CRM, recruitment and back-office onboarding execute against.</span></li><li><span class="dn">Discovery / Marlex-versus-Axxon process delta</span><br><span>The point-by-point map of where Axxon&#x27;s processes differ from Marlex&#x27;s, across CRM, recruitment and back office. This is the input that drives the reuse map — everything not on the delta is reused as-is; everything on it is either adapted or, only on a real business need, extended Axxon-specific.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-axstd)">
+<div class="eh"><div><span class="eid">AX-STD · Global-Readiness</span></div><div class="cnt">4 deliverables</div></div>
+<p>The global-readiness gate that reuse-by-default depends on. It takes the components Axxon will reuse — including the stable CRM, back-office and recruitment parts the Marlex rebuild did not standardise — refactors them to be genuinely reusable (configuration-first, no Marlex-specific hardcoding, standard naming, decoupled logic), confirms the promotion criteria, promotes the qualifying components into the group repository, and consolidates the Global Template. It exits when the capabilities Axxon plans to reuse are confirmed global-ready and available.</p>
+<details class="delivs"><summary>Show 4 deliverables</summary><ul><li><span class="dn">Global-Ready / Reuse-set global-readiness assessment</span><br><span>Take the group-shared capabilities the reuse map says Axxon will reuse and assess each for global-readiness — including the CRM/back-office/ATS components the Marlex rebuild did not standardise (stable parts carried forward untouched). Produce the list of components that still carry Marlex-specific assumptions and must be refactored before Axxon can reuse them.</span></li><li><span class="dn">Global-Ready / Global-ready refactor of the carried-forward components</span><br><span>Refactor the components flagged by the readiness assessment so they are genuinely reusable: externalise text to Custom Labels, externalise configuration to Custom Metadata, remove Marlex-specific hardcoding and direct cross-boundary dependencies, and align naming and structure to the standard. Scope is the reuse-set gap the rebuild&#x27;s own standardisation did not cover.</span></li><li><span class="dn">Global-Ready / Promotion criteria &amp; group-repository promotion</span><br><span>Confirm the criteria that move a component from the Marlex repository to the group repository (proven reuse across at least two brands, group ownership, common roadmap), then promote the qualifying reuse-set components into the group repository as the single source of truth for cross-org modules.</span></li><li><span class="dn">Global-Ready / Global Template consolidation</span><br><span>Consolidate the Global Template: the rebuild&#x27;s group-ready output plus the remaining CRM/back-office/ATS standardisations from this phase, packaged as the versioned group-shared module set Axxon deploys from. Exit gate for the onboarding tracks — the capabilities Axxon reuses are confirmed global-ready and available.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-axstd)">
+<div class="eh"><div><span class="eid">AX-STD · NET4 Integration</span></div><div class="cnt">8 deliverables</div></div>
+<p>Replaces Axxon&#x27;s connection to its current ERP (e-Oer) with NET4, build and cutover in one track — the one Axxon track that can start early because it is independent of the recruitment rebuild and reuses the shared Marlex-to-NET4 integration. It covers the integration requirements, the adapter (or a point-to-point fallback), multi-tenant routing, connectivity, rehearsals, cutover, and hypercare. The move is forward-only; timing is a finance-reporting ideal, not a hard deadline; the residual back-office functions retire only when back-office onboarding closes.</p>
+<details class="delivs"><summary>Show 8 deliverables</summary><ul><li><span class="dn">NET4 / NET4 integration requirements &amp; scope</span><br><span>Document the Axxon ERP flows that NET4 replaces — data, business processes, and payload semantics for both temporary work and selection — and the scope of the Axxon-to-NET4 integration. The pivot-independent early track; reuses the shared Marlex-to-NET4 integration.</span></li><li><span class="dn">NET4 / Axxon-to-middleware adapter</span><br><span>The adapter that connects Axxon&#x27;s systems to the middleware for the NET4 flows (or a direct point-to-point bridge as the fallback if the middleware path is not ready), plus the multi-tenant routing that distinguishes Axxon traffic. Reuses the shared Marlex-to-NET4 System API.</span></li><li><span class="dn">NET4 / Axxon Salesforce connectivity to NET4</span><br><span>Connected App and Named Credential on the Axxon org, with the authentication trust to the middleware gateway, reusing the group re-authentication procedure — the Salesforce side of the NET4 pipe.</span></li><li><span class="dn">NET4 / NET4 cutover rehearsals</span><br><span>End-to-end rehearsals of the NET4 cutover on a full copy of the data across the Axxon org, the middleware, and a NET4 staging tenant — validating the forward flow and the rollback path.</span></li><li><span class="dn">NET4 / NET4 cutover runbook</span><br><span>The production cutover runbook for NET4: soft freeze, switching Axxon&#x27;s flows to NET4 via the middleware, go/no-go criteria, and rollback plan.</span></li><li><span class="dn">NET4 / NET4 production cutover</span><br><span>Execute the runbook in production — freeze the old ERP link, switch all Axxon flows to NET4 — and reconcile pre/post business metrics to confirm the switch.</span></li><li><span class="dn">NET4 / NET4 hypercare &amp; stabilisation</span><br><span>Two to four weeks of close post-go-live support after the NET4 cutover: error monitoring, daily triage, and defect resolution.</span></li><li><span class="dn">NET4 / NET4-replaced ERP functions retired</span><br><span>Retire the Axxon ERP functions NET4 now covers. The residual back-office functions stay until back-office onboarding closes, which triggers the full ERP sunset.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-axstd)">
+<div class="eh"><div><span class="eid">AX-STD · ATS Onboarding — Build</span></div><div class="cnt">6 deliverables</div></div>
+<p>Builds Axxon&#x27;s recruitment platform by replicating the Marlex recruitment build as the template, extending only where Axxon&#x27;s verticals or French regulation genuinely require it. Held until the Marlex rebuild defines that platform and the recruitment capabilities are confirmed global-ready. It covers the gap analysis, the vertical/regulation extension design, the baseline, the reuse-first build, and the data mapping and pipeline from Eolia — a reuse-first mini-build, not a from-scratch rebuild.</p>
+<details class="delivs"><summary>Show 6 deliverables</summary><ul><li><span class="dn">ATS Build / Recruitment gap analysis</span><br><span>Functional requirements and gap analysis for Axxon recruitment against the Marlex recruitment build — CV parsing and matching are tied to the bought engine — establishing what is reused versus what needs an Axxon extension.</span></li><li><span class="dn">ATS Build / Vertical &amp; regulation extension design</span><br><span>Design the extensions for Axxon&#x27;s verticals (Business / Operational / Technical) and French regulation on top of the reused recruitment platform — the only parts that diverge from the Marlex build.</span></li><li><span class="dn">ATS Build / Axxon recruitment baseline</span><br><span>Stand up the Axxon recruitment target baseline by replicating the Marlex recruitment build from the group reference — no vendor package — as the base the vertical/regulation extensions layer onto.</span></li><li><span class="dn">ATS Build / Recruitment platform built</span><br><span>Build Axxon&#x27;s recruitment platform by replicating the group-shared recruitment capabilities and applying only the vertical/regulation extensions — reuse-first, not a from-scratch rebuild.</span></li><li><span class="dn">ATS Build / Recruitment data mapping</span><br><span>Field-level mapping from Eolia to the Axxon recruitment model — candidates, applications, placements, and binary attachments.</span></li><li><span class="dn">ATS Build / Recruitment data pipeline</span><br><span>The repeatable, idempotent migration pipeline from Eolia into the Axxon recruitment model, including binary attachments, with reconciliation checks.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-axstd)">
+<div class="eh"><div><span class="eid">AX-STD · ATS Onboarding — Cutover</span></div><div class="cnt">6 deliverables</div></div>
+<p>Takes Axxon&#x27;s rebuilt recruitment platform live and retires the old one: domain rehearsals, business acceptance, the cutover runbook, the production cutover, close post-go-live support, and decommissioning of Eolia (which retires only once the new platform is live). Depends on the recruitment build being complete.</p>
+<details class="delivs"><summary>Show 6 deliverables</summary><ul><li><span class="dn">ATS Cutover / Recruitment domain rehearsals</span><br><span>End-to-end rehearsals of the Axxon recruitment cutover by domain (recruitment, placement, onboarding) on a full data copy.</span></li><li><span class="dn">ATS Cutover / Recruitment business acceptance</span><br><span>Axxon business users validate the rebuilt recruitment platform on migrated data, with per-domain sign-off gating the cutover.</span></li><li><span class="dn">ATS Cutover / Recruitment cutover runbook</span><br><span>The production cutover runbook for Axxon recruitment: freeze, delta load, validation, go/no-go, and rollback.</span></li><li><span class="dn">ATS Cutover / Recruitment production cutover</span><br><span>Execute the runbook in production — Axxon recruitment goes live on the new platform.</span></li><li><span class="dn">ATS Cutover / Recruitment hypercare &amp; stabilisation</span><br><span>Two to four weeks of close post-go-live support after the Axxon recruitment cutover.</span></li><li><span class="dn">ATS Cutover / Eolia decommissioned</span><br><span>Retire Axxon&#x27;s current recruitment system (Eolia) once the new platform is live and stable.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-axstd)">
+<div class="eh"><div><span class="eid">AX-STD · Back-Office Onboarding</span></div><div class="cnt">10 deliverables</div></div>
+<p>Brings Axxon&#x27;s back office onto the group standard and retires the residual Axxon ERP not already replaced by NET4 — a reuse-first onboarding: scope delimitation, data mapping and migration, deploy the group back-office capabilities, rehearsals, business acceptance, cutover, hypercare, and the final Axxon ERP decommissioning. Follows the NET4 go-live.</p>
+<details class="delivs"><summary>Show 10 deliverables</summary><ul><li><span class="dn">Back-Office / Back-office scope delimitation</span><br><span>Identify which residual Axxon ERP back-office functions move to the group back office, which stay in NET4, and which retire — the scope of the reuse-first back-office onboarding.</span></li><li><span class="dn">Back-Office / Back-office data mapping</span><br><span>Field-level mapping from the residual Axxon ERP to the group back-office model.</span></li><li><span class="dn">Back-Office / Back office deployed</span><br><span>Deploy the group-shared back-office capabilities to the Axxon org, reusing the standard and extending only where a real business need is justified.</span></li><li><span class="dn">Back-Office / Back-office data pipeline</span><br><span>The migration pipeline from the residual Axxon ERP into the Axxon back-office model, with reconciliation.</span></li><li><span class="dn">Back-Office / Back-office rehearsals</span><br><span>End-to-end rehearsals of the back-office cutover on a full data copy.</span></li><li><span class="dn">Back-Office / Back-office business acceptance</span><br><span>Axxon business users validate the onboarded back office, with sign-off gating the cutover.</span></li><li><span class="dn">Back-Office / Back-office cutover runbook</span><br><span>The production cutover runbook for the Axxon back office.</span></li><li><span class="dn">Back-Office / Back-office production cutover</span><br><span>Execute the runbook in production — the Axxon back office goes live on the group standard.</span></li><li><span class="dn">Back-Office / Back-office hypercare &amp; stabilisation</span><br><span>Two to four weeks of close post-go-live support after the back-office cutover.</span></li><li><span class="dn">Back-Office / Residual Axxon ERP decommissioned</span><br><span>Retire the residual Axxon ERP once the back office is live — the full Axxon ERP sunset, completing what the NET4 cutover started.</span></li></ul></details>
+</div>
+<div class="epic" style="--pc:var(--p-axstd)">
+<div class="eh"><div><span class="eid">AX-STD · CRM Onboarding</span></div><div class="cnt">5 deliverables</div></div>
+<p>Brings Axxon onto the group CRM by reusing it — there is no legacy CRM to retire. It confirms the Axxon delta (pipeline stages, account model, French regulatory fields, division-versus-vertical model), deploys the group-shared CRM and adapts only that delta, migrates the data, and cuts over. Gated on the full licence upgrade and the CRM capabilities being global-ready; independent of the recruitment and NET4 tracks.</p>
+<details class="delivs"><summary>Show 5 deliverables</summary><ul><li><span class="dn">CRM / CRM delta confirmation</span><br><span>Confirm the Axxon CRM delta against the group standard (pipeline stages, account model, French regulatory fields, division-versus-vertical model) — the short list of genuine differences to adapt; everything else is reused as-is.</span></li><li><span class="dn">CRM / CRM deployed and delta-adapted</span><br><span>Deploy the group-shared CRM capabilities to the Axxon org and adapt only the confirmed delta — reuse-first, not a rebuild. Axxon-specific extensions only where a real business need is justified.</span></li><li><span class="dn">CRM / CRM data migration</span><br><span>Migrate Axxon&#x27;s current CRM data into the group-standard model — field mapping, load order, reconciliation.</span></li><li><span class="dn">CRM / CRM business acceptance</span><br><span>Axxon business users validate the onboarded CRM against their processes, with sign-off gating the cutover.</span></li><li><span class="dn">CRM / CRM cutover &amp; hypercare</span><br><span>Cut the Axxon CRM over to the group standard in production and provide close post-go-live support.</span></li></ul></details>
+</div>
+</div>
+<div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
+</div></main>
+</div>
+</body></html>
