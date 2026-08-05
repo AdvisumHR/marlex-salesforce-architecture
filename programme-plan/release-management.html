@@ -1,0 +1,424 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Release management — Marlex Programme</title>
+<style>
+:root{
+  --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f;
+  --spine:#922B21; --good:#196F3D; --draft:#8a94a0;
+  --maxw:820px; --nav:290px;
+  --p-atsrb:#922B21; --p-share:#7D3C98; --p-axstd:#AF601A; --p-axerp:#B9770E;
+  --p-mule:#196F3D; --p-portal:#1F618D; --p-exp:#76448A; --p-mkt:#C0287B; --p-evol:#4a5b6b;
+}
+@media (prefers-color-scheme: dark){
+  :root{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+    --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f;
+    --good:#5fbf87; --draft:#6b7681; }
+}
+:root[data-theme="light"]{ --bg:#f7f8fa; --surface:#ffffff; --surface-2:#f0f2f5; --ink:#1a2733; --ink-soft:#4a5b6b;
+  --line:#dde3ea; --brand:#0F4761; --brand-soft:#e3edf2; --accent:#b7791f; --spine:#922B21; --good:#196F3D; --draft:#8a94a0; }
+:root[data-theme="dark"]{ --bg:#0e1419; --surface:#161d24; --surface-2:#1d262f; --ink:#e6edf3; --ink-soft:#9fb0bf;
+  --line:#28323d; --brand:#4fa3c7; --brand-soft:#17303c; --accent:#e0a94a; --spine:#e07a6f; --good:#5fbf87; --draft:#6b7681; }
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);
+  font-family:-apple-system,BlinkMacSystemFont,"Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-size:16.5px;line-height:1.62;-webkit-font-smoothing:antialiased;}
+a{color:var(--brand);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* layout */
+.layout{display:flex;min-height:100vh}
+nav.side{width:var(--nav);flex:0 0 var(--nav);background:var(--surface);border-right:1px solid var(--line);
+  position:sticky;top:0;height:100vh;overflow-y:auto;padding:22px 0 40px}
+nav.side .brand{padding:0 22px 16px;border-bottom:1px solid var(--line);margin-bottom:10px}
+nav.side .brand .t{font-weight:700;font-size:15px;color:var(--brand);letter-spacing:.01em}
+nav.side .brand .s{font-size:12px;color:var(--ink-soft);margin-top:2px}
+nav.side a.nl{display:flex;align-items:center;gap:9px;padding:8px 22px;color:var(--ink-soft);font-size:14.5px;border-left:3px solid transparent}
+nav.side a.nl:hover{background:var(--surface-2);text-decoration:none;color:var(--ink)}
+nav.side a.nl.active{color:var(--brand);border-left-color:var(--brand);background:var(--brand-soft);font-weight:600}
+nav.side a.nl .ic{width:16px;text-align:center;opacity:.8;font-size:13px}
+nav.side .grp{font-size:11px;text-transform:uppercase;letter-spacing:.09em;color:var(--draft);padding:16px 22px 6px;font-weight:700}
+nav.side a.nl.proj .dot{width:8px;height:8px;border-radius:50%;flex:0 0 8px}
+
+main{flex:1;min-width:0;padding:40px 48px 120px;display:flex;justify-content:center}
+.col{width:100%;max-width:var(--maxw)}
+
+/* header controls */
+.topbar{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px}
+.crumb{font-size:13px;color:var(--ink-soft)}
+.themebtn{background:var(--surface);border:1px solid var(--line);color:var(--ink-soft);border-radius:20px;
+  padding:5px 13px;font-size:12.5px;cursor:pointer}
+.themebtn:hover{border-color:var(--brand);color:var(--brand)}
+
+h1{font-size:31px;line-height:1.2;margin:.15em 0 .1em;letter-spacing:-.01em}
+h1 .kicker{display:block;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;color:var(--accent);margin-bottom:8px}
+.lede{font-size:19px;line-height:1.5;color:var(--ink-soft);margin:.4em 0 1.4em;font-weight:400}
+h2{font-size:22px;margin:1.9em 0 .5em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
+h3{font-size:17.5px;margin:1.6em 0 .3em}
+p{margin:.7em 0}
+.stamp{font-size:12.5px;color:var(--draft);margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line)}
+.source-note{font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--line);
+  padding:10px 14px;border-radius:0 6px 6px 0;margin:1.2em 0}
+
+/* inline id chips */
+.id{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.82em;background:var(--surface-2);
+  color:var(--ink-soft);padding:.06em .38em;border-radius:4px;white-space:nowrap;border:1px solid var(--line)}
+
+/* stat row */
+.stats{display:flex;flex-wrap:wrap;gap:12px;margin:1.6em 0}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;min-width:110px;flex:1}
+.stat .n{font-size:26px;font-weight:700;color:var(--brand);line-height:1}
+.stat .l{font-size:12.5px;color:var(--ink-soft);margin-top:5px}
+
+/* project cards on index */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(255px,1fr));gap:16px;margin:1.4em 0}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:18px 20px;
+  border-top:4px solid var(--pc,var(--brand));display:block;color:inherit;transition:transform .12s,box-shadow .12s}
+.card:hover{text-decoration:none;transform:translateY(-2px);box-shadow:0 6px 20px rgba(15,71,97,.10);color:inherit}
+.card .k{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--pc,var(--brand));font-weight:700;letter-spacing:.03em}
+.card .t{font-size:16px;font-weight:600;margin:5px 0 8px}
+.card .d{font-size:13.5px;color:var(--ink-soft);line-height:1.5}
+.card .m{font-size:12px;color:var(--draft);margin-top:11px;display:flex;gap:14px}
+
+/* critical chain */
+.chain{list-style:none;padding:0;margin:1.4em 0;border-left:2px solid var(--spine)}
+.chain li{position:relative;padding:0 0 16px 26px}
+.chain li::before{content:"";position:absolute;left:-7px;top:6px;width:12px;height:12px;border-radius:50%;
+  background:var(--spine);border:2px solid var(--surface)}
+.chain .step{font-weight:700;color:var(--spine);font-size:14px}
+.chain .chain-proj{font-size:11px;color:var(--ink-soft);background:var(--surface-2);border:1px solid var(--line);border-radius:9px;padding:1px 8px;margin-left:4px;white-space:nowrap}
+.chain .what{color:var(--ink-soft);font-size:14.5px}
+
+/* epic list */
+.epic{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:16px 20px;margin:14px 0;
+  border-left:4px solid var(--pc,var(--brand))}
+.epic .eh{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.epic .eid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12.5px;font-weight:700;color:var(--pc,var(--brand))}
+.epic .en{font-size:16.5px;font-weight:600}
+.epic .cnt{font-size:12px;color:var(--draft);white-space:nowrap}
+.epic p{font-size:14.5px;color:var(--ink-soft);margin:.5em 0 0}
+details.delivs{margin-top:10px}
+details.delivs>summary{cursor:pointer;font-size:13px;color:var(--brand);list-style:none;user-select:none}
+details.delivs>summary::-webkit-details-marker{display:none}
+details.delivs>summary::before{content:"▸ ";font-size:11px}
+details.delivs[open]>summary::before{content:"▾ "}
+details.delivs ul{margin:10px 0 4px;padding-left:4px;list-style:none}
+details.delivs li{font-size:13.5px;color:var(--ink-soft);padding:6px 0 6px 0;border-top:1px dashed var(--line)}
+details.delivs li .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:11.5px;color:var(--pc,var(--brand));font-weight:600}
+details.delivs li .dn{color:var(--ink);font-weight:600}
+.wtag{font-size:10.5px;padding:1px 6px;border-radius:9px;font-weight:700;margin-left:6px;vertical-align:middle}
+.wtag.A{background:#D6EAF8;color:#1F618D} .wtag.B{background:#E8DAEF;color:#7D3C98} .wtag.C{background:#D5F5E3;color:#196F3D}
+@media (prefers-color-scheme:dark){.wtag.A{background:#17303c;color:#7ec8e8}.wtag.B{background:#2a1f36;color:#c39be0}.wtag.C{background:#12321f;color:#7fdca8}}
+
+/* decision cards */
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin:1.2em 0}
+.fbtn{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:5px 14px;font-size:13px;cursor:pointer;color:var(--ink-soft)}
+.fbtn.on{background:var(--brand);border-color:var(--brand);color:#fff;font-weight:600}
+.dec{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:18px 0;scroll-margin-top:20px}
+.dec .dh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap;margin-bottom:2px}
+.dec .did{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:13px;font-weight:700;color:var(--brand)}
+.dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
+.badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
+.badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
+.dec p{font-size:15px;margin:.6em 0}
+.dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
+.qa{display:flex;gap:6px;flex-wrap:wrap;margin-top:12px}
+.qa .chip{font-size:11.5px;background:var(--brand-soft);color:var(--brand);padding:2px 9px;border-radius:5px}
+.openbox{background:var(--surface-2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
+.openbox b{color:var(--accent)}
+
+/* methodology two-board flow diagram */
+.flow-diagram{margin:1.6em 0 2em}
+.flow-diagram svg{width:100%;height:auto;display:block}
+.flow-diagram .fd-board{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.flow-diagram .fd-analysis{stroke:var(--p-share)}
+.flow-diagram .fd-build{stroke:var(--good)}
+.flow-diagram .fd-eyebrow{fill:var(--ink-soft);font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.flow-diagram .fd-boardname{fill:var(--ink);font-size:19px;font-weight:700}
+.flow-diagram .fd-stage{fill:var(--surface-2);stroke:var(--p-share);stroke-width:1}
+.flow-diagram .fd-stage2{fill:var(--surface-2);stroke:var(--good);stroke-width:1}
+.flow-diagram .fd-stagetxt,.flow-diagram .fd-stagetxt2{fill:var(--ink);font-size:12.5px;text-anchor:middle;dominant-baseline:middle}
+.flow-diagram .fd-mini{stroke:var(--p-share);stroke-width:1.5}
+.flow-diagram .fd-arrow{stroke:var(--brand);stroke-width:2.5}
+.flow-diagram .fd-handoff{fill:var(--brand);font-size:13px;font-weight:700;text-anchor:middle}
+.flow-diagram .fd-verdict-h{fill:var(--ink-soft);font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase}
+.flow-diagram .fd-verdict{fill:var(--ink);font-size:13.5px;font-weight:600}
+.flow-diagram .fd-cap{font-size:13.5px;color:var(--ink-soft);margin:.6em 2px 0}
+
+/* diagram viewer */
+.diagram-wrap{background:var(--surface);border:1px solid var(--line);border-radius:12px;overflow:hidden;margin:1.4em 0}
+.diagram-bar{display:flex;align-items:center;gap:8px;padding:8px 12px;border-bottom:1px solid var(--line);background:var(--surface-2);font-size:13px;color:var(--ink-soft)}
+.diagram-bar button{background:var(--surface);border:1px solid var(--line);border-radius:6px;width:30px;height:28px;cursor:pointer;color:var(--ink);font-size:15px}
+.diagram-bar button:hover{border-color:var(--brand);color:var(--brand)}
+.diagram-bar .hint{margin-left:auto;font-size:12px;color:var(--draft)}
+.diagram-view{overflow:hidden;position:relative;height:560px;cursor:grab;background:var(--surface-2)}
+.diagram-view.grabbing{cursor:grabbing}
+.diagram-view img{position:absolute;top:0;left:0;transform-origin:0 0;user-select:none;-webkit-user-drag:none;max-width:none}
+/* Inline-SVG diagram. The mermaid diagram is a fixed light-palette graphic (dark
+   text on light nodes); render it on a constant light backdrop in BOTH themes so
+   it always reads, rather than trying to recolour every node for dark mode. */
+.diagram-view .dv-svgwrap{position:absolute;top:0;left:0;transform-origin:0 0;background:#FFFFFF;border-radius:8px;line-height:0}
+.diagram-view .dv-svgwrap svg.dv-svg{display:block;max-width:none}
+@media (prefers-color-scheme: dark){.diagram-view{background:#0d1013}}
+:root[data-theme="light"] .diagram-view{background:var(--surface-2)}
+:root[data-theme="dark"] .diagram-view{background:#0d1013}
+
+/* toc for decisions */
+.toc{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 18px;margin:1.4em 0}
+.toc .th{font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--draft);font-weight:700;margin-bottom:10px}
+/* uniform Jump-to cards — same width + height, no overlap, no clipped text (A2).
+   One clean line: the client-facing slug (which is already a meaningful name),
+   truncated with an ellipsis. The full title is on the card below. */
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.toc-grid a{display:flex;align-items:center;min-height:40px;
+  padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface-2);
+  overflow:hidden;transition:border-color .12s,background .12s}
+.toc-grid a:hover{text-decoration:none;border-color:var(--brand);background:var(--brand-soft)}
+.toc-grid a .tid{font-family:"SF Mono",ui-monospace,Menlo,monospace;font-size:12px;color:var(--brand);font-weight:600;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:100%}
+.toc-grid a .tt{display:none}
+
+@media (max-width:860px){
+  .layout{flex-direction:column}
+  nav.side{width:100%;height:auto;position:static;border-right:none;border-bottom:1px solid var(--line)}
+  main{padding:24px 18px 80px}
+  h1{font-size:26px}
+}
+</style>
+<script>
+(function(){
+  var KEY='marlex-readable-theme';
+  var saved=null; try{saved=localStorage.getItem(KEY)}catch(e){}
+  if(saved){document.documentElement.setAttribute('data-theme',saved);}
+  window.__toggleTheme=function(){
+    var cur=document.documentElement.getAttribute('data-theme');
+    if(!cur){cur=window.matchMedia&&window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}
+    var nxt=cur==='dark'?'light':'dark';
+    document.documentElement.setAttribute('data-theme',nxt);
+    try{localStorage.setItem(KEY,nxt)}catch(e){}
+  };
+})();
+</script>
+<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script><script>window.addEventListener("DOMContentLoaded",function(){if(window.mermaid){mermaid.initialize({startOnLoad:true,theme:"base"});}});</script>
+</head>
+<body>
+<div class="layout">
+<nav class="side">
+<div class="brand"><div class="t">Marlex Programme</div><div class="s">Readable roadmap &amp; decisions</div></div>
+<a class="nl" href="index.html"><span class="ic">◆</span>Overview</a>
+<a class="nl" href="roadmap.html"><span class="ic">▤</span>Programme roadmap</a>
+<a class="nl" href="risks.html"><span class="ic">▲</span>Risks &amp; assumptions</a>
+<div class="grp">Projects</div>
+<a class="nl proj" href="project-ats-rb.html"><span class="dot" style="background:var(--p-atsrb)"></span>ATS-RB</a>
+<a class="nl proj" href="project-share.html"><span class="dot" style="background:var(--p-share)"></span>SHARE</a>
+<a class="nl proj" href="project-ax-std.html"><span class="dot" style="background:var(--p-axstd)"></span>AX-STD</a>
+<a class="nl proj" href="project-mule.html"><span class="dot" style="background:var(--p-mule)"></span>MULE</a>
+<a class="nl proj" href="project-portal.html"><span class="dot" style="background:var(--p-portal)"></span>PORTAL</a>
+<a class="nl proj" href="project-exp.html"><span class="dot" style="background:var(--p-exp)"></span>EXP</a>
+<a class="nl proj" href="project-mkt.html"><span class="dot" style="background:var(--p-mkt)"></span>MKT</a>
+<a class="nl proj" href="project-evol.html"><span class="dot" style="background:var(--p-evol)"></span>EVOL</a>
+<a class="nl" href="methodology.html"><span class="ic">✎</span>How specs are defined</a>
+<a class="nl active" href="release-management.html"><span class="ic">⇄</span>Release management</a>
+<a class="nl" href="adrs.html"><span class="ic">⬡</span>Architecture decisions (ADR)</a>
+<a class="nl" href="pdrs.html"><span class="ic">⬢</span>Programme decisions (PDR)</a>
+</nav>
+<main><div class="col">
+<div class="topbar"><div class="crumb"><a href="index.html">Overview</a> &#8250; Release management</div>
+<button class="themebtn" onclick="window.__toggleTheme()">◑ Theme</button></div>
+<style>
+/* release-management diagrams — scoped, mapped to the programme palette */
+.rmfig{margin:1.6em 0 .4em}
+.rmfig svg{width:100%;height:auto;display:block}
+.rmfig figcaption{font-size:13.5px;color:var(--ink-soft);margin:.7em 2px 0;line-height:1.55}
+/* keep the git graphs compact so they read as a small diagram */
+.rmfig.gitfig{max-width:34rem;margin-left:auto;margin-right:auto}
+.rmfig.gitfig pre.mermaid{max-width:100%}
+.rmfig.gitfig svg{max-width:100%;height:auto}
+.rm-box{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.rm-box-prod{fill:var(--brand-soft);stroke:var(--brand);stroke-width:1.5}
+.rm-box-pre{fill:var(--surface);stroke:var(--line);stroke-width:1.5}
+.rm-box-mut{fill:var(--surface-2);stroke:var(--line);stroke-width:1.5;stroke-dasharray:4 3}
+.rm-line{stroke:var(--line);stroke-width:1.5;fill:none}
+.rm-arrow{stroke:var(--brand);stroke-width:2;fill:none}
+.rm-arrow-mut{stroke:var(--ink-soft);stroke-width:1.5;fill:none;stroke-dasharray:4 3}
+.rm-arrow-spine{stroke:var(--spine);stroke-width:2;fill:none}
+.rm-fill-line{fill:var(--line)}
+.rm-fill-brand{fill:var(--brand)}
+.rm-fill-spine{fill:var(--spine)}
+.rm-t{fill:var(--ink);font-family:inherit}
+.rm-t-sm{fill:var(--ink-soft);font-family:inherit}
+.rm-t-brand{fill:var(--brand);font-weight:700;font-family:inherit}
+.rm-t-spine{fill:var(--spine);font-weight:700;font-family:inherit}
+/* mermaid host — rendered natively in the merged artifact; light backdrop in both themes so it always reads */
+.rmfig pre.mermaid{background:#ffffff;border:1px solid var(--line);border-radius:10px;margin:0;padding:12px;overflow-x:auto}
+.rmfig pre.mermaid svg{margin:0 auto;max-width:100%}
+</style>
+<h1><span class="kicker">Ways of working</span>Release management &#8212; keeping branches, environments and production in step</h1>
+<p class="lede">Product owners, the delivery partner and the in-house IT team all build on the same live Salesforce at once. Four choices keep that orderly: where a change&#8217;s branch is cut from, which environments it flows through, how those environments are kept in step with production, and how much of the checking is automated. This page records the model and the fix for the drift a recent review exposed.</p>
+<h2>Three branches, three environments, one source of truth</h2>
+<p>The repository has three long-lived branches, each mirroring one Salesforce environment, with <b>production</b> as the single source of truth that every change is cut from and released back to.</p>
+<figure class="rmfig">
+  <svg viewBox="0 0 660 250" role="img" aria-labelledby="rm-map-t">
+    <title id="rm-map-t">Three branches, each mirroring one Salesforce environment</title>
+    <text class="rm-t-sm" x="150" y="26" text-anchor="middle" font-size="11">Git branch</text>
+    <text class="rm-t-sm" x="410" y="26" text-anchor="middle" font-size="11">mirrors &#8594;</text>
+    <text class="rm-t-sm" x="560" y="26" text-anchor="middle" font-size="11">Salesforce environment</text>
+    <rect class="rm-box-prod" x="40" y="40" width="220" height="44" rx="6" />
+    <text class="rm-t-brand" x="150" y="60" text-anchor="middle" font-size="13">production</text>
+    <text class="rm-t-sm" x="150" y="76" text-anchor="middle" font-size="10">source of truth &#183; release target</text>
+    <path class="rm-arrow-mut" d="M262 62 L470 62" marker-end="url(#rmm-mut)" />
+    <rect class="rm-box" x="472" y="40" width="150" height="44" rx="6" />
+    <text class="rm-t" x="547" y="60" text-anchor="middle" font-size="12.5">Production org</text>
+    <text class="rm-t-sm" x="547" y="76" text-anchor="middle" font-size="10">live</text>
+    <rect class="rm-box" x="40" y="103" width="220" height="44" rx="6" />
+    <text class="rm-t" x="150" y="123" text-anchor="middle" font-size="13">sandbox-pre</text>
+    <text class="rm-t-sm" x="150" y="139" text-anchor="middle" font-size="10">integration + UAT line</text>
+    <path class="rm-arrow-mut" d="M262 125 L470 125" marker-end="url(#rmm-mut)" />
+    <rect class="rm-box" x="472" y="103" width="150" height="44" rx="6" />
+    <text class="rm-t" x="547" y="123" text-anchor="middle" font-size="12.5">PRE (partial copy)</text>
+    <text class="rm-t-sm" x="547" y="139" text-anchor="middle" font-size="10">pre-production</text>
+    <rect class="rm-box" x="40" y="166" width="220" height="44" rx="6" />
+    <text class="rm-t" x="150" y="186" text-anchor="middle" font-size="13">sandbox-dev</text>
+    <text class="rm-t-sm" x="150" y="202" text-anchor="middle" font-size="10">build + dev QA line</text>
+    <path class="rm-arrow-mut" d="M262 188 L470 188" marker-end="url(#rmm-mut)" />
+    <rect class="rm-box" x="472" y="166" width="150" height="44" rx="6" />
+    <text class="rm-t" x="547" y="183" text-anchor="middle" font-size="12">Developer sandboxes</text>
+    <text class="rm-t-sm" x="547" y="200" text-anchor="middle" font-size="10">per domain</text>
+    <rect class="rm-box-mut" x="472" y="222" width="150" height="24" rx="5" />
+    <text class="rm-t-sm" x="547" y="238" text-anchor="middle" font-size="10">PREFULL &#8212; held for data-migration rehearsal</text>
+    <defs><marker id="rmm-mut" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path class="rm-fill-line" d="M0 0 L8 4 L0 8 Z" /></marker></defs>
+  </svg>
+  <figcaption>Each branch is the recorded state of exactly one environment. A branch is only trustworthy if it matches its environment, and the environment is only useful if it stays close to production &#8212; which is what the alignment mechanism below keeps true. PREFULL sits aside: it carries real production volume and is the rehearsal ground for the data move, never the everyday path.</figcaption>
+</figure>
+<h2>Cut every change from production, then promote the same branch forward</h2>
+<p>Every change starts as a branch cut from <b>production</b>, so it always begins from the latest live version of the components it touches. The <em>same</em> branch is then promoted into each environment in turn &#8212; the development line, then the pre-production line where the mandatory review happens, then back into production as the release. Promoting the change itself, rather than merging one environment into the next, is what keeps each change independent: two changes in flight can go live in either order.</p>
+<figure class="rmfig gitfig">
+<pre class="mermaid">
+---
+config:
+  gitGraph:
+    mainBranchName: production
+    nodeSpacing: 90
+    rotateCommitLabel: false
+---
+gitGraph
+   commit id: " "
+   branch sandbox-pre
+   branch sandbox-dev
+   checkout production
+   branch feature/issue
+   checkout feature/issue
+   commit id: "develop"
+   checkout sandbox-dev
+   merge feature/issue id: "deploy + test"
+   checkout sandbox-pre
+   merge feature/issue id: "review + UAT"
+   checkout production
+   merge feature/issue id: "release"
+</pre>
+<figcaption><b>The full path (product owners).</b> Read top-to-bottom in promotion order: production, then sandbox-pre, then sandbox-dev, with the feature branch at the foot. <b>1</b> the feature branches off production and the change is <em>developed</em> on it &#8212; you develop here, you do not test here; <b>2</b> the pull request merges the feature into sandbox-dev, and only <em>then</em> is it deployed to the Developer sandbox and <em>tested</em> &#8212; testing follows the merge, never the feature branch; <b>3</b> the same feature merges into sandbox-pre, where the mandatory review happens; <b>4</b> it is deployed to pre-production and put through UAT; <b>5</b> the same feature merges into production as the release. It is the <em>feature</em> that is promoted into each branch, not one environment branch merged into the next &#8212; that isolation is why, if a second feature is ready first, it can reach production ahead of one started earlier without dragging it along.</figcaption>
+</figure>
+<p>A developer does not have to go through the development line at all. The short path skips it: develop and test on the Developer sandbox, then raise the feature&#8217;s pull request straight into the pre-production line. This is the path the delivery partner follows &#8212; and they only adopt cutting from production once the drift below is fixed; until then, cutting from the pre-production line is their defence against it, not a shortcut.</p>
+<figure class="rmfig gitfig">
+<pre class="mermaid">
+---
+config:
+  gitGraph:
+    mainBranchName: production
+    nodeSpacing: 90
+    rotateCommitLabel: false
+---
+gitGraph
+   commit id: " "
+   branch sandbox-pre
+   checkout production
+   branch feature/issue
+   checkout feature/issue
+   commit id: "develop + test"
+   checkout sandbox-pre
+   merge feature/issue id: "review + UAT"
+   checkout production
+   merge feature/issue id: "release"
+</pre>
+<figcaption><b>The developer short path.</b> A developer does not have to go through sandbox-dev: they develop <em>and</em> test on their own Developer sandbox, then raise the pull request for the feature straight into sandbox-pre &#8212; still through the same mandatory review. Same cut-from-production rule, same feature-level promotion, one environment fewer. This is the path the delivery partner follows.</figcaption>
+</figure>
+<h3>When several features must ship together</h3>
+<p>Sometimes a set of features has to go live as one deployment. For that, cut a release branch from production and collect the features there for a single deploy. The rule that must not bend: <b>the pull request and the review stay at the feature level</b> &#8212; each feature is reviewed on its own, never as a bundle. Grouping is for the <em>deployment</em>, not the <em>review</em>, so any one feature can still be dropped from the bundle without holding up the others.</p>
+<figure class="rmfig gitfig">
+<pre class="mermaid">
+---
+config:
+  gitGraph:
+    mainBranchName: production
+    nodeSpacing: 70
+    rotateCommitLabel: false
+---
+gitGraph
+   commit id: " "
+   branch release/batch
+   checkout production
+   branch feature/A
+   commit id: "A"
+   checkout production
+   branch feature/B
+   commit id: "B"
+   checkout release/batch
+   merge feature/A id: "PR: A"
+   merge feature/B id: "PR: B"
+   checkout production
+   merge release/batch id: "deploy together"
+</pre>
+<figcaption><b>Bundling several features into one deployment.</b> When features must go live together, cut a release branch from production and collect them there, then deploy the bundle once. <b>The pull request and review stay at the feature level</b> &#8212; each feature raises its own request into the release branch and is reviewed on its own; there is no request against the release branch or the bundle as a whole. Bundling is only how the <em>deployment</em> is grouped, never how the <em>review</em> is grouped &#8212; so a feature that fails review is simply left out of the bundle without blocking the rest.</figcaption>
+</figure>
+<h2>The drift a recent review exposed</h2>
+<p>A single pull request made the problem visible. It reported roughly 120 components as brand-new when about 17 of them already existed in production. The change was not describing real work; it was describing the gap between the branch and reality. Three layers of drift had stacked up: a branch no longer matched its own environment, the lower environments lagged production, and work built directly in an environment was being pushed <em>down</em> into the branch rather than the other way round. When the baseline is wrong like this, review is impossible, an automated check has nothing trustworthy to compare against, and a rollback cannot know what the &#8220;before&#8221; state was.</p>
+<h2>Closing the drift, and keeping it closed</h2>
+<p>Two different jobs hide inside &#8220;fix the drift&#8221;. The <b>one-off reset</b> gets everything back to a production-true baseline now: retrieve each long-lived environment in full into its own branch, then <b>back-promote</b> the difference down to the pre-production line and <b>refresh</b> the development sandboxes from production. The <b>ongoing rule</b> keeps it there: before starting any change, sync just the components in its scope to the latest production version, then cut the branch. A wholesale refresh of the pre-production environment is avoided &#8212; it would destroy in-progress work that only lives there.</p>
+<figure class="rmfig">
+  <svg viewBox="0 0 720 210" role="img" aria-labelledby="rm-align-t">
+    <title id="rm-align-t">Alignment as a process: first retrieve each environment into its branch, then back-promotion plus refresh, then an ongoing per-change scope sync</title>
+    <line class="rm-line" x1="486" y1="14" x2="486" y2="150" stroke-dasharray="3 3" />
+    <text class="rm-t-sm" x="250" y="172" text-anchor="middle" font-size="10">one-off reset (do it now)</text>
+    <text class="rm-t-sm" x="608" y="172" text-anchor="middle" font-size="10">ongoing, forever</text>
+    <text class="rm-t-brand" x="16" y="26" text-anchor="start" font-size="10">STEP 1 &#183; retrieve each env &#8594; its branch</text>
+    <rect class="rm-box-prod" x="16" y="32" width="210" height="42" rx="7" />
+    <text class="rm-t-brand" x="121" y="50" text-anchor="middle" font-size="11.5">production &#8594; production branch</text>
+    <text class="rm-t-sm" x="121" y="65" text-anchor="middle" font-size="9.5">the branch becomes the truth</text>
+    <rect class="rm-box-prod" x="16" y="82" width="210" height="42" rx="7" />
+    <text class="rm-t-brand" x="121" y="100" text-anchor="middle" font-size="11.5">PRE &#8594; sandbox-pre branch</text>
+    <text class="rm-t-sm" x="121" y="115" text-anchor="middle" font-size="9.5">captures live work-in-progress first</text>
+    <path class="rm-arrow" d="M228 78 L262 78" marker-end="url(#rma-brand)" />
+    <text class="rm-t-brand" x="272" y="26" text-anchor="start" font-size="10">STEP 2</text>
+    <rect class="rm-box" x="272" y="32" width="196" height="42" rx="7" />
+    <text class="rm-t" x="370" y="50" text-anchor="middle" font-size="11">back-promotion &#8594; sandbox-pre</text>
+    <text class="rm-t-sm" x="370" y="65" text-anchor="middle" font-size="9.5">production under the live branches</text>
+    <rect class="rm-box" x="272" y="82" width="196" height="42" rx="7" />
+    <text class="rm-t" x="370" y="100" text-anchor="middle" font-size="11">refresh &#8594; dev sandboxes</text>
+    <text class="rm-t-sm" x="370" y="115" text-anchor="middle" font-size="9.5">wholesale &#183; nothing to lose</text>
+    <path class="rm-arrow" d="M470 78 L500 78" marker-end="url(#rma-brand)" />
+    <text class="rm-t-brand" x="512" y="26" text-anchor="start" font-size="10">STEP 3 &#183; ongoing</text>
+    <rect class="rm-box-prod" x="512" y="50" width="192" height="56" rx="7" />
+    <text class="rm-t-brand" x="608" y="74" text-anchor="middle" font-size="12">per-change scope sync</text>
+    <text class="rm-t-sm" x="608" y="90" text-anchor="middle" font-size="10">before each new change, sync</text>
+    <text class="rm-t-sm" x="608" y="101" text-anchor="middle" font-size="10">just the components it touches</text>
+    <defs>
+      <marker id="rma-brand" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path class="rm-fill-brand" d="M0 0 L8 4 L0 8 Z" /></marker>
+    </defs>
+  </svg>
+  <figcaption>Read left to right as a process. <b>Step 1 &#8212; retrieve each long-lived environment into its own branch first:</b> production into the production branch <em>and</em> PRE into the sandbox-pre branch. This second retrieve is the one the failed review skipped &#8212; it captures the live work that exists only in the PRE environment into version control <em>before</em> anything merges over it, so it cannot be silently overwritten. <b>Step 2</b>, two actions: a surgical back-promotion lands production <em>underneath</em> the live feature branches on sandbox-pre, while the dev sandboxes &#8212; with no work to protect &#8212; are refreshed wholesale. <b>Step 3</b> is the ongoing rule that stops the drift returning: before every new change, sync just the components it touches. Steps 1&#8211;2 are a one-off done now; step 3 runs forever.</figcaption>
+</figure>
+<p>Two safeguards make the back-promotion safe. The <b>retrieve-first step</b> above matters most: before any merge, each environment is captured into its own branch &#8212; especially PRE into the sandbox-pre branch &#8212; so the live work that only exists in an environment is under version control and cannot be silently lost. Then the merge itself is done in two moves, in order: <b>first</b> merge every live feature branch into the back-promotion branch, so their components keep the in-progress version; <b>then</b> bring production in underneath, so production wins for everything that has drifted while the live branches win for the components they own. Doing the merge the other way round could silently overwrite work already committed to the pre-production line. The prerequisite is that every in-progress change sits on a live feature branch before the reset starts &#8212; anything living only in the environment cannot be protected.</p>
+<h2>Roles and what no partner may skip</h2>
+<p>A Release Manager in the in-house IT team groups changes into releases and coordinates the deployments. The hard rule is that <b>no partner releases to production without an in-house review</b> &#8212; a partner cannot approve its own change. The release into production itself needs no second review; it is a handover to the Release Manager, not a fresh change. Automation is staged: keep pull requests plus the mandatory review now, add automated checks on each pull request as the first step, and only adopt a dedicated deployment platform if the volume genuinely calls for it.</p>
+<div class="openbox"><b>Still open.</b> Who runs the one-off reset, and when &#8212; it is cheapest during a quiet period, and takes roughly two days, largely re-pointing production record references that the current recruitment package hard-codes. Also open: whether every non-developer change is forced through the same build-and-review path, and whether the delivery partner releases independently or routes the deploy through the Release Manager. The review rule itself is settled.</div>
+<div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
+</div></main>
+</div>
+</body></html>

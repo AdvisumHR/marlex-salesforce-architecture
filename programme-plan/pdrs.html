@@ -224,6 +224,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <a class="nl proj" href="project-mkt.html"><span class="dot" style="background:var(--p-mkt)"></span>MKT</a>
 <a class="nl proj" href="project-evol.html"><span class="dot" style="background:var(--p-evol)"></span>EVOL</a>
 <a class="nl" href="methodology.html"><span class="ic">✎</span>How specs are defined</a>
+<a class="nl" href="release-management.html"><span class="ic">⇄</span>Release management</a>
 <a class="nl" href="adrs.html"><span class="ic">⬡</span>Architecture decisions (ADR)</a>
 <a class="nl active" href="pdrs.html"><span class="ic">⬢</span>Programme decisions (PDR)</a>
 </nav>
@@ -239,29 +240,29 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
       <button class="fbtn" data-f="draft" onclick="__filter('draft',this)">Draft</button>
     </div>
 <div class="toc"><div class="th">Jump to</div><div class="toc-grid">
-<a href="#MIG-010" data-estado="accepted" title="Rebuild Sequencing Strategy"><span class="tid">PDR · Rebuild Sequencing Strategy</span></a>
-<a href="#CLEAN-003" data-estado="proposed" title="Deprecation of Lead-Object Business Logic and Customisations"><span class="tid">PDR · Lead-Object Deprecation</span></a>
-<a href="#CLEAN-001" data-estado="proposed" title="Cleanup and Refactor of the Current Org as a Foundational Pre-Migration Initiative"><span class="tid">PDR · Foundational Org Cleanup</span></a>
-<a href="#CLEAN-004" data-estado="proposed" title="Modernising Workflow Rules in CLEAN (not MIG), Pre-Migration"><span class="tid">PDR · Workflow-Rule Modernisation</span></a>
-<a href="#AXON-001" data-estado="proposed" title="Axxon&#x27;s recruitment build references the Marlex build in parallel — not gated on a finished hand-over"><span class="tid">PDR · Axxon ATS as Marlex-Referenced Build</span></a>
-<a href="#MIG-013" data-estado="proposed" title="Splitting Testing/UAT and Data/Cutover into Four Owner-and-Timing Epics"><span class="tid">PDR · Testing/UAT/Data/Cutover Four-Epic Split</span></a>
-<a href="#STD-008" data-estado="proposed" title="Organising standardisation by delivery moment — Waves A, B and C (supersedes the earlier thematic structure)"><span class="tid">PDR · STD Wave A/B/C by Delivery Moment</span></a>
-<a href="#STD-010" data-estado="accepted" title="Hybrid topology — Spain/Italy/Portugal share one org, Axxon and the Philippines are referential brand-orgs; the multi-org pipeline is retired"><span class="tid">PDR · Hybrid Topology</span></a>
-<a href="#STD-011" data-estado="accepted" title="Standardisation Programme Governance (scope ladder, package-free, no epic re-cut)"><span class="tid">PDR · Standardisation Programme Governance</span></a>
-<a href="#PROG-001" data-estado="draft" title="Marlex Group Programme Execution and Parallelisation Model"><span class="tid">PDR · Programme Execution &amp; Parallelisation Model</span></a>
-<a href="#EXP-016" data-estado="proposed" title="Composition and governance of the Marlex Group Centre of Excellence"><span class="tid">PDR · CoE Composition &amp; Governance</span></a>
-<a href="#STD-013" data-estado="proposed" title="No pre-locked group standard — the standard is defined after the rebuild, on proven components"><span class="tid">PDR · No Pre-Locked Group Standard</span></a>
-<a href="#EXP-015" data-estado="draft" title="Sequencing the Philippines, Portugal and Italy rollouts"><span class="tid">PDR · Regional Rollout Sequencing</span></a>
-<a href="#PORTAL-001" data-estado="draft" title="Portals Build Initiative (Candidates/Recruiters) — Owner and Scope"><span class="tid">PDR · Portals Build Initiative</span></a>
-<a href="#AXON-002" data-estado="draft" title="Axxon Does Not Start as a Block — Each Track Has Its Own Start Prerequisite Against Marlex"><span class="tid">PDR · Axxon Per-Track Start Prerequisites</span></a>
-<a href="#MIG-025" data-estado="accepted" title="Internal-HR confidentiality — built into the rebuild&#x27;s sharing model, with no standalone pilot"><span class="tid">PDR · Internal-HR Confidentiality in the Rebuild</span></a>
-<a href="#MIG-023" data-estado="proposed" title="Activation Rule for the Rebuild — Refactor-Now vs Dark-Ship Behind a Feature Flag"><span class="tid">PDR · Activation &amp; Feature-Flag Rule</span></a>
-<a href="#MIG-026" data-estado="proposed" title="Agile Capability Epics for the Rebuild — Design, Build, Test and UAT Inside Each Capability"><span class="tid">PDR · Agile Capability Epics</span></a>
-<a href="#MIG-035" data-estado="proposed" title="When the HR team comes onto the platform — at the switch, or after it"><span class="tid">PDR · HR Onboarding Timing</span></a>
-<a href="#MIG-036" data-estado="proposed" title="How internal HR work stays private while external hiring stays open"><span class="tid">PDR · Internal-vs-External Access Model</span></a>
-<a href="#MIG-038" data-estado="proposed" title="PO Specification &amp; Analysis Process"><span class="tid">PDR · Proceso de especificación y análisis de PO</span></a>
+<a href="#pdr-1" data-estado="accepted" title="Rebuild Sequencing Strategy"><span class="tid">PDR · Rebuild Sequencing Strategy</span></a>
+<a href="#pdr-2" data-estado="proposed" title="Deprecation of Lead-Object Business Logic and Customisations"><span class="tid">PDR · Lead-Object Deprecation</span></a>
+<a href="#pdr-3" data-estado="proposed" title="Cleanup and Refactor of the Current Org as a Foundational Pre-Migration Initiative"><span class="tid">PDR · Foundational Org Cleanup</span></a>
+<a href="#pdr-4" data-estado="proposed" title="Modernising Workflow Rules in CLEAN (not MIG), Pre-Migration"><span class="tid">PDR · Workflow-Rule Modernisation</span></a>
+<a href="#pdr-5" data-estado="proposed" title="Axxon&#x27;s recruitment build references the Marlex build in parallel — not gated on a finished hand-over"><span class="tid">PDR · Axxon ATS as Marlex-Referenced Build</span></a>
+<a href="#pdr-6" data-estado="proposed" title="Splitting Testing/UAT and Data/Cutover into Four Owner-and-Timing Epics"><span class="tid">PDR · Testing/UAT/Data/Cutover Four-Epic Split</span></a>
+<a href="#pdr-7" data-estado="proposed" title="Organising standardisation by delivery moment — Waves A, B and C (supersedes the earlier thematic structure)"><span class="tid">PDR · STD Wave A/B/C by Delivery Moment</span></a>
+<a href="#pdr-8" data-estado="accepted" title="Hybrid topology — Spain/Italy/Portugal share one org, Axxon and the Philippines are referential brand-orgs; the multi-org pipeline is retired"><span class="tid">PDR · Hybrid Topology</span></a>
+<a href="#pdr-9" data-estado="accepted" title="Standardisation Programme Governance (scope ladder, package-free, no epic re-cut)"><span class="tid">PDR · Standardisation Programme Governance</span></a>
+<a href="#pdr-10" data-estado="draft" title="Marlex Group Programme Execution and Parallelisation Model"><span class="tid">PDR · Programme Execution &amp; Parallelisation Model</span></a>
+<a href="#pdr-11" data-estado="proposed" title="Composition and governance of the Marlex Group Centre of Excellence"><span class="tid">PDR · CoE Composition &amp; Governance</span></a>
+<a href="#pdr-12" data-estado="proposed" title="No pre-locked group standard — the standard is defined after the rebuild, on proven components"><span class="tid">PDR · No Pre-Locked Group Standard</span></a>
+<a href="#pdr-13" data-estado="draft" title="Sequencing the Philippines, Portugal and Italy rollouts"><span class="tid">PDR · Regional Rollout Sequencing</span></a>
+<a href="#pdr-14" data-estado="draft" title="Portals Build Initiative (Candidates/Recruiters) — Owner and Scope"><span class="tid">PDR · Portals Build Initiative</span></a>
+<a href="#pdr-15" data-estado="draft" title="Axxon Does Not Start as a Block — Each Track Has Its Own Start Prerequisite Against Marlex"><span class="tid">PDR · Axxon Per-Track Start Prerequisites</span></a>
+<a href="#pdr-16" data-estado="accepted" title="Internal-HR confidentiality — built into the rebuild&#x27;s sharing model, with no standalone pilot"><span class="tid">PDR · Internal-HR Confidentiality in the Rebuild</span></a>
+<a href="#pdr-17" data-estado="proposed" title="Activation Rule for the Rebuild — Refactor-Now vs Dark-Ship Behind a Feature Flag"><span class="tid">PDR · Activation &amp; Feature-Flag Rule</span></a>
+<a href="#pdr-18" data-estado="proposed" title="Agile Capability Epics for the Rebuild — Design, Build, Test and UAT Inside Each Capability"><span class="tid">PDR · Agile Capability Epics</span></a>
+<a href="#pdr-19" data-estado="proposed" title="When the HR team comes onto the platform — at the switch, or after it"><span class="tid">PDR · HR Onboarding Timing</span></a>
+<a href="#pdr-20" data-estado="proposed" title="How internal HR work stays private while external hiring stays open"><span class="tid">PDR · Internal-vs-External Access Model</span></a>
+<a href="#pdr-21" data-estado="proposed" title="PO Specification &amp; Analysis Process"><span class="tid">PDR · Proceso de especificación y análisis de PO</span></a>
 </div></div>
-<div class="dec" id="MIG-010" data-estado="accepted">
+<div class="dec" id="pdr-1" data-estado="accepted">
 <div class="dh">
 <h3>Rebuild Sequencing Strategy</h3>
 <span class="did">PDR · Rebuild Sequencing Strategy</span>
@@ -274,7 +275,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Time-to-Market</span><span class="chip">Risk</span></div>
 <div class="openbox"><b>Still open:</b> Confirm the functional-area order with the business before the build starts; the working sequence is CRM, then back office, then recruitment. The capability breakdown itself comes from the requirements inventory.</div>
 </div>
-<div class="dec" id="CLEAN-003" data-estado="proposed">
+<div class="dec" id="pdr-2" data-estado="proposed">
 <div class="dh">
 <h3>Deprecation of Lead-Object Business Logic and Customisations</h3>
 <span class="did">PDR · Lead-Object Deprecation</span>
@@ -288,7 +289,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Maintainability</span><span class="chip">Risk</span></div>
 <div class="openbox"><b>Still open:</b> Under the rebuild direction the logic deprecation still holds and the object is left clean in place, with no change to the decision.</div>
 </div>
-<div class="dec" id="CLEAN-001" data-estado="proposed">
+<div class="dec" id="pdr-3" data-estado="proposed">
 <div class="dh">
 <h3>Cleanup and Refactor of the Current Org as a Foundational Pre-Migration Initiative</h3>
 <span class="did">PDR · Foundational Org Cleanup</span>
@@ -302,7 +303,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Maintainability</span><span class="chip">Modifiability</span><span class="chip">Risk</span></div>
 <div class="openbox"><b>Still open:</b> Confirm with Marlex IT and Marlex Product the shift from parallel to foundational, the cleanup window between the first-pass inventory and the canonical model and anti-corruption-layer work, and the NET4 January 2027 impact (accept the risk or renegotiate). Under the rebuild direction cleanup survives in a reduced form — pre-rebuild hygiene mostly absorbed into the native rebuild, and the debt it prevents now protects a native custom standard rather than a Bullhorn one. Absorbs the former minimal-naming-cleanup decision: strip the TargetRecruit and implementer prefixes and reconcile inconsistent prefixes during the native build, keeping the Marlex Standard prefix.</div>
 </div>
-<div class="dec" id="CLEAN-004" data-estado="proposed">
+<div class="dec" id="pdr-4" data-estado="proposed">
 <div class="dh">
 <h3>Modernising Workflow Rules in CLEAN (not MIG), Pre-Migration</h3>
 <span class="did">PDR · Workflow-Rule Modernisation</span>
@@ -316,7 +317,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Maintainability</span><span class="chip">Modifiability</span><span class="chip">Risk</span></div>
 <div class="openbox"><b>Still open:</b> Confirm in the live-org inventory pass that the count matches the repository (four active Workflow Rules, zero Process Builders) or widen the scope if more are found, and confirm with Marlex IT that the automation-modernisation work can run before the canonical model and anti-corruption-layer build with Telefónica&#x27;s available capacity. Under the rebuild direction the Workflow-to-Flow conversion is deferred and applied only to what survives natively (do not modernise code that will be rebuilt), reframing rather than reversing the decision.</div>
 </div>
-<div class="dec" id="AXON-001" data-estado="proposed">
+<div class="dec" id="pdr-5" data-estado="proposed">
 <div class="dh">
 <h3>Axxon&#x27;s recruitment build references the Marlex build in parallel — not gated on a finished hand-over</h3>
 <span class="did">PDR · Axxon ATS as Marlex-Referenced Build</span>
@@ -330,7 +331,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Time-to-Market</span><span class="chip">Reliability</span><span class="chip">Adaptability</span></div>
 <div class="openbox"><b>Still open:</b> The governing rule for Axxon onboarding is reuse-by-default: reuse a group-shared capability whenever the requirement is equivalent, and build an Axxon-specific extension only where a real business need or French regulation requires it (divergence must be justified). Before any adoption track runs, a global-readiness phase makes the reuse set genuinely reusable — including the components the Marlex rebuild did not standardise — and consolidates the Global Template. The reference for Axxon&#x27;s recruitment build is the Marlex custom platform, held until the rebuild defines it; the map of where Axxon&#x27;s processes differ from Marlex&#x27;s remains the required foundational input.</div>
 </div>
-<div class="dec" id="MIG-013" data-estado="proposed">
+<div class="dec" id="pdr-6" data-estado="proposed">
 <div class="dh">
 <h3>Splitting Testing/UAT and Data/Cutover into Four Owner-and-Timing Epics</h3>
 <span class="did">PDR · Testing/UAT/Data/Cutover Four-Epic Split</span>
@@ -344,7 +345,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Understandability</span><span class="chip">Maintainability</span></div>
 <div class="openbox"><b>Still open:</b> Taken to the 2026-05-28 weekly for ratification, with rollback by restore if rejected. Under the rebuild direction the four-way split (testing, data, UAT, cutover) survives intact as vendor-neutral, with no change.</div>
 </div>
-<div class="dec" id="STD-008" data-estado="proposed">
+<div class="dec" id="pdr-7" data-estado="proposed">
 <div class="dh">
 <h3>Organising standardisation by delivery moment — Waves A, B and C (supersedes the earlier thematic structure)</h3>
 <span class="did">PDR · STD Wave A/B/C by Delivery Moment</span>
@@ -358,7 +359,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Understandability</span><span class="chip">Maintainability</span><span class="chip">Time-to-Market</span></div>
 <div class="openbox"><b>Still open:</b> The delivery-moment organisation is settled; the wave contents were leaned in the 2026-07-09 rewrite (Wave A folded into the build, Wave B reduced to classification and reporting, Wave C to the data-dependent gates).</div>
 </div>
-<div class="dec" id="STD-010" data-estado="accepted">
+<div class="dec" id="pdr-8" data-estado="accepted">
 <div class="dh">
 <h3>Hybrid topology — Spain/Italy/Portugal share one org, Axxon and the Philippines are referential brand-orgs; the multi-org pipeline is retired</h3>
 <span class="did">PDR · Hybrid Topology</span>
@@ -372,7 +373,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Deployability</span><span class="chip">Maintainability</span><span class="chip">Operability</span><span class="chip">Simplicity</span></div>
 <div class="openbox"><b>Still open:</b> Ratified alongside the rest of the standardisation session. This supersedes only the earlier decision&#x27;s pipeline scope (not the rest), does not touch the wave-hierarchy decision, and was applied to become the programme baseline.</div>
 </div>
-<div class="dec" id="STD-011" data-estado="accepted">
+<div class="dec" id="pdr-9" data-estado="accepted">
 <div class="dh">
 <h3>Standardisation Programme Governance (scope ladder, package-free, no epic re-cut)</h3>
 <span class="did">PDR · Standardisation Programme Governance</span>
@@ -386,7 +387,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Governability</span><span class="chip">Traceability</span></div>
 <div class="openbox"><b>Still open:</b> Define the group prefix letters with the group (still to confirm); the Group Shared option has been adopted.</div>
 </div>
-<div class="dec" id="PROG-001" data-estado="draft">
+<div class="dec" id="pdr-10" data-estado="draft">
 <div class="dh">
 <h3>Marlex Group Programme Execution and Parallelisation Model</h3>
 <span class="did">PDR · Programme Execution &amp; Parallelisation Model</span>
@@ -400,7 +401,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Time-to-Market</span><span class="chip">Governability</span><span class="chip">Risk</span><span class="chip">Scalability</span></div>
 <div class="openbox"><b>Still open:</b> This is a draft (analysis only). To become firm it needs the workstream split and dependencies validated with Marlex, a staffing model (roles, gaps, second-partner decision), a call on which initiatives are discovery-only, and the single-partner concentration risk addressed. Under the rebuild direction the recommended parallel model survives and fits the core-rebuild-first, promote-when-proven model with no change.</div>
 </div>
-<div class="dec" id="EXP-016" data-estado="proposed">
+<div class="dec" id="pdr-11" data-estado="proposed">
 <div class="dh">
 <h3>Composition and governance of the Marlex Group Centre of Excellence</h3>
 <span class="did">PDR · CoE Composition &amp; Governance</span>
@@ -414,7 +415,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Governability</span><span class="chip">Accountability</span><span class="chip">Maintainability</span></div>
 <div class="openbox"><b>Still open:</b> Formally ratify the composition at the 2026-06-16 CoE meeting, define the group-candidate review cadence and the tie-break authority (proposed: Marlex IT or escalation to the Sponsor), and confirm Philippines representation when relevant. Under the rebuild direction the CoE also gains the role of gating the rebuild ratification and buy-versus-build, with no change to the decision.</div>
 </div>
-<div class="dec" id="STD-013" data-estado="proposed">
+<div class="dec" id="pdr-12" data-estado="proposed">
 <div class="dh">
 <h3>No pre-locked group standard — the standard is defined after the rebuild, on proven components</h3>
 <span class="did">PDR · No Pre-Locked Group Standard</span>
@@ -428,7 +429,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Adaptability</span><span class="chip">Reusability</span><span class="chip">Governability</span></div>
 <div class="openbox"><b>Still open:</b> The classification that defines the group standard runs after the rebuild, on the finished reusable-by-construction components.</div>
 </div>
-<div class="dec" id="EXP-015" data-estado="draft">
+<div class="dec" id="pdr-13" data-estado="draft">
 <div class="dh">
 <h3>Sequencing the Philippines, Portugal and Italy rollouts</h3>
 <span class="did">PDR · Regional Rollout Sequencing</span>
@@ -442,7 +443,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Adaptability</span><span class="chip">Time-to-Market</span><span class="chip">Risk</span></div>
 <div class="openbox"><b>Still open:</b> This is a draft backing the partial close of the rollout-sequencing decision. To become firm it needs the Portugal-versus-Italy order decided with Marlex Product and the parallelism limits confirmed against Telefónica&#x27;s capacity.</div>
 </div>
-<div class="dec" id="PORTAL-001" data-estado="draft">
+<div class="dec" id="pdr-14" data-estado="draft">
 <div class="dh">
 <h3>Portals Build Initiative (Candidates/Recruiters) — Owner and Scope</h3>
 <span class="did">PDR · Portals Build Initiative</span>
@@ -456,7 +457,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Interoperability</span><span class="chip">Usability</span></div>
 <div class="openbox"><b>Still open:</b> This is a draft backing the portal-integration decision, the integration-strategy open questions, the self-service portals feature and the dependent items. To become firm it needs the build owner (partner), the multi-region shape, and the integration contract with Marlex confirmed.</div>
 </div>
-<div class="dec" id="AXON-002" data-estado="draft">
+<div class="dec" id="pdr-15" data-estado="draft">
 <div class="dh">
 <h3>Axxon Does Not Start as a Block — Each Track Has Its Own Start Prerequisite Against Marlex</h3>
 <span class="did">PDR · Axxon Per-Track Start Prerequisites</span>
@@ -471,7 +472,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Time-to-Market</span><span class="chip">Risk</span><span class="chip">Adaptability</span><span class="chip">Governability</span></div>
 <div class="openbox"><b>Still open:</b> This is a draft backing the Axxon coexistence risk, the execution model and the Marlex-referenced build decision. To become firm it needs the per-track prerequisites validated with Marlex Product and IT, the functional delta&#x27;s owner and close date confirmed with the Axxon lead, formal Axxon Discovery start against the authorised sandbox, and the small-core group repository model validated with Marlex and Axxon direction. Under the rebuild direction the prerequisites re-anchor: the canonical model becomes the real native custom data model, the Axxon ATS reference is Marlex&#x27;s custom ATS not Bullhorn, and Axxon CRM depends on the core-rebuild Opportunity model plus Axxon&#x27;s Salesforce license upgrade — held on the rebuild decision.</div>
 </div>
-<div class="dec" id="MIG-025" data-estado="accepted">
+<div class="dec" id="pdr-16" data-estado="accepted">
 <div class="dh">
 <h3>Internal-HR confidentiality — built into the rebuild&#x27;s sharing model, with no standalone pilot</h3>
 <span class="did">PDR · Internal-HR Confidentiality in the Rebuild</span>
@@ -485,7 +486,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Confidentiality</span><span class="chip">Security</span><span class="chip">Maintainability</span></div>
 <div class="openbox"><b>Still open:</b> The validated list of objects to privatise (owned by the Axxon lead and the ATS Product Owner) is an external dependency.</div>
 </div>
-<div class="dec" id="MIG-023" data-estado="proposed">
+<div class="dec" id="pdr-17" data-estado="proposed">
 <div class="dh">
 <h3>Activation Rule for the Rebuild — Refactor-Now vs Dark-Ship Behind a Feature Flag</h3>
 <span class="did">PDR · Activation &amp; Feature-Flag Rule</span>
@@ -498,7 +499,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Modifiability</span><span class="chip">Reliability</span><span class="chip">Maintainability</span><span class="chip">Testability</span></div>
 <div class="openbox"><b>Still open:</b> Feeds the cutover-activation decision (per-domain versus big-bang activation) rather than closing it — the ATS product owner&#x27;s independent-domain analysis applies the independently-cuttable test per capability and produces the activation sequence. To be ratified at the following ATS weekly. The full analysis is captured in the activation-and-feature-flag strategy.</div>
 </div>
-<div class="dec" id="MIG-026" data-estado="proposed">
+<div class="dec" id="pdr-18" data-estado="proposed">
 <div class="dh">
 <h3>Agile Capability Epics for the Rebuild — Design, Build, Test and UAT Inside Each Capability</h3>
 <span class="did">PDR · Agile Capability Epics</span>
@@ -511,7 +512,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Understandability</span><span class="chip">Testability</span><span class="chip">Maintainability</span><span class="chip">Modifiability</span></div>
 <div class="openbox"><b>Still open:</b> To be ratified at the following ATS weekly. Requires decomposing the canonical-model and native-build work into per-capability epics once the requirements inventory lands, annotating each build epic, and re-framing the testing work as cross-cutting quality gates with the UAT work as the consolidated sign-off. The rebuild runs a requirement-by-requirement coordination cadence (developer plus ATS product owner plus business) tracked in Jira; the ATS Product Owner owns requirements consolidation (the business ATS board is done).</div>
 </div>
-<div class="dec" id="MIG-035" data-estado="proposed">
+<div class="dec" id="pdr-19" data-estado="proposed">
 <div class="dh">
 <h3>When the HR team comes onto the platform — at the switch, or after it</h3>
 <span class="did">PDR · HR Onboarding Timing</span>
@@ -524,7 +525,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Confidentiality</span><span class="chip">Security</span><span class="chip">Deployability</span><span class="chip">Maintainability</span></div>
 <div class="openbox"><b>Still open:</b> The person responsible for People decides the timing — at the switch or after it — before the switch plan is locked. Confirm how urgent the HR need is; if immediate, decide between a temporary bridge and pulling the private model into the switch.</div>
 </div>
-<div class="dec" id="MIG-036" data-estado="proposed">
+<div class="dec" id="pdr-20" data-estado="proposed">
 <div class="dh">
 <h3>How internal HR work stays private while external hiring stays open</h3>
 <span class="did">PDR · Internal-vs-External Access Model</span>
@@ -537,7 +538,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Confidentiality</span><span class="chip">Security</span><span class="chip">Data integrity</span><span class="chip">Maintainability</span></div>
 <div class="openbox"><b>Still open:</b> Gather the HR requirements — which fields are confidential, which onboarding screens are needed, the shape of the internal management line. Confirm whether internal work reuses the recruitment records or needs its own. Design how related records inherit the private model. Depends on the timing decision.</div>
 </div>
-<div class="dec" id="MIG-038" data-estado="proposed">
+<div class="dec" id="pdr-21" data-estado="proposed">
 <div class="dh">
 <h3>PO Specification &amp; Analysis Process</h3>
 <span class="did">PDR · Proceso de especificación y análisis de PO</span>
