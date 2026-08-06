@@ -308,13 +308,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p>Every change starts as a branch cut from <b>production</b>, so it always begins from the latest live version of the components it touches. The <em>same</em> branch is then promoted into each environment in turn &#8212; the development line, then the pre-production line where the mandatory review happens, then back into production as the release. Promoting the change itself, rather than merging one environment into the next, is what keeps each change independent: two changes in flight can go live in either order.</p>
 <figure class="rmfig gitfig">
 <pre class="mermaid">
----
-config:
-  gitGraph:
-    mainBranchName: production
-    nodeSpacing: 90
-    rotateCommitLabel: false
----
+%%{init:{"gitGraph":{"mainBranchName": "production", "nodeSpacing": 90, "rotateCommitLabel": false}}}%%
 gitGraph
    commit id: " "
    branch sandbox-pre
@@ -336,13 +330,7 @@ gitGraph
 <p>Sometimes a set of features has to go live as one deployment. For that, cut a release branch from production and collect the features there for a single deploy. The rule that must not bend: <b>the pull request and the review stay at the feature level</b> &#8212; each feature is reviewed on its own, never as a bundle. Grouping is for the <em>deployment</em>, not the <em>review</em>, so any one feature can still be dropped from the bundle without holding up the others.</p>
 <figure class="rmfig gitfig">
 <pre class="mermaid">
----
-config:
-  gitGraph:
-    mainBranchName: production
-    nodeSpacing: 70
-    rotateCommitLabel: false
----
+%%{init:{"gitGraph":{"mainBranchName": "production", "nodeSpacing": 70, "rotateCommitLabel": false}}}%%
 gitGraph
    commit id: " "
    branch release/batch
@@ -369,13 +357,7 @@ gitGraph
 <p>The target model assumes the pre-production line already reflects production. While it does not, <b>where the branch is cut from only decides which promotion pays for the gap</b> &#8212; one drowns the review, the other ships more than was agreed.</p>
 <figure class="rmfig gitfig">
 <pre class="mermaid">
----
-config:
-  gitGraph:
-    mainBranchName: production
-    nodeSpacing: 80
-    rotateCommitLabel: false
----
+%%{init:{"gitGraph":{"mainBranchName": "production", "nodeSpacing": 80, "rotateCommitLabel": false}}}%%
 gitGraph
    commit id: " "
    branch sandbox-pre
@@ -392,13 +374,7 @@ gitGraph
 <p>So while the gap exists, a change is carried on <b>one branch per environment it passes through</b>, each cut from the line it merges into: on the full path that is three &#8212; development, pre-production, release &#8212; and on the short path two, because there is no development line. That cost per change is the reason the reset in 2.3 is worth doing rather than living with.</p>
 <figure class="rmfig gitfig">
 <pre class="mermaid">
----
-config:
-  gitGraph:
-    mainBranchName: production
-    nodeSpacing: 80
-    rotateCommitLabel: false
----
+%%{init:{"gitGraph":{"mainBranchName": "production", "nodeSpacing": 80, "rotateCommitLabel": false}}}%%
 gitGraph
    commit id: " "
    branch sandbox-pre
