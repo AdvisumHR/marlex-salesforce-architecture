@@ -125,7 +125,8 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 .dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
 .badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
 .badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
-@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.badge.superseded,.badge.deprecated{background:#e9e6e1;color:#6b6b6b} .dec[data-estado="superseded"],.dec[data-estado="deprecated"]{opacity:.72}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}.badge.superseded,.badge.deprecated{background:#2a2a2a;color:#9a9a9a}}
 .dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
 .dec p{font-size:15px;margin:.6em 0}
 .dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
@@ -241,6 +242,11 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
           <div class="eh"><div><span class="en">Most delivery sits with one partner</span></div></div>
           <p>The large majority of the build depends on a single delivery partner, with no fallback in place today. If that partner&#x27;s capacity slips, much of the critical path slips with it.</p>
           <p><b>How it's managed —</b> Governance keeps the concentration visible and under review; a second-partner option is on the table if the load or the risk grows.</p>
+        </div>
+<div class="epic" style="--pc:var(--spine)">
+          <div class="eh"><div><span class="en">Source control and the live environments have drifted apart</span></div></div>
+          <p>The repository branches, their Salesforce environments and production no longer describe the same state. That makes ordinary pull requests misleading: existing production components appear as new, genuine differences are buried in noise, and reviewers cannot reliably tell what a release would change.</p>
+          <p><b>How it's managed —</b> Use the low-activity August window for a controlled reset: retrieve the full production baseline, promote it back through the shared pre-production branch while protecting live work, then refresh developer environments. After that, every change starts from production and synchronises the components in its own scope before development begins.</p>
         </div>
 <div class="epic" style="--pc:var(--spine)">
           <div class="eh"><div><span class="en">The matching-and-search engine is bought, not built</span></div></div>

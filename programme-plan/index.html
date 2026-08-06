@@ -125,7 +125,8 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 .dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
 .badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
 .badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
-@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.badge.superseded,.badge.deprecated{background:#e9e6e1;color:#6b6b6b} .dec[data-estado="superseded"],.dec[data-estado="deprecated"]{opacity:.72}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}.badge.superseded,.badge.deprecated{background:#2a2a2a;color:#9a9a9a}}
 .dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
 .dec p{font-size:15px;margin:.6em 0}
 .dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
@@ -239,8 +240,8 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
       <div class="stat"><div class="n">8</div><div class="l">Delivery projects</div></div>
       <div class="stat"><div class="n">34</div><div class="l">Epics</div></div>
       <div class="stat"><div class="n">154</div><div class="l">Deliverables</div></div>
-      <div class="stat"><div class="n">32</div><div class="l">Architecture decisions</div></div>
-      <div class="stat"><div class="n">21</div><div class="l">Programme decisions</div></div>
+      <div class="stat"><div class="n">44</div><div class="l">Architecture decisions</div></div>
+      <div class="stat"><div class="n">26</div><div class="l">Programme decisions</div></div>
     </div>
 <h2>What this programme is</h2>
 <p>Marlex&#x27;s recruitment system runs today on TargetRecruit, a product it licenses. The programme replaces it with a solution Marlex builds and owns itself, on the same Salesforce platform. Marlex stops renting the engine and owns it — no vendor lock-in, and its own roadmap. The aim is to match what the business does today and improve how people actually use it, not to copy the old tool screen-for-screen.</p>
@@ -285,7 +286,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
           <div class="m"><span>future backlog</span></div></a>
 </div>
 <h2>Decisions</h2>
-<div class="cards"><a class="card" style="--pc:var(--brand)" href="adrs.html"><div class="k">ADR</div><div class="t">Architecture decisions</div><div class="d">The irreversible technology choices — canonical model, ACL, integration platform, org topology — each explained as context → decision → why → consequences.</div><div class="m"><span>32 records</span></div></a><a class="card" style="--pc:var(--p-share)" href="pdrs.html"><div class="k">PDR</div><div class="t">Programme decisions</div><div class="d">The delivery and sequencing choices — STD waves, epic structure, expansion topology — explained the same way.</div><div class="m"><span>21 records</span></div></a></div>
+<div class="cards"><a class="card" style="--pc:var(--brand)" href="adrs.html"><div class="k">ADR</div><div class="t">Architecture decisions</div><div class="d">The irreversible technology choices — canonical model, ACL, integration platform, org topology — each explained as context → decision → why → consequences.</div><div class="m"><span>44 records</span></div></a><a class="card" style="--pc:var(--p-share)" href="pdrs.html"><div class="k">PDR</div><div class="t">Programme decisions</div><div class="d">The delivery and sequencing choices — STD waves, epic structure, expansion topology — explained the same way.</div><div class="m"><span>26 records</span></div></a></div>
 <div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
 </div></main>
 </div>

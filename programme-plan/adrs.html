@@ -125,7 +125,8 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 .dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
 .badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
 .badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
-@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.badge.superseded,.badge.deprecated{background:#e9e6e1;color:#6b6b6b} .dec[data-estado="superseded"],.dec[data-estado="deprecated"]{opacity:.72}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}.badge.superseded,.badge.deprecated{background:#2a2a2a;color:#9a9a9a}}
 .dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
 .dec p{font-size:15px;margin:.6em 0}
 .dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
@@ -240,12 +241,13 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
       <button class="fbtn" data-f="accepted" onclick="__filter('accepted',this)">Accepted</button>
       <button class="fbtn" data-f="proposed" onclick="__filter('proposed',this)">Proposed</button>
       <button class="fbtn" data-f="draft" onclick="__filter('draft',this)">Draft</button>
+      <button class="fbtn" data-f="archived" onclick="__filter('archived',this)">Archived</button>
     </div>
 <div class="toc"><div class="th">Jump to</div><div class="toc-grid">
 <a href="#adr-1" data-estado="proposed" title="Marlex-owned canonical model — the real schema in the rebuild, a decoupling layer only during transition"><span class="tid">ADR · Canonical Model (Marlex-owned schema)</span></a>
 <a href="#adr-2" data-estado="proposed" title="Anti-Corruption Layer (ACL) pattern — integration-edge only"><span class="tid">ADR · Anti-Corruption Layer (edge-only)</span></a>
-<a href="#adr-3" data-estado="proposed" title="Data-access seam during coexistence — repository confinement, not full ACL"><span class="tid">ADR · Seam de acceso a datos durante la coexistencia con TargetRecruit</span></a>
-<a href="#adr-4" data-estado="accepted" title="Mandatory anti-corruption-layer rule on vendor package objects"><span class="tid">ADR · ACL Entry-Point Rule</span></a>
+<a href="#adr-3" data-estado="proposed" title="Data-access seam during coexistence — repository confinement, not full ACL"><span class="tid">ADR · Data-Access Seam during Coexistence</span></a>
+<a href="#adr-4" data-estado="superseded" title="Mandatory anti-corruption-layer rule on vendor package objects"><span class="tid">ADR · ACL Entry-Point Rule</span></a>
 <a href="#adr-5" data-estado="proposed" title="API-led integration architecture with a middleware layer"><span class="tid">ADR · API-led Integration with Middleware</span></a>
 <a href="#adr-6" data-estado="proposed" title="Canonical contracts and Salesforce-middleware integration patterns"><span class="tid">ADR · Canonical Integration Contracts</span></a>
 <a href="#adr-7" data-estado="proposed" title="Marlex Spain Git repository and CI/CD pipeline"><span class="tid">ADR · Git Repository &amp; CI/CD</span></a>
@@ -263,17 +265,29 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <a href="#adr-19" data-estado="accepted" title="Enforcement model and governance catalogue"><span class="tid">ADR · Enforcement Model &amp; Governance Catalogue</span></a>
 <a href="#adr-20" data-estado="proposed" title="Component scope strategy: Group-first vs Local-first and the promotion/downgrade cycle"><span class="tid">ADR · Component-Scope Strategy (Group vs Local)</span></a>
 <a href="#adr-21" data-estado="accepted" title="Middleware / integration platform selection"><span class="tid">ADR · Middleware Platform Selection (MuleSoft)</span></a>
-<a href="#adr-22" data-estado="draft" title="Data-migration tooling, backup, and rollback strategy"><span class="tid">ADR · Data-Migration Tooling, Backup &amp; Rollback</span></a>
-<a href="#adr-23" data-estado="draft" title="Testing strategy and quality gates"><span class="tid">ADR · Testing &amp; Quality Gates</span></a>
-<a href="#adr-24" data-estado="draft" title="Environment and sandbox strategy"><span class="tid">ADR · Environments &amp; Sandboxes</span></a>
-<a href="#adr-25" data-estado="draft" title="ATS fit-gap (SME: the ATS Product Owner) and target data-model freeze"><span class="tid">ADR · Fit-Gap &amp; Target-Model Freeze</span></a>
+<a href="#adr-22" data-estado="proposed" title="Data-migration tooling, backup, and rollback strategy"><span class="tid">ADR · Data-Migration Tooling, Backup &amp; Rollback</span></a>
+<a href="#adr-23" data-estado="proposed" title="Testing strategy and quality gates"><span class="tid">ADR · Testing &amp; Quality Gates</span></a>
+<a href="#adr-24" data-estado="proposed" title="Environment and sandbox strategy"><span class="tid">ADR · Environments &amp; Sandboxes</span></a>
+<a href="#adr-25" data-estado="deprecated" title="ATS fit-gap (SME: the ATS Product Owner) and target data-model freeze"><span class="tid">ADR · Fit-Gap &amp; Target-Model Freeze</span></a>
 <a href="#adr-26" data-estado="draft" title="Data Cloud (Data 360) and Marketing Cloud Next architecture"><span class="tid">ADR · Data Cloud &amp; Marketing Cloud Architecture</span></a>
-<a href="#adr-27" data-estado="proposed" title="The rebuild is a custom-native ATS rebuild plus an independent capability-preservation baseline"><span class="tid">ADR · Custom-Native Rebuild + Capability-Preservation Baseline</span></a>
+<a href="#adr-27" data-estado="deprecated" title="The rebuild is a custom-native ATS rebuild plus an independent capability-preservation baseline"><span class="tid">ADR · Custom-Native Rebuild + Capability-Preservation Baseline</span></a>
 <a href="#adr-28" data-estado="draft" title="AI-assistant data governance (MarlexOne / Groq) and data residency"><span class="tid">ADR · AI-Assistant Data Governance</span></a>
 <a href="#adr-29" data-estado="draft" title="Target-state reporting and BI strategy — native SF plus Data Cloud plus external Power BI"><span class="tid">ADR · Reporting &amp; BI Target-State</span></a>
 <a href="#adr-30" data-estado="draft" title="Making Apex-managed sharing country-aware (closes the sharing model&#x27;s implicit leak path)"><span class="tid">ADR · Country-aware Apex Managed Sharing</span></a>
 <a href="#adr-31" data-estado="proposed" title="ATS rebuild strategy — custom-native plus whole-surface buy-versus-build (Standard &gt; AppExchange &gt; Custom)"><span class="tid">ADR · ATS Rebuild Strategy (custom-native + buy-vs-build)</span></a>
 <a href="#adr-32" data-estado="proposed" title="Rebuild target-org topology — in-place (same org as TR) vs new org"><span class="tid">ADR · Rebuild Org Topology (in-place)</span></a>
+<a href="#adr-33" data-estado="proposed" title="Rebuild activation — one core cutover, progressive edge slices and no mirrored dual-write"><span class="tid">ADR · Rebuild Activation (core big-bang + edge slices)</span></a>
+<a href="#adr-34" data-estado="proposed" title="Candidate remains on standard Contact"><span class="tid">ADR · Candidate Remains on Standard Contact</span></a>
+<a href="#adr-35" data-estado="proposed" title="Target data model is designed from measured use"><span class="tid">ADR · Measured Target Data-Model Rules</span></a>
+<a href="#adr-36" data-estado="proposed" title="Rollback commitment and a separate uninstall gate"><span class="tid">ADR · Rollback Commitment &amp; Uninstall Gate</span></a>
+<a href="#adr-37" data-estado="proposed" title="Matching and CV parsing engine behind a Marlex-owned port"><span class="tid">ADR · Matching &amp; CV Parsing Engine</span></a>
+<a href="#adr-38" data-estado="proposed" title="Internal and external recruitment are separated by data, not only by screens"><span class="tid">ADR · Internal-vs-External Record Discriminator</span></a>
+<a href="#adr-39" data-estado="proposed" title="Internal records reuse the platform safely without inheriting external behaviour"><span class="tid">ADR · Logic Boundaries for Internal Records</span></a>
+<a href="#adr-40" data-estado="draft" title="Rebuild build standard"><span class="tid">ADR · Rebuild Build Standard</span></a>
+<a href="#adr-41" data-estado="proposed" title="Modern framework and permission-set security for the rebuild"><span class="tid">ADR · Modern Framework &amp; Access Standard</span></a>
+<a href="#adr-42" data-estado="proposed" title="Sharing privatisation is sequenced after cutover"><span class="tid">ADR · Privatisation Sequenced Post-Cutover</span></a>
+<a href="#adr-43" data-estado="accepted" title="How business logic is triggered — by kind of object"><span class="tid">ADR · Business-Logic Entry-Point Rule by Object Type</span></a>
+<a href="#adr-44" data-estado="accepted" title="Naming for the new build — plain English names, no owner tags"><span class="tid">ADR · Prefix-free English Naming for New Build</span></a>
 </div></div>
 <div class="dec" id="adr-1" data-estado="proposed">
 <div class="dh">
@@ -298,7 +312,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="dec" id="adr-3" data-estado="proposed">
 <div class="dh">
 <h3>Data-access seam during coexistence — repository confinement, not full ACL</h3>
-<span class="did">ADR · Seam de acceso a datos durante la coexistencia con TargetRecruit</span>
+<span class="did">ADR · Data-Access Seam during Coexistence</span>
 <span class="badge proposed">Proposed</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Solution</span></div>
@@ -310,11 +324,11 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Maintainability</span><span class="chip">Modifiability</span><span class="chip">Simplicity</span><span class="chip">Testability</span><span class="chip">Cost-Effectiveness</span></div>
 <div class="openbox"><b>Still open:</b> Recorded direction, not yet ratified — pending confirmation with Marlex after the reference-org discussion. The full per-entity assignment of each package touch point to delete-at-cutover or re-point-at-cutover is filled in as capabilities are built; whether a class has confined all its package access with none leaking into callers is a review item.</div>
 </div>
-<div class="dec" id="adr-4" data-estado="accepted">
+<div class="dec" id="adr-4" data-estado="superseded">
 <div class="dh">
 <h3>Mandatory anti-corruption-layer rule on vendor package objects</h3>
 <span class="did">ADR · ACL Entry-Point Rule</span>
-<span class="badge accepted">Accepted</span>
+<span class="badge superseded">Superseded</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Technical</span></div>
 <p class="bluf">On the TargetRecruit package objects (AVTRRT__), the only valid entry point for database-triggered business logic is a thin Apex trigger dispatcher that immediately delegates to the ACL. Record-Triggered Flows on those objects are banned as a business-logic entry point; a Flow that only calls an invocable Apex action passing through the ACL is still acceptable, because the Flow is only an orchestration surface.</p>
@@ -357,7 +371,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <span class="badge proposed">Proposed</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Technical</span></div>
-<p class="bluf">The programme uses a production branch (main) and a UAT/pre-production branch, with feature branches cut from main and no long-lived develop branches. Pull requests go through the Marlex CoE before merge. Releases are grouped by sprint as the base cadence, with intermediate releases allowed for hotfixes or justified business need, and hotfixes take a direct path to main with mandatory CoE review.</p>
+<p class="bluf">The programme uses a production branch and a shared pre-production branch, with feature branches cut from the production baseline and no long-lived development branch. Before each feature starts, the components in that change&#x27;s scope are retrieved and aligned to production so environmental drift is not carried into the pull request. Review happens at promotion into pre-production, and production release is a controlled handover rather than a second redesign of the change.</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
 <div class="dec" id="adr-9" data-estado="proposed">
@@ -417,7 +431,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Governance + Solution</span></div>
 <p class="bluf">The sharing model enforces data isolation between business units (brand by region) in the shared Marlex org: OWD is Private for all SObjects carrying regional business data, an MA_Country__c picklist (ES/PT/IT/PH) is added to those objects and defaults from the creating user, a Region role layer is inserted above the Spanish office hierarchy, and criteria-based sharing rules keyed on MA_Country__c replace the existing rules. Crucially, the sharing rules deploy inert at cutover so Spain users see no access change until historical data is back-populated in the data-dependent activation wave.</p>
-<div class="openbox"><b>Full decision —</b> set out in the <i>sharing &amp; access model</i> decision record.</div>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
 <div class="dec" id="adr-14" data-estado="accepted">
 <div class="dh">
@@ -524,41 +538,41 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p class="bluf">MuleSoft (Anypoint Platform) is selected as the middleware platform, running the three API-led layers with a MuleSoft-managed API Gateway. Demonstrations completed in June 2026 and licensing is in progress. The selection is closed as decided (2026-07-03).</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>integration layer</i> decision record.</div>
 </div>
-<div class="dec" id="adr-22" data-estado="draft">
+<div class="dec" id="adr-22" data-estado="proposed">
 <div class="dh">
 <h3>Data-migration tooling, backup, and rollback strategy</h3>
 <span class="did">ADR · Data-Migration Tooling, Backup &amp; Rollback</span>
-<span class="badge draft">Draft</span>
+<span class="badge proposed">Proposed</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Data Migration</span></span><span>·</span><span>Solution</span></div>
-<p class="bluf">The draft direction covers three things: use a proven Salesforce-aware loader (Bulk API 2.0 via Data Loader, dataloader.io, or Gearset, or middleware-driven loading if the integration platform lands first) rather than custom Apex ETL; adopt a third-party backup tool (Own, Gearset, or Spanning) for point-in-time restore before and during cutover, since native Salesforce backup is limited; and define a cutover rollback runbook with a go/no-go gate. The tools are illustrative, pending evaluation.</p>
+<p class="bluf">The draft direction covers three things: use a proven Salesforce-aware loader rather than custom Apex ETL, because a migration batch would compete with the live InfoJobs candidate-intake batches for the same asynchronous capacity; adopt a third-party backup tool for point-in-time restore before and during cutover, since native Salesforce backup is limited; and define a cutover rollback runbook with a go/no-go gate. The tools are illustrative, pending evaluation.</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
-<div class="dec" id="adr-23" data-estado="draft">
+<div class="dec" id="adr-23" data-estado="proposed">
 <div class="dh">
 <h3>Testing strategy and quality gates</h3>
 <span class="did">ADR · Testing &amp; Quality Gates</span>
-<span class="badge draft">Draft</span>
+<span class="badge proposed">Proposed</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Testing</span></span><span>·</span><span>Technical</span></div>
 <p class="bluf">The draft direction sets four quality gates: minimum Apex coverage above Salesforce&#x27;s 75% floor (targeting around 85% on new or refactored code) enforced as a continuous-integration gate on pull requests; continuous-integration gates combining test execution, static analysis (PMD/ApexGuru), and the with-sharing declaration gate already defined in the sharing model; acceptance tests for the division decoupling as regression guards; and user-acceptance testing owned by Marlex Product during the UAT phase as a single cycle validating both the data migration and the standardisation waves. The thresholds are illustrative, pending agreement.</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
-<div class="dec" id="adr-24" data-estado="draft">
+<div class="dec" id="adr-24" data-estado="proposed">
 <div class="dh">
 <h3>Environment and sandbox strategy</h3>
 <span class="did">ADR · Environments &amp; Sandboxes</span>
-<span class="badge draft">Draft</span>
+<span class="badge proposed">Proposed</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Technical</span></div>
 <p class="bluf">The draft direction defines a sandbox ladder: at least one full-copy sandbox for the cutover rehearsals, data-dependent activation, and user-acceptance testing; partial-copy and developer sandboxes for build; a refresh cadence aligned to the standardisation-wave gates; and Marlex IT as the provisioner. Counts and cadence are illustrative, pending sizing.</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
-<div class="dec" id="adr-25" data-estado="draft">
+<div class="dec" id="adr-25" data-estado="deprecated">
 <div class="dh">
 <h3>ATS fit-gap (SME: the ATS Product Owner) and target data-model freeze</h3>
 <span class="did">ADR · Fit-Gap &amp; Target-Model Freeze</span>
-<span class="badge draft">Draft</span>
+<span class="badge deprecated">Deprecated</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Solution</span></div>
 <p class="bluf">The draft direction is to commission the fit-gap analysis from the ATS Product Owner (Marlex Product) as a named programme deliverable feeding the ATS build, and to freeze the target data model (the canonical object catalogue) before the ATS build starts, with a controlled change process after the freeze. Owner and timing are to be confirmed.</p>
@@ -579,11 +593,11 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="qa"><span class="chip">Privacy</span><span class="chip">Security</span><span class="chip">Interoperability</span><span class="chip">Reusability</span></div>
 <div class="openbox"><b>Still open:</b> To advance, EU residency and the Philippines transfer legal basis, the Marketing Cloud Next edition, identity-resolution rulesets, consent ownership, the Data Spaces list (recomputed without the Philippines), and topology licensing cost must be confirmed.</div>
 </div>
-<div class="dec" id="adr-27" data-estado="proposed">
+<div class="dec" id="adr-27" data-estado="deprecated">
 <div class="dh">
 <h3>The rebuild is a custom-native ATS rebuild plus an independent capability-preservation baseline</h3>
 <span class="did">ADR · Custom-Native Rebuild + Capability-Preservation Baseline</span>
-<span class="badge proposed">Proposed</span>
+<span class="badge deprecated">Deprecated</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Solution</span></div>
 <p class="bluf">The programme is named explicitly as an ATS rebuild plus standardisation, not a lift-and-shift, and a separate functional-preservation baseline is carved out: behaviour-based, derived from the capability inventory, data reconciliation, and traceable user-acceptance testing, and governed independently of the transformation so that parity has a clean checkpoint.</p>
@@ -625,7 +639,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution + Technical</span></div>
 <p class="bluf">For MA_Oferta__Share and MA_Factura__Share, the Apex Managed Sharing classes must be made country-aware or retired before isolation is activated in the data-dependent activation wave. The default recommendation is to keep the classes but add a country guard, creating a share only if the target user and the record resolve to the same MA_Country__c or an explicit named exception. A build deliverable is added so the fix travels with the model rather than surfacing after a leak in user-acceptance testing. The sharing-model doctrine is unchanged; this decision covers the mechanism it left implicit.</p>
-<div class="openbox"><b>Full decision —</b> set out in the <i>sharing &amp; access model</i> decision record.</div>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
 <div class="dec" id="adr-31" data-estado="proposed">
 <div class="dh">
@@ -647,14 +661,833 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p class="bluf">The topology is in-place: the custom-native rebuild happens in the same org as TargetRecruit, not a new org. This was decided 2026-07-03 and promoted to Proposed, alongside the direction to co-decide topology together with the rebuild feasibility and the cutover activation as a single combined decision of {viable?} x {in-place or new org} x {big-bang or phased}, because resolving the pieces separately produces incoherent downstream plans.</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
+<div class="dec" id="adr-33" data-estado="proposed">
+<div class="dh">
+<h3>Rebuild activation — one core cutover, progressive edge slices and no mirrored dual-write</h3>
+<span class="did">ADR · Rebuild Activation (core big-bang + edge slices)</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Cutover &amp; Hypercare</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The shared candidate, job and application core is activated in one rehearsed cutover window, with placements moving with it by default, while independently owned edges such as interviews can move earlier as learning slices. New components may be deployed dormant as they are completed, but deployment and activation remain separate events. Coexistence always has one owner for each record and never relies on keeping old and new copies synchronised.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-34" data-estado="proposed">
+<div class="dh">
+<h3>Candidate remains on standard Contact</h3>
+<span class="did">ADR · Candidate Remains on Standard Contact</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Candidates remain standard Contact records. Existing records are retyped in place onto a Marlex-owned record type and the new fields are backfilled onto those same rows, preserving files, activities, sharing, history and a single person identity instead of creating a second custom candidate object.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-35" data-estado="proposed">
+<div class="dh">
+<h3>Target data model is designed from measured use</h3>
+<span class="did">ADR · Measured Target Data-Model Rules</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">The target model uses lookups by default, indexed external identifiers for repeatable migration and reconciliation, record types only where processes genuinely diverge, field history from day one for decision fields, restricted global value sets, and configuration rather than country or brand hard-coding. The shape is based on measured production use instead of copying the managed package one for one.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-36" data-estado="proposed">
+<div class="dh">
+<h3>Rollback commitment and a separate uninstall gate</h3>
+<span class="did">ADR · Rollback Commitment &amp; Uninstall Gate</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Cutover &amp; Hypercare</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">TargetRecruit stays installed and intact, under read-only permissions, for a dated fallback period after cutover. Rollback has written invocation criteria, a named owner, a rehearsed metadata flip-back and bounded data-delta replay. Physical package removal is a later irreversible gate crossed only against written go-criteria and operational evidence.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-37" data-estado="proposed">
+<div class="dh">
+<h3>Matching and CV parsing engine behind a Marlex-owned port</h3>
+<span class="did">ADR · Matching &amp; CV Parsing Engine</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The current direction remains to buy a specialist matching and CV-parsing engine behind a Marlex-owned interface, with native search for everyday lookup and the engine for semantic matching. The buy-versus-build choice was reopened because of cost, so an off-platform in-house option is again being evaluated outside the main estimate until an owner and a parity test close it.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-38" data-estado="proposed">
+<div class="dh">
+<h3>Internal and external recruitment are separated by data, not only by screens</h3>
+<span class="did">ADR · Internal-vs-External Record Discriminator</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">SHARE · HR Rollout + Sharing-Model Refactor</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Each recruitment record carries both an internal-or-external record type for user experience and a derived external-work indicator for access, automation and integration rules. The two values are kept in lockstep, and every existing record is marked external during migration so current visibility is preserved.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>HR rollout &amp; sharing model</i> decision record.</div>
+</div>
+<div class="dec" id="adr-39" data-estado="proposed">
+<div class="dh">
+<h3>Internal records reuse the platform safely without inheriting external behaviour</h3>
+<span class="did">ADR · Logic Boundaries for Internal Records</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">SHARE · HR Rollout + Sharing-Model Refactor</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Shared recruitment logic applies to internal HR records only where the business meaning is genuinely common. Job-board, portal, customer and other external-facing behaviour is explicitly gated off for internal work, with the record-level discriminator providing the boundary rather than duplicating the whole platform.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>HR rollout &amp; sharing model</i> decision record.</div>
+</div>
+<div class="dec" id="adr-40" data-estado="draft">
+<div class="dh">
+<h3>Rebuild build standard</h3>
+<span class="did">ADR · Rebuild Build Standard</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Native Build</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">The rebuild follows a platform-first build standard: declarative automation where it remains clear and governable, Apex for complex or high-volume behaviour, Lightning pages composed from focused components, English prefix-free API names for new native metadata, and permission-set-based access rather than profiles. Exceptions require an explicit technical reason.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-41" data-estado="proposed">
+<div class="dh">
+<h3>Modern framework and permission-set security for the rebuild</h3>
+<span class="did">ADR · Modern Framework &amp; Access Standard</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Native Build</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">New rebuild components use current Salesforce patterns, including External Credentials and Named Credentials for outbound access, permission sets and permission-set groups for user access, explicit sharing behaviour and testable service boundaries. Profiles are not the delivery mechanism for new access, and secrets or endpoint details never live in code.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-42" data-estado="proposed">
+<div class="dh">
+<h3>Sharing privatisation is sequenced after cutover</h3>
+<span class="did">ADR · Privatisation Sequenced Post-Cutover</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">SHARE · HR Rollout + Sharing-Model Refactor</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">The move from the current open access model to private-by-default sharing is not coupled to the core TargetRecruit cutover. It is delivered afterwards as its own rehearsed activation with zero-leakage tests, while the internal-HR rollout carries its confidential access boundary when that population joins the platform.</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-43" data-estado="accepted">
+<div class="dh">
+<h3>How business logic is triggered — by kind of object</h3>
+<span class="did">ADR · Business-Logic Entry-Point Rule by Object Type</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">O</p>
+<div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
+</div>
+<div class="dec" id="adr-44" data-estado="accepted">
+<div class="dh">
+<h3>Naming for the new build — plain English names, no owner tags</h3>
+<span class="did">ADR · Prefix-free English Naming for New Build</span>
+<span class="badge accepted">Accepted</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">E</p>
+<p>v</p>
+<p>e</p>
+<p>r</p>
+<p>y</p>
+<p> </p>
+<p>o</p>
+<p>b</p>
+<p>j</p>
+<p>e</p>
+<p>c</p>
+<p>t</p>
+<p> </p>
+<p>a</p>
+<p>n</p>
+<p>d</p>
+<p> </p>
+<p>f</p>
+<p>i</p>
+<p>e</p>
+<p>l</p>
+<p>d</p>
+<p> </p>
+<p>b</p>
+<p>u</p>
+<p>i</p>
+<p>l</p>
+<p>t</p>
+<p> </p>
+<p>n</p>
+<p>e</p>
+<p>w</p>
+<p> </p>
+<p>f</p>
+<p>o</p>
+<p>r</p>
+<p> </p>
+<p>t</p>
+<p>h</p>
+<p>e</p>
+<p> </p>
+<p>r</p>
+<p>e</p>
+<p>b</p>
+<p>u</p>
+<p>i</p>
+<p>l</p>
+<p>d</p>
+<p> </p>
+<p>g</p>
+<p>e</p>
+<p>t</p>
+<p>s</p>
+<p> </p>
+<p>a</p>
+<p> </p>
+<p>p</p>
+<p>l</p>
+<p>a</p>
+<p>i</p>
+<p>n</p>
+<p> </p>
+<p>E</p>
+<p>n</p>
+<p>g</p>
+<p>l</p>
+<p>i</p>
+<p>s</p>
+<p>h</p>
+<p> </p>
+<p>t</p>
+<p>e</p>
+<p>c</p>
+<p>h</p>
+<p>n</p>
+<p>i</p>
+<p>c</p>
+<p>a</p>
+<p>l</p>
+<p> </p>
+<p>n</p>
+<p>a</p>
+<p>m</p>
+<p>e</p>
+<p> </p>
+<p>w</p>
+<p>i</p>
+<p>t</p>
+<p>h</p>
+<p> </p>
+<p>n</p>
+<p>o</p>
+<p> </p>
+<p>o</p>
+<p>w</p>
+<p>n</p>
+<p>e</p>
+<p>r</p>
+<p> </p>
+<p>t</p>
+<p>a</p>
+<p>g</p>
+<p> </p>
+<p>i</p>
+<p>n</p>
+<p> </p>
+<p>f</p>
+<p>r</p>
+<p>o</p>
+<p>n</p>
+<p>t</p>
+<p> </p>
+<p>o</p>
+<p>f</p>
+<p> </p>
+<p>i</p>
+<p>t</p>
+<p> </p>
+<p>—</p>
+<p> </p>
+<p>t</p>
+<p>h</p>
+<p>e</p>
+<p> </p>
+<p>l</p>
+<p>a</p>
+<p>b</p>
+<p>e</p>
+<p>l</p>
+<p> </p>
+<p>a</p>
+<p> </p>
+<p>u</p>
+<p>s</p>
+<p>e</p>
+<p>r</p>
+<p> </p>
+<p>s</p>
+<p>e</p>
+<p>e</p>
+<p>s</p>
+<p> </p>
+<p>c</p>
+<p>a</p>
+<p>n</p>
+<p> </p>
+<p>s</p>
+<p>t</p>
+<p>i</p>
+<p>l</p>
+<p>l</p>
+<p> </p>
+<p>b</p>
+<p>e</p>
+<p> </p>
+<p>S</p>
+<p>p</p>
+<p>a</p>
+<p>n</p>
+<p>i</p>
+<p>s</p>
+<p>h</p>
+<p>,</p>
+<p> </p>
+<p>b</p>
+<p>u</p>
+<p>t</p>
+<p> </p>
+<p>t</p>
+<p>h</p>
+<p>e</p>
+<p> </p>
+<p>u</p>
+<p>n</p>
+<p>d</p>
+<p>e</p>
+<p>r</p>
+<p>l</p>
+<p>y</p>
+<p>i</p>
+<p>n</p>
+<p>g</p>
+<p> </p>
+<p>n</p>
+<p>a</p>
+<p>m</p>
+<p>e</p>
+<p> </p>
+<p>i</p>
+<p>s</p>
+<p> </p>
+<p>E</p>
+<p>n</p>
+<p>g</p>
+<p>l</p>
+<p>i</p>
+<p>s</p>
+<p>h</p>
+<p> </p>
+<p>a</p>
+<p>n</p>
+<p>d</p>
+<p> </p>
+<p>p</p>
+<p>r</p>
+<p>e</p>
+<p>f</p>
+<p>i</p>
+<p>x</p>
+<p>-</p>
+<p>f</p>
+<p>r</p>
+<p>e</p>
+<p>e</p>
+<p>.</p>
+<p> </p>
+<p>A</p>
+<p>n</p>
+<p> </p>
+<p>o</p>
+<p>w</p>
+<p>n</p>
+<p>e</p>
+<p>r</p>
+<p> </p>
+<p>t</p>
+<p>a</p>
+<p>g</p>
+<p> </p>
+<p>o</p>
+<p>n</p>
+<p> </p>
+<p>a</p>
+<p>l</p>
+<p>m</p>
+<p>o</p>
+<p>s</p>
+<p>t</p>
+<p> </p>
+<p>e</p>
+<p>v</p>
+<p>e</p>
+<p>r</p>
+<p>y</p>
+<p> </p>
+<p>c</p>
+<p>o</p>
+<p>m</p>
+<p>p</p>
+<p>o</p>
+<p>n</p>
+<p>e</p>
+<p>n</p>
+<p>t</p>
+<p> </p>
+<p>t</p>
+<p>e</p>
+<p>l</p>
+<p>l</p>
+<p>s</p>
+<p> </p>
+<p>y</p>
+<p>o</p>
+<p>u</p>
+<p> </p>
+<p>n</p>
+<p>o</p>
+<p>t</p>
+<p>h</p>
+<p>i</p>
+<p>n</p>
+<p>g</p>
+<p>,</p>
+<p> </p>
+<p>a</p>
+<p>n</p>
+<p>d</p>
+<p> </p>
+<p>c</p>
+<p>r</p>
+<p>o</p>
+<p>s</p>
+<p>s</p>
+<p>-</p>
+<p>o</p>
+<p>r</p>
+<p>g</p>
+<p>a</p>
+<p>n</p>
+<p>i</p>
+<p>s</p>
+<p>a</p>
+<p>t</p>
+<p>i</p>
+<p>o</p>
+<p>n</p>
+<p> </p>
+<p>o</p>
+<p>w</p>
+<p>n</p>
+<p>e</p>
+<p>r</p>
+<p>s</p>
+<p>h</p>
+<p>i</p>
+<p>p</p>
+<p> </p>
+<p>i</p>
+<p>s</p>
+<p> </p>
+<p>c</p>
+<p>a</p>
+<p>r</p>
+<p>r</p>
+<p>i</p>
+<p>e</p>
+<p>d</p>
+<p> </p>
+<p>b</p>
+<p>y</p>
+<p> </p>
+<p>t</p>
+<p>h</p>
+<p>e</p>
+<p> </p>
+<p>p</p>
+<p>l</p>
+<p>a</p>
+<p>t</p>
+<p>f</p>
+<p>o</p>
+<p>r</p>
+<p>m</p>
+<p> </p>
+<p>a</p>
+<p>t</p>
+<p> </p>
+<p>r</p>
+<p>e</p>
+<p>l</p>
+<p>e</p>
+<p>a</p>
+<p>s</p>
+<p>e</p>
+<p> </p>
+<p>t</p>
+<p>i</p>
+<p>m</p>
+<p>e</p>
+<p>,</p>
+<p> </p>
+<p>n</p>
+<p>o</p>
+<p>t</p>
+<p> </p>
+<p>b</p>
+<p>y</p>
+<p> </p>
+<p>a</p>
+<p> </p>
+<p>t</p>
+<p>y</p>
+<p>p</p>
+<p>e</p>
+<p>d</p>
+<p> </p>
+<p>p</p>
+<p>r</p>
+<p>e</p>
+<p>f</p>
+<p>i</p>
+<p>x</p>
+<p>.</p>
+<p> </p>
+<p>A</p>
+<p> </p>
+<p>g</p>
+<p>r</p>
+<p>o</p>
+<p>u</p>
+<p>p</p>
+<p> </p>
+<p>t</p>
+<p>a</p>
+<p>g</p>
+<p> </p>
+<p>i</p>
+<p>s</p>
+<p> </p>
+<p>a</p>
+<p>d</p>
+<p>d</p>
+<p>e</p>
+<p>d</p>
+<p> </p>
+<p>t</p>
+<p>o</p>
+<p> </p>
+<p>a</p>
+<p> </p>
+<p>c</p>
+<p>o</p>
+<p>m</p>
+<p>p</p>
+<p>o</p>
+<p>n</p>
+<p>e</p>
+<p>n</p>
+<p>t</p>
+<p> </p>
+<p>o</p>
+<p>n</p>
+<p>l</p>
+<p>y</p>
+<p> </p>
+<p>w</p>
+<p>h</p>
+<p>e</p>
+<p>n</p>
+<p> </p>
+<p>t</p>
+<p>h</p>
+<p>e</p>
+<p> </p>
+<p>g</p>
+<p>o</p>
+<p>v</p>
+<p>e</p>
+<p>r</p>
+<p>n</p>
+<p>a</p>
+<p>n</p>
+<p>c</p>
+<p>e</p>
+<p> </p>
+<p>b</p>
+<p>o</p>
+<p>a</p>
+<p>r</p>
+<p>d</p>
+<p> </p>
+<p>c</p>
+<p>o</p>
+<p>n</p>
+<p>f</p>
+<p>i</p>
+<p>r</p>
+<p>m</p>
+<p>s</p>
+<p> </p>
+<p>i</p>
+<p>t</p>
+<p> </p>
+<p>i</p>
+<p>s</p>
+<p> </p>
+<p>g</p>
+<p>e</p>
+<p>n</p>
+<p>u</p>
+<p>i</p>
+<p>n</p>
+<p>e</p>
+<p>l</p>
+<p>y</p>
+<p> </p>
+<p>s</p>
+<p>h</p>
+<p>a</p>
+<p>r</p>
+<p>e</p>
+<p>d</p>
+<p> </p>
+<p>g</p>
+<p>r</p>
+<p>o</p>
+<p>u</p>
+<p>p</p>
+<p>-</p>
+<p>w</p>
+<p>i</p>
+<p>d</p>
+<p>e</p>
+<p>.</p>
+<p> </p>
+<p>E</p>
+<p>x</p>
+<p>i</p>
+<p>s</p>
+<p>t</p>
+<p>i</p>
+<p>n</p>
+<p>g</p>
+<p> </p>
+<p>p</p>
+<p>r</p>
+<p>o</p>
+<p>d</p>
+<p>u</p>
+<p>c</p>
+<p>t</p>
+<p>i</p>
+<p>o</p>
+<p>n</p>
+<p> </p>
+<p>n</p>
+<p>a</p>
+<p>m</p>
+<p>e</p>
+<p>s</p>
+<p> </p>
+<p>a</p>
+<p>r</p>
+<p>e</p>
+<p> </p>
+<p>l</p>
+<p>e</p>
+<p>f</p>
+<p>t</p>
+<p> </p>
+<p>a</p>
+<p>s</p>
+<p> </p>
+<p>t</p>
+<p>h</p>
+<p>e</p>
+<p>y</p>
+<p> </p>
+<p>a</p>
+<p>r</p>
+<p>e</p>
+<p> </p>
+<p>—</p>
+<p> </p>
+<p>n</p>
+<p>o</p>
+<p>t</p>
+<p>h</p>
+<p>i</p>
+<p>n</p>
+<p>g</p>
+<p> </p>
+<p>i</p>
+<p>s</p>
+<p> </p>
+<p>m</p>
+<p>a</p>
+<p>s</p>
+<p>s</p>
+<p>-</p>
+<p>r</p>
+<p>e</p>
+<p>n</p>
+<p>a</p>
+<p>m</p>
+<p>e</p>
+<p>d</p>
+<p>.</p>
+<p> </p>
+<p>T</p>
+<p>h</p>
+<p>i</p>
+<p>s</p>
+<p> </p>
+<p>r</p>
+<p>e</p>
+<p>p</p>
+<p>l</p>
+<p>a</p>
+<p>c</p>
+<p>e</p>
+<p>s</p>
+<p> </p>
+<p>t</p>
+<p>h</p>
+<p>e</p>
+<p> </p>
+<p>e</p>
+<p>a</p>
+<p>r</p>
+<p>l</p>
+<p>i</p>
+<p>e</p>
+<p>r</p>
+<p> </p>
+<p>o</p>
+<p>p</p>
+<p>t</p>
+<p>i</p>
+<p>o</p>
+<p>n</p>
+<p>a</p>
+<p>l</p>
+<p>-</p>
+<p>p</p>
+<p>r</p>
+<p>e</p>
+<p>f</p>
+<p>i</p>
+<p>x</p>
+<p> </p>
+<p>n</p>
+<p>a</p>
+<p>m</p>
+<p>i</p>
+<p>n</p>
+<p>g</p>
+<p> </p>
+<p>g</p>
+<p>u</p>
+<p>i</p>
+<p>d</p>
+<p>a</p>
+<p>n</p>
+<p>c</p>
+<p>e</p>
+<p> </p>
+<p>w</p>
+<p>h</p>
+<p>i</p>
+<p>l</p>
+<p>e</p>
+<p> </p>
+<p>k</p>
+<p>e</p>
+<p>e</p>
+<p>p</p>
+<p>i</p>
+<p>n</p>
+<p>g</p>
+<p> </p>
+<p>t</p>
+<p>h</p>
+<p>a</p>
+<p>t</p>
+<p> </p>
+<p>d</p>
+<p>e</p>
+<p>c</p>
+<p>i</p>
+<p>s</p>
+<p>i</p>
+<p>o</p>
+<p>n</p>
+<p>&#x27;</p>
+<p>s</p>
+<p> </p>
+<p>r</p>
+<p>u</p>
+<p>l</p>
+<p>e</p>
+<p>s</p>
+<p> </p>
+<p>a</p>
+<p>b</p>
+<p>o</p>
+<p>u</p>
+<p>t</p>
+<p> </p>
+<p>w</p>
+<p>h</p>
+<p>o</p>
+<p> </p>
+<p>o</p>
+<p>w</p>
+<p>n</p>
+<p>s</p>
+<p> </p>
+<p>w</p>
+<p>h</p>
+<p>a</p>
+<p>t</p>
+<p> </p>
+<p>a</p>
+<p>n</p>
+<p>d</p>
+<p> </p>
+<p>w</p>
+<p>h</p>
+<p>e</p>
+<p>r</p>
+<p>e</p>
+<p> </p>
+<p>c</p>
+<p>o</p>
+<p>m</p>
+<p>p</p>
+<p>o</p>
+<p>n</p>
+<p>e</p>
+<p>n</p>
+<p>t</p>
+<p>s</p>
+<p> </p>
+<p>l</p>
+<p>i</p>
+<p>v</p>
+<p>e</p>
+<p>.</p>
+<div class="qa"><span class="chip">Maintainability</span><span class="chip">Consistency</span></div>
+</div>
 <script>
 window.__filter=function(f,btn){
   document.querySelectorAll('#filters .fbtn').forEach(function(b){b.classList.remove('on')});
   btn.classList.add('on');
-  var show=function(el){el.style.display=(f==='all'||el.getAttribute('data-estado')===f)?'':'none';};
+  var match=function(e){var d=e.getAttribute('data-estado');return f==='all'||d===f||(f==='archived'&&(d==='superseded'||d==='deprecated'));};
+  var show=function(el){el.style.display=match(el)?'':'none';};
   document.querySelectorAll('.dec').forEach(show);
   document.querySelectorAll('.toc-grid a').forEach(function(a){
-    a.style.display=(f==='all'||a.getAttribute('data-estado')===f)?'':'none';
+    a.style.display=match(a)?'':'none';
   });
 };
 </script>

@@ -125,7 +125,8 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 .dec h3{margin:.1em 0;font-size:19px;flex:1 1 100%}
 .badge{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;padding:3px 10px;border-radius:20px}
 .badge.accepted{background:#d7f0e0;color:#155d34} .badge.proposed{background:#fdeecf;color:#8a5a12} .badge.draft{background:var(--surface-2);color:var(--draft)}
-@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}}
+.badge.superseded,.badge.deprecated{background:#e9e6e1;color:#6b6b6b} .dec[data-estado="superseded"],.dec[data-estado="deprecated"]{opacity:.72}
+@media (prefers-color-scheme:dark){.badge.accepted{background:#12321f;color:#7fdca8}.badge.proposed{background:#3a2c10;color:#e6b45a}.badge.superseded,.badge.deprecated{background:#2a2a2a;color:#9a9a9a}}
 .dec .meta{font-size:12px;color:var(--draft);margin-bottom:12px;display:flex;gap:16px;flex-wrap:wrap}
 .dec p{font-size:15px;margin:.6em 0}
 .dec p.bluf{font-size:16px;font-weight:600;color:var(--ink);border-left:3px solid var(--brand);padding-left:14px;margin-left:-2px}
@@ -240,6 +241,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
       <button class="fbtn" data-f="accepted" onclick="__filter('accepted',this)">Accepted</button>
       <button class="fbtn" data-f="proposed" onclick="__filter('proposed',this)">Proposed</button>
       <button class="fbtn" data-f="draft" onclick="__filter('draft',this)">Draft</button>
+      <button class="fbtn" data-f="archived" onclick="__filter('archived',this)">Archived</button>
     </div>
 <div class="toc"><div class="th">Jump to</div><div class="toc-grid">
 <a href="#pdr-1" data-estado="accepted" title="Rebuild Sequencing Strategy"><span class="tid">PDR · Rebuild Sequencing Strategy</span></a>
@@ -262,7 +264,12 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <a href="#pdr-18" data-estado="proposed" title="Agile Capability Epics for the Rebuild — Design, Build, Test and UAT Inside Each Capability"><span class="tid">PDR · Agile Capability Epics</span></a>
 <a href="#pdr-19" data-estado="proposed" title="When the HR team comes onto the platform — at the switch, or after it"><span class="tid">PDR · HR Onboarding Timing</span></a>
 <a href="#pdr-20" data-estado="proposed" title="How internal HR work stays private while external hiring stays open"><span class="tid">PDR · Internal-vs-External Access Model</span></a>
-<a href="#pdr-21" data-estado="proposed" title="PO Specification &amp; Analysis Process"><span class="tid">PDR · Proceso de especificación y análisis de PO</span></a>
+<a href="#pdr-21" data-estado="proposed" title="PO Specification &amp; Analysis Process"><span class="tid">PDR · PO Specification &amp; Analysis Process</span></a>
+<a href="#pdr-22" data-estado="proposed" title="Minimum rebuild scope — enough to disconnect from TargetRecruit, shaped by accepted requirements"><span class="tid">PDR · Minimum Rebuild Scope Rule</span></a>
+<a href="#pdr-23" data-estado="proposed" title="Delivery continues without a long freeze"><span class="tid">PDR · No-Freeze Delivery Model</span></a>
+<a href="#pdr-24" data-estado="proposed" title="Characterise behaviour before replacing it"><span class="tid">PDR · Behaviour-Parity Testing</span></a>
+<a href="#pdr-25" data-estado="proposed" title="Shared entry points switch one route at a time"><span class="tid">PDR · Shared-Entry-Point Switching</span></a>
+<a href="#pdr-26" data-estado="draft" title="Axxon interim ERP bridge — self-service in NET4, Eolia retained and no disposable integration"><span class="tid">PDR · Axxon Interim ERP Bridge</span></a>
 </div></div>
 <div class="dec" id="pdr-1" data-estado="accepted">
 <div class="dh">
@@ -543,24 +550,92 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="dec" id="pdr-21" data-estado="proposed">
 <div class="dh">
 <h3>PO Specification &amp; Analysis Process</h3>
-<span class="did">PDR · Proceso de especificación y análisis de PO</span>
+<span class="did">PDR · PO Specification &amp; Analysis Process</span>
 <span class="badge proposed">Proposed</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Programme</span></div>
 <p class="bluf">Before any change is built, it is first analysed and given a clear disposition — keep it, drop it, or merge it into something else — decided against the target way of working, not against how the current tool happens to do it today. Only once that analysis produces an agreed specification does the work move on to be built, tested and released. The two stages are kept deliberately separate: one place to decide what should change and why, a second to build and ship it.</p>
 <p>The yardstick for every decision is a single business objective — fill vacancies with the right candidate as quickly and cost-effectively as possible, covering more vacancies faster. A change earns its place only if it moves that objective; otherwise it is dropped rather than rebuilt out of habit. The current-state map doubles as a coverage checklist, so nothing quietly falls through, while the target-state map is the lens each decision is made against.</p>
 <p>Work is described in business-meaningful units — a capability the business would recognise — rather than one entry per underlying technical component, which would produce thousands of meaningless items. Each specification captures the information involved, the rules and automations, the screens, and above all the what and the why; the how is a separate technical step taken only after the specification is accepted.</p>
+<p>Delivery traceability uses a rebuild label rather than a new issue type. Roughly seven or eight capability epics provide the backbone, rebuild stories sit underneath them, and labels or components distinguish phase and sub-package. This keeps every production change traceable to what must be activated at cutover without creating another Jira workflow.</p>
 <div class="qa"><span class="chip">Understandability</span><span class="chip">Traceability</span><span class="chip">Time-to-Market</span></div>
 <div class="openbox"><b>Still open:</b> Confirm the method at the governance forum. Still to settle: the tooling for a living, visual process catalogue and a shared drawing standard so everyone maps processes the same way (to be assessed ahead of the mapping work); and access to the neighbouring systems whose steps form part of each end-to-end process.</div>
+</div>
+<div class="dec" id="pdr-22" data-estado="proposed">
+<div class="dh">
+<h3>Minimum rebuild scope — enough to disconnect from TargetRecruit, shaped by accepted requirements</h3>
+<span class="did">PDR · Minimum Rebuild Scope Rule</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Programme</span></div>
+<p class="bluf">The rebuild&#x27;s minimum scope is the smallest coherent set of capabilities needed to disconnect Marlex from TargetRecruit safely. It is not a replica of every feature in the current package and it is not a pre-written technical backlog; the accepted business requirements and capability inventory decide what must survive, improve, merge or disappear.</p>
+<p>This rule prevents two opposite failures: carrying unused package behaviour forward by default, and cutting apparently minor capabilities whose dependencies are only discovered at cutover. Scope is therefore agreed by capability against the target process, with the product owner defining the required outcome and architecture checking the dependency boundary.</p>
+<p>Anything beyond safe disconnection and accepted capability parity is treated as an explicit evolution, with its own priority and release path, rather than being hidden inside the rebuild baseline.</p>
+<div class="qa"><span class="chip">Understandability</span><span class="chip">Traceability</span><span class="chip">Time-to-Market</span></div>
+<div class="openbox"><b>Still open:</b> Complete the requirements inventory and disposition each capability before locking the build scope.</div>
+</div>
+<div class="dec" id="pdr-23" data-estado="proposed">
+<div class="dh">
+<h3>Delivery continues without a long freeze</h3>
+<span class="did">PDR · No-Freeze Delivery Model</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Delivering While Rebuilding</span></span><span>·</span><span>Programme</span></div>
+<p class="bluf">Business delivery continues while the rebuild is under way. New work is built native-first where its capability can live safely on the owned model; where the live TargetRecruit path must also change, the ticket carries an explicit twin obligation so the temporary legacy change and its native successor stay linked.</p>
+<p>The model avoids a programme-long freeze, which would leave the business unable to evolve, without pretending that changes to the retiring platform are free. Every legacy-side change must declare whether it is temporary, how it will be represented in the rebuilt capability, and when the legacy part is retired.</p>
+<p>Release review separates evolution work from rebuild work because they have different acceptance criteria, dependency order and rollback behaviour. The default is one functional unit per issue and one traceable change set per release unit.</p>
+<div class="qa"><span class="chip">Time-to-Market</span><span class="chip">Maintainability</span><span class="chip">Traceability</span></div>
+<div class="openbox"><b>Still open:</b> Define the operational threshold for when a live request is implemented twice, deferred, or delivered only on the native path.</div>
+</div>
+<div class="dec" id="pdr-24" data-estado="proposed">
+<div class="dh">
+<h3>Characterise behaviour before replacing it</h3>
+<span class="did">PDR · Behaviour-Parity Testing</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Testing</span></span><span>·</span><span>Programme</span></div>
+<p class="bluf">Before a TargetRecruit-dependent capability is replaced, its observable behaviour is captured as executable characterisation tests. Those tests describe inputs, outputs, side effects and important failure cases without treating the package&#x27;s internal implementation as the specification.</p>
+<p>The rebuilt capability must pass the agreed behaviour-parity baseline before the old path is retired. Where the target process deliberately changes, the test and its acceptance criterion change through an explicit business decision rather than by silently accepting a regression.</p>
+<p>Characterisation uses synthetic or anonymised data and is complemented by capability-level user acceptance. Destructive package-behaviour probes are handled as separately controlled experiments in an appropriate sandbox.</p>
+<div class="qa"><span class="chip">Testability</span><span class="chip">Reliability</span><span class="chip">Traceability</span></div>
+<div class="openbox"><b>Still open:</b> Prioritise the high-risk capabilities, assign test owners and reconcile any destructive sandbox probes with the synthetic-data rule.</div>
+</div>
+<div class="dec" id="pdr-25" data-estado="proposed">
+<div class="dh">
+<h3>Shared entry points switch one route at a time</h3>
+<span class="did">PDR · Shared-Entry-Point Switching</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Native Build</span></span><span>·</span><span>Programme</span></div>
+<p class="bluf">When a Marlex-owned object is reused but its existing automation is coupled to TargetRecruit, the existing entry point becomes a thin dispatcher. Per-object configuration selects exactly one path — legacy or native — so activation and rollback can happen by domain without deploying two competing triggers or running both implementations.</p>
+<p>The router is deliberately narrow. It applies only to reused custom objects whose live handler depends on the retiring model. New native objects do not need it, and platform-native activation remains preferable for flows or schedules where Salesforce already provides a clean switch. A global emergency bypass remains separate from the route selector.</p>
+<p>Each routed object needs legacy characterisation tests, native tests, a configuration-flip test, an exclusive-route guard, rollback rehearsal and logging that makes the active route visible. Once native writes have created divergent data, rollback follows the wider cutover decision rather than assuming a configuration flip alone is sufficient.</p>
+<div class="qa"><span class="chip">Modifiability</span><span class="chip">Reliability</span><span class="chip">Maintainability</span><span class="chip">Deployability</span></div>
+<div class="openbox"><b>Still open:</b> Validate the pattern on a real live trigger, confirm the reused-object inventory and add route observability before ratification.</div>
+</div>
+<div class="dec" id="pdr-26" data-estado="draft">
+<div class="dh">
+<h3>Axxon interim ERP bridge — self-service in NET4, Eolia retained and no disposable integration</h3>
+<span class="did">PDR · Axxon Interim ERP Bridge</span>
+<span class="badge draft">Draft</span>
+</div>
+<div class="meta"><span>Programme</span></div>
+<p class="bluf">The provisional bridge replaces e-Oer with NET4 on the required fiscal timeline while Axxon keeps Eolia temporarily as its ATS. Operational hand-off into NET4 is manual and self-service, supported by a Jira ticket where needed, instead of building a short-lived Axxon-specific Salesforce integration.</p>
+<p>NET4 treats Axxon as another company in the shared database while the two brands and Salesforce orgs remain separate. Axxon reuses the MuleSoft-to-NET4 integration only after that route exists for Marlex; until then, the interim path stays deliberately manual.</p>
+<p>This avoids investing in an integration expected to live for only a short bridge period and does not force Axxon prematurely onto a recruitment platform that is itself being rebuilt. The trade-off is extra manual work, dependence on Eolia and a need to revisit the choice if the bridge lasts materially longer than expected.</p>
+<p>The decision remains draft until the follow-up outcome, bridge duration, Eolia-to-NET4 route and worker-portal arrangement are confirmed.</p>
+<div class="qa"><span class="chip">Time-to-Market</span><span class="chip">Operability</span><span class="chip">Risk</span></div>
+<div class="openbox"><b>Still open:</b> Confirm the selected bridge scenario, its expected duration, the Eolia/NET4 path and the two-brand portal model before promotion from Draft.</div>
 </div>
 <script>
 window.__filter=function(f,btn){
   document.querySelectorAll('#filters .fbtn').forEach(function(b){b.classList.remove('on')});
   btn.classList.add('on');
-  var show=function(el){el.style.display=(f==='all'||el.getAttribute('data-estado')===f)?'':'none';};
+  var match=function(e){var d=e.getAttribute('data-estado');return f==='all'||d===f||(f==='archived'&&(d==='superseded'||d==='deprecated'));};
+  var show=function(el){el.style.display=match(el)?'':'none';};
   document.querySelectorAll('.dec').forEach(show);
   document.querySelectorAll('.toc-grid a').forEach(function(a){
-    a.style.display=(f==='all'||a.getAttribute('data-estado')===f)?'':'none';
+    a.style.display=match(a)?'':'none';
   });
 };
 </script>
