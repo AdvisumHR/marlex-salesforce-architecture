@@ -734,6 +734,101 @@
     color: var(--ink-soft);
     line-height: 1.5;
   }
+
+  /* ---- click-to-enlarge for diagrams (pure CSS :target lightbox, no JS) ----
+     A diagram opts in by wrapping its <svg> in <a class="dg-zoom" href="#zoom-<id>">
+     and following it with <div class="dg-lightbox" id="zoom-<id>">. Works on the
+     single pages and inside the merged artifact alike. ---- */
+  a.dg-zoom {
+    display: block;
+    cursor: zoom-in;
+    text-decoration: none;
+    border: 0;
+    position: relative;
+  }
+  a.dg-zoom::after {
+    content: "Click to enlarge";
+    position: absolute;
+    right: 0.5rem;
+    bottom: 0.4rem;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    padding: 0.15rem 0.4rem;
+    opacity: 0.75;
+  }
+  a.dg-zoom:hover::after {
+    opacity: 1;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .dg-lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    display: none;
+    background: color-mix(in srgb, var(--ink) 82%, transparent);
+    padding: 2.5vh 2vw;
+  }
+  .dg-lightbox:target {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .dg-lightbox .dg-lightbox-inner {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 1.2rem;
+    width: 100%;
+    max-width: 1600px;
+    max-height: 95vh;
+    overflow: auto;
+  }
+  .dg-lightbox svg {
+    display: block;
+    width: 100%;
+    height: auto;
+    overflow: visible;
+  }
+  .dg-lightbox .dg-close {
+    position: absolute;
+    top: 1.6vh;
+    right: 2vw;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.72rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-decoration: none;
+    color: var(--ink);
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    padding: 0.35rem 0.7rem;
+  }
+  .dg-lightbox .dg-close:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .dg-lightbox .dg-backdrop {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+  }
+  @media print {
+    a.dg-zoom::after {
+      display: none;
+    }
+    .dg-lightbox {
+      display: none !important;
+    }
+  }
   /* SVG primitives styled by class so they follow the theme */
   .dg-box {
     fill: var(--surface);
@@ -4883,8 +4978,2331 @@
             Everything else already runs on the native (<code>MA_*</code>) or
             standard model and crosses the cutover untouched.
           </p>
-          
+          <!-- Orbio in-build: SF-1333 (field creation, PO UAT Jul-2026), SF-1190 (offers; Orbio branch deferred, fields being wired). Read-only verified: 6 MA_Orbio_* fields present in PRE, 0 in prod. Taleva write owner-to-confirm (named-user OAuth). -->
         </div>
+
+        <section>
+          <p class="section-eyebrow">The whole landscape on one picture</p>
+          <h2>
+            Every outside system, and which of the two models inside Salesforce
+            it touches
+          </h2>
+          <p>
+            The tables below list the edges one per row. This picture puts them
+            all on one screen first, because the single fact that decides the
+            cutover is
+            <em>spatial</em>: the org holds
+            <strong>two data models at once</strong> — the native and standard
+            model that survives, and the retiring TargetRecruit model — and
+            every outside system attaches to one, the other, or both. An arrow
+            that reaches the retiring model is an edge the cutover must
+            re-point; an arrow that reaches only the surviving model crosses the
+            cutover untouched.
+          </p>
+          <p class="lk-legend">
+            <strong>Reading the picture.</strong>
+            <span class="term">One box per system, named</span> — each box is a
+            real outside system named by its vendor, drawn once however many
+            separate calls it makes. A system that runs two different
+            integrations gets
+            <strong>two labelled arrows from the one box</strong>, not two
+            boxes: that is how the picture shows the analytics platform both
+            extracting data and embedding reports, and the ERP link carrying the
+            finance feed alongside the transfer.
+            <span class="term">Grouping</span> — systems are grouped by what the
+            cutover owes them, and each group sits beside the model it touches:
+            the <strong>re-point group</strong> reaches the retiring model, the
+            <strong>untouched group</strong> reaches only the surviving one.
+            <span class="term">Arrow colour</span> —
+            <span class="term">copper</span> reaches the retiring model, so it
+            is on the re-point list; <span class="term">green</span> reaches
+            only the surviving model. <span class="term">Dashed</span> — not
+            carrying production traffic yet (in build, or planned).
+          </p>
+
+          <figure class="diagram">
+            <a
+              class="dg-zoom"
+              href="#zoom-landscape-ml"
+              aria-label="Enlarge this diagram"
+            >
+              <svg
+                viewBox="0 0 1084 616"
+                role="img"
+                aria-labelledby="ls-title ls-desc"
+              >
+                <title id="ls-title">
+                  The Marlex recruitment system landscape — named outside
+                  systems and the two data models inside the one Salesforce org
+                </title>
+                <desc id="ls-desc">
+                  A single Salesforce org contains two data models: the
+                  surviving native and standard model, and the retiring
+                  TargetRecruit model. Named outside systems are grouped by
+                  cutover consequence. On the left, four systems reach the
+                  retiring model and must be re-pointed: the job board InfoJobs,
+                  the sourcing connector Taleva, the AI pre-screening service
+                  Orbio, and Microsoft Power BI whose scheduled extract reads
+                  retiring records. On the right, systems that reach only the
+                  surviving model and cross the cutover untouched: the NET4 ERP,
+                  Signaturit, Iberinform, Humact and Lectio, Anthropic and Groq
+                  for document reading, Salesforce Data Cloud, Dolma,
+                  DocsMadeEasy, Google Maps, the Indra-built corporate website
+                  and a planned call-transcription service. Azure AD provides
+                  identity. The self-service portals sit inside the retiring
+                  model and leave with the package.
+                </desc>
+
+                <!-- ================= Salesforce container ================= -->
+                <rect
+                  class="dg-box"
+                  x="372"
+                  y="16"
+                  width="340"
+                  height="546"
+                  rx="10"
+                />
+                <text
+                  class="dg-t"
+                  x="542"
+                  y="42"
+                  text-anchor="middle"
+                  font-size="13"
+                  font-weight="700"
+                >
+                  Salesforce — one org
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="58"
+                  text-anchor="middle"
+                  font-size="10"
+                >
+                  two data models coexisting during the rebuild
+                </text>
+
+                <!-- · retiring model (TOP, beside the copper cluster) · -->
+                <rect
+                  class="dg-box-copper"
+                  x="390"
+                  y="76"
+                  width="304"
+                  height="212"
+                  rx="8"
+                />
+                <text
+                  class="dg-t-copper"
+                  x="542"
+                  y="100"
+                  text-anchor="middle"
+                  font-size="12"
+                >
+                  TargetRecruit model — retiring
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="118"
+                  text-anchor="middle"
+                  font-size="9.5"
+                >
+                  the bought recruitment package being rebuilt
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="137"
+                  text-anchor="middle"
+                  font-size="9.5"
+                >
+                  vacancies · applications · interviews
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="151"
+                  text-anchor="middle"
+                  font-size="9.5"
+                >
+                  placements · shortlists · employment history
+                </text>
+                <rect
+                  class="dg-box-mut"
+                  x="408"
+                  y="166"
+                  width="268"
+                  height="56"
+                  rx="6"
+                />
+                <text
+                  class="dg-t-copper"
+                  x="542"
+                  y="185"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  Self-service portals — candidate · recruiting · staffing
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="200"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  built on the package, so they cannot be re-pointed —
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="212"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  they end when the package ends
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="243"
+                  text-anchor="middle"
+                  font-size="9.5"
+                  font-style="italic"
+                >
+                  four systems still reach this model —
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="256"
+                  text-anchor="middle"
+                  font-size="9.5"
+                  font-style="italic"
+                >
+                  each one is a cutover re-point
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="275"
+                  text-anchor="middle"
+                  font-size="9"
+                >
+                  everything here is rebuilt into the model below
+                </text>
+
+                <!-- rebuild arrow, models are adjacent so it is short and unambiguous -->
+                <line
+                  class="dg-arrow-mut"
+                  x1="542"
+                  y1="288"
+                  x2="542"
+                  y2="316"
+                />
+                <polygon
+                  class="dg-fill-line"
+                  points="542,320 536,308 548,308"
+                />
+                <text
+                  class="dg-t-sm"
+                  x="554"
+                  y="308"
+                  font-size="9"
+                  font-style="italic"
+                >
+                  rebuilt into
+                </text>
+
+                <!-- · surviving model (BOTTOM, beside the green cluster) · -->
+                <rect
+                  class="dg-box-accent"
+                  x="390"
+                  y="324"
+                  width="304"
+                  height="164"
+                  rx="8"
+                />
+                <text
+                  class="dg-t-accent"
+                  x="542"
+                  y="348"
+                  text-anchor="middle"
+                  font-size="12"
+                >
+                  Native + standard model — survives
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="366"
+                  text-anchor="middle"
+                  font-size="9.5"
+                >
+                  Marlex-built objects and Salesforce standard objects
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="385"
+                  text-anchor="middle"
+                  font-size="9.5"
+                >
+                  offers · invoices · accounts · contacts · candidates
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="399"
+                  text-anchor="middle"
+                  font-size="9.5"
+                >
+                  training records · incentives · margin per client
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="413"
+                  text-anchor="middle"
+                  font-size="9.5"
+                >
+                  opportunities · campaigns · leads
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="440"
+                  text-anchor="middle"
+                  font-size="9.5"
+                  font-style="italic"
+                >
+                  every system reaching only this model
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="453"
+                  text-anchor="middle"
+                  font-size="9.5"
+                  font-style="italic"
+                >
+                  crosses the cutover untouched
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="475"
+                  text-anchor="middle"
+                  font-size="9"
+                >
+                  the rebuild's target model
+                </text>
+
+                <!-- · identity strip · -->
+                <rect
+                  class="dg-box"
+                  x="390"
+                  y="510"
+                  width="304"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="542"
+                  y="529"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  Identity · Microsoft Azure AD
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="542"
+                  y="543"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  single sign-on · no recruitment data · unchanged
+                </text>
+
+                <!-- ================= LEFT CLUSTER — reaches the retiring model ================= -->
+                <text
+                  class="dg-t-copper"
+                  x="160"
+                  y="34"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  Reaches the retiring model — must re-point
+                </text>
+
+                <!-- InfoJobs -->
+                <rect
+                  class="dg-box-copper"
+                  x="20"
+                  y="48"
+                  width="262"
+                  height="56"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="151"
+                  y="67"
+                  text-anchor="middle"
+                  font-size="11"
+                  font-weight="700"
+                >
+                  Job board · InfoJobs
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="82"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  publishes vacancies out; applications and CVs
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="94"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  come back in and create records — writes today
+                </text>
+
+                <!-- Taleva -->
+                <rect
+                  class="dg-box-copper"
+                  x="20"
+                  y="116"
+                  width="262"
+                  height="56"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="151"
+                  y="135"
+                  text-anchor="middle"
+                  font-size="11"
+                  font-weight="700"
+                >
+                  Sourcing connector · Taleva
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="150"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  reads applications heavily and appears to create
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="162"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  them — its owner must confirm
+                </text>
+
+                <!-- Orbio -->
+                <rect
+                  class="dg-box-mut"
+                  x="20"
+                  y="184"
+                  width="262"
+                  height="56"
+                  rx="6"
+                />
+                <text
+                  class="dg-t-copper"
+                  x="151"
+                  y="203"
+                  text-anchor="middle"
+                  font-size="11"
+                  font-weight="700"
+                >
+                  AI pre-screening · Orbio — in build
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="218"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  vacancy and candidates out; screening score and
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="230"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  outcome written back — sandbox only today
+                </text>
+
+                <!-- Power BI — ONE box, TWO arrows -->
+                <rect
+                  class="dg-box-copper"
+                  x="20"
+                  y="252"
+                  width="262"
+                  height="68"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="151"
+                  y="271"
+                  text-anchor="middle"
+                  font-size="11"
+                  font-weight="700"
+                >
+                  Analytics · Microsoft Power BI
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="286"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  one system, two separate integrations —
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="298"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  a scheduled extract out to an analytics database,
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="310"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  and reports embedded back inside the screen
+                </text>
+
+                <!-- ================= ARROWS — the four re-point edges, drawn individually ================= -->
+                <!-- These are the edges that cost the cutover work, so each gets its own arrow. -->
+
+                <!-- InfoJobs <-> retiring : both -->
+                <path
+                  class="dg-arrow-copper"
+                  d="M312 76 L378 76 L378 104 L386 104"
+                />
+                <polygon
+                  class="dg-fill-copper"
+                  points="390,104 378,98 378,110"
+                />
+                <polygon class="dg-fill-copper" points="308,76 320,70 320,82" />
+                <text
+                  class="dg-t-copper"
+                  x="342"
+                  y="68"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  both
+                </text>
+
+                <!-- Taleva -> retiring : in -->
+                <path
+                  class="dg-arrow-copper"
+                  d="M312 144 L372 144 L372 134 L386 134"
+                />
+                <polygon
+                  class="dg-fill-copper"
+                  points="390,134 378,128 378,140"
+                />
+                <text
+                  class="dg-t-copper"
+                  x="326"
+                  y="158"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  in
+                </text>
+
+                <!-- Orbio <-> retiring : both, dashed (in build) -->
+                <path
+                  class="dg-arrow-copper"
+                  d="M312 212 L324 212 L324 164 L386 164"
+                  stroke-dasharray="5 3"
+                />
+                <polygon
+                  class="dg-fill-copper"
+                  points="390,164 378,158 378,170"
+                />
+                <polygon
+                  class="dg-fill-copper"
+                  points="308,212 320,206 320,218"
+                />
+                <text
+                  class="dg-t-copper"
+                  x="322"
+                  y="226"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  both
+                </text>
+
+                <!-- Power BI, arrow 1 of 2 : the extract READS the retiring model -->
+                <path
+                  class="dg-arrow-copper"
+                  d="M312 276 L330 276 L330 236 L386 236"
+                />
+                <polygon
+                  class="dg-fill-copper"
+                  points="390,236 378,230 378,242"
+                />
+                <text
+                  class="dg-t-copper"
+                  x="342"
+                  y="252"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  extract
+                </text>
+                <text
+                  class="dg-t-copper"
+                  x="342"
+                  y="262"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  reads out
+                </text>
+
+                <!-- Power BI, arrow 2 of 2 : the report EMBED, config only, surviving side -->
+                <path
+                  class="dg-arrow-mut"
+                  d="M312 300 L326 300 L326 430 L386 430"
+                />
+                <polygon
+                  class="dg-fill-line"
+                  points="308,300 320,294 320,306"
+                />
+                <text
+                  class="dg-t-sm"
+                  x="342"
+                  y="326"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  report
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="342"
+                  y="336"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  embed
+                </text>
+
+                <!-- ================= RIGHT GROUP: one bracket, one arrow ================= -->
+                <!-- Nine systems make the same statement, so the group is bracketed and
+           carries ONE arrow. Per-system direction rides as a tag on each box. -->
+                <rect
+                  class="dg-box-mut"
+                  x="778"
+                  y="44"
+                  width="286"
+                  height="516"
+                  rx="10"
+                />
+                <text
+                  class="dg-t-accent"
+                  x="921"
+                  y="66"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  Reaches only the surviving model
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="921"
+                  y="80"
+                  text-anchor="middle"
+                  font-size="9"
+                >
+                  no cutover work — these cross unchanged
+                </text>
+
+                <!-- NET4 : one system, two integrations -->
+                <rect
+                  class="dg-box"
+                  x="792"
+                  y="92"
+                  width="258"
+                  height="56"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="908"
+                  y="110"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  ERP · NET4
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="908"
+                  y="124"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  offers, accounts and invoices both ways, plus
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="908"
+                  y="136"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  candidate lookup — and the finance figures feed
+                </text>
+                <text
+                  class="dg-t-accent"
+                  x="1040"
+                  y="110"
+                  text-anchor="end"
+                  font-size="8.5"
+                >
+                  both
+                </text>
+
+                <!-- Signaturit -->
+                <rect
+                  class="dg-box"
+                  x="792"
+                  y="156"
+                  width="258"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="912"
+                  y="173"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  E-signature · Signaturit
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="912"
+                  y="187"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  offers sent to sign; signed events come back
+                </text>
+                <text
+                  class="dg-t-accent"
+                  x="1040"
+                  y="173"
+                  text-anchor="end"
+                  font-size="8.5"
+                >
+                  both
+                </text>
+
+                <!-- Data Cloud -->
+                <rect
+                  class="dg-box"
+                  x="792"
+                  y="206"
+                  width="258"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="910"
+                  y="223"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  Customer data · Salesforce Data Cloud
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="910"
+                  y="237"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  heaviest caller of the org, all standard records
+                </text>
+                <text
+                  class="dg-t-accent"
+                  x="1042"
+                  y="223"
+                  text-anchor="end"
+                  font-size="8.5"
+                >
+                  out
+                </text>
+
+                <!-- Anthropic / Groq -->
+                <rect
+                  class="dg-box"
+                  x="792"
+                  y="256"
+                  width="258"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="910"
+                  y="273"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  Document reading · Anthropic / Groq
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="910"
+                  y="287"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  reads CVs and identity documents to fill fields
+                </text>
+                <text
+                  class="dg-t-accent"
+                  x="1042"
+                  y="273"
+                  text-anchor="end"
+                  font-size="8.5"
+                >
+                  out
+                </text>
+
+                <!-- Iberinform -->
+                <rect
+                  class="dg-box"
+                  x="792"
+                  y="306"
+                  width="258"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="910"
+                  y="323"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  Credit check · Iberinform
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="910"
+                  y="337"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  client creditworthiness looked up on demand
+                </text>
+                <text
+                  class="dg-t-accent"
+                  x="1042"
+                  y="323"
+                  text-anchor="end"
+                  font-size="8.5"
+                >
+                  out
+                </text>
+
+                <!-- Humact / Lectio -->
+                <rect
+                  class="dg-box"
+                  x="792"
+                  y="356"
+                  width="258"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="912"
+                  y="373"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  Training · Humact / Lectio
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="912"
+                  y="387"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  certificate and enrolment records pushed in
+                </text>
+                <text
+                  class="dg-t-accent"
+                  x="1044"
+                  y="373"
+                  text-anchor="end"
+                  font-size="8.5"
+                >
+                  in
+                </text>
+
+                <!-- Dolma -->
+                <rect
+                  class="dg-box"
+                  x="792"
+                  y="406"
+                  width="258"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="912"
+                  y="423"
+                  text-anchor="middle"
+                  font-size="10.5"
+                  font-weight="700"
+                >
+                  Document management · Dolma
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="912"
+                  y="437"
+                  text-anchor="middle"
+                  font-size="8.5"
+                >
+                  documents filed against native records
+                </text>
+                <text
+                  class="dg-t-accent"
+                  x="1044"
+                  y="423"
+                  text-anchor="end"
+                  font-size="8.5"
+                >
+                  in
+                </text>
+
+                <!-- DocsMadeEasy + Google Maps : two named systems, side by side -->
+                <rect
+                  class="dg-box"
+                  x="792"
+                  y="456"
+                  width="126"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="855"
+                  y="473"
+                  text-anchor="middle"
+                  font-size="9.5"
+                  font-weight="700"
+                >
+                  DocsMadeEasy
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="855"
+                  y="486"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  reads the field list only
+                </text>
+                <rect
+                  class="dg-box"
+                  x="924"
+                  y="456"
+                  width="126"
+                  height="42"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="987"
+                  y="473"
+                  text-anchor="middle"
+                  font-size="9.5"
+                  font-weight="700"
+                >
+                  Google Maps
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="987"
+                  y="486"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  addresses geocoded
+                </text>
+
+                <!-- Indra website + telephony : planned, dashed -->
+                <rect
+                  class="dg-box-mut"
+                  x="792"
+                  y="506"
+                  width="126"
+                  height="44"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="855"
+                  y="522"
+                  text-anchor="middle"
+                  font-size="9"
+                  font-weight="700"
+                >
+                  Corporate website
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="855"
+                  y="534"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  Indra — planned
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="855"
+                  y="545"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  enquiries in, natively
+                </text>
+                <rect
+                  class="dg-box-mut"
+                  x="924"
+                  y="506"
+                  width="126"
+                  height="44"
+                  rx="6"
+                />
+                <text
+                  class="dg-t"
+                  x="987"
+                  y="522"
+                  text-anchor="middle"
+                  font-size="9"
+                  font-weight="700"
+                >
+                  Call transcription
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="987"
+                  y="534"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  vendor not selected
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="987"
+                  y="545"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  fills native fields
+                </text>
+
+                <!-- THE single group arrow -->
+                <path
+                  class="dg-arrow"
+                  d="M778 400 L722 400 L722 406 L698 406"
+                />
+                <polygon
+                  class="dg-fill-accent"
+                  points="694,406 706,400 706,412"
+                />
+                <polygon
+                  class="dg-fill-accent"
+                  points="782,400 770,394 770,406"
+                />
+                <text
+                  class="dg-t-accent"
+                  x="745"
+                  y="382"
+                  text-anchor="middle"
+                  font-size="8.5"
+                  font-weight="700"
+                >
+                  all nine
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="745"
+                  y="393"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  reach only
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="745"
+                  y="425"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  this model
+                </text>
+
+                <!-- Azure AD identity : short hop from the left, into the identity strip -->
+                <line
+                  class="dg-arrow-mut"
+                  x1="282"
+                  y1="530"
+                  x2="386"
+                  y2="530"
+                />
+                <polygon
+                  class="dg-fill-line"
+                  points="390,530 378,524 378,536"
+                />
+                <text
+                  class="dg-t-sm"
+                  x="151"
+                  y="534"
+                  text-anchor="middle"
+                  font-size="9"
+                >
+                  users sign in through Azure AD
+                </text>
+              </svg>
+            </a>
+            <div class="dg-lightbox" id="zoom-landscape-ml">
+              <a
+                class="dg-backdrop"
+                href="#view-measured-surface"
+                aria-label="Close"
+              ></a>
+              <a class="dg-close" href="#view-measured-surface"
+                >Close &times;</a
+              >
+              <div class="dg-lightbox-inner">
+                <svg
+                  viewBox="0 0 1084 616"
+                  role="img"
+                  aria-labelledby="ls-title-zoom-landscape-ml ls-desc-zoom-landscape-ml"
+                >
+                  <title id="ls-title-zoom-landscape-ml">
+                    The Marlex recruitment system landscape — named outside
+                    systems and the two data models inside the one Salesforce
+                    org
+                  </title>
+                  <desc id="ls-desc-zoom-landscape-ml">
+                    A single Salesforce org contains two data models: the
+                    surviving native and standard model, and the retiring
+                    TargetRecruit model. Named outside systems are grouped by
+                    cutover consequence. On the left, four systems reach the
+                    retiring model and must be re-pointed: the job board
+                    InfoJobs, the sourcing connector Taleva, the AI
+                    pre-screening service Orbio, and Microsoft Power BI whose
+                    scheduled extract reads retiring records. On the right,
+                    systems that reach only the surviving model and cross the
+                    cutover untouched: the NET4 ERP, Signaturit, Iberinform,
+                    Humact and Lectio, Anthropic and Groq for document reading,
+                    Salesforce Data Cloud, Dolma, DocsMadeEasy, Google Maps, the
+                    Indra-built corporate website and a planned
+                    call-transcription service. Azure AD provides identity. The
+                    self-service portals sit inside the retiring model and leave
+                    with the package.
+                  </desc>
+
+                  <!-- ================= Salesforce container ================= -->
+                  <rect
+                    class="dg-box"
+                    x="372"
+                    y="16"
+                    width="340"
+                    height="546"
+                    rx="10"
+                  />
+                  <text
+                    class="dg-t"
+                    x="542"
+                    y="42"
+                    text-anchor="middle"
+                    font-size="13"
+                    font-weight="700"
+                  >
+                    Salesforce — one org
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="58"
+                    text-anchor="middle"
+                    font-size="10"
+                  >
+                    two data models coexisting during the rebuild
+                  </text>
+
+                  <!-- · retiring model (TOP, beside the copper cluster) · -->
+                  <rect
+                    class="dg-box-copper"
+                    x="390"
+                    y="76"
+                    width="304"
+                    height="212"
+                    rx="8"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="542"
+                    y="100"
+                    text-anchor="middle"
+                    font-size="12"
+                  >
+                    TargetRecruit model — retiring
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="118"
+                    text-anchor="middle"
+                    font-size="9.5"
+                  >
+                    the bought recruitment package being rebuilt
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="137"
+                    text-anchor="middle"
+                    font-size="9.5"
+                  >
+                    vacancies · applications · interviews
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="151"
+                    text-anchor="middle"
+                    font-size="9.5"
+                  >
+                    placements · shortlists · employment history
+                  </text>
+                  <rect
+                    class="dg-box-mut"
+                    x="408"
+                    y="166"
+                    width="268"
+                    height="56"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="542"
+                    y="185"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    Self-service portals — candidate · recruiting · staffing
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="200"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    built on the package, so they cannot be re-pointed —
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="212"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    they end when the package ends
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="243"
+                    text-anchor="middle"
+                    font-size="9.5"
+                    font-style="italic"
+                  >
+                    four systems still reach this model —
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="256"
+                    text-anchor="middle"
+                    font-size="9.5"
+                    font-style="italic"
+                  >
+                    each one is a cutover re-point
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="275"
+                    text-anchor="middle"
+                    font-size="9"
+                  >
+                    everything here is rebuilt into the model below
+                  </text>
+
+                  <!-- rebuild arrow, models are adjacent so it is short and unambiguous -->
+                  <line
+                    class="dg-arrow-mut"
+                    x1="542"
+                    y1="288"
+                    x2="542"
+                    y2="316"
+                  />
+                  <polygon
+                    class="dg-fill-line"
+                    points="542,320 536,308 548,308"
+                  />
+                  <text
+                    class="dg-t-sm"
+                    x="554"
+                    y="308"
+                    font-size="9"
+                    font-style="italic"
+                  >
+                    rebuilt into
+                  </text>
+
+                  <!-- · surviving model (BOTTOM, beside the green cluster) · -->
+                  <rect
+                    class="dg-box-accent"
+                    x="390"
+                    y="324"
+                    width="304"
+                    height="164"
+                    rx="8"
+                  />
+                  <text
+                    class="dg-t-accent"
+                    x="542"
+                    y="348"
+                    text-anchor="middle"
+                    font-size="12"
+                  >
+                    Native + standard model — survives
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="366"
+                    text-anchor="middle"
+                    font-size="9.5"
+                  >
+                    Marlex-built objects and Salesforce standard objects
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="385"
+                    text-anchor="middle"
+                    font-size="9.5"
+                  >
+                    offers · invoices · accounts · contacts · candidates
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="399"
+                    text-anchor="middle"
+                    font-size="9.5"
+                  >
+                    training records · incentives · margin per client
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="413"
+                    text-anchor="middle"
+                    font-size="9.5"
+                  >
+                    opportunities · campaigns · leads
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="440"
+                    text-anchor="middle"
+                    font-size="9.5"
+                    font-style="italic"
+                  >
+                    every system reaching only this model
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="453"
+                    text-anchor="middle"
+                    font-size="9.5"
+                    font-style="italic"
+                  >
+                    crosses the cutover untouched
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="475"
+                    text-anchor="middle"
+                    font-size="9"
+                  >
+                    the rebuild's target model
+                  </text>
+
+                  <!-- · identity strip · -->
+                  <rect
+                    class="dg-box"
+                    x="390"
+                    y="510"
+                    width="304"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="542"
+                    y="529"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    Identity · Microsoft Azure AD
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="542"
+                    y="543"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    single sign-on · no recruitment data · unchanged
+                  </text>
+
+                  <!-- ================= LEFT CLUSTER — reaches the retiring model ================= -->
+                  <text
+                    class="dg-t-copper"
+                    x="160"
+                    y="34"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    Reaches the retiring model — must re-point
+                  </text>
+
+                  <!-- InfoJobs -->
+                  <rect
+                    class="dg-box-copper"
+                    x="20"
+                    y="48"
+                    width="262"
+                    height="56"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="151"
+                    y="67"
+                    text-anchor="middle"
+                    font-size="11"
+                    font-weight="700"
+                  >
+                    Job board · InfoJobs
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="82"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    publishes vacancies out; applications and CVs
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="94"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    come back in and create records — writes today
+                  </text>
+
+                  <!-- Taleva -->
+                  <rect
+                    class="dg-box-copper"
+                    x="20"
+                    y="116"
+                    width="262"
+                    height="56"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="151"
+                    y="135"
+                    text-anchor="middle"
+                    font-size="11"
+                    font-weight="700"
+                  >
+                    Sourcing connector · Taleva
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="150"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    reads applications heavily and appears to create
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="162"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    them — its owner must confirm
+                  </text>
+
+                  <!-- Orbio -->
+                  <rect
+                    class="dg-box-mut"
+                    x="20"
+                    y="184"
+                    width="262"
+                    height="56"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="151"
+                    y="203"
+                    text-anchor="middle"
+                    font-size="11"
+                    font-weight="700"
+                  >
+                    AI pre-screening · Orbio — in build
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="218"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    vacancy and candidates out; screening score and
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="230"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    outcome written back — sandbox only today
+                  </text>
+
+                  <!-- Power BI — ONE box, TWO arrows -->
+                  <rect
+                    class="dg-box-copper"
+                    x="20"
+                    y="252"
+                    width="262"
+                    height="68"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="151"
+                    y="271"
+                    text-anchor="middle"
+                    font-size="11"
+                    font-weight="700"
+                  >
+                    Analytics · Microsoft Power BI
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="286"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    one system, two separate integrations —
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="298"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    a scheduled extract out to an analytics database,
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="310"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    and reports embedded back inside the screen
+                  </text>
+
+                  <!-- ================= ARROWS — the four re-point edges, drawn individually ================= -->
+                  <!-- These are the edges that cost the cutover work, so each gets its own arrow. -->
+
+                  <!-- InfoJobs <-> retiring : both -->
+                  <path
+                    class="dg-arrow-copper"
+                    d="M312 76 L378 76 L378 104 L386 104"
+                  />
+                  <polygon
+                    class="dg-fill-copper"
+                    points="390,104 378,98 378,110"
+                  />
+                  <polygon
+                    class="dg-fill-copper"
+                    points="308,76 320,70 320,82"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="342"
+                    y="68"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    both
+                  </text>
+
+                  <!-- Taleva -> retiring : in -->
+                  <path
+                    class="dg-arrow-copper"
+                    d="M312 144 L372 144 L372 134 L386 134"
+                  />
+                  <polygon
+                    class="dg-fill-copper"
+                    points="390,134 378,128 378,140"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="326"
+                    y="158"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    in
+                  </text>
+
+                  <!-- Orbio <-> retiring : both, dashed (in build) -->
+                  <path
+                    class="dg-arrow-copper"
+                    d="M312 212 L324 212 L324 164 L386 164"
+                    stroke-dasharray="5 3"
+                  />
+                  <polygon
+                    class="dg-fill-copper"
+                    points="390,164 378,158 378,170"
+                  />
+                  <polygon
+                    class="dg-fill-copper"
+                    points="308,212 320,206 320,218"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="322"
+                    y="226"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    both
+                  </text>
+
+                  <!-- Power BI, arrow 1 of 2 : the extract READS the retiring model -->
+                  <path
+                    class="dg-arrow-copper"
+                    d="M312 276 L330 276 L330 236 L386 236"
+                  />
+                  <polygon
+                    class="dg-fill-copper"
+                    points="390,236 378,230 378,242"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="342"
+                    y="252"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    extract
+                  </text>
+                  <text
+                    class="dg-t-copper"
+                    x="342"
+                    y="262"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    reads out
+                  </text>
+
+                  <!-- Power BI, arrow 2 of 2 : the report EMBED, config only, surviving side -->
+                  <path
+                    class="dg-arrow-mut"
+                    d="M312 300 L326 300 L326 430 L386 430"
+                  />
+                  <polygon
+                    class="dg-fill-line"
+                    points="308,300 320,294 320,306"
+                  />
+                  <text
+                    class="dg-t-sm"
+                    x="342"
+                    y="326"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    report
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="342"
+                    y="336"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    embed
+                  </text>
+
+                  <!-- ================= RIGHT GROUP: one bracket, one arrow ================= -->
+                  <!-- Nine systems make the same statement, so the group is bracketed and
+           carries ONE arrow. Per-system direction rides as a tag on each box. -->
+                  <rect
+                    class="dg-box-mut"
+                    x="778"
+                    y="44"
+                    width="286"
+                    height="516"
+                    rx="10"
+                  />
+                  <text
+                    class="dg-t-accent"
+                    x="921"
+                    y="66"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    Reaches only the surviving model
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="921"
+                    y="80"
+                    text-anchor="middle"
+                    font-size="9"
+                  >
+                    no cutover work — these cross unchanged
+                  </text>
+
+                  <!-- NET4 : one system, two integrations -->
+                  <rect
+                    class="dg-box"
+                    x="792"
+                    y="92"
+                    width="258"
+                    height="56"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="908"
+                    y="110"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    ERP · NET4
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="908"
+                    y="124"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    offers, accounts and invoices both ways, plus
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="908"
+                    y="136"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    candidate lookup — and the finance figures feed
+                  </text>
+                  <text
+                    class="dg-t-accent"
+                    x="1040"
+                    y="110"
+                    text-anchor="end"
+                    font-size="8.5"
+                  >
+                    both
+                  </text>
+
+                  <!-- Signaturit -->
+                  <rect
+                    class="dg-box"
+                    x="792"
+                    y="156"
+                    width="258"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="912"
+                    y="173"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    E-signature · Signaturit
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="912"
+                    y="187"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    offers sent to sign; signed events come back
+                  </text>
+                  <text
+                    class="dg-t-accent"
+                    x="1040"
+                    y="173"
+                    text-anchor="end"
+                    font-size="8.5"
+                  >
+                    both
+                  </text>
+
+                  <!-- Data Cloud -->
+                  <rect
+                    class="dg-box"
+                    x="792"
+                    y="206"
+                    width="258"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="910"
+                    y="223"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    Customer data · Salesforce Data Cloud
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="910"
+                    y="237"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    heaviest caller of the org, all standard records
+                  </text>
+                  <text
+                    class="dg-t-accent"
+                    x="1042"
+                    y="223"
+                    text-anchor="end"
+                    font-size="8.5"
+                  >
+                    out
+                  </text>
+
+                  <!-- Anthropic / Groq -->
+                  <rect
+                    class="dg-box"
+                    x="792"
+                    y="256"
+                    width="258"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="910"
+                    y="273"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    Document reading · Anthropic / Groq
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="910"
+                    y="287"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    reads CVs and identity documents to fill fields
+                  </text>
+                  <text
+                    class="dg-t-accent"
+                    x="1042"
+                    y="273"
+                    text-anchor="end"
+                    font-size="8.5"
+                  >
+                    out
+                  </text>
+
+                  <!-- Iberinform -->
+                  <rect
+                    class="dg-box"
+                    x="792"
+                    y="306"
+                    width="258"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="910"
+                    y="323"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    Credit check · Iberinform
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="910"
+                    y="337"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    client creditworthiness looked up on demand
+                  </text>
+                  <text
+                    class="dg-t-accent"
+                    x="1042"
+                    y="323"
+                    text-anchor="end"
+                    font-size="8.5"
+                  >
+                    out
+                  </text>
+
+                  <!-- Humact / Lectio -->
+                  <rect
+                    class="dg-box"
+                    x="792"
+                    y="356"
+                    width="258"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="912"
+                    y="373"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    Training · Humact / Lectio
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="912"
+                    y="387"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    certificate and enrolment records pushed in
+                  </text>
+                  <text
+                    class="dg-t-accent"
+                    x="1044"
+                    y="373"
+                    text-anchor="end"
+                    font-size="8.5"
+                  >
+                    in
+                  </text>
+
+                  <!-- Dolma -->
+                  <rect
+                    class="dg-box"
+                    x="792"
+                    y="406"
+                    width="258"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="912"
+                    y="423"
+                    text-anchor="middle"
+                    font-size="10.5"
+                    font-weight="700"
+                  >
+                    Document management · Dolma
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="912"
+                    y="437"
+                    text-anchor="middle"
+                    font-size="8.5"
+                  >
+                    documents filed against native records
+                  </text>
+                  <text
+                    class="dg-t-accent"
+                    x="1044"
+                    y="423"
+                    text-anchor="end"
+                    font-size="8.5"
+                  >
+                    in
+                  </text>
+
+                  <!-- DocsMadeEasy + Google Maps : two named systems, side by side -->
+                  <rect
+                    class="dg-box"
+                    x="792"
+                    y="456"
+                    width="126"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="855"
+                    y="473"
+                    text-anchor="middle"
+                    font-size="9.5"
+                    font-weight="700"
+                  >
+                    DocsMadeEasy
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="855"
+                    y="486"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    reads the field list only
+                  </text>
+                  <rect
+                    class="dg-box"
+                    x="924"
+                    y="456"
+                    width="126"
+                    height="42"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="987"
+                    y="473"
+                    text-anchor="middle"
+                    font-size="9.5"
+                    font-weight="700"
+                  >
+                    Google Maps
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="987"
+                    y="486"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    addresses geocoded
+                  </text>
+
+                  <!-- Indra website + telephony : planned, dashed -->
+                  <rect
+                    class="dg-box-mut"
+                    x="792"
+                    y="506"
+                    width="126"
+                    height="44"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="855"
+                    y="522"
+                    text-anchor="middle"
+                    font-size="9"
+                    font-weight="700"
+                  >
+                    Corporate website
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="855"
+                    y="534"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    Indra — planned
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="855"
+                    y="545"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    enquiries in, natively
+                  </text>
+                  <rect
+                    class="dg-box-mut"
+                    x="924"
+                    y="506"
+                    width="126"
+                    height="44"
+                    rx="6"
+                  />
+                  <text
+                    class="dg-t"
+                    x="987"
+                    y="522"
+                    text-anchor="middle"
+                    font-size="9"
+                    font-weight="700"
+                  >
+                    Call transcription
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="987"
+                    y="534"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    vendor not selected
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="987"
+                    y="545"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    fills native fields
+                  </text>
+
+                  <!-- THE single group arrow -->
+                  <path
+                    class="dg-arrow"
+                    d="M778 400 L722 400 L722 406 L698 406"
+                  />
+                  <polygon
+                    class="dg-fill-accent"
+                    points="694,406 706,400 706,412"
+                  />
+                  <polygon
+                    class="dg-fill-accent"
+                    points="782,400 770,394 770,406"
+                  />
+                  <text
+                    class="dg-t-accent"
+                    x="745"
+                    y="382"
+                    text-anchor="middle"
+                    font-size="8.5"
+                    font-weight="700"
+                  >
+                    all nine
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="745"
+                    y="393"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    reach only
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="745"
+                    y="425"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    this model
+                  </text>
+
+                  <!-- Azure AD identity : short hop from the left, into the identity strip -->
+                  <line
+                    class="dg-arrow-mut"
+                    x1="282"
+                    y1="530"
+                    x2="386"
+                    y2="530"
+                  />
+                  <polygon
+                    class="dg-fill-line"
+                    points="390,530 378,524 378,536"
+                  />
+                  <text
+                    class="dg-t-sm"
+                    x="151"
+                    y="534"
+                    text-anchor="middle"
+                    font-size="9"
+                  >
+                    users sign in through Azure AD
+                  </text>
+                </svg>
+              </div>
+            </div>
+            <figcaption>
+              One org, two data models — and the systems arranged by what the
+              cutover owes them.
+              <strong>Only four systems reach the retiring model</strong>, so
+              only four get an arrow of their own: InfoJobs (the one confirmed
+              live writer), Taleva (reads heavily and appears to write, its
+              owner must confirm), Orbio (writes by design, still in the
+              sandbox) and Power BI, whose scheduled extract reads retiring
+              records — a read, so it returns stale data rather than blocking
+              go-live. The nine on the right all make the same statement, so
+              they share one arrow rather than repeating it nine times; each
+              carries its own direction tag. Two systems run
+              <strong>two integrations from one box</strong>: Power BI (the
+              extract out, and reports embedded back) and the NET4 link (the
+              transfer plus the finance figures feed) — the same connection
+              doing two different jobs, which is why counting by system and
+              counting by integration give different numbers. The portals sit
+              inside the retiring model because they are built on the package:
+              they cannot be re-pointed, they end with it.
+            </figcaption>
+          </figure>
+          <div class="tech">
+            <span class="tech-label">For the developers</span>The four re-point
+            edges by object. <strong>InfoJobs</strong> — writes
+            <code>AVTRRT__Job_Applicant__c</code> and
+            <code>ContentVersion</code> through the guest-user site (<code
+              >MA_InfojobWebHook</code
+            >
+            at <code>/infojobsHook</code>); outbound publishing reads
+            <code>AVTRRT__Job__c</code> (<code>MA_InfoJobs</code> named
+            credential → api.infojobs.net). <strong>Taleva</strong> — ~110k
+            reads and 392 writes over 30 days: <code>Contact</code> (201),
+            <code>AVTRRT__Job_Applicant__c</code> (99 creates),
+            <code>ContentVersion</code> (92); named-user OAuth, so connector
+            writes are not separable from the humans'. <strong>Orbio</strong> —
+            six <code>MA_Orbio_*</code> fields on
+            <code>AVTRRT__Job_Applicant__c</code> / <code>AVTRRT__Job__c</code>,
+            present in pre-production, absent in production.
+            <strong>Power BI extract</strong> — the
+            <code>API Marlex Data Source</code>
+            external client app's Bulk-API job reads ~40 objects including nine
+            <code>AVTRRT__</code> ones (Job, Job_Applicant, Interview,
+            Placement, Employment_History, Hotbook, Candidate_to_Hotbook and the
+            Job / Job_Applicant history tables).
+            <strong>The one-box-two-arrows cases.</strong> That same
+            <code>API Marlex Data Source</code> app also fronts the finance
+            <em>write</em> feed (<code>MA_Incentivos__c</code> /
+            <code>MX_Margen_Mensual_Por_Cliente__c</code>, native, uncoupled) —
+            drawn on the NET4 box because it shares the ERP integration login,
+            told apart only by the connected app; and the Power BI
+            <em>embed</em> (<code>PowerBiEmbedManager</code> → the
+            <code>powerBiReport</code> component, client-credentials to
+            login.microsoftonline.com → api.powerbi.com) reads only custom
+            metadata, touching no recruitment data. Surviving-model edges for
+            contrast: <strong>NET4</strong> writes <code>Account</code>,
+            <code>MA_Factura__c</code>, <code>MA_Oferta__c</code>;
+            <strong>Signaturit</strong> works on <code>MA_Oferta__c</code>;
+            <strong>Humact / Lectio</strong> writes
+            <code>MA_Cursos_Quiron__c</code>;
+            <strong>document reading</strong> is <code>CVParserCtrl</code> →
+            <code>Anthropic_API</code> + <code>Groq_API</code>;
+            <strong>Data Cloud</strong> touches only <code>Contact</code> /
+            <code>Account</code> / <code>Opportunity</code> /
+            <code>Campaign</code> with zero <code>AVTRRT__</code> reads.
+            Verified read-only against production, July 2026.
+          </div>
+        </section>
 
         <section>
           <p class="section-eyebrow">
@@ -5475,7 +7893,7 @@
               to re-point.
             </li>
           </ul>
-          
+          <!-- Orbio: SF-1333 (PO UAT), SF-1190. PRE has all 6 MA_Orbio_* fields; prod has none (verified read-only 2026-07-19). Taleva named-user OAuth so connector-vs-human writes not separable from EventLogFile alone. -->
           <p>
             Neither changes the shape of the cutover; both firm up its count of
             write-coupled edges, and both belong to the client's IT team to
@@ -5564,7 +7982,7 @@
                     cannot yet be separated from those users' screen activity —
                     the owner must confirm.
                   </td>
-                  
+                  <!-- Taleva sourcing purpose confirmed: SF-1244 (LinkedIn URL via Taleva + PipeLaunch). -->
                   <td>
                     Re-pointed <strong>on the connector owner's side</strong> —
                     the mapping lives in their product. If it writes, it is a
@@ -5842,7 +8260,7 @@
               current means re-reading the backlog, not just re-running the
               query.
             </li>
-            
+            <!-- Native writers surfaced from backlog: Dolma SF-1299 (prod External App); new website (Indra) SF-1289 (forms -> Contact RT Candidato + Lead), SF-1244; telephony/transcription SF-905 (To Do). All native, survive cutover. -->
           </ul>
         </section>
 
@@ -6501,7 +8919,7 @@
               decision, not two — confirm the plumbing choice with the ERP side
               so the blocker is surfaced before the build, not at go-live.
             </li>
-            
+            <!-- Verified 2026-07-20: MA_Net4Client body = setEndpoint('callout:MA_Net4' + path), does NOT read ERP_Connection__c; live outbound = legacy classes via ERP_Connection__c (internal ERP host, redacted from public copy). -->
           </ul>
         </section>
 
@@ -7120,7 +9538,7 @@
               "alongside", and the boundary decision is the size of the swing.
             </p>
           </div>
-          
+          <!-- Orbio: fields MA_Orbio_* present in PRE only, 0 in prod (verified read-only). Writes AVTRRT__Job_Applicant__c / AVTRRT__Job__c by design -> 3rd write edge at go-live. -->
         </section>
 
         <section>
@@ -10068,7 +12486,7 @@
                 logins, no measured record traffic.
               </li>
             </ul>
-            
+            <!-- SF-1333 (Orbio field creation, PO UAT), SF-1190; SF-1244 (Taleva/PipeLaunch LinkedIn URL mapping). -->
           </div>
         </section>
 
@@ -11053,7 +13471,14 @@
       window.scrollTo(0, 0);
     }
     function fromHash() {
-      show((location.hash || "").replace(/^#view-/, "") || "index");
+      var h = location.hash || "";
+      // Ignore fragments that are not page routes (e.g. the #zoom-* diagram
+      // lightboxes). Without this guard, opening a lightbox looks like a route
+      // miss and would bounce the reader to the index page.
+      if (h && h.indexOf("#view-") !== 0) {
+        return;
+      }
+      show(h.replace(/^#view-/, "") || "index");
     }
     // Re-run on every signal the host might use, because the Artifact host can set
     // the URL fragment AFTER the script first parses (arriving via a cross-artifact
