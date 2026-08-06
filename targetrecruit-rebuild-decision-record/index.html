@@ -9482,34 +9482,46 @@
             dashboards): the new artifact carries a transient
             <code>2.0</code> in its on-screen label; the legacy label is left
             untouched; the <code>2.0</code> is dropped at cutover.
-            <strong>(B) Code API names on duplication</strong> (Apex, Flows, any
-            component): when a duplicate's API name would collide with a live
-            legacy component, the new one takes a versioned suffix (<code
-              >_2</code
+            <strong>(B) API names of new metadata components</strong> (Apex,
+            Flows, reports — anything with a unique API name): the new component
+            that does the same job on the native object is a
+            <em>distinct component</em>, not a version — so it takes a
+            <strong
+              >descriptive name for its responsibility on the native
+              model</strong
             >
-            / <code>V2</code>) — and <em>only</em> then. Where the legacy name
-            already carries a prefix that separates it (<code>MA_</code>,
-            <code>AVTRRT__</code>), there is no collision and the new component
-            takes the clean name.
+            (e.g. <code>PlacementAssignmentController</code>), never a version
+            suffix (<code>V2</code>/<code>_2</code>) and never a functional
+            prefix (<code>ATS_</code>). Where the legacy name already stands
+            apart (<code>MA_</code>, <code>AVTRRT__</code>), there is no
+            collision and the new component simply takes the clean name.
           </p>
           <p>
-            <strong>Why the marker never sits on the legacy component.</strong>
+            <strong
+              >Why the label marker never sits on the legacy component.</strong
+            >
             Rollback is config-only — a router un-flip, no deployment — and that
-            holds only while the legacy component is untouched. Rename a legacy
-            class or relabel a legacy report and restoring it becomes a deploy,
-            not a switch. So on every surface the new component carries the
-            marker.
+            holds only while the legacy component is untouched. Relabel a legacy
+            report and restoring it becomes a deploy, not a switch. So for UI
+            labels the new artifact carries the marker; for code the two
+            components are genuinely different (they act on different objects),
+            so each simply gets its own honest name.
           </p>
           <p>
-            <strong>Why no functional prefix on code.</strong> A prefix like
-            <code>ATS_</code> only tells the truth if it marks the
-            <em>whole</em>
-            functional module. Put it only on the classes that happen to collide
-            and it stops meaning "the ATS module" and starts meaning "this one
-            clashed" — which is not what a prefix is for. A versioned suffix
-            says exactly what happened (a duplicate whose name was taken) and is
-            applied only where a real clash exists, so nothing has to be
-            prefixed for consistency.
+            <strong
+              >Why a descriptive name, not a version suffix or a prefix.</strong
+            >
+            A version suffix (<code>V2</code>/<code>_2</code>) is a documented
+            Salesforce anti-pattern: it becomes permanent noise once the old one
+            is gone, pushes the next iteration to <code>V3</code>, and says
+            nothing about what the component does — you version in source
+            control, not in the name. A functional prefix (<code>ATS_</code>)
+            only tells the truth if it marks the <em>whole</em>
+            module, and both the legacy and the new component are already "the
+            ATS"; what actually differs is the object each acts on, so the
+            honest signal is a name that describes the responsibility on the
+            native model — which survives cutover as a good name, needing no
+            rename.
           </p>
         </div>
 
@@ -9679,86 +9691,107 @@
             Decision B — what the metadata is called
           </p>
           <h2>
-            Duplicated code: a versioned suffix, only when the name collides
+            Duplicated components: name for the responsibility on the native
+            object
           </h2>
           <p>
-            This covers <strong>any duplicated component's API name</strong> —
-            Apex classes, Flows, and the rest — not just Apex. The rule is
-            mechanical:
+            This covers <strong>any new metadata component's API name</strong> —
+            Apex classes, Flows, reports, LWC — where the platform requires the
+            name to be unique. The key realisation reframes the whole question:
+            the new component is
+            <strong>not a "version 2" of the legacy one</strong>. It does the
+            same job, but <em>on a different object</em> — the legacy
+            <code>PlacementController</code> acts on the packaged
+            <code>AVTRRT__Placement__c</code>; the new one acts on the native
+            <code>Placement__c</code>. Two genuinely distinct components that
+            coexist — so each earns its own honest, permanent name.
           </p>
           <div class="callout key">
-            <p class="callout-h">The duplication rule</p>
+            <p class="callout-h">The rule</p>
             <p>
-              When you duplicate a component and its API name would collide with
-              a
-              <strong>live legacy component</strong>, the new one
-              <strong>cannot</strong> reuse the name — give it a versioned
-              suffix (<code>_2</code> / <code>V2</code>). Apply the suffix
-              <strong>only</strong> when there is a real collision. When the
-              legacy component's name already carries a prefix that separates it
-              — <code>MA_</code>, or the TargetRecruit
+              Name the new component for
+              <strong>what it does on the native model</strong> — a descriptive
+              responsibility name (<code>PlacementAssignmentController</code>),
+              not a version suffix. It is permanent and survives cutover
+              unchanged, because it describes the component, not that it is "the
+              new one." If a like-for-like rebuild leaves no distinct
+              responsibility to name,
+              <strong>disambiguate by the native object</strong> it operates on.
+              Never a version suffix (<code>V2</code>/<code>_2</code>), never a
+              functional prefix (<code>ATS_</code>). Where the legacy name
+              already stands apart — it carries <code>MA_</code> or the
               <code>AVTRRT__</code> namespace — there is
-              <strong>no collision</strong>, and the new component takes its
-              clean prefix-free name with no suffix.
+              <strong>no collision</strong> and the new component takes the
+              clean prefix-free name directly.
             </p>
           </div>
           <div class="tech">
             <span class="tech-label">For the developers</span>
-            Legacy <code>PlacementController</code> (no prefix, live) → new
-            <code>PlacementController_2</code>; the router row maps the two.
-            Legacy <code>MA_ManagementMethods</code> → new
-            <code>ManagementService</code> (clean, no collision). Legacy
-            <code>AVTRRT__Placement__c</code> logic → new
-            <code>PlacementService</code> (clean). Triggers never duplicate
-            (global namespace; the dispatcher lives in the trigger body), so
-            there is no trigger-naming case.
+            Legacy <code>PlacementController</code> (on
+            <code>AVTRRT__Placement__c</code>, live) → new
+            <code>PlacementAssignmentController</code> (on native
+            <code>Placement__c</code>); the router row maps the two. Legacy
+            <code>MA_ManagementMethods</code> → new
+            <code>ManagementService</code> (clean, no collision). A new Flow on
+            the native object is a
+            <em>new Flow with its own descriptive name</em>, not a suffixed
+            clone of the legacy flow (Flow native versioning is for iterating
+            one automation in place, which is not this case). Triggers never
+            duplicate (global namespace; the dispatcher lives in the trigger
+            body), so there is no trigger-naming case.
           </div>
-          <p>
-            The suffix is permanent — an API name cannot be cleanly renamed
-            later without breaking every reference — but that is acceptable here
-            because it is applied only where a name was genuinely taken, and it
-            is honest about why: a second version of a thing whose name was
-            already in use.
-          </p>
           <div class="option">
             <div class="option-head">
               <span class="option-name"
-                >Functional prefix (<code>ATS_</code>) on the colliding
-                class</span
-              ><span class="chip rejected">Rejected</span>
+                >Version suffix
+                (<code>V2</code>/<code>_2</code>/<code>_v2</code>)</span
+              ><span class="chip rejected">Anti-pattern</span>
             </div>
             <p>
-              Name the new class <code>ATS_PlacementController</code>. A
-              functional prefix is only truthful if it marks the
-              <em>entire</em> module — but a non-colliding class like
-              <code>PlacementService</code> would carry no prefix, so
-              <code>ATS_</code> would silently come to mean "this one clashed"
-              rather than "the ATS module." To stay consistent you would have to
-              prefix every ATS component — reintroducing exactly the
-              blanket-prefix noise rejected for objects and fields.
+              Name the new class <code>PlacementControllerV2</code>. No
+              authoritative Salesforce source endorses this — version-control
+              guidance (Gearset, Copado, Salesforce Ben) calls name-based
+              versioning clutter and technical debt: you version in source
+              control, not in the API name. It becomes permanent noise once the
+              legacy is deleted, forces a <code>V3</code> next time, and says
+              nothing about <em>what</em> the component does.
             </p>
           </div>
           <div class="option">
             <div class="option-head">
               <span class="option-name"
-                >Owner prefix (<code>MA_</code> / <code>MG_</code>) on the new
-                class</span
+                >Functional prefix (<code>ATS_</code>) on the new class</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              Name it <code>ATS_PlacementController</code>. A functional prefix
+              is only truthful if it marks the <em>whole</em> module — but both
+              the legacy and the new component are already "the ATS," so
+              <code>ATS_</code> distinguishes nothing. What differs is the
+              object each acts on, which a responsibility name captures
+              directly. Applied only to the colliding classes it would come to
+              mean "this one clashed," forcing every ATS component to be
+              prefixed for consistency — the blanket-prefix noise already
+              rejected for objects/fields.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Owner prefix (<code>MA_</code> / <code>MG_</code>)</span
               ><span class="chip rejected">Rejected</span>
             </div>
             <p>
               Reuse an ownership marker. Same defect the object/field decision
               already settled: an owner tag on nearly every component partitions
               nothing, and cross-org ownership is carried by the packaging
-              namespace, not a typed prefix. It also does not actually signal
-              "duplicate because the name was taken," which is the real fact
-              here.
+              namespace, not a typed prefix.
             </p>
           </div>
           <div class="option">
             <div class="option-head">
               <span class="option-name"
-                >Rename the legacy component, give the new one the clean
-                name</span
+                >Rename the legacy component, give the new one its name</span
               ><span class="chip rejected">Rejected</span>
             </div>
             <p>
@@ -9771,17 +9804,34 @@
           <div class="option">
             <div class="option-head">
               <span class="option-name"
-                >Versioned suffix (<code>_2</code>/<code>V2</code>) on
-                duplication, only if it collides</span
+                >Temporary name, renamed to canonical at cutover</span
+              ><span class="chip limited">Considered</span>
+            </div>
+            <p>
+              Give the new component a placeholder name during coexistence and
+              rename it to the canonical one when the legacy is deleted. Valid,
+              and the community's fallback where no good name exists — but it
+              defers a rename to cutover (easy to skip, leaving the placeholder
+              permanent). A responsibility name avoids the rename entirely, so
+              it is preferred; this stays the fallback only where no distinct
+              name can be found even from the native object.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Responsibility name on the native model (object-disambiguated
+                fallback)</span
               ><span class="chip adopted">Adopted</span>
             </div>
             <p>
-              Mechanical and universal — "duplicating a component? version it if
-              the name is taken" — applied only at a real collision, never as a
-              blanket marker. Honest about what it is, and it needs no
-              module-wide prefixing to stay consistent. Where the legacy name is
-              already prefixed (<code>MA_</code>/<code>AVTRRT__</code>), no
-              suffix is needed at all.
+              Name by what the component does on the native object — permanent,
+              honest, self-documenting, and it survives cutover with no rename
+              because it never encoded "new." Aligns with Salesforce
+              Well-Architected and Trailhead naming guidance (whole words, name
+              the responsibility). Where the legacy name is already separated
+              (<code>MA_</code>/<code>AVTRRT__</code>), the clean name is free
+              and no disambiguation is needed at all.
             </p>
           </div>
         </section>
@@ -9797,10 +9847,10 @@
               they refine.
             </li>
             <li>
-              <strong>Suffix spelling.</strong> <code>_2</code> vs
-              <code>V2</code> for the code duplication rule is a house-style
-              choice to pin once and apply consistently; either is acceptable as
-              long as it is the same everywhere.
+              <strong>A shared vocabulary for responsibility names</strong> is
+              worth pinning once so the native components read consistently
+              (e.g. how the object or sub-domain is folded into the name),
+              rather than each developer inventing a disambiguator.
             </li>
             <li>
               <strong>Folder-based UI disambiguation</strong> stays an allowed
