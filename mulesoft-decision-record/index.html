@@ -2729,7 +2729,7 @@
                 <span class="ap-n">3 edges</span
                 ><span class="ap-l"
                   >write the retiring records — one live, one under review, one
-                  in build. Only they re-point.</span
+                  in build. Two more re-point by reading them.</span
                 >
               </div>
               <div class="ap-cell">
@@ -4970,11 +4970,17 @@
             yet be told apart from its users'; and an AI pre-screening service
             (Orbio) writes those objects by design but is still in build in the
             sandbox, with no production traffic yet. Those three are the
-            <em>write</em>-coupled edges. One more edge is coupled by
-            <em>reading</em> the old model rather than writing it: the Power BI
-            extract that pulls Salesforce out to an analytics database includes
-            retiring objects in what it reads, so it too must be re-pointed —
-            but as a read it degrades gracefully rather than gating the go-live.
+            <em>write</em>-coupled edges.
+            <strong
+              >Two more are coupled by <em>reading</em> the old model rather
+              than writing it</strong
+            >: the Power BI extract that pulls Salesforce out to an analytics
+            database includes retiring objects in what it reads; and the NET4
+            ERP link, whose own traffic stays on the surviving model but which
+            fires an automation that looks up the retiring applications
+            belonging to the contact it just touched. Both must be re-pointed —
+            but as reads they degrade gracefully rather than gating the go-live.
+            That makes <strong>five edges on the re-point list</strong>.
             Everything else already runs on the native (<code>MA_*</code>) or
             standard model and crosses the cutover untouched.
           </p>
@@ -5039,18 +5045,18 @@
                   A single Salesforce org contains two data models: the
                   surviving native and standard model, and the retiring
                   TargetRecruit model. Named outside systems are grouped by
-                  cutover consequence. On the left, four systems reach the
-                  retiring model and must be re-pointed: the job board InfoJobs,
-                  the sourcing connector Taleva, the AI pre-screening service
-                  Orbio, and Microsoft Power BI whose scheduled extract reads
-                  retiring records. On the right, systems that reach only the
-                  surviving model and cross the cutover untouched: the NET4 ERP,
-                  Signaturit, Iberinform, Humact and Lectio, Anthropic and Groq
-                  for document reading, Salesforce Data Cloud, Dolma,
-                  DocsMadeEasy, Google Maps, the Indra-built corporate website
-                  and a planned call-transcription service. Azure AD provides
-                  identity. The self-service portals sit inside the retiring
-                  model and leave with the package.
+                  cutover consequence. Five reach the retiring model and must be
+                  re-pointed: the job board InfoJobs, the sourcing connector
+                  Taleva, the AI pre-screening service Orbio, Microsoft Power BI
+                  whose scheduled extract reads retiring records, and the NET4
+                  ERP, whose own automation looks up retiring applications. The
+                  rest reach only the surviving model and cross the cutover
+                  untouched: Signaturit, Iberinform, Humact and Lectio,
+                  Anthropic and Groq for document reading, Salesforce Data
+                  Cloud, Dolma, DocsMadeEasy, Google Maps, the Indra-built
+                  corporate website and a planned call-transcription service.
+                  Azure AD provides identity. The self-service portals sit
+                  inside the retiring model and leave with the package.
                 </desc>
 
                 <!-- ================= Salesforce container ================= -->
@@ -5170,7 +5176,7 @@
                   font-size="9.5"
                   font-style="italic"
                 >
-                  four systems still reach this model —
+                  five systems still reach this model —
                 </text>
                 <text
                   class="dg-t-sm"
@@ -5500,7 +5506,7 @@
                   and reports embedded back inside the screen
                 </text>
 
-                <!-- ================= ARROWS — the four re-point edges, drawn individually ================= -->
+                <!-- ================= ARROWS — the five re-point edges, drawn individually ================= -->
                 <!-- These are the edges that cost the cutover work, so each gets its own arrow. -->
 
                 <!-- InfoJobs <-> retiring : both -->
@@ -5655,11 +5661,11 @@
 
                 <!-- NET4 : one system, two integrations -->
                 <rect
-                  class="dg-box"
+                  class="dg-box-copper"
                   x="792"
-                  y="92"
+                  y="90"
                   width="258"
-                  height="56"
+                  height="66"
                   rx="6"
                 />
                 <text
@@ -5675,29 +5681,56 @@
                 <text
                   class="dg-t-sm"
                   x="908"
-                  y="124"
+                  y="122"
                   text-anchor="middle"
                   font-size="8.5"
                 >
-                  offers, accounts and invoices both ways, plus
+                  offers, accounts and invoices both ways, plus the
                 </text>
                 <text
                   class="dg-t-sm"
                   x="908"
-                  y="136"
+                  y="133"
                   text-anchor="middle"
                   font-size="8.5"
                 >
-                  candidate lookup — and the finance figures feed
+                  finance figures feed — all on the surviving model;
+                </text>
+                <text
+                  class="dg-t-copper"
+                  x="908"
+                  y="143"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  but an automation it fires reads
+                </text>
+                <text
+                  class="dg-t-copper"
+                  x="908"
+                  y="152"
+                  text-anchor="middle"
+                  font-size="8"
+                >
+                  the retiring records
                 </text>
                 <text
                   class="dg-t-accent"
                   x="1040"
-                  y="110"
+                  y="108"
                   text-anchor="end"
                   font-size="8.5"
                 >
                   both
+                </text>
+                <text
+                  class="dg-t-copper"
+                  x="1040"
+                  y="120"
+                  text-anchor="end"
+                  font-size="8"
+                >
+                  reads old
                 </text>
 
                 <!-- Signaturit -->
@@ -6058,6 +6091,27 @@
                   fills native fields
                 </text>
 
+                <!-- NET4 is read-coupled: an automation it fires looks up the retiring
+           applications. Drawn as its own copper read arrow, like the analytics
+           extract on the other side. -->
+                <path
+                  class="dg-arrow-copper"
+                  d="M792 122 L772 122 L772 200 L698 200"
+                />
+                <polygon
+                  class="dg-fill-copper"
+                  points="694,200 706,194 706,206"
+                />
+                <text
+                  class="dg-t-copper"
+                  x="768"
+                  y="196"
+                  text-anchor="end"
+                  font-size="8"
+                >
+                  reads old
+                </text>
+
                 <!-- THE single group arrow -->
                 <path
                   class="dg-arrow"
@@ -6147,19 +6201,19 @@
                     A single Salesforce org contains two data models: the
                     surviving native and standard model, and the retiring
                     TargetRecruit model. Named outside systems are grouped by
-                    cutover consequence. On the left, four systems reach the
-                    retiring model and must be re-pointed: the job board
-                    InfoJobs, the sourcing connector Taleva, the AI
-                    pre-screening service Orbio, and Microsoft Power BI whose
-                    scheduled extract reads retiring records. On the right,
-                    systems that reach only the surviving model and cross the
-                    cutover untouched: the NET4 ERP, Signaturit, Iberinform,
-                    Humact and Lectio, Anthropic and Groq for document reading,
-                    Salesforce Data Cloud, Dolma, DocsMadeEasy, Google Maps, the
-                    Indra-built corporate website and a planned
-                    call-transcription service. Azure AD provides identity. The
-                    self-service portals sit inside the retiring model and leave
-                    with the package.
+                    cutover consequence. Five reach the retiring model and must
+                    be re-pointed: the job board InfoJobs, the sourcing
+                    connector Taleva, the AI pre-screening service Orbio,
+                    Microsoft Power BI whose scheduled extract reads retiring
+                    records, and the NET4 ERP, whose own automation looks up
+                    retiring applications. The rest reach only the surviving
+                    model and cross the cutover untouched: Signaturit,
+                    Iberinform, Humact and Lectio, Anthropic and Groq for
+                    document reading, Salesforce Data Cloud, Dolma,
+                    DocsMadeEasy, Google Maps, the Indra-built corporate website
+                    and a planned call-transcription service. Azure AD provides
+                    identity. The self-service portals sit inside the retiring
+                    model and leave with the package.
                   </desc>
 
                   <!-- ================= Salesforce container ================= -->
@@ -6279,7 +6333,7 @@
                     font-size="9.5"
                     font-style="italic"
                   >
-                    four systems still reach this model —
+                    five systems still reach this model —
                   </text>
                   <text
                     class="dg-t-sm"
@@ -6609,7 +6663,7 @@
                     and reports embedded back inside the screen
                   </text>
 
-                  <!-- ================= ARROWS — the four re-point edges, drawn individually ================= -->
+                  <!-- ================= ARROWS — the five re-point edges, drawn individually ================= -->
                   <!-- These are the edges that cost the cutover work, so each gets its own arrow. -->
 
                   <!-- InfoJobs <-> retiring : both -->
@@ -6767,11 +6821,11 @@
 
                   <!-- NET4 : one system, two integrations -->
                   <rect
-                    class="dg-box"
+                    class="dg-box-copper"
                     x="792"
-                    y="92"
+                    y="90"
                     width="258"
-                    height="56"
+                    height="66"
                     rx="6"
                   />
                   <text
@@ -6787,29 +6841,56 @@
                   <text
                     class="dg-t-sm"
                     x="908"
-                    y="124"
+                    y="122"
                     text-anchor="middle"
                     font-size="8.5"
                   >
-                    offers, accounts and invoices both ways, plus
+                    offers, accounts and invoices both ways, plus the
                   </text>
                   <text
                     class="dg-t-sm"
                     x="908"
-                    y="136"
+                    y="133"
                     text-anchor="middle"
                     font-size="8.5"
                   >
-                    candidate lookup — and the finance figures feed
+                    finance figures feed — all on the surviving model;
+                  </text>
+                  <text
+                    class="dg-t-copper"
+                    x="908"
+                    y="143"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    but an automation it fires reads
+                  </text>
+                  <text
+                    class="dg-t-copper"
+                    x="908"
+                    y="152"
+                    text-anchor="middle"
+                    font-size="8"
+                  >
+                    the retiring records
                   </text>
                   <text
                     class="dg-t-accent"
                     x="1040"
-                    y="110"
+                    y="108"
                     text-anchor="end"
                     font-size="8.5"
                   >
                     both
+                  </text>
+                  <text
+                    class="dg-t-copper"
+                    x="1040"
+                    y="120"
+                    text-anchor="end"
+                    font-size="8"
+                  >
+                    reads old
                   </text>
 
                   <!-- Signaturit -->
@@ -7170,6 +7251,27 @@
                     fills native fields
                   </text>
 
+                  <!-- NET4 is read-coupled: an automation it fires looks up the retiring
+           applications. Drawn as its own copper read arrow, like the analytics
+           extract on the other side. -->
+                  <path
+                    class="dg-arrow-copper"
+                    d="M792 122 L772 122 L772 200 L698 200"
+                  />
+                  <polygon
+                    class="dg-fill-copper"
+                    points="694,200 706,194 706,206"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="768"
+                    y="196"
+                    text-anchor="end"
+                    font-size="8"
+                  >
+                    reads old
+                  </text>
+
                   <!-- THE single group arrow -->
                   <path
                     class="dg-arrow"
@@ -7239,15 +7341,17 @@
             <figcaption>
               One org, two data models — and the systems arranged by what the
               cutover owes them.
-              <strong>Only four systems reach the retiring model</strong>, so
-              only four get an arrow of their own: InfoJobs (the one confirmed
+              <strong>Only five systems reach the retiring model</strong>, so
+              only five get an arrow of their own: InfoJobs (the one confirmed
               live writer), Taleva (reads heavily and appears to write, its
               owner must confirm), Orbio (writes by design, still in the
               sandbox) and Power BI, whose scheduled extract reads retiring
               records — a read, so it returns stale data rather than blocking
-              go-live. The nine on the right all make the same statement, so
-              they share one arrow rather than repeating it nine times; each
-              carries its own direction tag. Two systems run
+              go-live. NET4 is the fifth and the least obvious: its own traffic
+              stays on the surviving model, but an automation it triggers looks
+              up the retiring applications, so it too is read-coupled. The rest
+              all make the same statement, so they share one arrow rather than
+              repeating it; each carries its own direction tag. Two systems run
               <strong>two integrations from one box</strong>: Power BI (the
               extract out, and reports embedded back) and the NET4 link (the
               transfer plus the finance figures feed) — the same connection
@@ -7258,7 +7362,7 @@
             </figcaption>
           </figure>
           <div class="tech">
-            <span class="tech-label">For the developers</span>The four re-point
+            <span class="tech-label">For the developers</span>The five re-point
             edges by object. <strong>InfoJobs</strong> — writes
             <code>AVTRRT__Job_Applicant__c</code> and
             <code>ContentVersion</code> through the guest-user site (<code
@@ -7274,6 +7378,34 @@
             six <code>MA_Orbio_*</code> fields on
             <code>AVTRRT__Job_Applicant__c</code> / <code>AVTRRT__Job__c</code>,
             present in pre-production, absent in production.
+            <strong>NET4</strong> — the coupling is <em>indirect</em> and does
+            not appear in the ERP classes at all: all sixteen production
+            NET4/ERP Apex classes are free of <code>AVTRRT__</code>, and the
+            inbound endpoint <code>MA_WS_ERP_SF</code> resolves its targets
+            dynamically from <code>MA_Utilidades__c</code>. It comes through
+            Flow. Writing a <code>MA_Log_Integracion__c</code> record — which
+            the integration does on every run — fires
+            <code>MA_LOG_INTEG_Notificacion_NET4</code>
+            (record-triggered, after save, Active), which calls
+            <code>MA_Notification_NET4</code> (Active), whose
+            <code>Recuperamos_Job_Applicant</code> lookup queries
+            <code>AVTRRT__Job_Applicant__c</code> filtered by
+            <code>AVTRRT__Contact_Candidate__c</code>. It is a read: no create,
+            update or delete on any <code>AVTRRT__</code> object anywhere in the
+            chain. <code>MA_Candidate_NewDocumentacion</code> likewise
+            references <code>AVTRRT__Placement__c</code> and
+            <code>AVTRRT__Employer__c</code>. The field mapping carries exactly
+            one package field — <code>Contact.AVTRRT__Gender__c</code> ↔ "Sexo"
+            — and it is switched off in both directions (of 129 field mappings,
+            102 are active; none of the active ones is a package field). Note
+            the host object survives: the field sits on the standard
+            <code>Contact</code>, which carries 141 <code>AVTRRT__</code> fields
+            in production, and "Candidato"/"Contacto" in the mapping are ERP
+            aliases for <code>Contact</code> and
+            <code>AccountContactRelation</code>, not separate objects. The
+            integration identity (<code>erp_integrations@marlex.net</code>) also
+            holds <code>TR_Permission_set</code>, so the reach is granted, not
+            incidental. Verified read-only against production.
             <strong>Power BI extract</strong> — the
             <code>API Marlex Data Source</code>
             external client app's Bulk-API job reads ~40 objects including nine
@@ -7560,8 +7692,8 @@
                   <td><span class="dir out">Both</span></td>
                   <td>Marlex port</td>
                   <td>
-                    <span class="state preserved">new</span> (candidate link
-                    coming)
+                    <span class="state repoint">reads</span> old (via a
+                    triggered automation)
                   </td>
                   <td>Fire-and-forget + inbound push</td>
                   <td>Near-real-time</td>
@@ -7816,7 +7948,7 @@
               <span class="n">3 edges</span
               ><span class="l"
                 >write-coupled to the retiring model — one live, one under
-                review, one in build</span
+                review, one in build; two further edges are read-coupled</span
               >
             </div>
           </div>
@@ -8846,16 +8978,25 @@
               it, so a slip here reaches nothing on the cutover critical path.
             </li>
             <li>
-              <strong>Open — the load-bearing one:</strong> does the candidate
-              integration in development read or write the retiring
-              TargetRecruit record type and fields on Contact, or only native
-              <code>Contact</code>/<code>MA_</code>
-              fields? If it touches the TargetRecruit fields — the working
-              assumption, since that is where a candidate lives today — then
-              NET4 is a cutover re-point, not a preserved edge, and this page is
-              scoped correctly. If it is already native-only, NET4 crosses
-              untouched after all. This is the single confirmation that decides
-              NET4's cutover treatment, and it sits with the ERP-side team.
+              <strong>Answered — the load-bearing one:</strong> does the NET4
+              integration reach the retiring TargetRecruit data, or only the
+              native and standard records? Measured read-only against
+              production:
+              <strong>it reads the retiring data, and does not write it</strong
+              >. An active automation chain fires whenever the integration
+              writes its own log entry, and that chain looks up the retiring
+              applications belonging to the contact just touched. Separately,
+              the integration's field mapping carries a single TargetRecruit
+              field on the contact, and that one row is switched off in both
+              directions. So NET4 is a <strong>read-coupled</strong> edge: it
+              does not gate the go-live the way a write does — a read returns
+              nothing rather than corrupting anything — but it <em>is</em> on
+              the cutover's re-point list, because the lookup breaks when the
+              objects retire. That makes the re-point list five edges, not four.
+              What remains with the ERP-side team is narrower than the original
+              question: confirming that the candidate work still in development
+              stays on native and standard fields, so this edge does not become
+              write-coupled as well.
             </li>
             <li>
               <strong>Multi-country assumption.</strong> The reuse case rests on
