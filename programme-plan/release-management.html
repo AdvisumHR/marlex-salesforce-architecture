@@ -60,6 +60,7 @@ h1 .kicker{display:block;font-size:13px;font-weight:600;text-transform:uppercase
 .lede{font-size:19px;line-height:1.5;color:var(--ink-soft);margin:.4em 0 1.4em;font-weight:400}
 h2{font-size:22px;margin:1.9em 0 .5em;padding-bottom:.2em;border-bottom:1px solid var(--line)}
 h3{font-size:17.5px;margin:1.6em 0 .3em}
+h4{font-size:15.5px;margin:1.5em 0 .25em;color:var(--ink-soft);font-weight:700}
 p{margin:.7em 0}
 .stamp{font-size:12.5px;color:var(--draft);margin-top:2.5em;padding-top:1em;border-top:1px solid var(--line)}
 .source-note{font-size:13px;color:var(--ink-soft);background:var(--surface-2);border-left:3px solid var(--line);
@@ -207,7 +208,6 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
   };
 })();
 </script>
-<script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script><script>window.addEventListener("DOMContentLoaded",function(){if(window.mermaid){mermaid.initialize({startOnLoad:true,theme:"base"});}});</script>
 </head>
 <body>
 <div class="layout">
@@ -264,8 +264,8 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 .rmfig pre.mermaid svg{margin:0 auto;max-width:100%}
 </style>
 <h1><span class="kicker">Ways of working</span>Release management &#8212; keeping branches, environments and production in step</h1>
-<p class="lede">Product owners, the delivery partner and the in-house IT team all build on the same live Salesforce at once. Four choices keep that orderly: where a change&#8217;s branch is cut from, which environments it flows through, how those environments are kept in step with production, and how much of the checking is automated. This page records the model and the fix for the drift a recent review exposed.</p>
-<h2>Three branches, three environments, one source of truth</h2>
+<p class="lede">Product owners, the delivery partner and the in-house IT team all build on the same live Salesforce at once. <b>The process in force is the two-branch route in 2.2</b>, because the branches and their environments are not yet in step; the single-branch model in 2.1 is the target it protects. This page covers the environments and branches, how a change is promoted through them, and the roles and rules that apply throughout.</p>
+<h2>1 &#183; Environments and branches</h2>
 <p>The repository has three long-lived branches, each mirroring one Salesforce environment, with <b>production</b> as the single source of truth that every change is cut from and released back to.</p>
 <figure class="rmfig">
   <svg viewBox="0 0 660 250" role="img" aria-labelledby="rm-map-t">
@@ -298,9 +298,13 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
     <text class="rm-t-sm" x="547" y="238" text-anchor="middle" font-size="10">PREFULL &#8212; held for data-migration rehearsal</text>
     <defs><marker id="rmm-mut" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path class="rm-fill-line" d="M0 0 L8 4 L0 8 Z" /></marker></defs>
   </svg>
-  <figcaption>Each branch is the recorded state of exactly one environment. A branch is only trustworthy if it matches its environment, and the environment is only useful if it stays close to production &#8212; which is what the alignment mechanism below keeps true. PREFULL sits aside: it carries real production volume and is the rehearsal ground for the data move, never the everyday path.</figcaption>
+  <figcaption>Each branch is the recorded state of exactly one environment. A branch is only trustworthy if it matches its environment, and the environment is only useful if it stays close to production &#8212; which is what the reset and the per-change sync keep true. PREFULL sits aside: it carries real production volume and is the rehearsal ground for the data move, never the everyday path.</figcaption>
 </figure>
-<h2>Cut every change from production, then promote the same branch forward</h2>
+<h2>2 &#183; Promotions and releases</h2>
+<p>Everything in this section answers one question: how does a change get from a developer&#8217;s sandbox into production without carrying anything it should not?</p>
+<div class="tbl-wrap"><table class="rmtbl"><thead><tr><th></th><th>In force now</th><th>After the reset</th></tr></thead><tbody><tr><td><b>Branches per change</b></td><td>Two &#8212; one per destination</td><td>One, cut from production</td></tr><tr><td><b>Described in</b></td><td>2.2</td><td>2.1</td></tr></tbody></table></div>
+<h3>2.1 &#183; The target: cut every change from production</h3>
+<p class="source-note"><b>This is the target, not today&#8217;s practice.</b> It applies from the moment the reset in 2.3 has been done. Until then, follow 2.2.</p>
 <p>Every change starts as a branch cut from <b>production</b>, so it always begins from the latest live version of the components it touches. The <em>same</em> branch is then promoted into each environment in turn &#8212; the development line, then the pre-production line where the mandatory review happens, then back into production as the release. Promoting the change itself, rather than merging one environment into the next, is what keeps each change independent: two changes in flight can go live in either order.</p>
 <figure class="rmfig gitfig">
 <pre class="mermaid">
@@ -326,33 +330,9 @@ gitGraph
    checkout production
    merge feature/issue id: "release"
 </pre>
-<figcaption><b>The full path (product owners).</b> Read top-to-bottom in promotion order: production, then sandbox-pre, then sandbox-dev, with the feature branch at the foot. <b>1</b> the feature branches off production and the change is <em>developed</em> on it &#8212; you develop here, you do not test here; <b>2</b> the pull request merges the feature into sandbox-dev, and only <em>then</em> is it deployed to the Developer sandbox and <em>tested</em> &#8212; testing follows the merge, never the feature branch; <b>3</b> the same feature merges into sandbox-pre, where the mandatory review happens; <b>4</b> it is deployed to pre-production and put through UAT; <b>5</b> the same feature merges into production as the release. It is the <em>feature</em> that is promoted into each branch, not one environment branch merged into the next &#8212; that isolation is why, if a second feature is ready first, it can reach production ahead of one started earlier without dragging it along.</figcaption>
+<figcaption><b>The full path (product owners).</b> Read top-to-bottom in promotion order. The feature branches off production and is developed there. Each merge is followed by its own deployment and testing &#8212; testing happens after the merge, never on the feature branch. The mandatory review sits at the pre-production line. A developer may skip the development line entirely, developing and testing on their own sandbox and raising the request straight into pre-production; that is the path the delivery partner follows.</figcaption>
 </figure>
-<p>A developer does not have to go through the development line at all. The short path skips it: develop and test on the Developer sandbox, then raise the feature&#8217;s pull request straight into the pre-production line. This is the path the delivery partner follows &#8212; and they only adopt cutting from production once the drift below is fixed; until then, cutting from the pre-production line is their defence against it, not a shortcut.</p>
-<figure class="rmfig gitfig">
-<pre class="mermaid">
----
-config:
-  gitGraph:
-    mainBranchName: production
-    nodeSpacing: 90
-    rotateCommitLabel: false
----
-gitGraph
-   commit id: " "
-   branch sandbox-pre
-   checkout production
-   branch feature/issue
-   checkout feature/issue
-   commit id: "develop + test"
-   checkout sandbox-pre
-   merge feature/issue id: "review + UAT"
-   checkout production
-   merge feature/issue id: "release"
-</pre>
-<figcaption><b>The developer short path.</b> A developer does not have to go through sandbox-dev: they develop <em>and</em> test on their own Developer sandbox, then raise the pull request for the feature straight into sandbox-pre &#8212; still through the same mandatory review. Same cut-from-production rule, same feature-level promotion, one environment fewer. This is the path the delivery partner follows.</figcaption>
-</figure>
-<h3>When several features must ship together</h3>
+<h4>When several features must ship together</h4>
 <p>Sometimes a set of features has to go live as one deployment. For that, cut a release branch from production and collect the features there for a single deploy. The rule that must not bend: <b>the pull request and the review stay at the feature level</b> &#8212; each feature is reviewed on its own, never as a bundle. Grouping is for the <em>deployment</em>, not the <em>review</em>, so any one feature can still be dropped from the bundle without holding up the others.</p>
 <figure class="rmfig gitfig">
 <pre class="mermaid">
@@ -378,17 +358,79 @@ gitGraph
    checkout production
    merge release/batch id: "deploy together"
 </pre>
-<figcaption><b>Bundling several features into one deployment.</b> When features must go live together, cut a release branch from production and collect them there, then deploy the bundle once. <b>The pull request and review stay at the feature level</b> &#8212; each feature raises its own request into the release branch and is reviewed on its own; there is no request against the release branch or the bundle as a whole. Bundling is only how the <em>deployment</em> is grouped, never how the <em>review</em> is grouped &#8212; so a feature that fails review is simply left out of the bundle without blocking the rest.</figcaption>
+<figcaption><b>Bundling several features into one deployment.</b> Features are collected on a release branch cut from production and deployed once. Each raises its own request into it &#8212; there is no request against the bundle.</figcaption>
 </figure>
-<h2>The drift a recent review exposed</h2>
+<h3>2.2 &#183; Today: the gap, and the two branches it forces</h3>
 <p>A single pull request made the problem visible. It reported roughly 120 components as brand-new when about 17 of them already existed in production. The change was not describing real work; it was describing the gap between the branch and reality. Three layers of drift had stacked up: a branch no longer matched its own environment, the lower environments lagged production, and work built directly in an environment was being pushed <em>down</em> into the branch rather than the other way round. When the baseline is wrong like this, review is impossible, an automated check has nothing trustworthy to compare against, and a rollback cannot know what the &#8220;before&#8221; state was.</p>
-<h2>Closing the drift, and keeping it closed</h2>
-<p>Two different jobs hide inside &#8220;fix the drift&#8221;. The <b>one-off reset</b> gets everything back to a production-true baseline now: retrieve each long-lived environment in full into its own branch, then <b>back-promote</b> the difference down to the pre-production line and <b>refresh</b> the development sandboxes from production. The <b>ongoing rule</b> keeps it there: before starting any change, sync just the components in its scope to the latest production version, then cut the branch. A wholesale refresh of the pre-production environment is avoided &#8212; it would destroy in-progress work that only lives there.</p>
+<p>Measuring it gave one figure that matters more than the totals: the two lines last agreed on 21 May 2026, but the genuine overlap &#8212; the same component changed on <em>both</em> sides &#8212; is around <b>160 components</b>, not the thousands a raw comparison suggests. So resolving the overlap is about a day&#8217;s careful work, and about half that overlap is configuration built through the screens rather than code, which is what makes it delicate rather than merely large.</p>
+<p>One further finding limits how far the history can be trusted: where the same change reached both lines, it was almost always re-done by hand rather than copied. The two versions match in content while version control still treats them as unrelated &#8212; presenting them as new work, and later as conflicts. Reconciliation must be based on what the environments actually contain, not on what the branch history appears to say.</p>
+<div class="openbox" style="border-left:3px solid var(--spine)"><b>A clean merge is not evidence of a correct merge.</b> That same re-doing by hand creates a quieter failure. If a change reached production and was later undone or replaced on the pre-production line, the tooling cannot see that the two are versions of one thing &#8212; so bringing the lines together raises nothing, and the undone version is the one that survives. No conflict, no marker, nothing for a reviewer to catch. This is why the combined result is always deployed and tested rather than the change on its own, and why an undo must be applied to <em>both</em> lines or recorded as a deliberate difference: the tooling will not remind anyone later.</div>
+<h4>Promoting a change while the gap exists</h4>
+<p>The target model assumes the pre-production line already reflects production. While it does not, <b>where the branch is cut from only decides which promotion pays for the gap</b> &#8212; one drowns the review, the other ships more than was agreed.</p>
+<figure class="rmfig gitfig">
+<pre class="mermaid">
+---
+config:
+  gitGraph:
+    mainBranchName: production
+    nodeSpacing: 80
+    rotateCommitLabel: false
+---
+gitGraph
+   commit id: " "
+   branch sandbox-pre
+   commit id: "work not yet live"
+   checkout production
+   commit id: "released since"
+   branch feature/issue
+   commit id: "the change"
+   checkout sandbox-pre
+   merge feature/issue id: "+ everything released since"
+</pre>
+<figcaption><b>Why one branch no longer works.</b> While the two lines are out of step, a branch cut from production carries the production changes the pre-production line is missing. Merging it there brings <em>all</em> of them &#8212; a merge cannot be partial &#8212; so the review shows the drift instead of the change. Cutting from the pre-production line instead reverses the problem: that merge is clean, but the release then carries work never approved to go live.</figcaption>
+</figure>
+<p>So while the gap exists, a change that must reach both environments is carried on <b>two branches</b>, each cut from the line it merges into. That cost per change is the reason the reset in 2.3 is worth doing rather than living with.</p>
+<figure class="rmfig gitfig">
+<pre class="mermaid">
+---
+config:
+  gitGraph:
+    mainBranchName: production
+    nodeSpacing: 80
+    rotateCommitLabel: false
+---
+gitGraph
+   commit id: " "
+   branch sandbox-pre
+   commit id: "work not yet live"
+   branch feature/A-pre
+   commit id: "the change"
+   checkout sandbox-pre
+   merge feature/A-pre id: "review + UAT"
+   checkout production
+   commit id: "released since"
+   branch feature/A-release
+   commit id: "same change, re-applied"
+   checkout production
+   merge feature/A-release id: "release"
+</pre>
+<figcaption><b>Two branches, one change.</b> The same feature carries a <em>pre-release</em> branch cut off the pre-production line to be validated and reviewed, and a <em>release</em> branch cut off production to go live. Because each is cut from the line it merges into, each merge contains only the change &#8212; neither moves the drift, and either can go first.</figcaption>
+</figure>
+<p>There are two honest ways to re-apply it, and the choice follows what the change touches:</p>
+<ul><li><b>Capture the components from the environment and commit them &#8212; the default.</b> Use this for anything built through the Salesforce screens, whose definitions cannot be safely combined by hand, and for any work too large or long-running to replay. Nearly all work in flight is one or the other, and it has the advantage of committing what the environment <em>actually</em> contains rather than what the history claims.</li><li><b>Copy the individual commits across &#8212; the exception.</b> Sound only for a small, self-contained <em>code</em> change, and only because the branch dies at the merge. A copied commit is a new commit that version control cannot match to the original, so on a long-lived branch the duplicate resurfaces later as an unexplained conflict &#8212; which is precisely the reconciliation problem being escaped here. Roughly one change in seven is simple enough to qualify.</li></ul>
+<p><b>Access rights</b> &#8212; profiles, permission sets, sharing rules &#8212; sit outside both: they are never combined automatically, but decided by one person.</p>
+<p>Two rules hold throughout. <b>Bring a change&#8217;s components up to date from production, never from the pre-production line</b> &#8212; taking them from pre-production looks clean going in and quietly enlarges the release with work not approved to go live. And <b>record every promotion as a genuine combination of the two branches</b>: flattening it leaves them still looking apart, so the same gap returns and the same conflicts are resolved twice.</p>
+<p><b>The development line does not need a third branch.</b> Its sandboxes are refreshed from production, so once that is done they already match production and the release branch merges into them cleanly. Anyone taking the short path skips the development line entirely, so it does not arise for them at all.</p>
+<h4>Three cases that need naming</h4>
+<ul><li><b>An urgent production fix.</b> Cut it from production, ship it, and treat re-applying it to the pre-production line as a mandatory follow-up that keeps the item open until done. Nobody captures metadata mid-incident, so this is the one case where the fix is deliberately applied twice and the second pass is scheduled, not improvised.</li><li><b>Undoing something already live.</b> The undo must reach both lines, or be written down as a difference both sides accept. Left to one line, it becomes the silent case above.</li><li><b>Work abandoned after review but before release.</b> It is already on the pre-production line and will never be in production &#8212; new drift created by the process meant to prevent it. Either undo it there explicitly or resolve it before the reset; leaving it is how the gap quietly reopens.</li></ul>
+<p><b>Branch freshness matters too.</b> Cut late and merge quickly. Because a pull request compares against the point where the branch and its target last agreed, a branch left to age shows the whole accumulated gap instead of its own change &#8212; which is exactly the symptom that opened this section. If a branch goes stale, cut it again rather than topping it up.</p>
+<h3>2.3 &#183; Closing the gap, and keeping it closed</h3>
+<p>Two different jobs hide inside &#8220;fix the drift&#8221;. The <b>one-off reset</b> gets everything back to a production-true baseline now: retrieve each long-lived environment in full into its own branch, then <b>back-promote</b> the difference down to the pre-production line and <b>refresh</b> the development sandboxes from production. The <b>ongoing rule</b> keeps it there: before starting any change, bring just the components that change will touch from production into the <b>pre-production branch and environment</b>, then cut the feature branch. It is the back-promotion in miniature &#8212; instead of reconciling every drifted component at once, only the handful about to be worked on is brought up to the live version. The feature branch needs nothing itself: cut afterwards, it inherits the corrected baseline. A wholesale refresh of the pre-production environment is avoided &#8212; it would destroy in-progress work that only lives there.</p>
 <figure class="rmfig">
   <svg viewBox="0 0 720 210" role="img" aria-labelledby="rm-align-t">
-    <title id="rm-align-t">Alignment as a process: first retrieve each environment into its branch, then back-promotion plus refresh, then an ongoing per-change scope sync</title>
+    <title id="rm-align-t">Alignment as a process: first retrieve each environment into its branch, then back-promotion plus refresh, then an ongoing per-change sync of production into the pre-production line</title>
     <line class="rm-line" x1="486" y1="14" x2="486" y2="150" stroke-dasharray="3 3" />
-    <text class="rm-t-sm" x="250" y="172" text-anchor="middle" font-size="10">one-off reset (do it now)</text>
+    <text class="rm-t-sm" x="250" y="172" text-anchor="middle" font-size="10">one-off reset (run once)</text>
     <text class="rm-t-sm" x="608" y="172" text-anchor="middle" font-size="10">ongoing, forever</text>
     <text class="rm-t-brand" x="16" y="26" text-anchor="start" font-size="10">STEP 1 &#183; retrieve each env &#8594; its branch</text>
     <rect class="rm-box-prod" x="16" y="32" width="210" height="42" rx="7" />
@@ -401,31 +443,37 @@ gitGraph
     <text class="rm-t-brand" x="272" y="26" text-anchor="start" font-size="10">STEP 2</text>
     <rect class="rm-box" x="272" y="32" width="196" height="42" rx="7" />
     <text class="rm-t" x="370" y="50" text-anchor="middle" font-size="11">back-promotion &#8594; sandbox-pre</text>
-    <text class="rm-t-sm" x="370" y="65" text-anchor="middle" font-size="9.5">production under the live branches</text>
+    <text class="rm-t-sm" x="370" y="65" text-anchor="middle" font-size="9.5">resolve the overlap by owner</text>
     <rect class="rm-box" x="272" y="82" width="196" height="42" rx="7" />
     <text class="rm-t" x="370" y="100" text-anchor="middle" font-size="11">refresh &#8594; dev sandboxes</text>
     <text class="rm-t-sm" x="370" y="115" text-anchor="middle" font-size="9.5">wholesale &#183; nothing to lose</text>
     <path class="rm-arrow" d="M470 78 L500 78" marker-end="url(#rma-brand)" />
     <text class="rm-t-brand" x="512" y="26" text-anchor="start" font-size="10">STEP 3 &#183; ongoing</text>
     <rect class="rm-box-prod" x="512" y="50" width="192" height="56" rx="7" />
-    <text class="rm-t-brand" x="608" y="74" text-anchor="middle" font-size="12">per-change scope sync</text>
+    <text class="rm-t-brand" x="608" y="74" text-anchor="middle" font-size="12">production &#8594; pre-production</text>
     <text class="rm-t-sm" x="608" y="90" text-anchor="middle" font-size="10">before each new change, sync</text>
-    <text class="rm-t-sm" x="608" y="101" text-anchor="middle" font-size="10">just the components it touches</text>
+    <text class="rm-t-sm" x="608" y="101" text-anchor="middle" font-size="10">just the components in scope</text>
     <defs>
       <marker id="rma-brand" markerWidth="8" markerHeight="8" refX="6" refY="4" orient="auto"><path class="rm-fill-brand" d="M0 0 L8 4 L0 8 Z" /></marker>
     </defs>
   </svg>
-  <figcaption>Read left to right as a process. <b>Step 1 &#8212; retrieve each long-lived environment into its own branch first:</b> production into the production branch <em>and</em> PRE into the sandbox-pre branch. This second retrieve is the one the failed review skipped &#8212; it captures the live work that exists only in the PRE environment into version control <em>before</em> anything merges over it, so it cannot be silently overwritten. <b>Step 2</b>, two actions: a surgical back-promotion lands production <em>underneath</em> the live feature branches on sandbox-pre, while the dev sandboxes &#8212; with no work to protect &#8212; are refreshed wholesale. <b>Step 3</b> is the ongoing rule that stops the drift returning: before every new change, sync just the components it touches. Steps 1&#8211;2 are a one-off done now; step 3 runs forever.</figcaption>
+  <figcaption>Read left to right as a process. <b>Step 1 &#8212; retrieve each long-lived environment into its own branch first:</b> production into the production branch <em>and</em> PRE into the sandbox-pre branch. This second retrieve is the one the pull request that exposed the drift skipped &#8212; it captures the live work that exists only in the PRE environment into version control <em>before</em> anything merges over it, so it cannot be silently overwritten. <b>Step 2</b>, two actions: production is brought into the pre-production line and the components changed on both sides are resolved one by one by a named owner, while the dev sandboxes &#8212; with no work to protect &#8212; are refreshed wholesale. <b>Step 3</b> repeats that first action in miniature, for good: before each new change, only the components it will touch are brought from production into the pre-production branch and environment. Steps 1&#8211;2 run once; step 3 runs for good.</figcaption>
 </figure>
-<p>Two safeguards make the back-promotion safe. The <b>retrieve-first step</b> above matters most: before any merge, each environment is captured into its own branch &#8212; especially PRE into the sandbox-pre branch &#8212; so the live work that only exists in an environment is under version control and cannot be silently lost. Then the merge itself is done in two moves, in order: <b>first</b> merge every live feature branch into the back-promotion branch, so their components keep the in-progress version; <b>then</b> bring production in underneath, so production wins for everything that has drifted while the live branches win for the components they own. Doing the merge the other way round could silently overwrite work already committed to the pre-production line. The prerequisite is that every in-progress change sits on a live feature branch before the reset starts &#8212; anything living only in the environment cannot be protected.</p>
-<h2>The hard case: two people editing the same Flow at once</h2>
-<p>Cutting every change from production keeps <em>code</em> clean, but it does not, on its own, solve the case the delivery partner raised from real experience: two people editing the <b>same declarative component</b> &#8212; a Flow, a page layout, a screen configuration &#8212; in parallel. These are built through the Salesforce screens, and their underlying definition cannot be safely merged or hand-edited afterwards; nobody edits a Flow on screen and then strips a colleague&#8217;s changes out of its definition by hand. So if two changes touch the same Flow, keeping their branches separate does not make them independent &#8212; whoever merges second inherits the other&#8217;s change and cannot ship without it.</p>
+<p>The reset is what retires the two-branch route in 2.2. Once the pre-production line reflects production, a single branch cut from production merges cleanly into both, one review covers it, and the second branch simply stops being necessary. That is the test of whether the reset has worked, and the point at which the temporary arrangement should be dropped rather than kept out of habit.</p>
+<p>Two things make the back-promotion safe, and the first matters most. <b>Retrieve first:</b> before any merge, each environment is captured into its own branch &#8212; especially pre-production into its own &#8212; so live work that exists only in an environment is under version control and cannot be silently lost. Every in-progress change must sit on a branch before the reset starts; anything living only in an environment cannot be protected.</p>
+<p><b>Then expect to decide, component by component.</b> It is tempting to assume that merging in the right order makes production win for whatever has drifted while in-progress branches keep the components they own. <b>It does not.</b> Whichever order the merges are done in, the comparison is made against the point where the two lines last agreed, so for the components changed on <em>both</em> sides &#8212; the roughly 160 above &#8212; the tooling will not choose: it either stops and asks, on about 114 of them, or silently combines both versions into one that neither line ever had. Those decisions need a named owner per area and a record of what was chosen. Merging the in-progress branches in first actively makes this harder, because it mixes their work into the same decisions. Bring production in first, resolve the drift on its own, then re-apply each in-progress branch on top of a baseline that is already clean.</p>
+<h2>3 &#183; Roles and rules</h2>
+<h3>The hard case: two people editing the same Flow at once</h3>
+<p>Cutting every change from production keeps <em>code</em> clean, but it does not, on its own, solve the case the delivery partner raised: two people editing the <b>same declarative component</b> &#8212; a Flow, a page layout, a screen configuration &#8212; in parallel. These are built through the Salesforce screens, and their underlying definition cannot be safely merged or hand-edited afterwards; nobody edits a Flow on screen and then strips a colleague&#8217;s changes out of its definition by hand. So if two changes touch the same Flow, keeping their branches separate does not make them independent &#8212; whoever merges second inherits the other&#8217;s change and cannot ship without it.</p>
 <p>Branch strategy cannot fix this; it is a matter of coordination and hygiene, handled by five practices both sides agreed:</p>
 <ul><li><b>A single owner for complex shared components.</b> Heavily-shared Flows and core layouts have one person who makes or coordinates their changes, so two people are not editing the same one in parallel by default.</li><li><b>A shared environment for evolutions, an isolated one only for genuinely new work.</b> When several people evolve the <em>same existing</em> capability, they share one development environment for that area and resolve any clash together, on screen &#8212; not by reconciling definitions at promotion time. A private environment is kept only for work that is genuinely new or independent, where no one else is touching the same components.</li><li><b>Deploy the merged result, never the change branch directly.</b> A change is merged into its target branch first, and the combined result is what gets deployed and validated &#8212; because the version-control merge may not surface every conflict, so the deployment and tests must exercise the combination.</li><li><b>An overlap check before every pull request.</b> Before raising a request, check whether recent changes or open requests against the target already touch the same components; if they overlap, the people involved resolve it first.</li><li><b>Dependencies made visible up front.</b> When one change cannot go live until another does, that dependency is documented and visible at a glance, rather than living in a verbal &#8220;wait for my OK&#8221;.</li></ul>
 <p>This is the condition that makes cutting from production safe in practice, not just on paper: the branch model handles independent code, and these five practices carry the concurrent-declarative case it cannot.</p>
-<h2>Roles and what no partner may skip</h2>
+<h3>Three settings to put in place, whichever process is in force</h3>
+<p>These are configuration, not practice, and they are the cheapest corrections available. Each needs an owner.</p>
+<ul><li><b>Stop access rights combining on their own.</b> Profiles, permission sets and sharing rules are long machine-ordered lists, so where the same file changed on both lines the tooling merges two people&#8217;s grants without raising anything &#8212; and deploys access nobody chose. Twenty-two of these files are in that state: sixteen would stop and ask, which is safe, but <b>six combine silently</b>, the administrator profile among them. Mark these file types so they can never be combined automatically and always require a person to decide. Marking them the other way &#8212; to take both sides &#8212; is the opposite of the fix and produces a plausible-looking but invalid file.</li><li><b>Allow only a true combination when a request is completed.</b> The other two ways of completing a request leave the two branches still looking apart afterwards, so the same gap is presented again and the same decisions are made twice. Turn those options off for the production and pre-production branches rather than relying on everyone remembering.</li><li><b>Let the tooling remember resolutions.</b> It can record how a clash was resolved and reapply it next time. With the same components in the gap being resolved on every promotion until the reset, this saves the work being redone by hand each time. Switch it on before the reset, not after.</li></ul>
+<h3>Who reviews, who releases, and what no partner may skip</h3>
 <p>A Release Manager in the in-house IT team groups changes into releases and coordinates the deployments. The hard rule is that <b>no partner releases to production without an in-house review</b> &#8212; a partner cannot approve its own change. The release into production itself needs no second review; it is a handover to the Release Manager, not a fresh change. Automation is staged: keep pull requests plus the mandatory review now, add automated checks on each pull request as the first step, and only adopt a dedicated deployment platform if the volume genuinely calls for it.</p>
-<div class="openbox"><b>Still open.</b> Who runs the one-off reset, and when &#8212; it is cheapest during a quiet period, and takes roughly two days, largely re-pointing production record references that the current recruitment package hard-codes. Who owns the coordination of cross-change dependencies on the in-house side &#8212; today it tends to fall to one partner person by default, and the delivery partner asked for it to be owned and visible rather than verbal. And whether every non-developer change is forced through the same build-and-review path, and whether the delivery partner releases independently or routes the deploy through the Release Manager. The review rule itself is settled.</div>
+<div class="openbox"><b>Still open.</b><ul><li>Who runs the one-off reset, and when &#8212; it is cheapest during a quiet period, and the reset itself takes roughly two days, largely re-pointing production record references that the current recruitment package hard-codes.</li><li>Who owns each of the three settings above, and by when.</li><li>Which combined result the access-rights files should carry where both lines changed them, and who decides it.</li><li>Whether the release branch is prepared by the developer or by the Release Manager for partner-led changes while the two-branch route is in force.</li><li>What happens to the long-running branches that pre-date the reset &#8212; re-cut from the new baseline, or abandoned.</li><li>Who owns the coordination of cross-change dependencies on the in-house side &#8212; today it tends to fall to one partner person by default, and the delivery partner asked for it to be owned and visible rather than verbal.</li><li>Whether every non-developer change is forced through the same build-and-review path, and whether the delivery partner releases independently or routes the deploy through the Release Manager. The review rule itself is settled.</li></ul></div>
 <div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
 </div></main>
 </div>
