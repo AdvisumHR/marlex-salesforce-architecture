@@ -1470,6 +1470,9 @@
       href="#view-data-model-inventory"
       >· What we're replacing</a
     >
+    <a class="navlink nonum" data-view="naming" href="#view-naming"
+      >· Naming conventions</a
+    >
     <a class="navlink" data-view="candidate-model" href="#view-candidate-model"
       ><span class="n">2</span><span>Standard objects</span></a
     >
@@ -5935,75 +5938,14 @@
 
         <section>
           <p class="section-eyebrow">Naming</p>
-          <h2>Why the new components carry no ownership prefix</h2>
+          <h2>New components carry no ownership prefix</h2>
           <p>
             Every object and field built for the rebuild takes an English name
             with
-            <strong>no owner prefix</strong> — not the old
-            <code>MA_</code> ("Marlex") marker that many existing fields carry.
-            This is a deliberate choice, and it matches what Salesforce
-            practitioners recommend:
-            <strong
-              >prefix to group or to disambiguate, not to stamp
-              ownership.</strong
-            >
-            A prefix earns its place only when it tells the reader something the
-            name cannot otherwise convey.
-          </p>
-          <div class="callout">
-            <p class="callout-h">
-              Three reasons a blanket owner prefix is the wrong tool here
-            </p>
-            <ul>
-              <li>
-                <strong>It distinguishes nothing.</strong> A prefix exists to
-                partition one set of things from another. If almost every
-                component carries the same owner marker, it partitions nothing —
-                it is noise on every name. The old system already shows this:
-                the marker sits on the large majority of custom fields, so it no
-                longer signals anything. And the rebuilt components are already
-                separated from the vendor's own objects, which carry the
-                package's own reserved marker — so there is nothing left for an
-                owner prefix to clarify.
-              </li>
-              <li>
-                <strong
-                  >Cross-org ownership is a packaging decision, not a typed
-                  prefix.</strong
-                >
-                The real reason to worry about a marker is that these components
-                may later be promoted to other Marlex Group orgs (Axxon, the
-                Philippines) as a shared template. But Salesforce already has a
-                first-class mechanism for that: when components are packaged for
-                deployment to another org, the platform applies a registered
-                <em>namespace</em> automatically. A hand-typed prefix is a
-                manual imitation of that — and if the rebuild is ever packaged,
-                the namespace is prepended <em>on top</em> of any prefix,
-                leaving a doubly-redundant, uglier name. So the "we might share
-                it" scenario is an argument <em>against</em> a typed owner
-                prefix, not for one.
-              </li>
-              <li>
-                <strong>Prefix-free keeps the cheap direction open.</strong>
-                Adding a shared group prefix later — if and when the governance
-                body confirms a component is a genuine group-wide standard — is
-                a controlled rename at that moment. Committing every component
-                to an owner prefix now, and undoing it later, is the expensive
-                direction. The group-wide marker is a decision to take when the
-                sharing is real, not a default to apply to everything up front.
-              </li>
-            </ul>
-          </div>
-          <p>
-            Two narrow exceptions prove the rule, because both are
-            <em>functional</em>, not organizational. The job object is
-            <code>ATS_Job__c</code> rather than the bare
-            <code>Job__c</code> because that name is already taken in the org by
-            a package setting — the <code>ATS_</code> qualifier resolves a real
-            collision. And a pre-existing <code>MA_</code> field that is carried
-            across unchanged keeps its name purely so that live integrations and
-            automation pointing at it do not break; the moment such a field is
-            renamed for any other reason, the prefix goes with it.
+            <strong>no owner prefix</strong> — the reasoning, the exceptions,
+            and the matching rules for Apex classes and on-screen labels during
+            coexistence are on the
+            <a href="#view-naming">naming conventions</a> page.
           </p>
         </section>
 
@@ -9414,6 +9356,342 @@
             the migration rehearsal.
           </p>
         </footer>
+      </div>
+    </section>
+    <section class="page-view" id="view-naming">
+      <div class="wrap-inner">
+        <header class="masthead">
+          <p class="eyebrow">· Naming conventions</p>
+          <h1>Naming the new components while the old system still runs</h1>
+          <p class="subtitle">
+            For the months the rebuilt system and TargetRecruit run side by
+            side, some new components briefly share a name with the old
+            component they replace — an object, an Apex class, a list view.
+            Three surfaces, one rule: the disambiguating marker always rides the
+            <strong>new</strong> component, and the old one is never touched.
+            Leaving the old one pristine is what keeps rollback a configuration
+            switch rather than a deployment.
+          </p>
+          <p class="dateline">
+            Naming conventions · recorded direction, pending ratification · 6
+            August 2026
+          </p>
+        </header>
+
+        <div class="bluf">
+          <p>
+            <strong>What this decides.</strong> How to name a new native
+            component when a live legacy one already carries the name it wants.
+            The answer differs by surface, but the principle is single:
+            <strong>mark the new thing, leave the legacy thing alone.</strong>
+            Objects and fields need no marker at all — the package namespace
+            already separates them. Apex classes take a
+            <strong>permanent</strong> <code>ATS_</code> domain qualifier. The
+            on-screen labels of list views, reports and dashboards take a
+            <strong>transient</strong> <code>2.0</code> suffix that is dropped
+            at cutover.
+          </p>
+          <p>
+            <strong>The decisive fact.</strong> Rollback is config-only — a
+            router un-flip, no deployment — and that guarantee holds
+            <em>only</em> while the legacy component is untouched. The moment
+            you rename a legacy class or relabel a legacy report, restoring it
+            is a deploy, not a switch. So the marker cannot sit on the legacy
+            component on any surface; it rides the new one. Where the new name
+            is permanent the marker is permanent (<code>ATS_</code>); where the
+            new name inherits the clean name at cutover the marker is transient
+            (<code>2.0</code>).
+          </p>
+        </div>
+
+        <section>
+          <p class="section-eyebrow">Objects &amp; fields</p>
+          <h2>Why the new components carry no ownership prefix</h2>
+          <p>
+            Every object and field built for the rebuild takes an English name
+            with
+            <strong>no owner prefix</strong> — not the old
+            <code>MA_</code> ("Marlex") marker that many existing fields carry.
+            This is a deliberate choice, and it matches what Salesforce
+            practitioners recommend:
+            <strong
+              >prefix to group or to disambiguate, not to stamp
+              ownership.</strong
+            >
+            A prefix earns its place only when it tells the reader something the
+            name cannot otherwise convey.
+          </p>
+          <div class="callout">
+            <p class="callout-h">
+              Three reasons a blanket owner prefix is the wrong tool here
+            </p>
+            <ul>
+              <li>
+                <strong>It distinguishes nothing.</strong> A prefix exists to
+                partition one set of things from another. If almost every
+                component carries the same owner marker, it partitions nothing —
+                it is noise on every name. The old system already shows this:
+                the marker sits on the large majority of custom fields, so it no
+                longer signals anything. And the rebuilt components are already
+                separated from the vendor's own objects, which carry the
+                package's own reserved marker — so there is nothing left for an
+                owner prefix to clarify.
+              </li>
+              <li>
+                <strong
+                  >Cross-org ownership is a packaging decision, not a typed
+                  prefix.</strong
+                >
+                The real reason to worry about a marker is that these components
+                may later be promoted to other Marlex Group orgs (Axxon, the
+                Philippines) as a shared template. But Salesforce already has a
+                first-class mechanism for that: when components are packaged for
+                deployment to another org, the platform applies a registered
+                <em>namespace</em> automatically. A hand-typed prefix is a
+                manual imitation of that — and if the rebuild is ever packaged,
+                the namespace is prepended <em>on top</em> of any prefix,
+                leaving a doubly-redundant, uglier name. So the "we might share
+                it" scenario is an argument <em>against</em> a typed owner
+                prefix, not for one.
+              </li>
+              <li>
+                <strong>Prefix-free keeps the cheap direction open.</strong>
+                Adding a shared group prefix later — if and when the governance
+                body confirms a component is a genuine group-wide standard — is
+                a controlled rename at that moment. Committing every component
+                to an owner prefix now, and undoing it later, is the expensive
+                direction. The group-wide marker is a decision to take when the
+                sharing is real, not a default to apply to everything up front.
+              </li>
+            </ul>
+          </div>
+          <p>
+            Two narrow exceptions prove the rule, because both are
+            <em>functional</em>, not organizational. The job object is
+            <code>ATS_Job__c</code> rather than the bare
+            <code>Job__c</code> because that name is already taken in the org by
+            a package setting — the <code>ATS_</code> qualifier resolves a real
+            collision. And a pre-existing <code>MA_</code> field that is carried
+            across unchanged keeps its name purely so that live integrations and
+            automation pointing at it do not break; the moment such a field is
+            renamed for any other reason, the prefix goes with it.
+          </p>
+          <p>
+            Objects and fields need no coexistence marker at all: the new native
+            object is <code>Placement__c</code>, the legacy one is the packaged
+            <code>AVTRRT__Placement__c</code>. The package namespace already
+            keeps them apart, so there is nothing to disambiguate — and no
+            reason to decorate the new name.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Apex classes</p>
+          <h2>The new class takes a permanent <code>ATS_</code> qualifier</h2>
+          <p>
+            Apex classes are the surface where the collision is <em>hard</em>.
+            Two classes cannot share a name in the same namespace, and during
+            coexistence both must compile — the legacy
+            <code>PlacementController</code> is live, the new native one is
+            being built. Unlike an object, there is no package namespace to
+            separate them: your own code has no namespace prefix. So the bare
+            name is <strong>not available</strong> to the new class while the
+            legacy one lives.
+          </p>
+          <p>
+            The new class therefore takes a permanent domain qualifier —
+            <code>ATS_PlacementController</code> — reusing the exact functional
+            collision-fix precedent already set by <code>ATS_Job__c</code>.
+            <code>ATS_</code> names the native recruitment (ATS) domain; it is
+            true before cutover and after it, so the class is
+            <strong>never renamed</strong>. The legacy class is left untouched,
+            which is what preserves config-only rollback.
+          </p>
+          <div class="tech">
+            <span class="tech-label">For the developers</span>Legacy class stays
+            as-is (<code>PlacementController</code> on
+            <code>AVTRRT__Placement__c</code>); the native twin is
+            <code>ATS_PlacementController</code> on <code>Placement__c</code>.
+            The router row maps the two names. Triggers never collide — the
+            global namespace and the dispatcher-in-trigger-body pattern mean
+            there is no trigger-naming case.
+          </div>
+          <div class="callout">
+            <p class="callout-h">
+              Why <code>ATS_</code> and not a version or era suffix
+            </p>
+            <p>
+              An earlier rule reserved the bare name for the native class and
+              rejected any suffix, on the reasoning that Apex is cheap to rename
+              after cutover. That reasoning does not survive contact with
+              coexistence: the two classes must both compile
+              <em>before</em> cutover, so the bare name is not free to take. A
+              transitional suffix such as <code>…Native</code> or
+              <code>2.0</code> would need its own rename pass once the legacy
+              class is gone — a name that encodes the transition outlives it as
+              noise. <code>ATS_</code> avoids both traps: it is available now
+              and it is permanent, so it satisfies the "no transitional suffix"
+              intent better than the bare-name rule ever did.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">List views, reports &amp; dashboards</p>
+          <h2>
+            The new label carries a transient <code>2.0</code>; the legacy stays
+            pristine
+          </h2>
+          <p>
+            On-screen labels are the surface where the new component
+            <em>can</em> take the clean final name — but only if we are willing
+            to touch the legacy label, and we are not. During coexistence a
+            recruiter opening the list-view menu sees two "All Placements" and
+            must know which to click. The new artifact therefore carries a
+            light, transient suffix — <strong>All Placements 2.0</strong> — that
+            reads plainly as the newer one to choose. The legacy artifact is
+            left <strong>completely untouched</strong>.
+          </p>
+          <p>
+            Leaving the legacy label pristine is not cosmetic — it is what keeps
+            rollback a switch. If we instead marked the legacy artifact ("All
+            Placements (Legacy)"), a rollback would leave the surviving legacy
+            list mis-named and force a deployment to correct it, widening the
+            rebuild's rollback surface. Marking the new one keeps the legacy
+            recoverable with no deploy. At cutover, when the legacy artifact is
+            deleted, the <code>2.0</code> is dropped in a single forward-only
+            rename — "All Placements 2.0" becomes "All Placements". That rename
+            happens only at the one-way door of cutover, never on rollback.
+          </p>
+          <p>
+            Where the tool provides a container — report and dashboard folders —
+            an equally valid option is to keep the names identical and separate
+            the new artifacts by <em>folder</em> rather than by a suffix,
+            deleting the legacy folder at cutover with no rename at all. That is
+            left as an allowed choice per artifact type; list views have no
+            comparable container, so the <code>2.0</code> suffix is the general
+            rule.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Alternatives considered</p>
+          <h2>Why the marker sits on the new component, not the old</h2>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Apex — bare name on the new class, rename the legacy away
+                later</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              Give the native class the clean
+              <code>PlacementController</code> name and retire the legacy one
+              afterwards. This was the earlier rule. It assumes the bare name is
+              free — but both classes must compile throughout coexistence, so it
+              is not. Impossible without either renaming the live legacy class
+              (forbidden) or delaying the native class until cutover
+              (unworkable).
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Apex — a <code>…Native</code> transitional suffix on the new
+                class</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              Name the native class <code>PlacementControllerNative</code> for
+              the duration. It compiles alongside the legacy one, but it encodes
+              the transition into a permanent artifact: once the legacy class is
+              deleted the suffix is meaningless and needs its own rename pass. A
+              permanent <code>ATS_</code> qualifier carries no such debt.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >UI labels — mark the legacy artifact instead</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              Rename the legacy list to "All Placements (Legacy)" and let the
+              new one take the clean name immediately. Cleanest end-state on
+              paper — but it touches the legacy component, so on rollback the
+              surviving legacy artifact is mis-named and needs a deployment to
+              fix. That breaks the config-only rollback guarantee the whole
+              coexistence design rests on.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >UI labels — <code>(New)</code> or <code>(Native)</code> on the
+                new artifact</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              Both keep the legacy pristine, but the words are weaker.
+              <code>(New)</code> stops being true the moment it is the only one
+              left; <code>(Native)</code> means nothing to a non-technical
+              recruiter, who does not know what the label is native <em>to</em>.
+              <code>2.0</code> reads universally as "the newer one, use this".
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >UI labels — separate by folder, identical names</span
+              ><span class="chip limited">Conditional</span>
+            </div>
+            <p>
+              Where the platform gives a container (report and dashboard
+              folders), keep the names identical and disambiguate by location,
+              deleting the legacy folder at cutover with no rename. Genuinely
+              cleaner where it applies — kept as an allowed per-artifact option
+              — but list views have no equivalent container, so it cannot be the
+              general rule.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Marker on the new component — <code>ATS_</code> for code,
+                <code>2.0</code> for labels</span
+              ><span class="chip adopted">Adopted</span>
+            </div>
+            <p>
+              One principle across every surface: the legacy component is never
+              touched, so rollback stays a switch; the marker rides the new
+              component; it is permanent where the new name is permanent
+              (<code>ATS_</code>) and transient where the new name inherits the
+              clean name at cutover (<code>2.0</code>).
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Residual &amp; open items</p>
+          <h2>What is still to confirm</h2>
+          <ul>
+            <li>
+              <strong>Governance ratification.</strong> The extension to Apex
+              classes and UI labels is recorded direction pending confirmation
+              by the Centre of Excellence, alongside the owner of the
+              coexistence-router rules it refines.
+            </li>
+            <li>
+              <strong>Folder-based UI disambiguation.</strong> Left as an
+              allowed option per artifact type; no blanket rule until the
+              reporting-strategy wave scopes it.
+            </li>
+            <li>
+              <strong>The object/field rule is settled and unchanged</strong> —
+              this page extends it to two new surfaces, it does not revisit it.
+            </li>
+          </ul>
+        </section>
       </div>
     </section>
     <section class="page-view" id="view-candidate-model">
