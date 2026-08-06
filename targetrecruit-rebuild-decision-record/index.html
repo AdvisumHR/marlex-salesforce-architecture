@@ -9691,8 +9691,8 @@
             Decision B — what the metadata is called
           </p>
           <h2>
-            Duplicated components: name for the responsibility on the native
-            object
+            Duplicated components: name for the responsibility, not the
+            migration state
           </h2>
           <p>
             This covers <strong>any new metadata component's API name</strong> —
@@ -9704,25 +9704,61 @@
             <code>PlacementController</code> acts on the packaged
             <code>AVTRRT__Placement__c</code>; the new one acts on the native
             <code>Placement__c</code>. Two genuinely distinct components that
-            coexist — so each earns its own honest, permanent name.
+            coexist — so each earns its own honest, permanent name. The name
+            should encode <em>what the component does</em>, never
+            <em>which side of the migration it is on</em> — that state belongs
+            in the component catalogue, not the API name.
           </p>
           <div class="callout key">
-            <p class="callout-h">The rule</p>
+            <p class="callout-h">The rule — a hierarchy, tried in order</p>
+            <ol>
+              <li>
+                <strong>No collision → clean name.</strong> Where the legacy
+                name already stands apart — it carries <code>MA_</code> or the
+                <code>AVTRRT__</code>
+                namespace — there is no clash; the new component takes its clean
+                prefix-free name directly.
+              </li>
+              <li>
+                <strong>A more precise responsibility name.</strong> The rebuild
+                is a chance to improve the vocabulary: where the legacy name was
+                generic, name the new component for what it actually does (<code
+                  >InterviewService</code
+                >
+                → <code>InterviewSchedulingService</code>;
+                <code>CandidateMatchingService</code> →
+                <code>CandidateSimilarityScoringService</code>). Permanent,
+                self-documenting, no rename at cutover.
+              </li>
+              <li>
+                <strong
+                  >Same responsibility exactly → disambiguate by the native
+                  object.</strong
+                >
+                If the two genuinely do the same thing, the real, permanent
+                difference is the object each acts on — reflect that in the name
+                (<code>PlacementCreationService</code> on
+                <code>Placement__c</code>). Still permanent; still no rename at
+                cutover.
+              </li>
+              <li>
+                <strong
+                  >Last resort — a transient qualifier, renamed at
+                  cutover.</strong
+                >
+                Only if none of the above yields a distinct name, append a
+                transient qualifier and rename it to the canonical name when the
+                legacy is deleted (<code>…Target</code> preferred; see the
+                options below). This is the fallback because it defers a rename,
+                which is easy to skip.
+              </li>
+            </ol>
             <p>
-              Name the new component for
-              <strong>what it does on the native model</strong> — a descriptive
-              responsibility name (<code>PlacementAssignmentController</code>),
-              not a version suffix. It is permanent and survives cutover
-              unchanged, because it describes the component, not that it is "the
-              new one." If a like-for-like rebuild leaves no distinct
-              responsibility to name,
-              <strong>disambiguate by the native object</strong> it operates on.
-              Never a version suffix (<code>V2</code>/<code>_2</code>), never a
-              functional prefix (<code>ATS_</code>). Where the legacy name
-              already stands apart — it carries <code>MA_</code> or the
-              <code>AVTRRT__</code> namespace — there is
-              <strong>no collision</strong> and the new component takes the
-              clean prefix-free name directly.
+              <strong>Never</strong> a permanent version suffix
+              (<code>V2</code>/<code>_2</code>) and <strong>never</strong> a
+              functional prefix (<code>ATS_</code>). Migration state — legacy /
+              active / deprecated — is recorded in the component catalogue (the
+              router row), <em>not</em> in the API name.
             </p>
           </div>
           <div class="tech">
@@ -9804,17 +9840,23 @@
           <div class="option">
             <div class="option-head">
               <span class="option-name"
-                >Temporary name, renamed to canonical at cutover</span
-              ><span class="chip limited">Considered</span>
+                >Transient qualifier, renamed to canonical at cutover</span
+              ><span class="chip limited">Fallback</span>
             </div>
             <p>
-              Give the new component a placeholder name during coexistence and
-              rename it to the canonical one when the legacy is deleted. Valid,
-              and the community's fallback where no good name exists — but it
-              defers a rename to cutover (easy to skip, leaving the placeholder
-              permanent). A responsibility name avoids the rename entirely, so
-              it is preferred; this stays the fallback only where no distinct
-              name can be found even from the native object.
+              Only where steps 1–3 above yield no distinct name: append a
+              transient qualifier during coexistence and rename it to the
+              canonical name when the legacy is deleted. It defers a rename to
+              cutover (easy to skip, leaving the qualifier permanent), so it is
+              the last resort. If a qualifier is needed, the preference order is
+              <strong><code>…Target</code></strong> (neutral — "the target
+              implementation") &gt; <code>…V2</code> (neutral but a version tag)
+              &gt; <code>…Native</code> (ambiguous — "native" reads as
+              Salesforce <em>standard</em>, but this model is custom) &gt;
+              <code>…Core</code> (ambiguous — collides with "Salesforce Core")
+              &gt; <code>…New</code>
+              (rejected — it stops being new). All are transient and must be
+              renamed at cutover; none should be left permanent.
             </p>
           </div>
           <div class="option">
