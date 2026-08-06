@@ -23072,17 +23072,14 @@
             <strong
               >one confirmed live, a second under review, and a third in
               build</strong
-            >.
-            <strong
-              >Two further edges are coupled by <em>reading</em> the old records
-              rather than writing them</strong
-            >
-            — the analytics extract, and the ERP link, whose own traffic stays
-            on the new model but which fires an automation that looks up the
-            retiring applications. Reads degrade rather than gate the go-live,
-            but they are on the re-point list all the same, so the list is five.
-            Everything else already runs on the new native or standard model and
-            survives the cutover untouched.
+            >. A fourth is coupled by <em>reading</em> the old records rather
+            than writing them — the analytics extract. And
+            <strong>two are coupled indirectly</strong>: the ERP link and the
+            training platform exchange data only on the new model, but
+            Salesforce automation they trigger reads the retiring records —
+            fixed in Marlex's own automation, not on the vendor side. Everything
+            else already runs on the new native or standard model and survives
+            the cutover untouched.
           </p>
           <p>
             The full measured census — every connection, its traffic and how it
@@ -23196,8 +23193,14 @@
             <span class="term">Arrow colour</span> —
             <span class="term">copper</span> reaches the retiring model, so it
             is on the re-point list; <span class="term">green</span> reaches
-            only the surviving model. <span class="term">Dashed</span> — not
-            carrying production traffic yet (in build, or planned).
+            only the surviving model.
+            <span class="term">Copper dashed outline</span> — indirect coupling:
+            the system exchanges data only on the surviving model, yet
+            Salesforce automation it triggers reads the retiring records. It
+            gets no copper arrow of its own, because the system never touches
+            those records — the coupling is Marlex's own automation and is fixed
+            inside the org. <span class="term">Dashed</span> — not carrying
+            production traffic yet (in build, or planned).
           </p>
 
           <figure class="diagram">
@@ -23219,18 +23222,20 @@
                   A single Salesforce org contains two data models: the
                   surviving native and standard model, and the retiring
                   TargetRecruit model. Named outside systems are grouped by
-                  cutover consequence. Five reach the retiring model and must be
-                  re-pointed: the job board InfoJobs, the sourcing connector
-                  Taleva, the AI pre-screening service Orbio, Microsoft Power BI
-                  whose scheduled extract reads retiring records, and the NET4
-                  ERP, whose own automation looks up retiring applications. The
-                  rest reach only the surviving model and cross the cutover
-                  untouched: Signaturit, Iberinform, Humact and Lectio,
-                  Anthropic and Groq for document reading, Salesforce Data
-                  Cloud, Dolma, DocsMadeEasy, Google Maps, the Indra-built
-                  corporate website and a planned call-transcription service.
-                  Azure AD provides identity. The self-service portals sit
-                  inside the retiring model and leave with the package.
+                  cutover consequence. Four reach the retiring model directly
+                  and must be re-pointed: the job board InfoJobs, the sourcing
+                  connector Taleva, the AI pre-screening service Orbio, and
+                  Microsoft Power BI, whose scheduled extract reads retiring
+                  records. Two more — the NET4 ERP and the Humact training
+                  platform — touch only the surviving model themselves, but
+                  Salesforce automation they trigger reads the retiring records,
+                  so they are coupled indirectly. The rest cross the cutover
+                  untouched: Signaturit, Iberinform and Lectio, Anthropic and
+                  Groq for document reading, Salesforce Data Cloud, Dolma,
+                  DocsMadeEasy, Google Maps, the Indra-built corporate website
+                  and a planned call-transcription service. Azure AD provides
+                  identity. The self-service portals sit inside the retiring
+                  model and leave with the package.
                 </desc>
 
                 <rect
@@ -23348,7 +23353,7 @@
                   font-size="9.5"
                   font-style="italic"
                 >
-                  five systems still reach this model —
+                  four systems reach this model directly —
                 </text>
                 <text
                   class="dg-t-sm"
@@ -23359,15 +23364,6 @@
                   font-style="italic"
                 >
                   each one is a cutover re-point
-                </text>
-                <text
-                  class="dg-t-sm"
-                  x="542"
-                  y="275"
-                  text-anchor="middle"
-                  font-size="9"
-                >
-                  everything here is rebuilt into the model below
                 </text>
 
                 <line
@@ -23800,7 +23796,7 @@
                   font-size="10.5"
                   font-weight="700"
                 >
-                  Reaches only the surviving model
+                  No direct link to the retiring model
                 </text>
                 <text
                   class="dg-t-sm"
@@ -23809,7 +23805,7 @@
                   text-anchor="middle"
                   font-size="9"
                 >
-                  no cutover work — these cross unchanged
+                  these exchange data on the surviving model only
                 </text>
 
                 <rect
@@ -23819,6 +23815,7 @@
                   width="258"
                   height="66"
                   rx="6"
+                  stroke-dasharray="5 3"
                 />
                 <text
                   class="dg-t"
@@ -23833,7 +23830,7 @@
                 <text
                   class="dg-t-sm"
                   x="908"
-                  y="122"
+                  y="121"
                   text-anchor="middle"
                   font-size="8.5"
                 >
@@ -23842,29 +23839,20 @@
                 <text
                   class="dg-t-sm"
                   x="908"
-                  y="133"
+                  y="132"
                   text-anchor="middle"
                   font-size="8.5"
                 >
-                  finance figures feed — all on the surviving model;
+                  finance figures feed — the integration itself
                 </text>
                 <text
-                  class="dg-t-copper"
+                  class="dg-t-sm"
                   x="908"
                   y="143"
                   text-anchor="middle"
-                  font-size="8"
+                  font-size="8.5"
                 >
-                  but an automation it fires reads
-                </text>
-                <text
-                  class="dg-t-copper"
-                  x="908"
-                  y="152"
-                  text-anchor="middle"
-                  font-size="8"
-                >
-                  the retiring records
+                  touches only the surviving model
                 </text>
                 <text
                   class="dg-t-accent"
@@ -23882,7 +23870,7 @@
                   text-anchor="end"
                   font-size="8"
                 >
-                  reads old
+                  indirect
                 </text>
 
                 <rect
@@ -24063,11 +24051,20 @@
                 <text
                   class="dg-t-accent"
                   x="1044"
-                  y="373"
+                  y="371"
                   text-anchor="end"
                   font-size="8.5"
                 >
                   in
+                </text>
+                <text
+                  class="dg-t-copper"
+                  x="1044"
+                  y="383"
+                  text-anchor="end"
+                  font-size="8"
+                >
+                  indirect
                 </text>
 
                 <rect
@@ -24235,22 +24232,24 @@
                   fills native fields
                 </text>
 
-                <path
-                  class="dg-arrow-copper"
-                  d="M792 122 L772 122 L772 200 L698 200"
-                />
-                <polygon
-                  class="dg-fill-copper"
-                  points="694,200 706,194 706,206"
-                />
                 <text
                   class="dg-t-copper"
-                  x="768"
-                  y="196"
-                  text-anchor="end"
+                  x="500"
+                  y="270"
+                  text-anchor="middle"
                   font-size="8"
+                  font-weight="700"
                 >
-                  reads old
+                  plus automation two integrations trigger
+                </text>
+                <text
+                  class="dg-t-sm"
+                  x="500"
+                  y="280"
+                  text-anchor="middle"
+                  font-size="7.5"
+                >
+                  an internal coupling, fixed inside the org
                 </text>
 
                 <path
@@ -24273,7 +24272,7 @@
                   font-size="8.5"
                   font-weight="700"
                 >
-                  all nine
+                  these
                 </text>
                 <text
                   class="dg-t-sm"
@@ -24340,19 +24339,20 @@
                     A single Salesforce org contains two data models: the
                     surviving native and standard model, and the retiring
                     TargetRecruit model. Named outside systems are grouped by
-                    cutover consequence. Five reach the retiring model and must
-                    be re-pointed: the job board InfoJobs, the sourcing
-                    connector Taleva, the AI pre-screening service Orbio,
-                    Microsoft Power BI whose scheduled extract reads retiring
-                    records, and the NET4 ERP, whose own automation looks up
-                    retiring applications. The rest reach only the surviving
-                    model and cross the cutover untouched: Signaturit,
-                    Iberinform, Humact and Lectio, Anthropic and Groq for
-                    document reading, Salesforce Data Cloud, Dolma,
-                    DocsMadeEasy, Google Maps, the Indra-built corporate website
-                    and a planned call-transcription service. Azure AD provides
-                    identity. The self-service portals sit inside the retiring
-                    model and leave with the package.
+                    cutover consequence. Four reach the retiring model directly
+                    and must be re-pointed: the job board InfoJobs, the sourcing
+                    connector Taleva, the AI pre-screening service Orbio, and
+                    Microsoft Power BI, whose scheduled extract reads retiring
+                    records. Two more — the NET4 ERP and the Humact training
+                    platform — touch only the surviving model themselves, but
+                    Salesforce automation they trigger reads the retiring
+                    records, so they are coupled indirectly. The rest cross the
+                    cutover untouched: Signaturit, Iberinform and Lectio,
+                    Anthropic and Groq for document reading, Salesforce Data
+                    Cloud, Dolma, DocsMadeEasy, Google Maps, the Indra-built
+                    corporate website and a planned call-transcription service.
+                    Azure AD provides identity. The self-service portals sit
+                    inside the retiring model and leave with the package.
                   </desc>
 
                   <rect
@@ -24470,7 +24470,7 @@
                     font-size="9.5"
                     font-style="italic"
                   >
-                    five systems still reach this model —
+                    four systems reach this model directly —
                   </text>
                   <text
                     class="dg-t-sm"
@@ -24481,15 +24481,6 @@
                     font-style="italic"
                   >
                     each one is a cutover re-point
-                  </text>
-                  <text
-                    class="dg-t-sm"
-                    x="542"
-                    y="275"
-                    text-anchor="middle"
-                    font-size="9"
-                  >
-                    everything here is rebuilt into the model below
                   </text>
 
                   <line
@@ -24925,7 +24916,7 @@
                     font-size="10.5"
                     font-weight="700"
                   >
-                    Reaches only the surviving model
+                    No direct link to the retiring model
                   </text>
                   <text
                     class="dg-t-sm"
@@ -24934,7 +24925,7 @@
                     text-anchor="middle"
                     font-size="9"
                   >
-                    no cutover work — these cross unchanged
+                    these exchange data on the surviving model only
                   </text>
 
                   <rect
@@ -24944,6 +24935,7 @@
                     width="258"
                     height="66"
                     rx="6"
+                    stroke-dasharray="5 3"
                   />
                   <text
                     class="dg-t"
@@ -24958,7 +24950,7 @@
                   <text
                     class="dg-t-sm"
                     x="908"
-                    y="122"
+                    y="121"
                     text-anchor="middle"
                     font-size="8.5"
                   >
@@ -24967,29 +24959,20 @@
                   <text
                     class="dg-t-sm"
                     x="908"
-                    y="133"
+                    y="132"
                     text-anchor="middle"
                     font-size="8.5"
                   >
-                    finance figures feed — all on the surviving model;
+                    finance figures feed — the integration itself
                   </text>
                   <text
-                    class="dg-t-copper"
+                    class="dg-t-sm"
                     x="908"
                     y="143"
                     text-anchor="middle"
-                    font-size="8"
+                    font-size="8.5"
                   >
-                    but an automation it fires reads
-                  </text>
-                  <text
-                    class="dg-t-copper"
-                    x="908"
-                    y="152"
-                    text-anchor="middle"
-                    font-size="8"
-                  >
-                    the retiring records
+                    touches only the surviving model
                   </text>
                   <text
                     class="dg-t-accent"
@@ -25007,7 +24990,7 @@
                     text-anchor="end"
                     font-size="8"
                   >
-                    reads old
+                    indirect
                   </text>
 
                   <rect
@@ -25188,11 +25171,20 @@
                   <text
                     class="dg-t-accent"
                     x="1044"
-                    y="373"
+                    y="371"
                     text-anchor="end"
                     font-size="8.5"
                   >
                     in
+                  </text>
+                  <text
+                    class="dg-t-copper"
+                    x="1044"
+                    y="383"
+                    text-anchor="end"
+                    font-size="8"
+                  >
+                    indirect
                   </text>
 
                   <rect
@@ -25360,22 +25352,24 @@
                     fills native fields
                   </text>
 
-                  <path
-                    class="dg-arrow-copper"
-                    d="M792 122 L772 122 L772 200 L698 200"
-                  />
-                  <polygon
-                    class="dg-fill-copper"
-                    points="694,200 706,194 706,206"
-                  />
                   <text
                     class="dg-t-copper"
-                    x="768"
-                    y="196"
-                    text-anchor="end"
+                    x="500"
+                    y="270"
+                    text-anchor="middle"
                     font-size="8"
+                    font-weight="700"
                   >
-                    reads old
+                    plus automation two integrations trigger
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="500"
+                    y="280"
+                    text-anchor="middle"
+                    font-size="7.5"
+                  >
+                    an internal coupling, fixed inside the org
                   </text>
 
                   <path
@@ -25398,7 +25392,7 @@
                     font-size="8.5"
                     font-weight="700"
                   >
-                    all nine
+                    these
                   </text>
                   <text
                     class="dg-t-sm"
@@ -25445,17 +25439,27 @@
             <figcaption>
               One org, two data models — and the systems arranged by what the
               cutover owes them.
-              <strong>Only five systems reach the retiring model</strong>, so
-              only five get an arrow of their own: InfoJobs (the one confirmed
-              live writer), Taleva (reads heavily and appears to write, its
-              owner must confirm), Orbio (writes by design, still in the
-              sandbox) and Power BI, whose scheduled extract reads retiring
+              <strong
+                >Only four systems reach the retiring model directly</strong
+              >, so only four get an arrow of their own: InfoJobs (the one
+              confirmed live writer), Taleva (reads heavily and appears to
+              write, its owner must confirm), Orbio (writes by design, still in
+              the sandbox) and Power BI, whose scheduled extract reads retiring
               records — a read, so it returns stale data rather than blocking
-              go-live. NET4 is the fifth and the least obvious: its own traffic
-              stays on the surviving model, but an automation it triggers looks
-              up the retiring applications, so it too is read-coupled. The rest
-              all make the same statement, so they share one arrow rather than
-              repeating it; each carries its own direction tag. Two systems run
+              go-live. Two edges are coupled a different way, and the
+              distinction matters for who fixes them:
+              <strong
+                >NET4 and the Humact training platform never touch the retiring
+                objects themselves</strong
+              >
+              — they exchange data on the surviving model — but Salesforce
+              automation they trigger reads the retiring records. That coupling
+              lives <em>inside the org</em>, in Marlex's own Flow and Apex,
+              which is why it is drawn as the internal dashed hop rather than as
+              an arrow from those systems. Nothing changes on the vendor side to
+              fix it. The rest all make the same statement, so they share one
+              arrow rather than repeating it; each carries its own direction
+              tag. Two systems run
               <strong>two integrations from one box</strong>: Power BI (the
               extract out, and reports embedded back) and the NET4 link (the
               transfer plus the finance figures feed) — the same connection
@@ -25466,8 +25470,8 @@
             </figcaption>
           </figure>
           <div class="tech">
-            <span class="tech-label">For the developers</span>The five re-point
-            edges by object. <strong>InfoJobs</strong> — writes
+            <span class="tech-label">For the developers</span>The re-point edges
+            by object. <strong>InfoJobs</strong> — writes
             <code>AVTRRT__Job_Applicant__c</code> and
             <code>ContentVersion</code> through the guest-user site (<code
               >MA_InfojobWebHook</code
@@ -25482,13 +25486,26 @@
             six <code>MA_Orbio_*</code> fields on
             <code>AVTRRT__Job_Applicant__c</code> / <code>AVTRRT__Job__c</code>,
             present in pre-production, absent in production.
-            <strong>NET4</strong> — the coupling is <em>indirect</em> and does
-            not appear in the ERP classes at all: all sixteen production
-            NET4/ERP Apex classes are free of <code>AVTRRT__</code>, and the
-            inbound endpoint <code>MA_WS_ERP_SF</code> resolves its targets
-            dynamically from <code>MA_Utilidades__c</code>. It comes through
-            Flow. Writing a <code>MA_Log_Integracion__c</code> record — which
-            the integration does on every run — fires
+            <strong>The two indirect edges.</strong> Neither system's own
+            traffic touches the retiring objects; Salesforce automation they
+            trigger does. <strong>Humact / Lectio</strong> — the callback and
+            service classes (<code>MA_WS_HumactCallback</code>,
+            <code>MA_HumactService</code>) are free of <code>AVTRRT__</code>,
+            but two classes on the same asynchronous path,
+            <code>MA_HumactInscriptionService</code> and
+            <code>MA_HumactInscripcionesController</code> (reached via
+            <code>MA_HumactInscriptionQueueable</code>), <em>SOQL</em>
+            <code>AVTRRT__Job__c</code> and <code>AVTRRT__Placement__c</code>.
+            Their DML lands only on the native
+            <code>MA_Humact_Inscripcion__c</code>, and no
+            <code>AVTRRT__</code> object is ever instantiated — so it reads the
+            retiring model and writes the native one. <strong>NET4</strong> —
+            the coupling does not appear in the ERP classes at all: all sixteen
+            production NET4/ERP Apex classes are free of <code>AVTRRT__</code>,
+            and the inbound endpoint <code>MA_WS_ERP_SF</code> resolves its
+            targets dynamically from <code>MA_Utilidades__c</code>. It comes
+            through Flow. Writing a <code>MA_Log_Integracion__c</code> record —
+            which the integration does on every run — fires
             <code>MA_LOG_INTEG_Notificacion_NET4</code>
             (record-triggered, after save, Active), which calls
             <code>MA_Notification_NET4</code> (Active), whose
