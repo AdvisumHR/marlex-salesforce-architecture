@@ -11944,7 +11944,8 @@
                   / 717</span
                 ></span
               ><span class="l"
-                >users work in one app — the stock Sales app, not a bespoke
+                >users work in one app — the org's stock Sales app (labelled
+                <strong>"One"</strong> in the app switcher), not a bespoke
                 recruitment app</span
               >
             </div>
@@ -12624,8 +12625,11 @@
             <code>MX_Facturacion</code>, <code>MA_HumactIntegracion_PS</code>,
             and the <code>Marlex Leader</code> PS (Job+pool VA/MA). Apps come
             from the <code>Marlex</code> profile (both AVTRRT apps visible;
-            default <code>standard__LightningSales</code>). No permission-set
-            groups assigned.
+            default <code>standard__LightningSales</code>, labelled "One" in
+            this org's app switcher — measured via <code>UserAppInfo</code>: 716
+            of ~730 recorded sessions on this app, all desktop form factor,
+            confirming it as actual daily-use, not just the profile default). No
+            permission-set groups assigned.
             <strong
               >Build method: mirror-per-grantor deduped by permission
               signature</strong
@@ -12644,8 +12648,10 @@
             assigns the new sets. Profile object-CRUD is left in place at
             cutover and refactored profile→PS post-cutover. FlexiPage
             assignments per app and record type mirror the existing TR default
-            pages. The stock Sales app can remain the home for users who work
-            there.
+            pages. The stock Sales app ("One") can remain the home for users who
+            work there — it is the app the new recruitment app replaces at
+            cutover for the 699/717 who use it today, not a third app added
+            alongside it.
           </div>
         </section>
 
