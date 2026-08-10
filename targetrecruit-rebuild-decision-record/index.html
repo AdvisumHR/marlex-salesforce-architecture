@@ -11901,8 +11901,11 @@
             (a change users never feel), and the switch becomes: un-assign the
             legacy-app set, assign the new-app and new-object sets. Rolling back
             is the same toggle in reverse. Users keep the exact access level
-            they have now. The reason it is nearly a swap and not a redesign is
-            a fact the audit surfaced:
+            they have now — measured as
+            <em>what each person can actually open and edit</em>, not as a count
+            of the grants they hold, which is a distinction that turned out to
+            matter and is drawn out below. The reason it is nearly a swap and
+            not a redesign is a fact the audit surfaced:
             <strong>the access model is simple and shallow</strong> — a handful
             of user groups, about fifteen objects, no permission-set groups, and
             broadly full access within the recruitment population — with a few
@@ -11922,9 +11925,9 @@
           </p>
           <div class="stat-row">
             <div class="stat">
-              <span class="n">509</span
+              <span class="n">521</span
               ><span class="l"
-                >active users in total; the recruitment population is about 440
+                >active users in total; the recruitment population is about 465
                 of them across four business groups</span
               >
             </div>
@@ -12097,7 +12100,7 @@
               <tbody>
                 <tr>
                   <td><strong>Recruiter</strong> — the core population</td>
-                  <td class="num">~373</td>
+                  <td class="num">~385</td>
                   <td>
                     Create-read-edit-delete on twelve of the objects, but
                     create-read-edit only — <em>no delete</em> — on jobs and the
@@ -12107,7 +12110,7 @@
                 </tr>
                 <tr>
                   <td><strong>Team leader</strong></td>
-                  <td class="num">~39</td>
+                  <td class="num">~40</td>
                   <td>
                     The recruiter's full create-read-edit-delete on all objects,
                     plus a
@@ -12287,10 +12290,15 @@
             The add-on row is a category, not one set: it stands for each
             existing cross-cutting permission set that touches an in-scope
             object or field. The mirror method finds them mechanically — any set
-            granting something we're replacing gets a mirror — so none is
-            missed, however small its assignment count. The largest, a
-            candidature field filter, is assigned to nearly the whole
-            recruitment population, so it is not optional.
+            granting something we're replacing is a <em>candidate</em> for a
+            mirror — so none is missed, however small its assignment count. The
+            largest, a candidature field filter, is assigned to nearly the whole
+            recruitment population, so it is not optional. Being found is not
+            the same as being rebuilt, though: a candidate earns its mirror only
+            if it actually widens what its holders can do, measured per holder.
+            That test, and what it removed, is set out under
+            <a href="#grants-that-add-nothing">grants that add nothing</a>
+            below.
           </p>
           <p>
             <strong
@@ -12371,6 +12379,194 @@
           </div>
         </section>
 
+        <section id="grants-that-add-nothing">
+          <p class="section-eyebrow">What "the same access" actually means</p>
+          <h2>Two things a faithful copy has to get right</h2>
+          <p>
+            Reproducing access sounds like copying a list. Measuring the live
+            platform user by user showed it is not, because two different things
+            can both be called "the same access" and they do not agree with each
+            other. One is the set of grants a person holds. The other is what
+            that person can actually open and edit. Where the two diverge,
+            copying the first faithfully reproduces paperwork; copying the
+            second reproduces the job. Both rules below choose the second, and
+            each was settled by measurement rather than preference.
+          </p>
+
+          <h3>Grants that add nothing are not rebuilt</h3>
+          <p>
+            The mirror method above finds every grant that touches something
+            being replaced. Testing what those grants deliver produced an
+            uncomfortable result: one of them, covering four placement fields
+            and held by thirty people, gives twenty-four of them nothing at all,
+            because the access their role already carries makes those four
+            fields editable anyway. Comparing a holder against a non-holder with
+            the same underlying role returns an identical answer on every field
+            of the object — the grant is real metadata that changes nobody's
+            day.
+          </p>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Copy every grant one for one, so nothing can be missed</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              Mechanical, auditable, and impossible to lose a right by. It also
+              rebuilds empty containers on the new objects and works directly
+              against the goal of reaching the smallest set of grants that
+              reproduces today's access. The current estate is what a decade of
+              "keep it, clean it later" produces, and the cleaning never came.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Rebuild a grant only where it widens what its holders can do,
+                proven per holder</span
+              ><span class="chip adopted">Adopted</span>
+            </div>
+            <p>
+              The test is the comparison described above, run for each grant
+              against its own holders. Where it adds something, it is rebuilt.
+              Where it adds something for only part of its holders, it is
+              rebuilt for those people alone. Where it adds nothing, it is not
+              rebuilt and the measurement that showed so is written down, so a
+              later reader sees a decision with evidence rather than an
+              unexplained gap. What makes this safe is that "adds nothing"
+              stopped being a matter of judgement and became a result anyone can
+              reproduce.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Redesign the grants into clean roles while we are in here</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              Tempting, and the wrong exercise. It is a redesign wearing the
+              costume of a reproduction, and it rounds off precisely the small
+              differences that have to survive — the core recruitment population
+              creating and editing jobs and the talent pool but not deleting
+              them, a team leader's wider reach covering two objects rather than
+              the whole model.
+            </p>
+          </div>
+
+          <h3>Field security in the new code, decided by who is acting</h3>
+          <p>
+            The second divergence is invisible in any permission table. The
+            platform runs code with field and object checks switched off unless
+            a developer switches them on, and the setting that governs which
+            records a person reaches is a different setting from the one that
+            governs which fields they can open — so code can respect the first
+            and quietly ignore the second. A read of the code Marlex owns found
+            that roughly a third of it touches the objects being rebuilt, and
+            exactly one class checks field access at all. Reproducing the
+            permission tables perfectly therefore does not, on its own,
+            reproduce what people can do.
+          </p>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Carry the current behaviour across — write the new code the
+                same way, checks off</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              It guarantees nobody loses anything, which is the right instinct
+              and the reason it was the starting assumption. It also carries the
+              whole of the current exposure into a system being built from
+              scratch, including code that writes candidate details with no
+              field check at all, and it commits the rebuild to the one habit
+              the build standard was written to end.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Switch the checks on everywhere, uniformly</span
+              ><span class="chip rejected">Rejected</span>
+            </div>
+            <p>
+              One rule, easy to teach, and it breaks production. A small number
+              of fields are written only by automation — the doors inbound feeds
+              arrive through, scheduled jobs, logic that fires on save — and
+              those fields appear in no business user's access at all. Enforcing
+              a user's access in code that runs without a user simply fails the
+              write.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Enforce where a person acts; stay explicit where automation
+                writes</span
+              ><span class="chip adopted">Adopted</span>
+            </div>
+            <p>
+              Where somebody clicks something — a screen, a button, an action
+              they fire — the code respects that person's field and object
+              access. Where the platform writes on its own, it keeps writing as
+              it does today and the code says why in a comment, so the next
+              reader sees a decision instead of an omission. The reason this is
+              not a trade of access for tidiness is that it was measured first:
+              testing every user's real field access against the fields each
+              piece of code writes, across the three busiest objects, found no
+              case where enforcing checks in the screens takes away anything a
+              person can do today. The tightening is free; the exemption is
+              where it is genuinely needed.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >A named grant may act as the gate for an administrative
+                tool</span
+              ><span class="chip limited">Limited</span>
+            </div>
+            <p>
+              Where a tool is reachable only by holding one specific grant, that
+              grant can be the control, and the code records which grant it is
+              relying on. This is not a loophole invented here — it is a pattern
+              already in use and already documented in the code, by the team
+              that wrote it, for exactly the case it fits. Keeping it as a named
+              exception with a stated dependency is what stops it becoming an
+              excuse everywhere else.
+            </p>
+          </div>
+
+          <div class="tech">
+            <p>
+              <strong>For the developers</strong> Measured on the live platform:
+              of 428 customer-owned Apex classes, 133 reference an in-scope
+              object — 34 user-entry classes (<code>@AuraEnabled</code>,
+              <code>@InvocableMethod</code>, page controllers), 8 trigger
+              handlers, 14 batch/queueable/scheduled, 32 services, 45 test.
+              Exactly one enforces field security (<code
+                >Database.query(..., AccessLevel.USER_MODE)</code
+              >). Note <code>with sharing</code> governs records only — it does
+              <em>not</em> impose field-level security; that needs
+              <code>WITH USER_MODE</code>,
+              <code>WITH SECURITY_ENFORCED</code> or
+              <code>Security.stripInaccessible</code>. Cross-check of effective
+              field-level security per user against the fields each class
+              writes, over the three highest-write objects: no user-entry class
+              writes a field outside its own user's field-level security;
+              <code>MA_External_Id_InfoJobs__c</code> and
+              <code>AVTRRT__State__c</code> are written only from webhook, batch
+              and trigger paths and sit in no business profile's field-level
+              security — those stay in system mode deliberately. Detection
+              caveat for reviewers: grepping for the enforcement APIs produces
+              false positives, because at least two classes name
+              <code>stripInaccessible</code> inside a comment stating they do
+              <em>not</em> call it; match code, not comments, and filter by
+              execution context before flagging.
+            </p>
+          </div>
+        </section>
+
         <section>
           <p class="section-eyebrow">App &amp; screen access</p>
           <h2>The right pages on the right objects, on day one</h2>
@@ -12409,7 +12605,7 @@
             <span class="tech-label">For the developers</span>Object rights
             verified live on the 14 in-scope AVTRRT objects (2026-07-16 prod
             read). The four recruitment profiles are <em>not</em> uniformly
-            full-CRUD: <code>Marlex</code> (373 users) = CRED on 12 objects but
+            full-CRUD: <code>Marlex</code> (385 users) = CRED on 12 objects but
             CRE- (no delete) on <code>AVTRRT__Job__c</code> +
             <code>AVTRRT__Hotbook__c</code>, no ViewAll/ModifyAll anywhere;
             <code>Marlex Director</code> (22) = CRED on all 14, no ViewAll;
