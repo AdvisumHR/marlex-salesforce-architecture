@@ -6590,6 +6590,27 @@
             package plumbing is left behind. There is no "recently used"
             judgement — presence of data is the whole signal.
           </p>
+          <p>
+            <strong
+              >The rule has exactly one recorded exception, and it is
+              deliberate.</strong
+            >
+            Two fields that mark a candidate as
+            <strong>internal rather than external</strong> — one on the
+            candidate, one on the application — are
+            <strong>carried even though both are empty</strong>. The rule would
+            drop them, and in this single case the rule gives the wrong answer:
+            what would be dropped is not stale data but the
+            <em>capability</em> the future confidential internal-recruitment
+            model depends on. Unlike almost anything else here, this information
+            <strong>cannot be reconstructed later</strong> — whether a past
+            process was internal is knowable only at the moment the record is
+            created, so a field added afterwards would have nothing truthful to
+            put in it. Adding it now, to objects that start empty, costs almost
+            nothing. Every migrated record keeps the value "external", which is
+            accurate rather than a placeholder, and
+            <strong>no access behaviour is attached to it at cutover</strong>.
+          </p>
         </div>
 
         <section>
@@ -6604,10 +6625,12 @@
               >
             </div>
             <div class="stat">
-              <span class="n">314</span
+              <span class="n">316</span
               ><span class="l"
-                >fields carry data and are rebuilt, of 1,139 non-system fields
-                examined — the other 825 are empty, formulas or plumbing</span
+                >fields are rebuilt, of 1,139 non-system fields examined — the
+                other 823 are empty, formulas or plumbing. 314 are carried
+                because they hold data; 2 are carried despite holding none, for
+                the reason below</span
               >
             </div>
             <div class="stat">
@@ -6673,14 +6696,14 @@
                 <tr>
                   <td><strong>Contact</strong></td>
                   <td class="num">1,097,122</td>
-                  <td class="num">51</td>
+                  <td class="num">52</td>
                   <td><code>Contact</code></td>
                   <td>Back-fill in place</td>
                 </tr>
                 <tr>
                   <td><strong>Job_Applicant</strong></td>
                   <td class="num">1,404,424</td>
-                  <td class="num">66</td>
+                  <td class="num">67</td>
                   <td><code>Application__c</code></td>
                   <td>Migrate + archive</td>
                 </tr>
@@ -7020,10 +7043,13 @@
             <p class="callout-h">How each field was decided</p>
             <ul>
               <li>
-                <strong>Kept</strong> — the field holds real data. Its measured
-                fill rate is shown in the table beside it; anything above zero
-                that isn't a formula or a piece of plumbing is kept, however
-                low, because low-but-real data is still someone's record.
+                <strong>Kept</strong> — the field holds real data (with the two
+                deliberate exceptions noted at the top of this page, which are
+                kept for a requirement rather than for their contents). Its
+                measured fill rate is shown in the table beside it; anything
+                above zero that isn't a formula or a piece of plumbing is kept,
+                however low, because low-but-real data is still someone's
+                record.
               </li>
               <li>
                 <strong>Dropped</strong> — one of three things is true: the
@@ -7203,6 +7229,12 @@
                     <td>AVTRRT__Integration_Source__c</td>
                     <td class="num">0.0%</td>
                     <td><code>Integration_Source__c</code></td>
+                    <td><span class="origin-rename">renamed</span></td>
+                  </tr>
+                  <tr>
+                    <td>AVTRRT__Internal_Candidate__c</td>
+                    <td class="num">0%</td>
+                    <td><code>Internal_Candidate__c</code></td>
                     <td><span class="origin-rename">renamed</span></td>
                   </tr>
                   <tr>
@@ -7493,6 +7525,12 @@
                     <td>Data_Source__c</td>
                     <td class="num">52.303%</td>
                     <td><code>Data_Source__c</code></td>
+                    <td><span class="origin-carry">carried</span></td>
+                  </tr>
+                  <tr>
+                    <td>Employee_Type__c</td>
+                    <td class="num">0%</td>
+                    <td><code>Employee_Type__c</code></td>
                     <td><span class="origin-carry">carried</span></td>
                   </tr>
                   <tr>
