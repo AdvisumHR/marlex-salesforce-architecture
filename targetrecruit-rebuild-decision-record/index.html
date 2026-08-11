@@ -490,6 +490,56 @@
   .tech code {
     font-size: 0.85em;
   }
+  /* Structured "For the developers" blocks. These carry dense measured detail;
+     as one paragraph they read as a wall of text, so allow a labelled-row
+     layout (dt/dd) and bullets inside the block. */
+  .tech p {
+    margin: 0 0 0.5rem;
+  }
+  .tech p:last-child {
+    margin-bottom: 0;
+  }
+  .tech ul {
+    margin: 0.35rem 0 0.6rem;
+    padding-left: 1.1rem;
+  }
+  .tech ul:last-child {
+    margin-bottom: 0;
+  }
+  .tech li {
+    margin-bottom: 0.3rem;
+  }
+  .tech li:last-child {
+    margin-bottom: 0;
+  }
+  .tech dl {
+    display: grid;
+    grid-template-columns: 10.5rem 1fr;
+    column-gap: 0.9rem;
+    row-gap: 0.45rem;
+    margin: 0.45rem 0 0;
+  }
+  .tech dt {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--accent);
+    padding-top: 0.12rem;
+  }
+  .tech dd {
+    margin: 0;
+  }
+  @media (max-width: 34rem) {
+    .tech dl {
+      grid-template-columns: 1fr;
+      row-gap: 0.15rem;
+    }
+    .tech dd {
+      margin-bottom: 0.5rem;
+    }
+  }
 
   .questions {
     display: flex;
@@ -1576,6 +1626,12 @@
     >
     <a class="navlink" data-view="security" href="#view-security"
       ><span class="n">5</span><span>Security</span></a
+    >
+    <a
+      class="navlink nonum"
+      data-view="record-access"
+      href="#view-record-access"
+      >· Who reaches which records</a
     >
     <a class="navlink" data-view="access" href="#view-access"
       ><span class="n">6</span><span>Access & app switch</span></a
@@ -11271,6 +11327,28 @@
             batch of new metadata. The question this decision answers is
             <em>when</em> that work lands, not whether.
           </p>
+          <p>
+            A record-by-record audit of the objects being rebuilt has since
+            confirmed that reading and sharpened it. Of the thirteen recruitment
+            objects in scope,
+            <strong
+              >eleven are open to every internal user and carry no sharing
+              configuration at all</strong
+            >
+            — the platform's sharing tables for them are empty, because nothing
+            is restricted enough to need a share. The two exceptions turn out
+            not to be exceptions:
+            <strong
+              >the talent-pool object is marked private, but a rule reopens
+              every one of its records to everyone with edit rights</strong
+            >, and the education history is a child record whose access is its
+            parent's by definition. So the access model to reproduce at cutover
+            is
+            <strong>one setting per object, not a sharing architecture</strong>
+            — the evidence, and what it changes about the tightening stage, is
+            on
+            <a href="#view-record-access">the record-access evidence page</a>.
+          </p>
         </section>
 
         <section>
@@ -11415,12 +11493,52 @@
                 a data-layer flag (a record type plus an
                 <code>Is_External__c</code> boolean); internal HR processes are
                 private and roll up a
-                <strong>hierarchical internal role tree</strong>, so HR sees all
-                internal work, a regional director sees only their own and those
-                beneath them, and nobody sees upward. It is a scoped project
-                with its own rehearsal and its own rollback — not a step bolted
-                to go-live — and it runs when the calendar is empty of other
-                risk, not on cutover morning.
+                <strong>dedicated internal structure of their own</strong> —
+                deliberately separate from the commercial management tree,
+                because that tree grants access upward and these processes must
+                not — so HR sees all internal work, a regional director sees
+                only their own and those beneath them, and nobody sees upward.
+                It is a scoped project with its own rehearsal and its own
+                rollback — not a step bolted to go-live — and it runs when the
+                calendar is empty of other risk, not on cutover morning.
+              </p>
+              <p>
+                One correction the audit forces on this plan, worth stating
+                before the stage is scoped:
+                <strong
+                  >the existing management structure has no country level in
+                  it</strong
+                >. It runs from the company root through business areas and
+                Spanish sub-regions down to individual offices — the handful of
+                positions whose names read like a region are Spanish
+                sub-regions, not countries, because the company has only ever
+                operated one. A country-keyed model therefore needs a
+                <strong>new tier added above what exists</strong>, not a re-use
+                of the current structure. Nor is there usable scaffolding to
+                inherit: the org holds around 150 sharing groups named after
+                offices, and the large majority are
+                <strong>empty shells that grant nothing to anyone</strong>. Both
+                are sizing facts for the tightening stage, not blockers to it.
+              </p>
+              <p>
+                A second correction lands on the internal-versus-external axis
+                specifically. Automatic roll-up to a person's management chain
+                is
+                <strong>switched on for every object checked</strong> — which is
+                invisible today, because everyone already reaches everything.
+                But roll-up grants access <strong>upward</strong>, and the
+                confidential internal process described above must be invisible
+                upward, to the very person being replaced.
+                <strong
+                  >Those two requirements cannot both hold on the same
+                  structure.</strong
+                >
+                So the internal model is built on
+                <strong>a structure of its own</strong>, not on the commercial
+                management tree — and the periphery records around a
+                confidential process (interviews, screenings, placements,
+                attachments) are checked with it, so the process cannot leak
+                through a child record that stayed open.
               </p>
             </div>
             <div class="tmpl-step">
@@ -11458,6 +11576,27 @@
                 while the objects are still open, so the privatisation stage has
                 nothing to retro-fit; the existing routines are corrected as
                 their objects are touched.
+              </p>
+              <p>
+                The audit read all four line by line and
+                <strong>confirmed the warning</strong> — none of them tests a
+                country or a region anywhere. It also found the exposure is
+                wider than four routines and sets the order of work. Roughly
+                <strong
+                  >250 custom components do not apply the record-access
+                  model</strong
+                >, which has <em>no effect today</em> because nothing is
+                restricted — and becomes a live bypass the moment any object is
+                tightened. So the tightening runs
+                <strong
+                  >per object, in one order: correct that object's components
+                  first, tighten it second, re-verify third</strong
+                >. Never the reverse. The four routines themselves sit on the
+                commercial offer and invoice records rather than the recruitment
+                ones, so they are a neighbouring clean-up rather than part of
+                this rebuild — detail on
+                <a href="#view-record-access">the record-access evidence page</a
+                >.
               </p>
             </div>
           </div>
@@ -11846,6 +11985,1351 @@
             production-org audit and live access-model queries.
           </p>
         </footer>
+      </div>
+    </section>
+    <section class="page-view" id="view-record-access">
+      <div class="wrap-inner">
+        <header class="masthead">
+          <p class="eyebrow">Security · reference</p>
+          <h1>Who can reach which records</h1>
+          <p class="subtitle">
+            The measured evidence behind the
+            <a href="#view-security">security &amp; sharing decision</a>: every
+            mechanism that grants access to individual <em>records</em> on the
+            objects being rebuilt, what each one actually does today, and the
+            smallest configuration that reproduces it. This is the census, not
+            the argument.
+          </p>
+          <p class="dateline">
+            Measured live · production org · read-only · 11 August 2026
+          </p>
+        </header>
+
+        <div class="bluf">
+          <p>
+            <strong>Read this if</strong> you need to know why a given user can
+            or cannot open a given record, or you are about to tighten one of
+            these objects. The
+            <a href="#view-security">decision page</a> explains
+            <em>when</em> the model is tightened; this page is the line-by-line
+            <em>what is there now</em>.
+          </p>
+          <p>
+            <strong>The finding in one line:</strong> there is almost no
+            record-access model to reproduce.
+            <strong>Eleven of the thirteen</strong> recruitment objects being
+            rebuilt are open to every internal user with no sharing
+            configuration whatsoever — the platform's sharing tables for them
+            are <strong>empty</strong>. Reproducing today's behaviour needs
+            <strong>one setting per object plus at most one rule</strong>, not a
+            sharing architecture. The effort belongs to the later tightening
+            stage, not to cutover.
+          </p>
+          <p>
+            <strong
+              >Two projects, not one — and this page belongs to the
+              first.</strong
+            >
+            The rebuild's job on record access is
+            <strong>to replicate what exists today onto the new objects</strong
+            >. Nothing more. Making the model private is a
+            <strong>separate, later project</strong> with its own scope, timing,
+            rehearsal and rollback — it is not a phase of the rebuild and does
+            not share its plan. That separation is deliberate: the rebuild is
+            already the largest change the business will absorb, and the current
+            model is so open that replicating it carries almost no risk, while
+            tightening it carries a great deal. So everything below describes
+            <strong>what to replicate</strong>. Where the audit turned up
+            something the future privatisation project will need to know, it is
+            marked as an <strong>input handed to that project</strong> — never
+            as work this one takes on.
+          </p>
+          <p>
+            <strong
+              >Why this is a separate page from the permissions audit.</strong
+            >
+            Two different questions get confused constantly.
+            <em>Which objects and fields</em> a person can reach is decided by
+            their profile and permission sets — that is the
+            <a href="#view-access">access page</a>. <em>Which records</em> of
+            those objects they can reach is decided by the mechanisms below. A
+            person needs <strong>both</strong>, and this page contains a
+            measured case that proves it.
+          </p>
+        </div>
+
+        <section>
+          <p class="section-eyebrow">The census</p>
+          <h2>Eleven objects wide open, one private in name only</h2>
+          <div class="stat-row">
+            <div class="stat">
+              <span class="n"
+                >11<span style="font-size: 0.9rem; color: var(--ink-soft)">
+                  / 13</span
+                ></span
+              ><span class="l"
+                >objects in scope are open to every internal user, with zero
+                sharing records — nothing is restricted, so nothing is
+                shared</span
+              >
+            </div>
+            <div class="stat">
+              <span class="n">640</span
+              ><span class="l"
+                >talent pools marked private, of which <strong>640</strong> are
+                reopened to everyone by a single rule — the privacy is
+                nominal</span
+              >
+            </div>
+            <div class="stat">
+              <span class="n">0</span
+              ><span class="l"
+                >custom programmatic sharing on any object in scope — no code
+                grants record access to the recruitment data</span
+              >
+            </div>
+          </div>
+          <p>
+            Ordered by cutover priority. "Sharing records" counts the rows the
+            platform stores to grant one record to one recipient; an empty table
+            means every internal user already reaches every record through the
+            object's default, so the platform has nothing to record.
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl objtbl">
+              <colgroup>
+                <col class="c-obj" />
+                <col class="c-nat" />
+                <col class="c-disp" />
+                <col class="c-num" />
+                <col class="c-disp" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Package object</th>
+                  <th>Native replacement</th>
+                  <th>Default access</th>
+                  <th class="num">Sharing records</th>
+                  <th>Mechanism in play</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Placement</strong></td>
+                  <td><code>Placement__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Interview</strong></td>
+                  <td><code>Interview__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Hotbook</strong></td>
+                  <td><code>Talent_Pool__c</code></td>
+                  <td><strong>Private</strong></td>
+                  <td class="num">1,404</td>
+                  <td><strong>Rule reopens all + ownership</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Contact</strong></td>
+                  <td><code>Contact</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Job_Applicant</strong></td>
+                  <td><code>Application__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Job</strong></td>
+                  <td><code>ATS_Job__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Employment_History</strong></td>
+                  <td><code>Employment_History__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Educational_History</strong></td>
+                  <td><code>Education_History__c</code></td>
+                  <td><strong>Follows its parent</strong></td>
+                  <td class="num">n/a</td>
+                  <td><strong>Inherited from the candidate</strong></td>
+                </tr>
+                <tr>
+                  <td><strong>Candidate_to_Hotbook</strong></td>
+                  <td><code>Talent_Pool_Member__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Source_To_Candidate</strong></td>
+                  <td><code>Candidate_Source__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Source</strong></td>
+                  <td><code>Source__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>References</strong></td>
+                  <td><code>Reference__c</code></td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td><strong>Scratch_Sheet</strong></td>
+                  <td>Deal sheet, native</td>
+                  <td>Read/write to all</td>
+                  <td class="num">0</td>
+                  <td>Default only</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Account</strong>
+                    <span style="color: var(--ink-soft)"
+                      >(parent, not rebuilt)</span
+                    >
+                  </td>
+                  <td><code>Account</code></td>
+                  <td>Read to all</td>
+                  <td class="num">707,623</td>
+                  <td>Rules + teams + inheritance</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The education history has no sharing table at all, which is correct
+            rather than missing: it is a child record whose access
+            <em>is</em> its parent candidate's, by definition of the
+            relationship. The account row is included because it is a parent
+            that projects access onto records in scope — it is not itself being
+            rebuilt, and it is the only object here with a genuine sharing
+            model.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">The one apparent exception</p>
+          <h2>The private talent pool that everyone can edit</h2>
+          <p>
+            The talent-pool object is the single object in scope with a real
+            sharing configuration, and it resolves to
+            <strong>no boundary at all</strong>:
+          </p>
+          <div class="cards">
+            <div class="card">
+              <h3>What is configured</h3>
+              <p>
+                The object's default is <strong>private</strong> — on paper,
+                only a pool's owner and their management chain reach it. One
+                rule then says: any pool whose visibility field reads "public"
+                is shared with
+                <strong>every internal user, with edit rights</strong>.
+              </p>
+            </div>
+            <div class="card">
+              <h3>What that produces</h3>
+              <p>
+                <strong>All 640 pools are set to "public"</strong> — not one is
+                private. So the rule fires on every record, and the platform
+                stores 640 sharing rows granting edit to everyone. The private
+                default is cancelled in full.
+              </p>
+            </div>
+            <div class="card">
+              <h3>What it means for the rebuild</h3>
+              <p>
+                Two mechanisms produce exactly what
+                <strong>one</strong> produces. Carrying the pair forward copies
+                complexity with no behavioural effect — and a rule that must be
+                recalculated whenever the data changes.
+              </p>
+            </div>
+          </div>
+          <div class="callout">
+            <p>
+              <strong
+                >A trap worth recording, because it looks like a defect and is
+                not.</strong
+              >
+              The rule's stored definition tests the visibility field against
+              the value <code>Público</code>, while the value actually stored on
+              every record is <code>Public</code> — and the field offers only
+              <code>Public</code> and <code>Private</code>. That reads like a
+              rule matching nothing. It matches everything: the platform saves
+              picklist criteria using the <em>translated label</em> as seen by
+              whoever authored the rule, so the Spanish word is a storage
+              artefact, not the comparison. Verified the only way that settles
+              it — all 640 records are public, and all 640 carry a
+              rule-generated sharing row.
+              <strong
+                >Check the sharing rows before calling a rule broken.</strong
+              >
+            </p>
+          </div>
+          <p>
+            There are also 124 manually-shared rows on this object, created by
+            people through the record's own sharing button — no code writes
+            them. They are redundant, because every one of those records is
+            already shared to everyone with edit rights by the rule.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Mechanism inventory</p>
+          <h2>What is switched on, and what merely exists</h2>
+          <p>
+            Salesforce offers roughly a dozen ways to grant access to a record.
+            Auditing all of them against the objects in scope, almost none is
+            engaged:
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Mechanism</th>
+                  <th>Status on the objects in scope</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Object default</strong></td>
+                  <td>
+                    <strong>The only live mechanism</strong> — decides
+                    everything on 11 of 13 objects
+                  </td>
+                </tr>
+                <tr>
+                  <td>Rules based on ownership</td>
+                  <td><strong>None</strong>, on any object in scope</td>
+                </tr>
+                <tr>
+                  <td>Rules based on record content</td>
+                  <td>
+                    <strong>One</strong> (the talent pool, above), plus two on
+                    the account
+                  </td>
+                </tr>
+                <tr>
+                  <td>Manual sharing by users</td>
+                  <td>124 rows, talent pool only — redundant with the rule</td>
+                </tr>
+                <tr>
+                  <td>Programmatic sharing by code</td>
+                  <td>
+                    <strong>None on any object in scope</strong> — see below
+                  </td>
+                </tr>
+                <tr>
+                  <td>Management-chain roll-up</td>
+                  <td>
+                    <strong>Switched on everywhere</strong> — but adds nothing
+                    while access is already open; see below
+                  </td>
+                </tr>
+                <tr>
+                  <td>Account and opportunity teams</td>
+                  <td>
+                    Heavily used —
+                    <strong
+                      >but on the account, not on recruitment records</strong
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>Territory management</td>
+                  <td><strong>Not enabled</strong> in this org at all</td>
+                </tr>
+                <tr>
+                  <td>Sharing groups</td>
+                  <td>
+                    ~150 exist; <strong>none receives a single share</strong> on
+                    any object in scope
+                  </td>
+                </tr>
+                <tr>
+                  <td>Queues</td>
+                  <td>Four, small, none used to share records in scope</td>
+                </tr>
+                <tr>
+                  <td>Inheritance from a parent record</td>
+                  <td>
+                    The education history; a small number of rows on the account
+                  </td>
+                </tr>
+                <tr>
+                  <td>External and job-board visitors</td>
+                  <td>
+                    Eight anonymous users,
+                    <strong
+                      >no object rights, no position in the structure</strong
+                    >
+                  </td>
+                </tr>
+                <tr>
+                  <td>Bundled permission sets</td>
+                  <td>
+                    Fifteen exist, all shipped by Salesforce,
+                    <strong>none assigned to anybody</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The sharing groups deserve a note, because they look like
+            scaffolding to build on and are not. Around 150 exist, most named
+            after individual offices, and
+            <strong>the large majority have no members and grant nothing</strong
+            >. They are the remains of an office-based model that was started
+            and never populated. The tightening stage should treat them as
+            debris to ignore or clean up — not as a foundation.
+          </p>
+          <div class="callout">
+            <p>
+              <strong
+                >Management-chain roll-up is switched on for every object
+                checked</strong
+              >
+              — the talent pool, placements, interviews and the account. This
+              setting decides whether a manager automatically reaches the
+              records owned by the people who report to them. It had to be read
+              off the sharing settings screen by hand, because
+              <strong>no read-only interface exposes it</strong> on this org,
+              and a behavioural test could not isolate it either: every senior
+              person tested either held org-wide administrator rights (whose
+              access proves nothing) or already had an explicit grant from the
+              cascading routines, which are broad enough to hide the setting
+              completely.
+            </p>
+            <p>
+              <strong
+                >Being switched on changes nothing today, and nothing at
+                cutover.</strong
+              >
+              On the nine objects that are open to everyone, the roll-up is
+              <em>inert</em> — everybody already reaches everything, so there is
+              nothing left for it to add. On the talent pool it is inert for the
+              same reason, one step removed: the rule has already opened every
+              record to everyone. It is only genuinely doing work on the
+              <strong>account</strong>, where it is what raises a manager from
+              read to edit on their reports' records. Reproducing this means
+              <strong>leaving it on</strong>, which is also the platform's
+              default for new objects — so there is no work here, and no
+              configuration to write.
+            </p>
+            <p>
+              <strong
+                >It becomes a real decision at the tightening stage, and an
+                awkward one.</strong
+              >
+              The moment a recruitment object is made private, this setting
+              decides whether managers see their team's records — almost
+              certainly wanted for placements and interviews, since an office
+              manager should see their recruiters' work. But it collides with
+              the confidential internal-recruitment requirement in the
+              <a href="#view-security">decision</a>, which needs a process to be
+              invisible <em>upward</em> — to the very person being replaced.
+              <strong>Roll-up grants access upward by definition</strong>, and
+              switching it off is a blunt instrument that applies to a whole
+              object at once. The conclusion to carry forward: the confidential
+              internal branch needs to be built on
+              <strong>a structure of its own</strong>, not on the existing
+              management tree with the roll-up bent into hiding things.
+            </p>
+          </div>
+          <div class="tech">
+            <span class="tech-label">For the developers</span>
+            <dl>
+              <dt>Defaults</dt>
+              <dd>
+                Read from <code>EntityDefinition.InternalSharingModel</code> /
+                <code>ExternalSharingModel</code>, cross-checked against a
+                Metadata API retrieve of each <code>.object</code> — no
+                discrepancies.
+              </dd>
+              <dt>Sharing rules</dt>
+              <dd>
+                Retrieved as <code>SharingRules</code> for all 14 members:
+                <strong>3 rules total</strong>, all criteria-based —
+                <code>Hotbook_Sharing_Rule</code>, plus
+                <code>Colaboraci_n_Sedes</code> and
+                <code>Colaboracion_cuentas_sin_asignar1</code> on Account.
+                <strong>Zero owner-based.</strong> The twelve zero-rule objects
+                returned well-formed empty root elements: retrieved and
+                genuinely empty, not failed retrieves.
+              </dd>
+              <dt>Share tables</dt>
+              <dd>
+                Counted by <code>RowCause</code>.
+                <code>AVTRRT__Educational_History__Share</code> does not exist —
+                master-detail child, expected.
+              </dd>
+              <dt>Sharing reasons</dt>
+              <dd>
+                <strong>Zero</strong>, confirmed two independent ways: no
+                <code>&lt;sharingReasons&gt;</code> in any retrieved object, and
+                the <code>RowCause</code> picklist on all 13 share objects holds
+                only the 26 standard platform values.
+              </dd>
+              <dt>Territory</dt>
+              <dd>
+                <code>Territory2</code> is not a queryable sObject — the feature
+                is not enabled.
+              </dd>
+              <dt>Group census</dt>
+              <dd>
+                780 <code>Group</code> rows: 190 Role · 190 RoleAndSubordinates
+                · 190 RoleAndSubordinatesInternal · 153 Regular (124 with zero
+                members) · 8 GuestUserGroup · 4 Queue · 1 Organization.
+              </dd>
+            </dl>
+          </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">The structure</p>
+          <h2>The management structure is built from offices, not countries</h2>
+          <p>
+            The tightening stage in the
+            <a href="#view-security">decision</a> assumes a country key
+            re-granting access within a country. The structure that exists
+            cannot carry that assumption:
+          </p>
+          <div class="cards">
+            <div class="card">
+              <h3>What exists</h3>
+              <p>
+                <strong>190 positions, eight levels deep</strong>, running from
+                the company root through business areas and Spanish sub-regions
+                down to <strong>individual offices</strong>. 112 of them hold
+                active people; 497 people are placed in the structure.
+              </p>
+            </div>
+            <div class="card">
+              <h3>The naming trap</h3>
+              <p>
+                Only <strong>ten</strong> position names contain the word
+                "region", and all ten are <strong>Spanish sub-regions</strong> —
+                Barcelona, Madrid, Levante, Norte, Sur, Aragón, Girona and so
+                on. None is a country.
+              </p>
+            </div>
+            <div class="card">
+              <h3>What follows</h3>
+              <p>
+                There is <strong>no country level anywhere</strong>, because the
+                business has only ever run one country. A country-keyed model
+                needs a <strong>new tier added above what exists</strong> — not
+                a reinterpretation of it.
+              </p>
+            </div>
+          </div>
+          <p>
+            This is a sizing correction for the tightening stage rather than an
+            obstacle to it, and it is better known now than discovered during
+            that work.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Ownership</p>
+          <h2>
+            Most records belong to a placeholder, which makes the structure
+            inert
+          </h2>
+          <p>
+            Ownership is what the management structure rolls up
+            <em>through</em>. Where records sit on a placeholder account, no
+            ownership-based mechanism can ever do anything useful — the
+            structure has nothing real to roll up. Measured, the largest owner
+            per object:
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Object</th>
+                  <th>Largest single owner</th>
+                  <th>Its position</th>
+                  <th class="num">Records</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Job_Applicant</td>
+                  <td><strong>Unassigned placeholder</strong></td>
+                  <td>Company root</td>
+                  <td class="num">711,054</td>
+                </tr>
+                <tr>
+                  <td>Contact</td>
+                  <td><strong>Unassigned placeholder</strong></td>
+                  <td>Company root</td>
+                  <td class="num">707,585</td>
+                </tr>
+                <tr>
+                  <td>Employment_History</td>
+                  <td>Migration service account</td>
+                  <td><strong>No position at all</strong></td>
+                  <td class="num">339,041</td>
+                </tr>
+                <tr>
+                  <td>Account</td>
+                  <td><strong>Unassigned placeholder</strong></td>
+                  <td>Company root</td>
+                  <td class="num">178,664</td>
+                </tr>
+                <tr>
+                  <td>Source_To_Candidate</td>
+                  <td>Migration service account</td>
+                  <td><strong>No position at all</strong></td>
+                  <td class="num">70,644</td>
+                </tr>
+                <tr>
+                  <td>Job</td>
+                  <td><strong>Unassigned placeholder</strong></td>
+                  <td>Company root</td>
+                  <td class="num">18,271</td>
+                </tr>
+                <tr>
+                  <td>Placement</td>
+                  <td>A real person</td>
+                  <td>Company root</td>
+                  <td class="num">3,004</td>
+                </tr>
+                <tr>
+                  <td>Interview</td>
+                  <td>A real person</td>
+                  <td>An office</td>
+                  <td class="num">1,284</td>
+                </tr>
+                <tr>
+                  <td>Candidate_to_Hotbook</td>
+                  <td>A real person</td>
+                  <td>An office</td>
+                  <td class="num">369</td>
+                </tr>
+                <tr>
+                  <td>Hotbook</td>
+                  <td>A real person</td>
+                  <td>A recruiting area</td>
+                  <td class="num">69</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            There are
+            <strong
+              >two different problems here, and they need different
+              fixes</strong
+            >. The unassigned placeholder is a user account parked at the
+            company root holding the bulk of candidates, applications, jobs and
+            accounts — and one of the account rules shares precisely those
+            records down from the root, which is to say to the whole company.
+            The migration service account is worse in one specific way: it holds
+            <strong>no position in the structure at all</strong>, so records it
+            owns are invisible to management roll-up entirely, because there is
+            nowhere to roll up from.
+          </p>
+          <p>
+            The good news is at the bottom of that table. Placements,
+            interviews, pool memberships and the pools themselves
+            <strong>already have real people in real offices as owners</strong>.
+            Those four carry meaningful ownership today, and the data migration
+            must preserve it rather than flatten everything onto a service
+            account — which is the failure mode the current state demonstrates.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Code</p>
+          <h2>
+            The bypass is real, has no effect today, and decides the tightening
+            order
+          </h2>
+          <p>
+            Custom code can be written to respect the record-access model or to
+            ignore it. Auditing all 428 custom components:
+          </p>
+          <div class="stat-row">
+            <div class="stat">
+              <span class="n">~250</span
+              ><span class="l"
+                >components do <strong>not</strong> apply the record-access
+                model — they read and write as though no boundary exists</span
+              >
+            </div>
+            <div class="stat">
+              <span class="n">0</span
+              ><span class="l"
+                >observable effect today, because no recruitment object is
+                restricted — there is no boundary to bypass yet</span
+              >
+            </div>
+            <div class="stat">
+              <span class="n">1</span
+              ><span class="l"
+                >component enforces record access on its queries deliberately
+                and correctly</span
+              >
+            </div>
+          </div>
+          <p>
+            The exposure is therefore <strong>latent, not present</strong>.
+            Nothing is leaking today. But the day any one of these objects is
+            tightened, every component touching it that ignores the model
+            becomes a live way around it. That fixes the order of work for the
+            tightening stage, per object and without exception:
+            <strong
+              >correct that object's components first, tighten the object
+              second, re-verify third.</strong
+            >
+            Doing it in the other order ships a boundary that code walks
+            straight through.
+          </p>
+          <div class="callout warn">
+            <p>
+              <strong
+                >The four cascading routines named in the decision are real —
+                confirmed line by line.</strong
+              >
+              They grant access along team and management relationships, and
+              <strong
+                >not one of them tests a country or a region anywhere in its
+                logic</strong
+              >; recipients are derived purely from person-to-person
+              relationship fields that carry no geography. Two points of nuance
+              the audit adds. First, they write to the commercial
+              <strong>offer and invoice</strong> records, not to any recruitment
+              object — so they are a neighbouring clean-up, not part of this
+              rebuild. Second, they have generated
+              <strong>4.8 million</strong> access rows of a kind the platform
+              <strong
+                >deletes when a record changes owner and never rebuilds</strong
+              >, because they were written without declaring a reason for the
+              grant. That is the largest durability problem in the org's access
+              model, and it sits just outside this programme's scope. It needs
+              an owner on the commercial side.
+            </p>
+          </div>
+          <div class="tech">
+            <span class="tech-label">For the developers</span>
+            <dl>
+              <dt>Declaration census</dt>
+              <dd>
+                Over 428 non-namespaced classes, comments and string literals
+                stripped first: <strong>165</strong> <code>with sharing</code> ·
+                <strong>62</strong> <code>without sharing</code> ·
+                <strong>5</strong> <code>inherited sharing</code> ·
+                <strong>196</strong> undeclared. Corrects the earlier 167/62/199
+                read, which folded away the
+                <code>inherited sharing</code> category.
+              </dd>
+              <dt>The real population</dt>
+              <dd>
+                Undeclared is <em>not</em> safe — it runs system-mode — so the
+                non-enforcing set is 62 + 194 ≈ <strong>256</strong>, not 62.
+              </dd>
+              <dt>Ranked risk</dt>
+              <dd>
+                38 of the 62 touch an object in scope. By what breaks first on
+                tightening:
+                <ul>
+                  <li>
+                    <code>CVParserCtrl</code> — 10
+                    <code>@AuraEnabled</code> entry points; runs system-mode by
+                    two routes (class modifier plus an explicit,
+                    comment-annotated <code>SYSTEM_MODE</code>), i.e. a
+                    deliberate choice for the current open model rather than an
+                    oversight
+                  </li>
+                  <li>
+                    <code>MA_InfojobWebHook</code> — <code>@RestResource</code>,
+                    upserts candidates
+                  </li>
+                  <li>
+                    <code>AddToJobPageController</code>,
+                    <code>MA_getCandidatesOfferBtch</code>,
+                    <code>MA_SendFinalist</code>
+                  </li>
+                </ul>
+              </dd>
+              <dt>Exposure ceiling</dt>
+              <dd>
+                An important negative: 13 active Sites and 8 guest users exist,
+                but <code>SetupEntityAccess</code> shows
+                <strong>zero</strong> Apex grants to every guest profile — no
+                custom Apex is anonymously reachable. Inbound job-board DML
+                rides system-mode package code.
+              </dd>
+              <dt>Cascade routines</dt>
+              <dd>
+                <code>MA_AccountTeamMemberMethods</code>,
+                <code>MA_OfertaMethods</code>,
+                <code>MA_Sede_OfertaMethods</code> (→
+                <code>MA_Oferta__Share</code>, Edit) and
+                <code>MA_AccountMethods</code> (→
+                <code>MA_Factura__Share</code>, Read) — all
+                <code>without sharing</code>, cascading team member →
+                <code>MA_Superior_Marlex__c</code> → that superior's
+                <code>MA_Companeros_de_oficina__c</code>. Checked
+                <code>MA_Country__c</code> and
+                <code>MA_Region__c</code> separately: neither appears.
+              </dd>
+              <dt>Row volume</dt>
+              <dd>
+                One de-duplication weakness in the colleague-expansion step lets
+                duplicate rows insert on repeat runs, absorbed by a
+                partial-success <code>Database.insert</code> — a plausible
+                contributor to the volume, worth confirming with the owning team
+                before any clean-up.
+              </dd>
+              <dt>Enforcement</dt>
+              <dd>
+                <code>WITH SECURITY_ENFORCED</code>: zero occurrences org-wide,
+                so the codebase never confuses it with sharing (it does not
+                enforce sharing). Record access is enforced programmatically in
+                exactly one class — <code>CandidaturaFilterController</code>,
+                via <code>System.AccessLevel.USER_MODE</code>.
+              </dd>
+            </dl>
+          </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Who sees what</p>
+          <h2>
+            One business population, and a case that proves two locks exist
+          </h2>
+          <p>
+            Testing representative people against the objects in scope, asking
+            the platform itself rather than inferring from configuration:
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Group</th>
+                  <th>What they reach</th>
+                  <th>Granted by</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <strong>Recruitment population</strong> — recruiters, office
+                    staff, directors
+                  </td>
+                  <td>
+                    <strong>Every record of every object in scope</strong>
+                  </td>
+                  <td>The object default; the talent pool via its rule</td>
+                </tr>
+                <tr>
+                  <td>
+                    <strong>Other internal staff</strong> — e.g. marketing
+                  </td>
+                  <td>Everything except talent pools</td>
+                  <td>
+                    <strong>Blocked by object rights, not by sharing</strong>
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Job-board and portal visitors</strong></td>
+                  <td>Nothing directly</td>
+                  <td>No object rights; writes go through system-level code</td>
+                </tr>
+                <tr>
+                  <td><strong>Administrators and integrations</strong></td>
+                  <td>Everything</td>
+                  <td>
+                    Org-wide permissions — the
+                    <a href="#view-access">access page</a>'s territory
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <strong
+              >24 of 25 person-and-object combinations tested see 100% of
+              records.</strong
+            >
+            Office and position change nothing about what a person reaches on
+            the recruitment objects today — so the "four business groups" that
+            matter for <em>object</em> rights collapse into
+            <strong>one</strong> group for <em>record</em> access. There is a
+            single population, and it sees everything.
+          </p>
+          <div class="callout">
+            <p>
+              <strong
+                >The single exception is the most useful result in this
+                audit.</strong
+              >
+              The marketing user reaches <strong>0%</strong> of talent pools —
+              and the sharing rule <em>does</em> reach them, along with everyone
+              else. They see nothing because their profile grants
+              <strong>no rights on the talent-pool object at all</strong>.
+              Access needs <strong>both locks open</strong>: rights to the
+              object, and access to the record. Sharing on its own grants
+              nothing, and this is measured, not assumed — which is precisely
+              why the tightening stage must be verified per person rather than
+              reasoned about per rule.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">What the rebuild must carry anyway</p>
+          <h2>
+            Two keys the future needs, and only one of them can be added later
+          </h2>
+          <p>
+            Replicating today's access is the whole of the rebuild's job here —
+            but two pieces of <strong>data</strong> are a different matter. Both
+            are needed by the future privatisation project, and the question
+            that decides whether they belong in the rebuild is simply:
+            <strong
+              >can this be filled in afterwards, or is it lost if not captured
+              now?</strong
+            >
+          </p>
+          <div class="cards">
+            <div class="card">
+              <h3>
+                Internal versus external —
+                <strong>must exist from day one</strong>
+              </h3>
+              <p>
+                A marker on the candidate and on the records around a candidate
+                saying whether this is an <strong>internal</strong> process (an
+                employee moving or being replaced) or ordinary
+                <strong>external</strong> recruitment. This is what the
+                confidential model will key off.
+              </p>
+              <p>
+                <strong>Why it cannot wait:</strong> it is knowable
+                <em>only at the moment the record is created</em>. Nobody will
+                be able to look back at a process a year later and reconstruct
+                whether it was internal. Miss it now and the information does
+                not exist to recover.
+              </p>
+            </div>
+            <div class="card">
+              <h3>Country — <strong>can be added later, safely</strong></h3>
+              <p>
+                A country key used as an <strong>access boundary</strong>, so
+                that when a second country joins it cannot see Spain's records.
+                Distinct from the geographic country fields the rebuild already
+                carries.
+              </p>
+              <p>
+                <strong>Why it can wait:</strong> everything that exists today
+                is Spain, by definition. The value is derivable in bulk whenever
+                it is needed, with no loss. It becomes real work only when a
+                second country actually arrives.
+              </p>
+            </div>
+          </div>
+          <div class="callout warn">
+            <p>
+              <strong
+                >An inherited decision worth revisiting, found while auditing
+                this.</strong
+              >
+              The old system already has an internal-candidate marker, and a
+              related employee-type field. Both are
+              <strong>completely unused</strong> — the marker reads "no" on all
+              <strong>1,118,777</strong> candidate records as counted on 11
+              August 2026, and the employee type is empty on every one of them.
+              The total climbs daily as job-board applications arrive; what
+              matters is that the proportion using either field is
+              <strong>zero</strong>, which is stable. Consistent with the
+              business doing only external recruitment so far.
+            </p>
+            <p>
+              Because the data-model rule for the rebuild is "carry what holds
+              data", both are currently marked to be <strong>dropped</strong> —
+              and by that rule, correctly.
+              <strong>The rule gives the wrong answer in this one case.</strong>
+              What is being dropped is not stale data; it is the
+              <em>capability</em> the confidential internal model depends on.
+              The recommendation is therefore to carry the internal/external
+              marker into the new objects as a
+              <strong>deliberate exception to the fill-rate rule</strong>,
+              justified not by the data it holds today but by the requirement it
+              is known to serve. Its value stays "external" for every migrated
+              record — which is accurate, not a default.
+            </p>
+          </div>
+          <p>
+            <strong>What this does and does not commit the rebuild to.</strong>
+            It commits it to
+            <strong>creating the field and populating it honestly</strong> on
+            the objects that relate to a candidate. It commits it to
+            <strong>nothing about access</strong> — no rule reads that field, no
+            default changes, and the model stays exactly as open as it is today.
+            Wiring the marker to actual confidentiality is the future project's
+            work. The distinction matters commercially as much as technically:
+            adding a field to empty objects during the rebuild is nearly free,
+            whereas adding one later to millions of live records, and
+            back-filling a value nobody can reconstruct, is not.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Reproducing it</p>
+          <h2>The target: one setting per object, and no rules</h2>
+          <p>
+            Reproducing today's record access on the native objects requires
+            this and nothing more:
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Native object</th>
+                  <th>Default access</th>
+                  <th>Rules required</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>
+                    <code>Placement__c</code>, <code>Interview__c</code>,
+                    <code>Application__c</code>, <code>ATS_Job__c</code>,
+                    <code>Employment_History__c</code>,
+                    <code>Talent_Pool_Member__c</code>,
+                    <code>Candidate_Source__c</code>, <code>Source__c</code>,
+                    <code>Reference__c</code>
+                  </td>
+                  <td>Read/write to all internal</td>
+                  <td><strong>None</strong></td>
+                </tr>
+                <tr>
+                  <td><code>Education_History__c</code></td>
+                  <td>Follows its parent candidate</td>
+                  <td><strong>None</strong></td>
+                </tr>
+                <tr>
+                  <td><code>Talent_Pool__c</code></td>
+                  <td>Read/write to all internal</td>
+                  <td><strong>None</strong> — see below</td>
+                </tr>
+                <tr>
+                  <td><code>Contact</code></td>
+                  <td>Read/write to all internal (unchanged)</td>
+                  <td>None</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            <strong>None of these needs</strong> an ownership-based rule, a
+            sharing group, a queue, a team, a territory, programmatic sharing or
+            a declared sharing reason. In particular,
+            <strong>do not recreate the office-named groups</strong> — most of
+            the existing ones are already unused shells.
+          </p>
+          <div class="dq">
+            <div class="dq-col chosen">
+              <span class="tag">Recommended</span>
+              <h3>Open the talent pool, defer its privacy</h3>
+              <p>
+                Set the pool to read/write and carry the visibility field across
+                as ordinary data without wiring it to access. This reproduces
+                observed behaviour <strong>exactly</strong> — all pools visible
+                and editable to all internal users — with one fewer mechanism
+                and no rule to recalculate. Per-pool privacy is then designed
+                properly in the tightening stage, alongside the country key,
+                rather than inherited by accident.
+              </p>
+              <p>
+                <strong>What it gives up:</strong> a latent capability. Today,
+                setting a pool to private would hide it. Nobody does —
+                <strong>zero of 640</strong> — so the capability is unexercised,
+                and rebuilding it unused means carrying a rule nobody relies on.
+              </p>
+            </div>
+            <div class="dq-col rejected">
+              <span class="tag">If privacy is confirmed as a live need</span>
+              <h3>Carry the private default plus its rule</h3>
+              <p>
+                Keep the pair as it stands: private by default, one
+                content-based rule reopening the public ones. Still only two
+                mechanisms, and defensible
+                <strong
+                  >if the product owner confirms per-pool privacy is a real
+                  requirement</strong
+                >
+                rather than a dormant setting.
+              </p>
+              <p>
+                <strong>The cost:</strong> a rule that must recalculate whenever
+                a pool's visibility changes, to reproduce behaviour identical to
+                having no rule at all. Either way the verification below proves
+                the choice, so this is a reversible decision — not one to
+                agonise over.
+              </p>
+            </div>
+          </div>
+          <p>
+            One thing genuinely does need fixing at cutover, and it is not
+            sharing: <strong>ownership</strong>. Records must arrive owned by
+            the office that actually owns them, not accumulated on a placeholder
+            or a service account. That is already committed in the
+            <a href="#view-security">decision</a>; the ownership table above is
+            the measured reason it matters mechanically — assign real owners and
+            the management structure starts to mean something, leave them and no
+            ownership-based mechanism can ever work.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Proving it</p>
+          <h2>How parity is verified, one person at a time</h2>
+          <p>
+            Claiming that access was reproduced is not the same as showing it.
+            The audit ships a verifier that answers, for one person and one
+            object,
+            <strong
+              >how many records they can actually reach and which mechanism
+              grants each one</strong
+            >. It is the record-level counterpart of the field-level checker
+            used for the <a href="#view-access">object and field rights</a>.
+          </p>
+          <p>
+            It deliberately does <strong>not</strong> reimplement the platform's
+            access logic — that would be a guess dressed as a measurement. It
+            <strong>asks the platform</strong> the question directly, then
+            explains the answer by decomposing the sharing rows. Run it for a
+            person on the old object before cutover and on the new object after:
+            <strong
+              >the same proportion visible, by an equivalent mechanism, means
+              that person's access was reproduced.</strong
+            >
+            Less is a regression; more is an over-grant.
+          </p>
+          <p>
+            A baseline is captured for the objects in cutover order and re-run
+            after the switch to compare.
+            <strong
+              >One honest limitation, and it matters for the future project
+              rather than this one:</strong
+            >
+            the check samples a fixed number of records per object, which is
+            sound while everyone sees everything — as they do today — but stops
+            representing the whole once access varies from record to record.
+            Whoever privatises the model will need to widen the sample and
+            stratify it by owner and office, otherwise it would confirm a parity
+            it never actually tested.
+          </p>
+          <div class="tech">
+            <span class="tech-label">For the developers</span>
+            <dl>
+              <dt>Safety</dt>
+              <dd>
+                Read-only. Verifies the production org Id before its first query
+                and refuses on mismatch.
+              </dd>
+              <dt>Truth source</dt>
+              <dd>
+                <code>UserRecordAccess</code> — the platform's own verdict,
+                accounting for every mechanism at once. No reimplementation of
+                the sharing algebra.
+              </dd>
+              <dt>Attribution</dt>
+              <dd>
+                The "why" comes from decomposing the object's
+                <code>__Share</code> rows by <code>RowCause</code> against the
+                user's full group closure — which must include the implicit
+                <code>Organization</code> group and the role-derived groups,
+                <em>none of which have <code>GroupMember</code> rows</em>. Miss
+                those and a share to all-internal-users appears to reach nobody,
+                misattributing the mechanism to the object default. That bug was
+                hit and fixed during this audit.
+              </dd>
+              <dt>Modes</dt>
+              <dd>
+                <ul>
+                  <li>single user on one object</li>
+                  <li>
+                    <code>--parity</code> — old object vs native, same user (the
+                    cutover check)
+                  </li>
+                  <li>
+                    <code>--cluster</code> — many users, one object, grouped
+                    into distinct access signatures
+                  </li>
+                  <li>
+                    <code>--baseline</code> — CSV snapshot for later diffing
+                  </li>
+                </ul>
+              </dd>
+              <dt>Sampling</dt>
+              <dd>
+                Orders by <code>Id</code>, deliberately <em>not</em>
+                <code>LastModifiedDate</code>, which the data-migration analysis
+                found unreliable on this org.
+              </dd>
+              <dt>Baseline captured</dt>
+              <dd>5 users × 5 objects, 120 records each, 11 August 2026.</dd>
+            </dl>
+          </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">What we still owe</p>
+          <h2>Open items from this audit</h2>
+          <div class="tmpl">
+            <div class="tmpl-step">
+              <span class="k"
+                >One design question, replacing a fact now confirmed</span
+              >
+              <p>
+                <strong
+                  >Can the confidential internal-recruitment model use the
+                  existing management structure at all?</strong
+                >
+                Management-chain roll-up is
+                <strong>switched on for every object checked</strong> —
+                confirmed by reading the sharing settings screen, since no
+                read-only interface exposes it. That closes the open question
+                and creates a sharper one: roll-up grants access
+                <em>upward</em> by definition, while confidential internal
+                processes must be invisible upward, to the person being
+                replaced. The two requirements are in direct conflict on the
+                same structure. The recommendation carried into the tightening
+                stage is that the
+                <strong
+                  >internal branch is built on a structure of its own</strong
+                >
+                rather than on the commercial tree — but that needs confirming
+                as a design decision, with the periphery records (interviews,
+                screenings, placements, attachments) checked so a confidential
+                process cannot leak through an open child record.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k"
+                >One reversal to confirm before the new objects are built</span
+              >
+              <p>
+                <strong
+                  >Carry the internal-versus-external marker, against the
+                  fill-rate rule.</strong
+                >
+                The old marker is unused — "no" on all 1,118,777 candidates — so
+                the standing rule says drop it, and that rule is currently set
+                to do exactly that. It should be
+                <strong>overridden in this one case</strong>: the field is cheap
+                to create on empty objects now, impossible to back-fill later,
+                and the confidential internal model cannot be built without it.
+                Needs confirming with the product owner, and the objects around
+                the candidate deciding — the candidate itself, the application,
+                the interview, the placement at minimum. No access behaviour
+                changes as a result.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k"
+                >One thing deliberately left to the future project</span
+              >
+              <p>
+                <strong>The country access key.</strong> Needed when a second
+                country joins, derivable in bulk at that point because
+                everything existing is Spain, and therefore <em>not</em> rebuild
+                scope. Recorded here so it is a known deferral rather than an
+                omission — and distinguished from the geographic country fields
+                the rebuild already carries, which serve a different purpose and
+                are not an access boundary.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k">One question for the product owner</span>
+              <p>
+                <strong>Is per-talent-pool privacy a live requirement?</strong>
+                Zero of 640 pools use it today. The answer decides between the
+                two options above and nothing else — it is a small, reversible
+                decision, but it should be answered rather than inherited by
+                default.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k"
+                >One data rule needed before the migration rehearsal</span
+              >
+              <p>
+                <strong>Which office owns which record.</strong> Roughly 700
+                thousand candidates and applications, and 179 thousand accounts,
+                currently sit on a placeholder. Assigning real owners is
+                committed work; the business rule that decides the assignment is
+                not yet written, and the rehearsal needs it.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k">One thing to hand to the commercial side</span>
+              <p>
+                <strong
+                  >The 4.8 million fragile access rows on offers and
+                  invoices</strong
+                >, and the de-duplication weakness that plausibly contributes to
+                that volume. Outside this rebuild's scope and genuinely worth a
+                look, but it needs the team that owns the commercial domain to
+                confirm the diagnosis before anything is changed — this audit
+                read the code, it did not test the behaviour.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k">One sequencing rule to hold to</span>
+              <p>
+                <strong
+                  >Per object: fix the components, then tighten, then
+                  re-verify.</strong
+                >
+                Around 250 components ignore the record-access model with no
+                effect today and full effect the moment an object is tightened.
+                The order is not negotiable, and it is cheaper to schedule than
+                to discover.
+              </p>
+            </div>
+          </div>
+          <p>
+            Record access decides <em>which records</em> a person reaches; the
+            companion question — <em>which objects and fields</em> they can
+            reach, and how that moves to the new build — is on
+            <a href="#view-access">Access &amp; app switch</a>. The decision
+            this page provides evidence for is
+            <a href="#view-security">Security &amp; sharing</a>. Or return to
+            the <a href="#view-index">overview</a>.
+          </p>
+        </section>
       </div>
     </section>
     <section class="page-view" id="view-access">
