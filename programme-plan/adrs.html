@@ -136,6 +136,24 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 .openbox{background:var(--surface-2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
 .openbox b{color:var(--accent)}
 
+/* "For the developers" blocks — same convention as the decision-record set, so a
+   reader moving between the two documents meets one shape. Business prose stays
+   business prose; the exact command, flag or platform gotcha lives here, marked
+   as being for the people who will run it. */
+.tech{margin-top:.7em;padding:11px 14px;border-radius:5px;background:var(--brand-soft);font-size:14px;line-height:1.55;color:var(--ink)}
+.tech-label{text-transform:uppercase;letter-spacing:.09em;font-size:10px;font-weight:700;color:var(--accent);display:block;margin-bottom:4px}
+/* Commands are long. Do NOT nowrap them — a single git invocation is wider than a
+   phone viewport and would put the whole page into horizontal scroll. Break on
+   the word boundaries the command already has. */
+.tech code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:var(--surface);
+  border:1px solid var(--line);border-radius:4px;padding:.05em .35em;
+  white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}
+.tech{overflow-wrap:break-word}
+.tech p{margin:0 0 .5em}
+.tech p:last-child{margin-bottom:0}
+.tech ul{margin:.35em 0 0;padding-left:1.1em}
+.tech li{margin:.2em 0}
+
 /* methodology two-board flow diagram */
 .flow-diagram{margin:1.6em 0 2em}
 .flow-diagram svg{width:100%;height:auto;display:block}
@@ -290,6 +308,8 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <a href="#adr-43" data-estado="accepted" title="How business logic is triggered — by kind of object"><span class="tid">ADR · Business-Logic Entry-Point Rule by Object Type</span></a>
 <a href="#adr-44" data-estado="accepted" title="Naming for the new build — plain English names, no owner tags"><span class="tid">ADR · Prefix-free English Naming for New Build</span></a>
 <a href="#adr-45" data-estado="proposed" title="Naming while old and new run side by side — two questions, each with its own answer"><span class="tid">ADR · Naming Old and New Side by Side</span></a>
+<a href="#adr-46" data-estado="proposed" title="Field-level security in rebuild code — enforced where a person acts, explicit where automation writes"><span class="tid">ADR · Field-Security Enforcement by Execution Context</span></a>
+<a href="#adr-47" data-estado="proposed" title="Access grants that add nothing are not rebuilt — the test is what a user can actually do"><span class="tid">ADR · Empty Access Grants Are Not Rebuilt</span></a>
 </div></div>
 <div class="dec" id="adr-1" data-estado="proposed">
 <div class="dh">
@@ -3072,6 +3092,34 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p>.</p>
 <div class="qa"><span class="chip">Maintainability</span><span class="chip">Consistency</span><span class="chip">Recoverability</span></div>
 <div class="openbox"><b>Still open:</b> Awaiting confirmation by the governance board, alongside the owner of the side-by-side coexistence rules it refines. A shared way of wording the descriptive names is worth agreeing once, so the new building blocks read consistently rather than each person inventing their own. For lists and reports, keeping the old and new apart by separate folders — rather than by a name marker — stays an allowed choice where the tool provides folders, and is left open until the reporting approach is set.</div>
+</div>
+<div class="dec" id="adr-46" data-estado="proposed">
+<div class="dh">
+<h3>Field-level security in rebuild code — enforced where a person acts, explicit where automation writes</h3>
+<span class="did">ADR · Field-Security Enforcement by Execution Context</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Native Build</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">Salesforce code runs with security checks switched off unless the developer switches them on, and the setting that governs which records a user can reach is a different setting from the one that governs which fields they can open. A read of the live platform found that of the code Marlex owns, roughly a third touches the objects being rebuilt, and only one class checks field access at all.</p>
+<p>The rule now depends on who is acting. Where a person clicks something — a screen, a button, an action they trigger — the code checks that person&#x27;s field and object access and respects it. Where the platform writes on its own — automation that fires on save, scheduled jobs, and the doors that inbound feeds arrive through — the code keeps writing without those checks, and says so in a comment explaining why.</p>
+<p>That split is not a compromise, it is what the evidence supports. Testing every user&#x27;s real field access against the fields each piece of code writes, across the three busiest objects, found no case where switching the checks on in the screens would take away something a user can do today. It also found the opposite risk is real: a handful of fields are written only by automation and appear in no user&#x27;s access at all, so switching checks on there would break the write.</p>
+<p>One narrow exception is allowed and was already being used correctly: where a tool is reachable only by holding a specific access grant, that grant can be the control, and the code records which grant it relies on.</p>
+<div class="qa"><span class="chip">Security</span><span class="chip">Maintainability</span><span class="chip">Correctness</span></div>
+<div class="openbox"><b>Still open:</b> Extend the field-access evidence to the remaining objects in scope; this can add exceptions to the list but does not change the rule. Owner: the architecture team, before the first change that touches those objects.</div>
+</div>
+<div class="dec" id="adr-47" data-estado="proposed">
+<div class="dh">
+<h3>Access grants that add nothing are not rebuilt — the test is what a user can actually do</h3>
+<span class="did">ADR · Empty Access Grants Are Not Rebuilt</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Native Build</span></span><span>·</span><span>Technical</span></div>
+<p class="bluf">The plan for moving users onto the new objects was to copy every existing access grant one for one, so that nothing could be missed. Measuring what those grants actually deliver showed that copying them literally would carry across empty containers.</p>
+<p>One grant covering four placement fields is held by thirty people. The base access their role already carries makes all four fields editable, so for twenty-four of the thirty the grant delivers nothing. Comparing what a holder can do against what a non-holder with the same base access can do returns an identical result across every field on the object.</p>
+<p>So the test changes from what a grant says to what a user can actually do. A grant is rebuilt only where it adds something on top of the access its holders already have, measured per holder. Where it adds nothing, it is not rebuilt, and the measurement that showed so is recorded rather than the grant being quietly dropped. Where it adds something for only some of its holders, it is rebuilt for those people alone.</p>
+<p>This is deliberately not a redesign. Real differences are still copied faithfully — including the ones that are easy to round off, such as the core recruitment population being able to create and edit jobs and the talent pool but not delete them. The only thing discarded is what is demonstrably empty.</p>
+<div class="qa"><span class="chip">Maintainability</span><span class="chip">Security</span><span class="chip">Operability</span></div>
+<div class="openbox"><b>Still open:</b> Apply the same test to the remaining cross-cutting grants, including the near-universal candidature field filter and a personnel-integration grant held by several hundred users that opens an object without opening any field on it. Owner: the architecture team, during the extension to the remaining objects.</div>
 </div>
 <script>
 window.__filter=function(f,btn){

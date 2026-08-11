@@ -136,6 +136,24 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 .openbox{background:var(--surface-2);border-radius:8px;padding:10px 14px;margin-top:12px;font-size:13.5px;color:var(--ink-soft)}
 .openbox b{color:var(--accent)}
 
+/* "For the developers" blocks — same convention as the decision-record set, so a
+   reader moving between the two documents meets one shape. Business prose stays
+   business prose; the exact command, flag or platform gotcha lives here, marked
+   as being for the people who will run it. */
+.tech{margin-top:.7em;padding:11px 14px;border-radius:5px;background:var(--brand-soft);font-size:14px;line-height:1.55;color:var(--ink)}
+.tech-label{text-transform:uppercase;letter-spacing:.09em;font-size:10px;font-weight:700;color:var(--accent);display:block;margin-bottom:4px}
+/* Commands are long. Do NOT nowrap them — a single git invocation is wider than a
+   phone viewport and would put the whole page into horizontal scroll. Break on
+   the word boundaries the command already has. */
+.tech code{font-family:"SF Mono",ui-monospace,Menlo,Consolas,monospace;font-size:.86em;background:var(--surface);
+  border:1px solid var(--line);border-radius:4px;padding:.05em .35em;
+  white-space:pre-wrap;overflow-wrap:break-word;word-break:break-word}
+.tech{overflow-wrap:break-word}
+.tech p{margin:0 0 .5em}
+.tech p:last-child{margin-bottom:0}
+.tech ul{margin:.35em 0 0;padding-left:1.1em}
+.tech li{margin:.2em 0}
+
 /* methodology two-board flow diagram */
 .flow-diagram{margin:1.6em 0 2em}
 .flow-diagram svg{width:100%;height:auto;display:block}
@@ -241,7 +259,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
       <div class="stat"><div class="n">8</div><div class="l">Delivery projects</div></div>
       <div class="stat"><div class="n">34</div><div class="l">Epics</div></div>
       <div class="stat"><div class="n">154</div><div class="l">Deliverables</div></div>
-      <div class="stat"><div class="n">45</div><div class="l">Architecture decisions</div></div>
+      <div class="stat"><div class="n">47</div><div class="l">Architecture decisions</div></div>
       <div class="stat"><div class="n">26</div><div class="l">Programme decisions</div></div>
     </div>
 <h2>What this programme is</h2>
@@ -287,7 +305,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
           <div class="m"><span>future backlog</span></div></a>
 </div>
 <h2>Decisions</h2>
-<div class="cards"><a class="card" style="--pc:var(--brand)" href="adrs.html"><div class="k">ADR</div><div class="t">Architecture decisions</div><div class="d">The irreversible technology choices — canonical model, ACL, integration platform, org topology — each explained as context → decision → why → consequences.</div><div class="m"><span>45 records</span></div></a><a class="card" style="--pc:var(--p-share)" href="pdrs.html"><div class="k">PDR</div><div class="t">Programme decisions</div><div class="d">The delivery and sequencing choices — STD waves, epic structure, expansion topology — explained the same way.</div><div class="m"><span>26 records</span></div></a></div>
+<div class="cards"><a class="card" style="--pc:var(--brand)" href="adrs.html"><div class="k">ADR</div><div class="t">Architecture decisions</div><div class="d">The irreversible technology choices — canonical model, ACL, integration platform, org topology — each explained as context → decision → why → consequences.</div><div class="m"><span>47 records</span></div></a><a class="card" style="--pc:var(--p-share)" href="pdrs.html"><div class="k">PDR</div><div class="t">Programme decisions</div><div class="d">The delivery and sequencing choices — STD waves, epic structure, expansion topology — explained the same way.</div><div class="m"><span>26 records</span></div></a></div>
 <div class="stamp">Prepared 2026-07-09. This is a plain-language reading view of the programme's governed roadmap and decisions, kept in step with the authoritative registers.</div>
 </div></main>
 </div>
