@@ -22460,41 +22460,51 @@
           <p class="eyebrow">Decision 20 · Integrations &amp; middleware</p>
           <h1>How the rebuilt edges meet the outside world</h1>
           <p class="subtitle">
-            Every rebuilt integration ships behind a Marlex-owned interface with
-            a direct connection first. The MuleSoft integration layer is adopted
-            per edge class, additively, on its own timeline — the cutover never
-            waits for it.
+            Every rebuilt integration ships behind a Marlex-owned interface. The
+            MuleSoft integration layer holds the switch for the edges coupled to
+            the retiring data; everywhere else it is adopted per edge class,
+            additively, on its own timeline.
           </p>
           <p class="dateline">
-            Cutover strategy · draft for peer review · 12 July 2026
+            Cutover strategy · draft for peer review · 11 August 2026
           </p>
         </header>
 
         <div class="bluf">
           <p>
             <strong>The question.</strong> The group has selected MuleSoft as
-            its integration platform, with licensing not yet in place as of this
-            strategy (July 2026). The rebuild, meanwhile, touches every
-            integration edge the recruitment system has — every point where it
-            meets an outside system, whether Salesforce calls out or the outside
-            system calls in — ERP, job board, e-signature, credit check,
-            training certificates, the customer data platform — and adds one of
-            its own: the bought matching-and-parsing engine. Do the rebuilt
-            edges route through MuleSoft from day one, or stay point-to-point?
-            Answered per-edge, ad hoc, later, this question quietly recreates
-            the tangled coupling the rebuild exists to remove — so it gets one
-            rule, decided here.
+            its integration platform, and the commercial terms are now agreed,
+            with the working environment available from September 2026. The
+            rebuild, meanwhile, touches every integration edge the recruitment
+            system has — every point where it meets an outside system, whether
+            Salesforce calls out or the outside system calls in — ERP, job
+            board, e-signature, credit check, training certificates, the
+            customer data platform — and adds one of its own: the bought
+            matching-and-parsing engine. Do the rebuilt edges route through
+            MuleSoft from day one, or stay point-to-point? Answered per-edge, ad
+            hoc, later, this question quietly recreates the tangled coupling the
+            rebuild exists to remove — so it gets one rule, decided here.
           </p>
           <p>
             <strong>The rule.</strong> Every rebuilt edge ships behind a
             <strong>Marlex-owned interface (a port)</strong> with a
-            <strong>direct connection as its first implementation</strong>.
-            Routing an edge through the platform later is an
-            <em>additive</em> change — a second implementation behind the same
-            port, switched by configuration, no redeployment — taken per edge
-            class when reuse across countries or systems earns it. The cutover
-            has zero dependency on the platform's licensing, build-out or the
-            team's capacity to operate it.
+            <strong>direct connection available behind it</strong>. Routing an
+            edge through the platform is an <em>additive</em> change — a second
+            implementation behind the same port, switched by configuration, no
+            redeployment — taken per edge class when reuse across countries or
+            systems earns it.
+          </p>
+          <p>
+            <strong>The exception that shapes the cutover.</strong> For the
+            edges <em>coupled to the retiring data</em> — the ERP and the job
+            board — the switch from the old model to the new one lives in the
+            <strong>interface the integration layer publishes</strong>, not in
+            Salesforce: the outside system keeps calling one address while the
+            target moves underneath it. Those two lanes are therefore built
+            <em>before</em>
+            their cutovers, and each keeps its direct connection as a tested
+            fallback. Every other edge crosses the cutover with no dependency on
+            the platform at all.
           </p>
         </div>
 
@@ -22717,13 +22727,19 @@
               ><span class="chip rejected">Rejected</span>
             </div>
             <p>
-              The architecturally pure endpoint — reached by making the riskiest
-              weekend of the programme depend on a platform whose licensing
-              isn't final, whose build-out hasn't started, and whose day-two
-              operation lands on a two-person IT team already carrying the
-              cutover. Any platform incident becomes a recruitment-system
-              incident, at the exact moment nobody can tell the difference from
-              a rebuild defect. Purity is not worth a coupled go-live.
+              The architecturally pure endpoint — and it makes the riskiest
+              weekend of the programme depend on the platform for
+              <em>every</em> edge at once, including the many that gain nothing
+              from the hop. Any platform incident then becomes a
+              recruitment-system incident, at the exact moment nobody can tell
+              the difference from a rebuild defect. That the platform is now
+              contracted and available from September 2026 changes the cost of
+              this option, not its shape: the objection was never only
+              commercial, it is that a single shared dependency across the whole
+              surface concentrates cutover risk for no corresponding gain. The
+              chosen rule takes the dependency deliberately for the two edges
+              where it buys control of the switch, and declines it everywhere
+              else.
             </p>
           </div>
           <div class="option">
@@ -22797,9 +22813,9 @@
                     >)
                   </td>
                   <td>
-                    Planned — first candidate once the platform is ready;
-                    multi-country ERP traffic is the reuse case that earns the
-                    hop
+                    First lane, built before the cutover — it is coupled to the
+                    retiring data, so the layer holds its switch; multi-country
+                    ERP traffic is the reuse case that also earns the hop
                   </td>
                 </tr>
                 <tr>
@@ -22818,8 +22834,10 @@
                     <a href="#view-security">the guest door</a>)
                   </td>
                   <td>
-                    Strong later candidate — its legacy protocol mediation and
-                    any second job board both argue for the platform
+                    Second lane, built before the cutover — the one edge that
+                    writes the retiring records, so the layer holds its switch;
+                    its legacy protocol mediation and any second job board argue
+                    for it too
                   </td>
                 </tr>
                 <tr>
@@ -23037,10 +23055,18 @@
               <ul class="dq-outcomes">
                 <li>
                   <span
-                    >The cutover proceeds on its own clock regardless of
-                    platform licensing, build-out or operating capacity.</span
+                    >Every edge outside the two data-coupled lanes crosses the
+                    cutover without depending on the platform at all.</span
                   >
                   <span class="lk good">almost certain</span>
+                </li>
+                <li>
+                  <span
+                    >The two data-coupled lanes are standing in time to hold
+                    their own switch, so the model change is a configuration
+                    change rather than a Salesforce release.</span
+                  >
+                  <span class="lk good">probably</span>
                 </li>
                 <li>
                   <span
@@ -23090,8 +23116,9 @@
                 </li>
                 <li>
                   <span
-                    >Platform licensing, build-out or operations slip — and the
-                    cutover date slips with them.</span
+                    >The platform's build-out or operations slip — and because
+                    <em>every</em> edge depends on it, the cutover date slips
+                    with them.</span
                   >
                   <span class="lk bad">more likely than not</span>
                 </li>
@@ -23177,11 +23204,13 @@
           <h2>What we still carry</h2>
           <ul>
             <li>
-              <strong
-                >Platform licensing and operating capacity remain open</strong
-              >
-              — deliberately outside this decision's blast radius, but the
-              per-class adoption plan can't start until both resolve.
+              <strong>Two lanes now sit on the platform's critical path</strong>
+              — the ERP and the job board, because the switch from the retiring
+              model to the new one lives in the layer for them. The commercial
+              terms are agreed and the environment is available from September
+              2026, so this is a scheduling risk rather than an open decision;
+              if it slips, those two edges switch in their Salesforce-side
+              adapter instead and give up the control the design was chosen for.
             </li>
             <li>
               <strong>The e-signature routing call stays open by design</strong>

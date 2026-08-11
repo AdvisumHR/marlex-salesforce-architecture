@@ -1764,7 +1764,7 @@
             weighed, what was chosen, and what is still open.
           </p>
           <p class="dateline">
-            Decision record · draft for peer review · 19 July 2026 · Nuvolar
+            Decision record · draft for peer review · 11 August 2026 · Nuvolar
           </p>
         </header>
 
@@ -1777,33 +1777,78 @@
             approach for peer and governance review, not a settled plan.
           </p>
           <p>
-            <strong>The objective.</strong> Move integration logic
-            <em>out</em> of Salesforce into one shared, Marlex-owned middleware
-            layer — MuleSoft — so Salesforce goes back to running CRM,
-            back-office and recruitment, and stops being the group's integration
-            hub. Today every endpoint change means a Salesforce release, and
-            when a hand-built connection fails mid-send the two systems drift
-            out of sync; a middleware on canonical contracts fixes both. It is a
-            <strong>platform investment, not a project cost</strong>: each
-            connection built is a reusable, named interface that Marlex Spain,
-            Axxon and the rollout countries all call, so the second job board —
-            or a new country's ERP — is a small addition, not a fresh build.
+            <strong>The objectives.</strong> Four, in priority order. They are
+            what the plan and its sequence are built to serve, so it is worth
+            stating them before anything else:
           </p>
+          <ol class="seq">
+            <li>
+              <span class="seq-title">Own the switch point</span>
+              <p>
+                Put every integration behind an interface Marlex controls, so
+                that
+                <em>where</em> it points — at the retiring TargetRecruit objects
+                or at the new native model, at one Salesforce environment or
+                another — is a change made in configuration, not a Salesforce
+                release. This is what makes the rebuild's cutover controllable,
+                and it is the reason the sequence looks the way it does.
+              </p>
+            </li>
+            <li>
+              <span class="seq-title"
+                >Prioritise the integrations coupled to the retiring data</span
+              >
+              <p>
+                Those are the only edges whose target has to change when the
+                recruitment model is replaced. Routing them through the
+                integration layer first is what puts that change under Marlex's
+                control in time for the switch — which is why the ERP and the
+                job board lead the order.
+              </p>
+            </li>
+            <li>
+              <span class="seq-title"
+                >Replace one-to-one wiring with reusable interfaces</span
+              >
+              <p>
+                Move integration logic <em>out</em> of Salesforce into one
+                shared, Marlex-owned layer so Salesforce goes back to running
+                CRM, back-office and recruitment and stops being the group's
+                integration hub. Each connection built is a named interface that
+                Marlex Spain, Axxon and the rollout countries all call, so the
+                second job board — or a new country's ERP — is a small addition,
+                not a fresh build. A platform investment, not a project cost.
+              </p>
+            </li>
+            <li>
+              <span class="seq-title"
+                >Keep the go-live's timing in Marlex's hands</span
+              >
+              <p>
+                Every edge is built so it has a working direct connection to
+                fall back on, so a delay in the integration layer degrades the
+                plan rather than stopping the switch.
+              </p>
+            </li>
+          </ol>
           <p>
             <strong>How it's approached.</strong> Every rebuilt integration
-            ships behind a <strong>Marlex-owned interface</strong> with a
-            <strong>direct connection first</strong>; MuleSoft is adopted one
-            edge at a time, by configuration, on its own schedule, so
-            <strong>the go-live never waits for it</strong>. Not everything
-            routes through it — connections that only need a secure, direct link
-            stay on Salesforce, and it is not a mandatory gateway. The
+            ships behind a <strong>Marlex-owned interface</strong>, and the
+            switch behind that interface is what the programme owns. For the
             <strong
-              >near-term priority is the edges tied to the retiring
-              TargetRecruit data</strong
-            >: NET4 first (the shared ERP, no dependencies, reused by Axxon),
-            then InfoJobs — built progressively, never big-bang. The platform
-            choice is settled; the architecture around it is proposed for
-            review.
+              >edges tied to the retiring TargetRecruit data — the ERP (NET4)
+              first, then the job board (InfoJobs)</strong
+            >
+            — that switch lives <strong>in the integration layer</strong>: the
+            interface each system calls keeps its address and its contract, and
+            the target moves from the old model to the new underneath it. Those
+            two lanes are therefore built before their cutovers, and each keeps
+            a direct connection as its tested fallback. Everything else is
+            adopted one edge at a time, by configuration, on its own schedule.
+            Not everything routes through the layer — connections that only need
+            a secure, direct link stay on Salesforce, and it is not a mandatory
+            gateway. The platform choice and its commercial terms are settled;
+            the architecture around it is proposed for review.
           </p>
           <p>
             This set opens with the foundations — <em>why</em> an integration
@@ -1948,12 +1993,12 @@
               <span class="body"
                 ><h3>Platform choice</h3>
                 <p>
-                  Which platform runs it. MuleSoft was selected after demos; the
-                  one open tail is licensing. The alternatives — Azure, AWS, a
-                  custom build — and why they lost.
+                  Which platform runs it. MuleSoft was selected after demos and
+                  the commercial terms are now agreed. The alternatives — Azure,
+                  AWS, a custom build — and why they lost.
                 </p></span
               >
-              <span class="pick">MuleSoft · chosen</span>
+              <span class="pick">MuleSoft · settled</span>
             </a>
             <a class="decrow" href="#view-swappable-adapter">
               <span class="num">3</span>
@@ -2195,24 +2240,34 @@
           <ul>
             <li>
               <strong
-                >The platform is chosen; the go-live doesn't depend on
-                it.</strong
+                >The platform is settled, and its terms are agreed.</strong
               >
-              MuleSoft was selected after demonstrations, with licensing the one
-              open tail. But because every edge ships behind a Marlex-owned
-              interface with a direct connection first, the switch to the new
-              recruitment system can happen whether or not the platform is
-              licensed, built out, or being operated yet.
+              MuleSoft was selected after demonstrations and the commercial
+              negotiation is complete; the working environment becomes available
+              in September 2026. What remains is delivery, not a decision.
             </li>
             <li>
               <strong
-                >The port is the decision; the transport is a detail.</strong
+                >Two lanes are built before their cutovers; the rest of the
+                switch keeps its own clock.</strong
+              >
+              The ERP and the job board are the edges tied to the retiring data,
+              so the integration layer holds their switch and has to be standing
+              before they cross. Every other edge ships behind its interface
+              with a direct connection and moves onto the layer later, so no
+              other part of the switch waits on it — and both lead lanes keep a
+              tested direct connection as their fallback.
+            </li>
+            <li>
+              <strong
+                >The interface is the decision; the transport is a
+                detail.</strong
               >
               What makes an integration expensive to change is business logic
               knowing vendor specifics. Put a Marlex-owned interface in front of
-              each edge and "direct or via the platform?" stops being an
-              architecture decision and becomes a configuration switch,
-              reversible either way.
+              each edge and both "direct or via the layer?" and "old model or
+              new?" stop being architecture decisions and become configuration
+              switches, reversible either way.
             </li>
             <li>
               <strong
@@ -2228,14 +2283,14 @@
             </li>
             <li>
               <strong
-                >Lanes are sequenced by reuse and by what touches the retiring
-                data.</strong
+                >Lanes are sequenced by what touches the retiring data, then by
+                reuse.</strong
               >
               The ERP goes first — no dependencies, multi-country reuse across
               Spain and Axxon, and a candidate integration that puts it in the
-              priority class of edges to route through MuleSoft. The job board
-              follows: heavier to build, and the one re-point that must land in
-              lockstep with the go-live.
+              class of edges whose switch the integration layer has to hold. The
+              job board follows: heavier to build, and the one switch that must
+              land in lockstep with the go-live.
             </li>
             <li>
               <strong>Some edges never belong on the platform.</strong> Bought
@@ -2296,7 +2351,8 @@
             comments and disagreement welcome on any of it. Grounded in the July
             2026 production-org audit, read-only throughout, cross-read against
             the delivery backlog. Counts are point-in-time as of 19 July 2026
-            and will drift. Start with
+            and will drift; the decisions on this page are current as of 11
+            August 2026. Start with
             <a href="#view-why-middleware">Why middleware</a>, jump to any lane
             above, or read the sequence on the
             <a href="#view-technical-roadmap">technical roadmap</a>.
@@ -2858,26 +2914,28 @@
             <p class="ap-kicker">The running order · the integration layer</p>
             <h1 class="ap-title">The integrations as a <em>sequence</em></h1>
             <p class="ap-lede">
-              The objective underneath the sequence is a platform investment:
-              integration logic moves out of Salesforce into one shared layer
-              that Marlex, Axxon and the rollout countries reuse. The order
-              below only decides which edges get there first — starting with
-              those tied to the retiring TargetRecruit data. A sequence, not a
-              schedule: it fixes what must come before what, by dependency and
-              reuse, not by committed dates. This is the technical roadmap; the
-              delivery plan that would put weeks against it does not yet exist.
+              The objective underneath the sequence is control: every
+              integration sits behind an interface Marlex owns, so that where it
+              points — at the retiring TargetRecruit objects or at the new model
+              — is a change made in configuration rather than a Salesforce
+              release. The order below is set by that, starting with the edges
+              tied to the retiring data, whose switch the integration layer
+              itself holds. A sequence, not a schedule: it fixes what must come
+              before what, by dependency and reuse, not by committed dates. This
+              is the technical roadmap; the delivery plan that would put weeks
+              against it does not yet exist.
             </p>
             <p class="ap-dateline">
               Grounded in the July 2026 production-org audit · draft for peer
-              review · 19 July 2026
+              review · 11 August 2026
             </p>
 
             <div class="ap-thesis">
               <div class="ap-cell">
                 <span class="ap-n">MuleSoft</span
                 ><span class="ap-l"
-                  >selected as the platform (3 July 2026); licensing is the one
-                  open tail.</span
+                  >selected as the platform (3 July 2026); commercial terms
+                  agreed, the environment available from September 2026.</span
                 >
               </div>
               <div class="ap-cell">
@@ -2894,11 +2952,12 @@
                   in build. Two more re-point by reading them.</span
                 >
               </div>
-              <div class="ap-cell">
-                <span class="ap-n">0</span
+              <div class="ap-cell ap-r">
+                <span class="ap-n">2 lanes</span
                 ><span class="ap-l"
-                  >dependency the go-live has on the platform — every edge runs
-                  direct first, switched by configuration.</span
+                  >hold their own switch in the layer, so they stand before
+                  their cutovers; every other edge runs direct and waits for
+                  nothing.</span
                 >
               </div>
             </div>
@@ -2908,36 +2967,50 @@
             <p>
               <strong>What this page is.</strong> Every other page argues one
               decision. This one stitches them into the order they run. The rule
-              underneath is simple: the go-live moves on its own clock, and the
-              platform is layered in behind it — lane by lane, each behind a
-              Marlex-owned interface, each a configuration switch away from
-              going live.
+              underneath: the two lanes that carry the switch from the old model
+              to the new one are built before their cutovers, and everything
+              else is layered in behind the go-live — lane by lane, each behind
+              a Marlex-owned interface, each a configuration switch away.
             </p>
             <p>
-              <strong>The shape in one line.</strong> Confirm the platform and
-              lay the shared foundation, bring the ERP across first because its
-              multi-country reuse earns it, bring the job board across second
-              because it is the one re-point the go-live gates on, then work the
-              remaining lanes and the cleanup on their own timelines — while the
-              edges that stay direct or simply carry over need no lane at all.
+              <strong>The shape in one line.</strong> Stand up the platform and
+              the shared foundation, bring the ERP across first because it is
+              coupled to the retiring data and its multi-country reuse earns it,
+              bring the job board across second because it is the one switch the
+              go-live gates on, then work the remaining lanes and the cleanup on
+              their own timelines — while the edges that stay direct or simply
+              carry over need no lane at all.
             </p>
           </div>
 
           <section class="ap-sec">
             <p class="ap-eyebrow">The premise it rests on</p>
-            <h2 class="ap-h2">Why the order can be relaxed at all</h2>
+            <h2 class="ap-h2">What is fixed, and what can move</h2>
             <p>
-              The reason this is a sequence and not a countdown is the
+              Most of this order can flex, and one part of it cannot. The
+              flexibility comes from the
               <a href="#view-swappable-adapter">swappable-adapter pattern</a>:
               every edge ships behind a Marlex-owned interface with a direct
-              connection first, so routing it through the platform later is an
-              additive change — a second implementation behind the same
+              connection available, so routing it through the platform later is
+              an additive change — a second implementation behind the same
               interface, chosen by a configuration record, no redeployment. That
-              single decision is what lets the platform's own timeline — its
-              licensing, its build-out, the team's capacity to operate it — sit
-              off the critical path of the recruitment system's go-live. The
-              order below is therefore driven by <em>reuse and dependency</em>,
-              not by a deadline.
+              is what keeps the platform's own build-out off the critical path
+              for the great majority of the surface.
+            </p>
+            <p>
+              The fixed part is the two lanes coupled to the retiring data.
+              Their switch from the old model to the new one lives
+              <strong>in the layer</strong> rather than in Salesforce, which is
+              the point of building them — so they have to be standing before
+              their cutovers. That is affordable because the commercial terms
+              are agreed and the environment is available from September 2026,
+              and it is survivable because each keeps a direct connection to
+              fall back on. The order below is therefore driven by
+              <em
+                >coupling to the retiring data first, then reuse and
+                dependency</em
+              >
+              — not by a deadline.
             </p>
           </section>
 
@@ -2957,21 +3030,24 @@
                   <span class="ap-when">Comes first</span>
                 </div>
                 <div class="ap-body">
-                  <h3>Confirm the platform &amp; lay the foundation</h3>
+                  <h3>Stand up the platform &amp; lay the foundation</h3>
                   <div class="ap-tagrow">
                     <span class="ap-tag ap-build">Foundation</span
-                    ><span class="ap-tag ap-gatec">Licensing gate</span>
+                    ><span class="ap-tag ap-gatec"
+                      >Environment from September 2026</span
+                    >
                   </div>
                   <p>
-                    The platform is chosen; what remains is to close the
-                    commercial side and stand up the shared building blocks
-                    every lane reuses — before any single lane is built.
+                    The platform is chosen and its commercial terms are agreed.
+                    What remains is to stand up the working environment and the
+                    shared building blocks every lane reuses — before any single
+                    lane is built.
                   </p>
                   <ul class="ap-steps">
                     <li>
-                      Close <b>licensing</b> and confirm the operating model —
-                      who runs the platform day to day is an open question,
-                      given a two-person in-house team (see
+                      Stand up the <b>working environment</b>, available from
+                      September 2026, and run the layer as Marlex IT with
+                      partner support (see
                       <a href="#view-platform-choice">Platform choice</a>).
                     </li>
                     <li>
@@ -2991,9 +3067,9 @@
                   </ul>
                   <div class="ap-dep">
                     <b>Blocks →</b> nothing routes through the platform until
-                    the foundation exists — but nothing about the go-live waits
-                    on it either, because every edge already has a working
-                    direct connection.
+                    the foundation exists, and the two lanes that hold their own
+                    switch cannot be built before it. Every other edge has a
+                    working direct connection and waits on none of this.
                   </div>
                 </div>
               </div>
@@ -3019,8 +3095,8 @@
                     same way: it has no dependencies and its reuse across both
                     Spain and Axxon most earns the hop, and a candidate
                     integration now in development makes it touch the retiring
-                    candidate data — putting it in the class the effort
-                    prioritises (see
+                    candidate data — putting it in the class whose switch the
+                    layer holds (see
                     <a href="#view-marlex-with-net4">NET4</a> and
                     <a href="#view-marlex-with-axxon">Axxon → NET4</a>).
                   </p>
@@ -3029,6 +3105,11 @@
                       Build the <b>NET4 system layer</b> on MuleSoft — owning
                       the authentication, retries and environment switching —
                       and the Salesforce-side adapter behind the ERP port.
+                      <b
+                        >This interface is where the lane's data target is
+                        set</b
+                      >, so moving it from the retiring objects to the new model
+                      is a change in the layer, not a Salesforce release.
                     </li>
                     <li>
                       The finance directions are <b>preserved, not rebuilt</b> —
@@ -3044,9 +3125,10 @@
                     </li>
                   </ul>
                   <div class="ap-dep">
-                    <b>Why first →</b> no dependencies, multi-country reuse, and
-                    it is one of the edges touching the retiring data. Roughly a
-                    third of the first delivery's effort.
+                    <b>Why first →</b> it touches the retiring data, so the
+                    layer has to hold its switch before the cutover; it also has
+                    no dependencies and the widest multi-country reuse. Roughly
+                    a third of the first delivery's effort.
                   </div>
                 </div>
               </div>
@@ -3079,6 +3161,9 @@
                       mediation and the Salesforce-side adapter; the inbound
                       application entry re-points from the old objects to the
                       new at the switch.
+                      <b>That switch is made in the layer</b> — the job board
+                      keeps calling one unchanged address across the cutover —
+                      with the Salesforce-side path kept as the tested fallback.
                     </li>
                     <li>
                       Settle the <b>pre-screening boundary</b> first — whether
@@ -3355,14 +3440,18 @@
             </p>
             <div class="ap-opens">
               <div class="ap-oq">
-                <h3>Licensing and who operates the platform</h3>
+                <h3>The environment date against the two lead lanes</h3>
                 <p>
-                  The platform is chosen but not yet licensed, and whether a
-                  two-person in-house team can operate it unaided — or needs a
-                  small shared operating group — is unsettled. Both gate the
-                  foundation, not the go-live.
+                  The platform's commercial terms are agreed and the working
+                  environment is available from September 2026, to be run by
+                  Marlex IT with partner support. What has to be watched is the
+                  fit between that date and the two lanes that hold their own
+                  switch: they must be standing before their cutovers, or those
+                  edges fall back to switching in Salesforce.
                 </p>
-                <span class="ap-owner">Marlex IT · before the foundation</span>
+                <span class="ap-owner"
+                  >Marlex IT · before the two lead lanes</span
+                >
               </div>
               <div class="ap-oq">
                 <h3>The job-board pre-screening boundary</h3>
@@ -3403,7 +3492,7 @@
               <a href="#view-index">overview</a> for the decision map, or open
               any lane's own page above. Grounded in the July 2026
               production-org audit; counts are point-in-time as of 19 July 2026
-              and will drift.
+              and will drift; the sequence is current as of 11 August 2026.
             </p>
           </footer>
         </div>
@@ -3424,8 +3513,8 @@
             integration platform behind interfaces Marlex owns?
           </p>
           <p class="dateline">
-            Grounded in the July 2026 production-org integration audit · 19 July
-            2026 · architecture proposed for review
+            Grounded in the July 2026 production-org integration audit · 11
+            August 2026 · architecture proposed for review
           </p>
         </header>
 
@@ -3716,6 +3805,23 @@
               change reopens it.
             </p>
           </div>
+          <div class="callout key">
+            <span class="lbl">And it is where the switch lives</span>
+            <p>
+              There is a second reason the layer earns its place, and for this
+              programme it is the sharper one. When an interface stands between
+              the outside system and the data,
+              <strong>the interface is where the target is set</strong> — so
+              moving an integration from the retiring TargetRecruit objects to
+              the new native model, or pointing it at a different Salesforce
+              environment, becomes a configuration change in the layer instead
+              of a Salesforce release. Without that layer, every such move is a
+              code deployment, made under exactly the time pressure a cutover
+              creates. This is why the edges coupled to the retiring data are
+              the ones routed through the layer first: they are the edges whose
+              target actually has to change.
+            </p>
+          </div>
         </section>
 
         <section>
@@ -3840,9 +3946,9 @@
                 </li>
                 <li>
                   <span
-                    >The platform's licensing or operating capacity is slower to
-                    land than the edges need it, and some edges run direct for
-                    longer than planned.</span
+                    >The platform's build-out is slower to land than the edges
+                    need it, and some edges run direct for longer than
+                    planned.</span
                   >
                   <span class="lk mid">more likely than not</span>
                 </li>
@@ -4001,15 +4107,15 @@
             </li>
             <li>
               <strong
-                >The platform choice is a separate, partly open
+                >The platform choice is a separate, now-settled
                 decision.</strong
               >
               The product that plays the middleware role — MuleSoft, selected 3
               July 2026 — is <a href="#view-platform-choice">its own page</a>;
-              its <em>licensing is not yet closed</em>, and whether a two-person
-              IT team can operate it unaided is a live operating-model question.
-              This decision is built to survive that being unresolved, but it
-              does not resolve it.
+              its commercial terms have since been agreed, the working
+              environment is available from September 2026, and it is run by
+              Marlex IT with partner support. This decision was built to survive
+              that being unresolved; it no longer has to.
             </li>
             <li>
               <strong>Contract discipline is cultural, not structural.</strong>
@@ -4046,16 +4152,16 @@
         <header class="masthead">
           <p class="eyebrow">Decision 2 · Platform choice</p>
           <h1>
-            MuleSoft is the middleware platform — licensing is the open tail
+            MuleSoft is the middleware platform — chosen, and now contracted
           </h1>
           <p class="subtitle">
-            Which product carries the integration layer? Chosen after demos.
-            What remains is the commercial close and the question of who runs
-            it.
+            Which product carries the integration layer? Chosen after demos,
+            with the commercial terms since agreed. What remains is standing it
+            up.
           </p>
           <p class="dateline">
             Grounded in a platform evaluation and demos · selected 3 July 2026 ·
-            19 July 2026
+            commercial terms agreed · 11 August 2026
           </p>
         </header>
 
@@ -4073,41 +4179,67 @@
           <p>
             <strong>What we chose.</strong>
             <strong>MuleSoft (Anypoint)</strong> — selected after demos,
-            accepted 3 July 2026 <span class="status decided">decided</span>. It
-            is the most complete platform of the five and the strongest fit for
-            an API-led design. But the choice carries one genuinely open tail:
-            <strong>licensing is not yet closed</strong> — there is no committed
-            price, only internal estimates, and no proof-of-concept was run
-            before the decision. Two further honest caveats travel with it: a
-            two-person IT team's capacity to operate MuleSoft unaided is a real
-            question, and the API-led architecture the platform will serve is
-            itself <span class="status proposed">proposed</span>, not ratified.
-            The product is chosen; the commercial and operating model around it
-            is not yet settled.
+            accepted 3 July 2026, with the
+            <strong>commercial negotiation since completed</strong>
+            <span class="status decided">decided</span>. It is the most complete
+            platform of the five and the strongest fit for an API-led design.
+            The working environment becomes available in
+            <strong>September 2026</strong>, and the layer will be run by
+            <strong>Marlex IT with partner support</strong>
+            rather than by the in-house team alone. What remains is delivery:
+            standing up the environment, building the lanes, and the fact that
+            the API-led architecture the platform serves is itself
+            <span class="status proposed">proposed</span>, not ratified. The
+            product, its terms and its operating model are settled; the shape of
+            what runs on it is still for review.
+          </p>
+          <p>
+            <strong>What this changes.</strong> The platform is no longer a
+            commercial unknown, so it can be depended on where depending on it
+            buys something. It does: for the two edges tied to the retiring
+            TargetRecruit data — the ERP and the job board — the integration
+            layer is where the switch from the old model to the new one lives,
+            which means those two lanes are built <em>before</em> their cutovers
+            rather than after. Both keep a direct connection as a tested
+            fallback. Every other edge still ships direct-first and joins the
+            layer on its own schedule.
           </p>
         </div>
 
         <section>
           <p class="section-eyebrow">
-            Why the platform choice is not the cutover's problem
+            What the settled platform is asked to carry
           </p>
-          <h2>The open tail does not block go-live</h2>
+          <h2>Two lanes now depend on it — deliberately</h2>
           <p>
-            A platform decision with unfinished licensing would normally be a
-            schedule risk. Here it is not, and the reason is deliberate design.
-            Every rebuilt edge ships behind a Marlex-owned interface (a "port")
-            with a
-            <strong>direct connection first</strong>; the platform is adopted
-            per edge, later, as a second implementation behind the same port,
-            switched by a configuration record with no redeployment. That
-            pattern — worked in full on
-            <a href="#view-swappable-adapter">the swappable adapter</a> — means
-            the cutover routes through direct adapters, so
+            While the commercial terms were open, no edge could safely be built
+            to depend on the platform, and the whole layer was designed so that
+            none did. That constraint has lifted, and the design takes advantage
+            of it in exactly one place. For the
+            <strong>edges coupled to the retiring TargetRecruit data</strong> —
+            the ERP lane and the job-board lane — the interface published by the
+            integration layer is
             <strong
-              >the platform being unlicensed at go-live changes nothing</strong
-            >. In effect the platform decision stays reversible until real
-            traffic actually routes through it. That is why this page can settle
-            the product without waiting on the commercial close.
+              >where the switch from the old model to the new one lives</strong
+            >. The outside system keeps calling the same address with the same
+            contract; the target moves underneath. That is a better place for
+            the switch than inside Salesforce, because it is changed by
+            configuration in the layer rather than by a Salesforce release, and
+            the same mechanism re-points a lane at a different Salesforce
+            environment when one is needed.
+          </p>
+          <p>
+            The price is honest: those two lanes have to be standing before
+            their cutovers, so the September environment date is now a real date
+            on the plan. Everything else is unchanged — every other rebuilt edge
+            ships behind a Marlex-owned interface (a "port") with a
+            <strong>direct connection first</strong> and joins the platform
+            later, as a second implementation behind the same port, switched by
+            a configuration record with no redeployment. That pattern is worked
+            in full on
+            <a href="#view-swappable-adapter">the swappable adapter</a>. The two
+            lead lanes keep their direct connection too, as a tested fallback
+            rather than as the plan.
           </p>
           <div class="callout key">
             <span class="lbl">The platform is not a mandatory gateway</span>
@@ -4136,11 +4268,12 @@
               The most complete platform of the five: a mature API-led
               toolchain, connectors for the systems in scope, and the design
               centre closest to the three-layer architecture the layer is
-              proposed to follow. Its risk is proportion — the cost and
-              operational weight of an enterprise integration platform may be
-              disproportionate for a two-person IT team and the current edge
-              count. Selected on completeness and fit, with that proportion
-              question carried openly.
+              proposed to follow. Its risk was proportion — whether the cost and
+              operational weight of an enterprise integration platform suited
+              the in-house team and the current edge count. Selected on
+              completeness and fit; the commercial terms have since been agreed
+              and the operating model answered by running it as Marlex IT with
+              partner support.
             </p>
           </div>
           <div class="option">
@@ -4149,15 +4282,15 @@
               ><span class="chip limited">Runner-up</span>
             </div>
             <p>
-              The strongest alternative. Marlex already runs its identity on
-              Microsoft Entra ID — the same directory that already provides
-              single sign-on to Salesforce — so there is no new identity edge to
-              stand up. It is leaner than MuleSoft and, on the same evidence, a
-              two-person team could plausibly operate it unaided. It lost on
-              breadth of API-led tooling and connector completeness, not on cost
-              or operability — which is exactly why it stays the credible
-              fallback if MuleSoft's licensing or operating model does not close
-              cleanly.
+              The strongest alternative at the time of the decision. Marlex
+              already runs its identity on Microsoft Entra ID — the same
+              directory that already provides single sign-on to Salesforce — so
+              there would have been no new identity edge to stand up. It is
+              leaner than MuleSoft and could plausibly have been operated by a
+              smaller team. It lost on breadth of API-led tooling and connector
+              completeness, not on cost or operability. With the MuleSoft terms
+              now agreed, this is recorded as why the runner-up was a genuine
+              contender — not as a fallback still held open.
             </p>
           </div>
           <div class="option">
@@ -4208,10 +4341,12 @@
             The genuine fork was between the two platforms taken to demo:
             MuleSoft and Azure Integration Services. Below are the reasonable
             outcomes of each and how likely each is, with the size of what is at
-            stake. A plain pros-and-cons list would treat a minor inconvenience
-            and a decisive weakness as one tick each; what matters is whether
-            the completeness MuleSoft buys is worth the operating and cost
-            weight it brings.
+            stake — the comparison as it stood when the choice was made, kept
+            here because a decision record should show the reasoning, not just
+            the result. A plain pros-and-cons list would treat a minor
+            inconvenience and a decisive weakness as one tick each; what
+            mattered was whether the completeness MuleSoft buys is worth the
+            operating and cost weight it brings.
           </p>
           <p class="lk-legend">
             <strong>Likelihoods below are educated guesses</strong>, not
@@ -4228,7 +4363,7 @@
               <h4>MuleSoft (Anypoint) <span class="tag">Chosen</span></h4>
               <p class="head-note">
                 The most complete platform; selected on API-led fit and
-                connector breadth, licensing still to close.
+                connector breadth, with the commercial terms since agreed.
               </p>
               <ul class="dq-outcomes">
                 <li>
@@ -4240,25 +4375,26 @@
                 </li>
                 <li>
                   <span
-                    >Licensing closes near the internal estimate and the
-                    commercial case holds.</span
+                    >The commercial terms close on an acceptable basis —
+                    <em>they since have</em>.</span
                   >
-                  <span class="lk mid">possibly</span>
+                  <span class="lk good">resolved</span>
                 </li>
                 <li>
                   <span
-                    >Cost or operating weight proves disproportionate for a
-                    two-person team, and a managed-service or partner
-                    arrangement becomes necessary.</span
+                    >Operating weight proves more than the in-house team can
+                    absorb alone, and partner support becomes necessary —
+                    <em>it did</em>.</span
                   >
-                  <span class="lk mid">possibly</span>
+                  <span class="lk good">resolved</span>
                 </li>
                 <li>
                   <span
-                    >Day-two operation overwhelms the team and the platform's
-                    footprint has to be pared back.</span
+                    >The environment or the delivery capacity lands later than
+                    the two lead lanes need it, compressing their build
+                    window.</span
                   >
-                  <span class="lk bad">unlikely</span>
+                  <span class="lk mid">possibly</span>
                 </li>
               </ul>
               <div class="dq-foot">
@@ -4270,9 +4406,9 @@
                 </p>
                 <p>
                   <span class="lbl">Worst case</span> A capable platform that is
-                  heavier and dearer than a two-person team can run alone —
-                  recoverable by buying operations in or falling back to the
-                  runner-up, because nothing at cutover depends on it.
+                  heavier to run than the in-house team can carry alone — which
+                  is why it is operated with partner support rather than
+                  unaided.
                 </p>
               </div>
             </div>
@@ -4324,16 +4460,16 @@
           <div class="dq-verdict">
             <p>
               <strong
-                >Completeness won; operability is the tail to manage.</strong
+                >Completeness won; operability was answered by how it is
+                staffed.</strong
               >
               MuleSoft is the more complete platform and the better long-term
               fit for an API-led group backbone shared with Axxon, so it was
               chosen. Azure's genuine advantages — leaner, already inside
-              Marlex's identity, operable by two people — are exactly the risks
-              MuleSoft carries, which is why Azure stays the credible fallback
-              rather than a closed door. Because the cutover routes through
-              direct adapters either way, this choice can be revisited on
-              commercial or operating evidence without touching the go-live.
+              Marlex's identity, operable by a small team — named exactly the
+              risk MuleSoft carried, and that risk is met not by holding a
+              fallback open but by running the layer as Marlex IT with partner
+              support. With the terms agreed, the fork is closed.
             </p>
           </div>
         </section>
@@ -4345,16 +4481,18 @@
           <h2>The first two lanes, sized and ordered</h2>
           <p>
             A delivery proposal scopes the platform's first real work: two edges
-            plus the shared foundation, built by a single MuleSoft developer.
-            The order is
+            plus the shared foundation. The order is
             <strong
               >the ERP link (NET4) first, then the job board (InfoJobs)</strong
             >
             — NET4 leads because it has no dependencies and its multi-country
             reuse (Spain plus Axxon) earns the platform hop earliest, and
-            InfoJobs follows as the heavier build. None of this is a technical
-            blocker: the gating dependency is simply a MuleSoft developer and
-            tenant access, which in turn waits on the licensing close.
+            InfoJobs follows as the heavier build. Both are edges coupled to the
+            retiring data, which is what puts them first and what makes them the
+            two lanes the layer must have standing before their cutovers. The
+            gating dependency is no longer commercial: it is the environment
+            arriving in September 2026 and the delivery capacity to build
+            against it.
           </p>
           <div class="stat-row">
             <div class="stat">
@@ -4371,8 +4509,10 @@
               >
             </div>
             <div class="stat">
-              <span class="n">1</span>
-              <span class="l">MuleSoft developer</span>
+              <span class="n">Sept</span>
+              <span class="l"
+                >2026 — when the working environment becomes available</span
+              >
             </div>
           </div>
           <div class="tech">
@@ -4380,12 +4520,16 @@
             is scoped as two lanes plus a shared foundation: the NET4 lane
             (<code>sys-api-net4</code>), the InfoJobs lane
             (<code>sys-api-infojobs</code>, with SOAP-to-REST mediation), and
-            the shared foundation — with InfoJobs the heavier of the two. The
-            critical-path dependency is a named MuleSoft developer plus Anypoint
-            tenant access — which follows the licensing close — not any
-            technical unknown. Reporting and monitoring tools stay off the
-            platform entirely: they authenticate to Salesforce directly through
-            a Connected App.
+            the shared foundation — with InfoJobs the heavier of the two. Each
+            lane's system interface is also where its data target is configured,
+            so moving a lane from the <code>AVTRRT__</code> objects to the
+            native model is a change in the layer rather than a Salesforce
+            release — the same mechanism that points a lane at a different
+            Salesforce environment. The critical-path dependency is the
+            environment landing in September 2026 and the delivery capacity to
+            build against it, not any technical unknown. Reporting and
+            monitoring tools stay off the platform entirely: they authenticate
+            to Salesforce directly through a Connected App.
           </div>
         </section>
 
@@ -4393,19 +4537,21 @@
           <p class="section-eyebrow">Rollback for this choice</p>
           <h2>How this decision fails back</h2>
           <p>
-            This is the rare platform decision whose rollback costs almost
-            nothing, because the
-            <a href="#view-swappable-adapter">swappable adapter</a> keeps every
-            edge on a direct connection until a lane actually routes through
-            MuleSoft. So until then the platform choice is
-            <strong>reversible in effect</strong>: if licensing does not close
-            on acceptable terms, or the two-person team cannot operate it, the
-            layer falls back to the runner-up (Azure) — or simply stays on
-            direct adapters for longer — with no impact on go-live and no
-            business logic touched. The one thing that would erode this is
-            letting an edge become hard-wired to MuleSoft behind the port;
-            keeping the port discipline intact is what keeps the door open both
-            ways.
+            With the terms agreed, this is no longer a decision anyone expects
+            to reverse — but it still fails back gracefully, because the
+            <a href="#view-swappable-adapter">swappable adapter</a> keeps a
+            direct connection behind every port, including the two lead lanes.
+            So the practical rollback is not "change platform" but
+            <strong>run an edge direct instead</strong>: if a lane misbehaves,
+            or the environment slips past what a cutover can wait for, that edge
+            falls back to its direct connection by flipping one configuration
+            record, with no business logic touched. For the two lanes coupled to
+            the retiring data that fallback is the contingency rather than the
+            plan, and it costs the switch-point advantage while it is in use —
+            the model change then has to be made in Salesforce instead of in the
+            layer. The one thing that would erode this is letting an edge become
+            hard-wired to MuleSoft behind the port; keeping the port discipline
+            intact is what keeps the door open both ways.
           </p>
         </section>
 
@@ -4414,19 +4560,29 @@
           <h2>What we still carry</h2>
           <ul>
             <li>
-              <strong>Licensing is not closed.</strong> There is no committed
-              price — only internal estimates — and no proof-of-concept was run
-              at the time of decision. Closing the commercial terms is the
-              gating item before any lane can start, because tenant access and a
-              MuleSoft developer both wait on it.
+              <strong>Closed:</strong> the commercial terms. The negotiation is
+              complete, and the working environment becomes available in
+              September 2026. No proof-of-concept was run before the selection,
+              so the first two lanes are also the first real evidence of the
+              platform in Marlex's hands.
             </li>
             <li>
-              <strong>Operating capacity is a genuine question.</strong> Whether
-              a two-person IT team can run MuleSoft unaided is unresolved. This
-              is an operating-model question, not a product one — it points at a
-              small Centre of Excellence, a managed-service arrangement, or
-              partner support, and it needs a deliberate answer rather than an
-              assumption that the team absorbs it.
+              <strong>Closed:</strong> who operates it. The layer is run by
+              Marlex IT with partner support rather than by the in-house team
+              unaided — the deliberate answer to the operating-capacity question
+              this decision carried when it was made.
+            </li>
+            <li>
+              <strong
+                >The September date is now on the critical path for two
+                lanes.</strong
+              >
+              Because the ERP and job-board lanes hold the switch from the
+              retiring model to the new one, they have to be standing before
+              their cutovers. If the environment or the delivery capacity slips,
+              those two lanes fall back to switching in Salesforce — which
+              works, but gives up the control this design was chosen for. That
+              trade is the item to watch.
             </li>
             <li>
               <strong>Open:</strong> the underlying API-led three-layer
@@ -4443,9 +4599,10 @@
             </li>
             <li>
               <strong>Open:</strong> proportion. The completeness that won
-              MuleSoft the decision may prove disproportionate for the current
-              edge count and team size — a signal to watch as the first two
-              lanes land, with Azure held as the fallback if the evidence turns.
+              MuleSoft the decision may still prove heavier than the current
+              edge count needs — a signal to watch as the first two lanes land,
+              now managed through how the layer is staffed rather than by
+              reopening the platform choice.
             </li>
           </ul>
         </section>
@@ -4454,9 +4611,9 @@
           <p>
             Continue to
             <a href="#view-swappable-adapter">the swappable adapter</a> for the
-            pattern that keeps this choice reversible and the cutover
-            independent of it. Selection accepted 3 July 2026; licensing figures
-            are estimates and will firm up.
+            pattern that decides where each edge's switch lives and keeps a way
+            back behind every one. Selection accepted 3 July 2026; commercial
+            terms agreed and current as of 11 August 2026.
           </p>
         </footer>
       </div>
@@ -4467,45 +4624,56 @@
           <p class="eyebrow">Decision 3 · The swappable adapter</p>
           <h1>The port is what we own; the transport is a setting</h1>
           <p class="subtitle">
-            How the rebuild ships every edge to the outside world without
-            waiting on a platform decision that is still open — and gets its
-            rollback for free in the bargain.
+            How the rebuild ships every edge to the outside world, decides which
+            side of the seam holds each edge's switch — and gets its rollback
+            for free in the bargain.
           </p>
           <p class="dateline">
             Grounded in the July 2026 production-org audit · pattern proposed
-            for peer review · 19 July 2026
+            for peer review · 11 August 2026
           </p>
         </header>
 
         <div class="bluf">
           <p>
-            <strong>The decision.</strong> Two dates are out of step. The
-            middleware platform is chosen — MuleSoft, selected 3 July 2026
-            <span class="status decided">decided</span> — but its licensing is
-            not closed, so no edge can safely be built to depend on it. The
-            rebuild, meanwhile, has to touch every integration edge and cannot
-            wait. The question this page settles is how a rebuilt edge connects
-            to the outside world
-            <em>today</em>
-            without either (a) hard-wiring it to a transport we may replace, or
-            (b) holding the whole rebuild hostage to a platform that isn't
-            ready.
+            <strong>The decision.</strong> The rebuild has to touch every
+            integration edge, and each one needs an answer to two questions:
+            what does it connect through, and
+            <em>where does its switch live</em> — the point at which it can be
+            re-aimed from the retiring TargetRecruit objects at the new native
+            model, or from one Salesforce environment at another. Get the second
+            answer wrong and the cutover's most delicate moves become code
+            changes under time pressure.
           </p>
           <p>
             <strong>What we chose</strong>
             <span class="status proposed">proposed</span>. Every rebuilt edge
-            ships behind a <strong>Marlex-owned interface — a "port"</strong>. A
-            <strong>direct adapter is the day-one implementation</strong>; a
+            ships behind a <strong>Marlex-owned interface — a "port"</strong> —
+            with a <strong>direct adapter</strong> and, where the layer carries
+            it, a <strong>middleware adapter behind the same port</strong>, a
             <strong
-              >middleware adapter is added later behind the same port</strong
-            >; and a
-            <strong
-              >runtime selector — a configuration record — chooses which one
-              runs at runtime</strong
+              >runtime selector — a configuration record — choosing which one
+              runs</strong
             >. Switching an edge from direct to middleware, or back, is a
-            configuration change, not a redeployment. This one pattern is what
-            decouples the cutover from the open platform decision — and, as a
-            corollary, it is also the rebuild's rollback mechanism.
+            configuration change, not a redeployment.
+          </p>
+          <p>
+            <strong>And the seam has two sides.</strong> The switch can sit in
+            the <strong>Salesforce-side adapter</strong> or in the
+            <strong>system interface the integration layer publishes</strong>,
+            and the choice is made per edge. For the
+            <strong
+              >edges coupled to the retiring data — the ERP and the job
+              board</strong
+            >
+            — it sits <strong>in the layer</strong>: the outside system keeps
+            calling one address with one contract while the target moves
+            underneath, changed by configuration in the layer rather than by a
+            Salesforce release. For every other edge the Salesforce-side adapter
+            holds it, because there is nothing to gain from the hop. Either way
+            the direct connection stays as the fallback — which is what makes
+            this pattern the rebuild's rollback mechanism as well as its
+            switching one.
           </p>
         </div>
 
@@ -4734,6 +4902,108 @@
         </section>
 
         <section>
+          <p class="section-eyebrow">Which side of the seam holds the switch</p>
+          <h2>Two places the target can change — and how we pick</h2>
+          <p>
+            "Re-point" is one word for two different operations, and the
+            difference matters enough to decide per edge. The target can be
+            changed in the
+            <strong>Salesforce-side adapter</strong> — Marlex's own Apex,
+            deployed on a Salesforce release — or in the
+            <strong>system interface the integration layer publishes</strong>,
+            where it is a configuration change in the layer and the outside
+            system never sees a thing. Both are re-points. They differ in who
+            has to act, how fast it can be reversed, and whether an outside
+            party is involved at all.
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl">
+              <caption>
+                Where each edge's switch lives, and why
+              </caption>
+              <thead>
+                <tr>
+                  <th>Switch lives in</th>
+                  <th>Applies to</th>
+                  <th>Why there</th>
+                  <th>Cost of the change</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>The integration layer</strong></td>
+                  <td>
+                    The ERP (NET4) and the job board (InfoJobs) — the edges
+                    coupled to the retiring data
+                  </td>
+                  <td>
+                    The outside system keeps one address and one contract across
+                    the switch; the target moves underneath it. Nothing is
+                    coordinated with the vendor, and the same mechanism
+                    re-points the lane at a different Salesforce environment.
+                  </td>
+                  <td>
+                    A configuration change in the layer — no Salesforce release
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>The Salesforce-side adapter</strong></td>
+                  <td>
+                    Every other Marlex-owned edge, and both lead lanes whenever
+                    they are running on their fallback
+                  </td>
+                  <td>
+                    There is no second consumer and no reuse to earn the hop, so
+                    routing the switch through the layer would add a moving part
+                    without removing one.
+                  </td>
+                  <td>An Apex change on a normal Salesforce release</td>
+                </tr>
+                <tr>
+                  <td><strong>Neither — the vendor's own connector</strong></td>
+                  <td>The bought data connectors</td>
+                  <td>
+                    They ship a fixed Salesforce connector with no Marlex-owned
+                    seam in front of it, so there is nothing to place a switch
+                    behind.
+                  </td>
+                  <td>
+                    The external owner re-points their product — see
+                    <a href="#view-connectors">the data connectors</a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The rule behind the table:
+            <strong
+              >put the switch in the layer when the switch itself is the
+              risk</strong
+            >. That is true for exactly the edges whose target has to change at
+            cutover, because those are the ones where a late-breaking Salesforce
+            release is the thing you least want to depend on. Everywhere else
+            the Salesforce-side adapter is the simpler home and stays the
+            default.
+          </p>
+          <div class="callout">
+            <span class="lbl">What this costs, honestly</span>
+            <p>
+              Putting the switch in the layer means the two lead lanes have to
+              be standing <em>before</em> their cutovers — the platform is on
+              the critical path for them, which it is not for anything else.
+              That is an accepted trade rather than a free win: it buys a switch
+              that Marlex changes by configuration instead of by release, and it
+              is affordable because the commercial terms are agreed and the
+              environment is available from September 2026. If a lane is not
+              ready in time, its edge falls back to switching in the
+              Salesforce-side adapter — the cutover still happens, on a less
+              comfortable mechanism.
+            </p>
+          </div>
+        </section>
+
+        <section>
           <p class="section-eyebrow">Alternatives considered</p>
           <h2>Three ways to sequence the edges — two of them rebuild twice</h2>
           <p>
@@ -4789,14 +5059,16 @@
             </div>
             <p>
               Build the seam once, where it is permanent — in the org,
-              Marlex-owned. Ship a direct adapter behind each port on day one so
-              the edge works immediately and the cutover has zero platform
-              dependency. When the platform is licensed, operable and earning
-              its hop for a class of edge, add a middleware adapter behind the
-              <em>same</em> port and flip the selector. The edge is built once;
-              the transport changes by configuration, never by rebuild. The
-              direct adapter stays as a permanent fallback, which is where the
-              rollback comes from.
+              Marlex-owned. Ship a direct adapter behind each port so the edge
+              works immediately and has something to fall back on. Where the
+              platform earns its hop for a class of edge, add a middleware
+              adapter behind the <em>same</em> port and flip the selector. The
+              edge is built once; the transport changes by configuration, never
+              by rebuild. The direct adapter stays as a permanent fallback,
+              which is where the rollback comes from. For the two lanes coupled
+              to the retiring data the middleware adapter is built ahead of the
+              cutover rather than after it, because that is where their switch
+              lives.
             </p>
           </div>
           <div class="callout">
@@ -4893,10 +5165,18 @@
               <ul class="dq-outcomes">
                 <li>
                   <span
-                    >The cutover proceeds on its own clock regardless of
-                    platform licensing or operating capacity.</span
+                    >Every edge outside the two lead lanes crosses the cutover
+                    without depending on the platform at all.</span
                   >
                   <span class="lk good">almost certain</span>
+                </li>
+                <li>
+                  <span
+                    >The two lead lanes are standing in time to hold their own
+                    switch, so the model change is made in the layer rather than
+                    in a Salesforce release.</span
+                  >
+                  <span class="lk good">probably</span>
                 </li>
                 <li>
                   <span
@@ -4988,8 +5268,8 @@
               later change a configuration flip: the port. The preference this
               serves is a
               <strong
-                >cutover that owes nothing to an open platform decision, with a
-                real way back</strong
+                >cutover whose switches Marlex controls, each with a real way
+                back</strong
               >
               — and only the chosen sequence delivers both without paying for
               the edge twice.
@@ -5063,14 +5343,16 @@
             </li>
             <li>
               <strong
-                >The platform decision this pattern insulates against is itself
-                still open.</strong
+                >Two lanes now depend on the platform being ready in
+                time.</strong
               >
-              MuleSoft is chosen but its licensing is not closed, and the
-              two-person IT team's capacity to operate it unaided is a real
-              question. The whole point of the pattern is that none of that
-              blocks the cutover — but the per-edge middleware adoption it
-              enables cannot start until those resolve.
+              Putting the switch in the layer for the ERP and job-board lanes
+              means those two have to be standing before their cutovers — the
+              one place the platform sits on the critical path. The commercial
+              terms are agreed and the environment is available from September
+              2026, so this is a scheduling risk rather than an open decision;
+              if it slips, those edges switch in their Salesforce-side adapter
+              instead and give up the control the design was chosen for.
             </li>
             <li>
               <strong
@@ -9848,8 +10130,10 @@
             scoped as <code>sys-api-net4</code> in the system-API layer. It is
             the lighter of the two lanes in the first delivery proposal (which
             covers NET4 + InfoJobs + the shared foundation), and leads because
-            it has no dependencies. The gating dependency is a middleware
-            developer plus tenant access, not a technical blocker — nothing in
+            it has no dependencies and is coupled to the retiring candidate
+            data, so the layer holds its switch. The gating dependency is the
+            working environment arriving in September 2026 and the delivery
+            capacity to build against it, not a technical blocker — nothing in
             the org stops the lane from being built.
           </div>
         </section>
@@ -9879,13 +10163,23 @@
             <a href="#view-swappable-adapter">swappable-adapter</a> pattern, the
             direct connection stays in place as the fallback: a single runtime
             configuration record chooses whether the edge runs direct or through
-            the middleware, with no redeployment. If the NET4 lane is not ready
-            — the tenant is late, the developer is unavailable, the licensing is
-            still open — the edge simply keeps running on its direct adapter,
-            and nothing waits. The switch to the middleware happens when the
-            lane is proven, and reverses just as cheaply if it misbehaves. That
-            is the whole point of putting the direct connection first and the
-            platform behind it.
+            the middleware, with no redeployment. That fallback means a
+            misbehaving lane is reversed in minutes rather than repaired under
+            pressure.
+          </p>
+          <p>
+            What has changed is that this lane is <em>planned</em> to be on the
+            platform before its cutover, not after. Because NET4 is coupled to
+            the retiring candidate data, the system interface the lane publishes
+            is where its data target is set — so the move from the old fields to
+            the new model is made in the layer rather than in a Salesforce
+            release, and the ERP keeps calling one unchanged address across the
+            switch. The platform's terms are agreed and its environment is
+            available from September 2026, which is what makes that plannable.
+            If the lane is nonetheless not ready in time, the edge runs on its
+            direct adapter and the candidate re-point is made in Marlex's own
+            Apex instead — the cutover still happens, on a mechanism that costs
+            a release rather than a configuration change.
           </p>
         </section>
 
@@ -10024,7 +10318,7 @@
           </p>
           <p class="dateline">
             Grounded in live production call volumes · 13 July 2026 · lane
-            sequencing proposed for review · 19 July 2026
+            sequencing proposed for review · 11 August 2026
           </p>
         </header>
 
@@ -11194,21 +11488,31 @@
           </div>
           <div class="callout">
             <span class="lbl"
-              >The platform is chosen; its footprint here is proposed</span
+              >The platform is settled; its footprint here is proposed</span
             >
             <p>
               MuleSoft was selected as the integration platform on 3 July 2026
-              <span class="status decided">decided</span>; its licensing is not
-              yet closed. The lane ordering, the ~140-hour figure and the
+              <span class="status decided">decided</span>, its commercial terms
+              have since been agreed, and the working environment is available
+              from September 2026. The lane ordering, the lane's sizing and the
               SOAP-to-REST mediation plan are
               <strong>proposed for review</strong>
               <span class="status proposed">proposed</span> — part of a delivery
-              proposal covering the first two lanes plus shared foundation. The
-              gating constraint is a MuleSoft developer plus tenant access, not
-              a technical blocker. And the cutover itself does not wait on the
-              platform: the webhook can re-point behind its direct Marlex-owned
-              service if the lane is not ready, because the seam is what is
-              permanent, not the transport.
+              proposal covering the first two lanes plus shared foundation.
+            </p>
+            <p>
+              <strong>Where this lane's switch lives.</strong> Because the
+              webhook writes the retiring records, the plan is for the
+              <strong
+                >system interface the layer publishes to hold the switch</strong
+              >: the job board keeps posting to one unchanged address across the
+              cutover while the target moves from the old objects to the new
+              underneath it. That is the whole reason this lane is built before
+              its cutover rather than after. The Salesforce-side service remains
+              as the tested fallback — if the lane is not ready, the webhook
+              re-points in Marlex's own Apex instead, and the cutover still
+              happens on a mechanism that costs a release rather than a
+              configuration change.
             </p>
           </div>
         </section>
@@ -11500,9 +11804,9 @@
               <strong>SOAP-to-REST mediation carries build risk.</strong> The
               older SOAP contract on the InfoJobs side is the reason this lane
               is heavier than the ERP lane; mediation quirks (session handling,
-              message shape) are the most likely place the ~140-hour estimate
-              slips. It is a known-hard task, not an unknown one — but it is the
-              lane's biggest technical variable.
+              message shape) are the most likely place this lane's sizing slips.
+              It is a known-hard task, not an unknown one — but it is the lane's
+              biggest technical variable.
             </li>
             <li>
               <strong
@@ -11516,10 +11820,12 @@
             </li>
             <li>
               <strong>Open:</strong> the lane sequencing (second, after the ERP,
-              before the portals), the ~140-hour figure and the SOAP-to-REST
-              plan are proposed for review and depend on a MuleSoft developer
-              plus tenant access — the gating dependency is people and access,
-              not a technical blocker.
+              before the portals), this lane's sizing and the SOAP-to-REST plan
+              are proposed for review. The gating dependency is the working
+              environment arriving in September 2026 and the delivery capacity
+              to build against it — not a technical blocker. Because this lane
+              holds the switch to the new model, it has to be standing before
+              the cutover.
             </li>
           </ul>
         </section>
@@ -14925,8 +15231,8 @@
             cannot start yet.
           </p>
           <p class="dateline">
-            Grounded in a read-only census of the live production org · 19 July
-            2026
+            Grounded in a read-only census of the live production org · 11
+            August 2026
           </p>
         </header>
 
@@ -16111,7 +16417,8 @@
             middleware.
           </p>
           <p class="dateline">
-            Grounded in the live production-org integration audit · 19 July 2026
+            Grounded in the live production-org integration audit · 11 August
+            2026
           </p>
         </header>
 
@@ -17258,7 +17565,7 @@
           </p>
           <p class="dateline">
             Grounded in the July 2026 production-org audit · lane reuse proposed
-            for review · 19 July 2026
+            for review · 11 August 2026
           </p>
         </header>
 
@@ -18359,12 +18666,11 @@
             the Marlex-owned port, a direct point-to-point bridge from the Axxon
             org to NET4 is a <strong>first-class fallback</strong>, not an
             afterthought: if the shared middleware lane is not ready in time —
-            the tenant routing proves harder than expected, the platform
-            licensing is still open, a developer is unavailable — the edge
-            simply runs on the direct connection and nothing waits. A single
-            runtime configuration record chooses direct or middleware, with no
-            redeployment, and reverses just as cheaply if the shared lane
-            misbehaves.
+            the tenant routing proves harder than expected, or the delivery
+            capacity is not there — the edge simply runs on the direct
+            connection and nothing waits. A single runtime configuration record
+            chooses direct or middleware, with no redeployment, and reverses
+            just as cheaply if the shared lane misbehaves.
           </p>
           <p>
             So the target has runway on both sides of the assumption. If NET4
@@ -18435,7 +18741,7 @@
             settled?
           </p>
           <p class="dateline">
-            Grounded in live production usage logs · 19 July 2026 · both calls
+            Grounded in live production usage logs · 11 August 2026 · both calls
             open
           </p>
         </header>
@@ -18968,8 +19274,8 @@
             them.
           </p>
           <p class="dateline">
-            Grounded in a read-only census of live production API traffic · 19
-            July 2026
+            Grounded in a read-only census of live production API traffic · 11
+            August 2026
           </p>
         </header>
 
@@ -19363,7 +19669,8 @@
             front them, and if not, who rolls them back?
           </p>
           <p class="dateline">
-            Grounded in the live production-org measured surface · 19 July 2026
+            Grounded in the live production-org measured surface · 11 August
+            2026
           </p>
         </header>
 
@@ -19780,8 +20087,8 @@
             and what is dropped.
           </p>
           <p class="dateline">
-            Grounded in a read-only census of the live production org · 19 July
-            2026
+            Grounded in a read-only census of the live production org · 11
+            August 2026
           </p>
         </header>
 
@@ -20201,7 +20508,7 @@
           </p>
           <p class="dateline">
             Grounded in a read-only census of live production API traffic and
-            login history · 19 July 2026
+            login history · 11 August 2026
           </p>
         </header>
 
