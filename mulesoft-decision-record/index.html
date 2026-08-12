@@ -1753,7 +1753,7 @@
             Marlex · Salesforce Programme · MuleSoft — the Integration Layer ·
             Decision Record
           </p>
-          <h1>MuleSoft — the integration layer, as a Decision Record</h1>
+          <h1>MuleSoft — the integration middleware, as a Decision Record</h1>
           <p class="subtitle">
             The MuleSoft build. Every edge where the recruitment system meets an
             outside world is mapped here — the ERP, the job board, e-signature,
@@ -1763,18 +1763,14 @@
             TargetRecruit data. Each is a decision, one per page: what was
             weighed, what was chosen, and what is still open.
           </p>
-          <p class="dateline">
-            Decision record · draft for peer review · 11 August 2026 · Nuvolar
-          </p>
+          <p class="dateline">Decision record · 11 August 2026 · Nuvolar</p>
         </header>
 
         <div class="bluf">
           <p>
             <strong>What this is.</strong> The complete reasoning behind how
             Marlex's integrations are rebuilt and routed as TargetRecruit is
-            replaced with a native Salesforce system — grounded in a read-only
-            audit of the live production org, not estimates. It is a proposed
-            approach for peer and governance review, not a settled plan.
+            replaced with a native Salesforce build and data model.
           </p>
           <p>
             <strong>The objectives.</strong> Four, in priority order. They are
@@ -1790,8 +1786,11 @@
                 <em>where</em> it points — at the retiring TargetRecruit objects
                 or at the new native model, at one Salesforce environment or
                 another — is a change made in configuration, not a Salesforce
-                release. This is what makes the rebuild's cutover controllable,
-                and it is the reason the sequence looks the way it does.
+                release.
+              </p>
+              <p>
+                This is what makes the rebuild's cutover controllable, and it is
+                the reason the sequence looks the way it does.
               </p>
             </li>
             <li>
@@ -1801,9 +1800,16 @@
               <p>
                 Those are the only edges whose target has to change when the
                 recruitment model is replaced. Routing them through the
-                integration layer first is what puts that change under Marlex's
-                control in time for the switch — which is why the ERP and the
-                job board lead the order.
+                middleware first is what puts that change under Marlex's control
+                in time for the switch.
+              </p>
+              <p>
+                The ERP and the job board lead the order for two reasons at
+                once: both touch the retiring model, and both are
+                business-critical — the ERP carries placements, invoicing and
+                the live candidate sync; the job board carries the whole
+                application intake. A re-point that goes wrong on either stops
+                the business, so they get the controlled switch first.
               </p>
             </li>
             <li>
@@ -1812,12 +1818,17 @@
               >
               <p>
                 Move integration logic <em>out</em> of Salesforce into one
-                shared, Marlex-owned layer so Salesforce goes back to running
-                CRM, back-office and recruitment and stops being the group's
-                integration hub. Each connection built is a named interface that
-                Marlex Spain, Axxon and the rollout countries all call, so the
-                second job board — or a new country's ERP — is a small addition,
-                not a fresh build. A platform investment, not a project cost.
+                shared, Marlex-owned platform, so Salesforce goes back to
+                running CRM, back-office and recruitment and stops being the
+                group's integration hub.
+              </p>
+              <p>
+                Each connection built is a named interface every org in the
+                group calls — Marlex Spain, the Marlex rollout countries, Axxon
+                on its own org, and the Philippines brand on its own org too. So
+                the second job board, or a new country's ERP, is a small
+                addition rather than a fresh build. A platform investment, not a
+                project cost.
               </p>
             </li>
             <li>
@@ -1826,45 +1837,92 @@
               >
               <p>
                 Every edge is built so it has a working direct connection to
-                fall back on, so a delay in the integration layer degrades the
-                plan rather than stopping the switch.
+                fall back on. A delay in the middleware degrades the plan rather
+                than stopping the switch.
+              </p>
+              <p>
+                The same design cuts the dependency on the teams that own the
+                other systems. Because the interface address and its contract
+                stay fixed, the ERP vendor, the job board and the portal
+                partners do not have to change anything, or be available on
+                Marlex's cutover weekend, for the switch to happen.
               </p>
             </li>
           </ol>
+          <div class="callout key">
+            <span class="lbl"
+              >Two things are called an integration layer — this set means the
+              middleware</span
+            >
+            <p>
+              There are two of them, and they are not the same thing. The
+              <strong>Salesforce-side integration layer</strong> is the code
+              inside the org: the named credentials, the callout classes, the
+              inbound REST endpoints, the adapters behind each port. The
+              <strong>middleware</strong> — MuleSoft — is the platform that sits
+              outside Salesforce and mediates between systems.
+            </p>
+            <p>
+              Where this set says <em>the middleware</em> or
+              <em>the platform</em>, it means MuleSoft. Where it means the
+              org-side code, it says <em>the Salesforce side</em>. Both exist,
+              and most edges use both.
+            </p>
+          </div>
           <p>
             <strong>How it's approached.</strong> Every rebuilt integration
             ships behind a <strong>Marlex-owned interface</strong>, and the
-            switch behind that interface is what the programme owns. For the
+            switch behind that interface is what the programme owns. Where that
+            switch physically lives differs by edge.
+          </p>
+          <p>
+            For the
+            <strong>edges tied to the retiring TargetRecruit data</strong>, the
+            switch lives <strong>in the middleware</strong>: the interface each
+            system calls keeps its address and its contract, and the target
+            moves from the old model to the new underneath it. The external
+            system notices nothing. Those edges are therefore built on the
+            platform before their cutovers, and each keeps a direct connection
+            as its tested fallback.
+          </p>
+          <p>
             <strong
-              >edges tied to the retiring TargetRecruit data — the ERP (NET4)
-              first, then the job board (InfoJobs)</strong
+              >The middleware carries more than two interfaces before the
+              cutover.</strong
             >
-            — that switch lives <strong>in the integration layer</strong>: the
-            interface each system calls keeps its address and its contract, and
-            the target moves from the old model to the new underneath it. Those
-            two lanes are therefore built before their cutovers, and each keeps
-            a direct connection as its tested fallback. Everything else is
-            adopted one edge at a time, by configuration, on its own schedule.
-            Not everything routes through the layer — connections that only need
-            a secure, direct link stay on Salesforce, and it is not a mandatory
-            gateway. The platform choice and its commercial terms are settled;
-            the architecture around it is proposed for review.
+            The ERP (NET4) and the job board (InfoJobs) are the two
+            <em>lead lanes</em> — the ones whose switch the platform has to hold
+            — but the first delivery also stands up the shared foundation every
+            lane reuses, and the pre-screening connector (Orbio) is routed
+            behind the platform before cutover too. Lead lane means first and
+            most constrained, not the only work.
+          </p>
+          <p>
+            Everything else is adopted one edge at a time, by configuration, on
+            its own schedule. Not everything routes through the platform —
+            connections that only need a secure, direct link stay on Salesforce.
+            It is not a mandatory gateway.
           </p>
           <p>
             This set opens with the foundations — <em>why</em> an integration
             platform at all, <em>which</em> platform was chosen, the
             <em>swappable-adapter</em>
             pattern that decouples the go-live from it, and the
-            <em>measured surface</em> the whole thing rests on. Then a page per
-            <em>edge</em> — one for each integration, named for the two systems
-            involved and answering the same four questions about each: which way
-            the traffic runs, whether it moves data or shares a process, where
-            in the business process it happens, and whether it touches the data
-            being retired. Then the edges that stay direct or simply carry over,
-            the commercial data connectors that sit outside the platform
-            entirely, and finally the edges that leave with the old package.
-            Each page states the alternatives, the choice, how it fails back,
-            and — because honest work carries them — its own open questions.
+            <em>measured surface</em> the whole thing rests on.
+          </p>
+          <p>
+            Then a page per <em>edge</em> — one for each integration, named for
+            the two systems involved and answering the same four questions:
+            which way the traffic runs, whether it moves data or shares a
+            process, where in the business process it happens, and whether it
+            touches the data being retired.
+          </p>
+          <p>
+            Then the edges that stay direct or simply carry over, the commercial
+            data connectors that sit outside the platform entirely, and finally
+            the edges that leave with the old package. Each page states the
+            alternatives, the choice, how it fails back, and its own open
+            questions.
           </p>
         </div>
 
@@ -1873,10 +1931,10 @@
           <h2 id="finding">Which edges touch the retiring data</h2>
           <p>
             The sharpest question for a go-live is not "who talks to Salesforce"
-            — it is "who writes the old recruitment records that are being
+            — it is "who touches the old recruitment records that are being
             retired," because that set, and only that set, has to be re-pointed
-            in step with the switch. A read-only census of the live org answered
-            it with counted fact rather than a pending confirmation.
+            in step with the switch. A read-only census of the live org counted
+            it.
           </p>
           <div class="stat-row">
             <div class="stat">
@@ -1887,36 +1945,53 @@
               >
             </div>
             <div class="stat">
-              <span class="n">3</span
+              <span class="n">4</span
               ><span class="l"
-                >integrations that write the retiring records — one live, one
+                >integrations coupled to the retiring records — two live, one
                 under review, one still in build</span
               >
             </div>
             <div class="stat">
-              <span class="n">1</span
+              <span class="n">2</span
               ><span class="l"
-                >of those the programme controls end to end — the job board; the
-                other two live with their vendors</span
+                >of those the programme controls end to end — the job board and
+                the ERP candidate sync; the other two live with their
+                vendors</span
               >
             </div>
           </div>
+          <p><strong>The two that are live and programme-owned.</strong></p>
+          <ul>
+            <li>
+              <strong>The job board (InfoJobs)</strong> writes the retiring
+              records today. Its re-point gates the switch.
+            </li>
+            <li>
+              <strong>The ERP (NET4)</strong> runs a live candidate sync that
+              reads a TargetRecruit field on the candidate record and sends it
+              to the ERP — around 23,600 candidate syncs in the last thirty
+              days. This is present coupling, confirmed in the live org, not a
+              future one (see <a href="#view-marlex-with-net4">NET4</a>).
+            </li>
+          </ul>
+          <p><strong>The two that sit with their vendors.</strong></p>
+          <ul>
+            <li>
+              <strong>A sourcing connector (Taleva)</strong> reads them heavily
+              and appears to write too, but signs in as named people, so its own
+              writes can't yet be told apart from users'. Its owner must
+              confirm.
+            </li>
+            <li>
+              <strong>An AI pre-screening service (Orbio)</strong> writes them
+              by design, but exists only in the build sandbox today with no
+              production footprint yet.
+            </li>
+          </ul>
           <p>
-            The job board (InfoJobs) writes the retiring records today and is
-            the one the programme owns end to end — it gates the switch. A
-            sourcing connector (Taleva) reads them heavily and appears to write
-            too, but signs in as named people, so its own writes can't yet be
-            told apart from users' — its owner must confirm. An AI pre-screening
-            service (Orbio) writes them by design but exists only in the build
-            sandbox today, with no footprint in production yet. Those three are
-            what the <em>logs</em> reveal. A fourth is coming from the other
-            direction: the ERP (NET4) is native today, but a candidate
-            integration in development will make it touch the retiring candidate
-            data — a re-point the logs can't show yet because it isn't built
-            (see <a href="#view-marlex-with-net4">NET4</a>). Everything else
-            already runs on the new native or standard model and crosses the
-            go-live untouched. The full evidence — and the limits of what logs
-            alone can show — is on
+            Everything else already runs on the new native or standard model and
+            crosses the go-live untouched. The full evidence — and the limits of
+            what logs alone can show — is on
             <a href="#view-measured-surface">the measured surface</a>.
           </p>
         </section>
@@ -2055,13 +2130,13 @@
                 ><h3>NET4 — the ERP</h3>
                 <p>
                   The first lane. Its finance directions are native and cross
-                  untouched, but a candidate integration in development makes it
-                  touch the retiring candidate data — so it re-points too. It
-                  leads on both multi-country reuse and being one of the edges
-                  the effort routes through MuleSoft first.
+                  untouched, but its live candidate sync already reads a
+                  retiring TargetRecruit field — so it re-points too. It leads
+                  on both multi-country reuse and being one of the edges routed
+                  through MuleSoft first.
                 </p></span
               >
-              <span class="pick">First lane · reuse + becoming TR-coupled</span>
+              <span class="pick">First lane · reuse + live coupling</span>
             </a>
             <a class="decrow" href="#view-marlex-from-infojobs">
               <span class="num">▸</span>
@@ -2248,15 +2323,17 @@
             </li>
             <li>
               <strong
-                >Two lanes are built before their cutovers; the rest of the
+                >Two lead lanes are built before their cutovers; the rest of the
                 switch keeps its own clock.</strong
               >
-              The ERP and the job board are the edges tied to the retiring data,
-              so the integration layer holds their switch and has to be standing
-              before they cross. Every other edge ships behind its interface
-              with a direct connection and moves onto the layer later, so no
-              other part of the switch waits on it — and both lead lanes keep a
-              tested direct connection as their fallback.
+              The ERP and the job board are the edges tied to the retiring data
+              that the programme owns, so the middleware holds their switch and
+              has to be standing before they cross. They are not the only
+              pre-cutover work — the shared foundation and the pre-screening
+              connector are built then too. Every other edge ships behind its
+              interface with a direct connection and moves onto the platform
+              later, so no other part of the switch waits on it. Both lead lanes
+              keep a tested direct connection as their fallback.
             </li>
             <li>
               <strong
@@ -2270,16 +2347,12 @@
               switches, reversible either way.
             </li>
             <li>
-              <strong
-                >Three edges write the retiring records — and a fourth is
-                coming.</strong
-              >
-              Measured, not assumed (the count and each edge are set out under
+              <strong>Four edges are coupled to the retiring records.</strong>
+              Measured, not assumed (each is set out under
               <a href="#finding">which edges touch the retiring data</a> above):
-              one live and programme-owned, one to confirm, one in build, plus a
-              fourth growing on the ERP side that the logs can't show yet
-              because it isn't built. Everything else already runs on the new
-              model.
+              two live and programme-owned — the job board and the ERP's
+              candidate sync — one to confirm with its owner, one still in
+              build. Everything else already runs on the new model.
             </li>
             <li>
               <strong
@@ -2287,10 +2360,10 @@
                 reuse.</strong
               >
               The ERP goes first — no dependencies, multi-country reuse across
-              Spain and Axxon, and a candidate integration that puts it in the
-              class of edges whose switch the integration layer has to hold. The
-              job board follows: heavier to build, and the one switch that must
-              land in lockstep with the go-live.
+              Spain and Axxon, and a live candidate sync that puts it in the
+              class of edges whose switch the middleware has to hold. The job
+              board follows: heavier to build, and the one switch that must land
+              in lockstep with the go-live.
             </li>
             <li>
               <strong>Some edges never belong on the platform.</strong> Bought
@@ -2335,24 +2408,24 @@
             not a guess.
           </p>
           <div class="callout key">
-            <span class="lbl">This is a draft for review</span>
+            <span class="lbl">What is decided and what is still open</span>
             <p>
-              The platform choice is decided; the architecture around it is
-              proposed. Every page lays out the alternatives, the choice, and
-              what could still go wrong — including the open questions each one
-              carries. Challenging any of it is the point of circulating it.
+              The platform choice and its commercial terms are settled. The
+              architecture around it is the approach this set argues, and every
+              page lays out the alternatives, the choice, and the open questions
+              it still carries. Challenging any of it is welcome.
             </p>
           </div>
         </section>
 
         <footer>
           <p>
-            Circulated by Nuvolar to the Marlex Salesforce team for review —
-            comments and disagreement welcome on any of it. Grounded in the July
-            2026 production-org audit, read-only throughout, cross-read against
-            the delivery backlog. Counts are point-in-time as of 19 July 2026
-            and will drift; the decisions on this page are current as of 11
-            August 2026. Start with
+            Prepared by Nuvolar for the Marlex Salesforce team — comments and
+            disagreement welcome on any of it. Grounded in the July 2026
+            production-org audit, read-only throughout, cross-read against the
+            delivery backlog. Counts are point-in-time as of 19 July 2026 and
+            will drift; the decisions on this page are current as of 12 August
+            2026. Start with
             <a href="#view-why-middleware">Why middleware</a>, jump to any lane
             above, or read the sequence on the
             <a href="#view-technical-roadmap">technical roadmap</a>.
@@ -2911,7 +2984,7 @@
 
         <div class="ap-plan">
           <header class="ap-hero">
-            <p class="ap-kicker">The running order · the integration layer</p>
+            <p class="ap-kicker">The running order · the middleware</p>
             <h1 class="ap-title">The integrations as a <em>sequence</em></h1>
             <p class="ap-lede">
               The objective underneath the sequence is control: every
@@ -2919,15 +2992,14 @@
               points — at the retiring TargetRecruit objects or at the new model
               — is a change made in configuration rather than a Salesforce
               release. The order below is set by that, starting with the edges
-              tied to the retiring data, whose switch the integration layer
-              itself holds. A sequence, not a schedule: it fixes what must come
-              before what, by dependency and reuse, not by committed dates. This
-              is the technical roadmap; the delivery plan that would put weeks
-              against it does not yet exist.
+              tied to the retiring data, whose switch the middleware itself
+              holds. A sequence, not a schedule: it fixes what must come before
+              what, by dependency and reuse, not by committed dates. This is the
+              technical roadmap; the delivery plan that would put weeks against
+              it does not yet exist.
             </p>
             <p class="ap-dateline">
-              Grounded in the July 2026 production-org audit · draft for peer
-              review · 11 August 2026
+              Grounded in the July 2026 production-org audit · 11 August 2026
             </p>
 
             <div class="ap-thesis">
@@ -2946,10 +3018,10 @@
                 >
               </div>
               <div class="ap-cell ap-r">
-                <span class="ap-n">3 edges</span
+                <span class="ap-n">4 edges</span
                 ><span class="ap-l"
-                  >write the retiring records — one live, one under review, one
-                  in build. Two more re-point by reading them.</span
+                  >are coupled to the retiring records — two live and
+                  programme-owned, one under review, one in build.</span
                 >
               </div>
               <div class="ap-cell ap-r">
@@ -3087,16 +3159,15 @@
                     <span class="ap-tag ap-build">NET4</span
                     ><span class="ap-tag ap-data">Multi-country reuse</span
                     ><span class="ap-tag ap-riskc"
-                      >Candidate integration in build</span
+                      >Live candidate sync is TR-coupled</span
                     >
                   </div>
                   <p>
                     NET4, the ERP, goes first for two reasons that point the
                     same way: it has no dependencies and its reuse across both
-                    Spain and Axxon most earns the hop, and a candidate
-                    integration now in development makes it touch the retiring
-                    candidate data — putting it in the class whose switch the
-                    layer holds (see
+                    Spain and Axxon most earns the hop, and its live candidate
+                    sync already reads a retiring TargetRecruit field — putting
+                    it in the class whose switch the middleware holds (see
                     <a href="#view-marlex-with-net4">NET4</a> and
                     <a href="#view-marlex-with-axxon">Axxon → NET4</a>).
                   </p>
@@ -3109,14 +3180,16 @@
                         >This interface is where the lane's data target is
                         set</b
                       >, so moving it from the retiring objects to the new model
-                      is a change in the layer, not a Salesforce release.
+                      is a change in the middleware, not a Salesforce release.
                     </li>
                     <li>
                       The finance directions are <b>preserved, not rebuilt</b> —
                       already behind a Marlex-owned, vendor-free client. The
-                      <b>candidate integration re-points</b> where it touches
-                      the retiring candidate fields on Contact (a working
-                      assumption to confirm with the ERP side).
+                      <b>live candidate sync re-points</b>: its field mapping
+                      moves off the retiring TargetRecruit field to the native
+                      successor, in step with the cutover. A wider candidate
+                      integration is still in build and its field set is still
+                      to confirm with the ERP side.
                     </li>
                     <li>
                       The same lane, built multi-tenant, becomes
@@ -3339,8 +3412,7 @@
                       <span class="ap-route ap-pre">MuleSoft · first lane</span>
                     </td>
                     <td>
-                      Finance preserved; candidate integration re-points (in
-                      build)
+                      Finance preserved; the live candidate sync re-points
                     </td>
                   </tr>
                   <tr>
@@ -3465,6 +3537,22 @@
                 >
               </div>
               <div class="ap-oq">
+                <h3>
+                  Which candidate fields the wider ERP integration will map
+                </h3>
+                <p>
+                  The ERP's live candidate sync is already coupled to the
+                  retiring model, and its single mapped TargetRecruit field
+                  re-points as a configuration change. What is not settled is
+                  the wider candidate integration still in build — which field
+                  set it maps decides how much bigger that re-point gets, and
+                  the native successor fields have to exist before it lands.
+                </p>
+                <span class="ap-owner"
+                  >Marlex IT ↔ ERP vendor · before the ERP lane</span
+                >
+              </div>
+              <div class="ap-oq">
                 <h3>Does the ERP accept both tenants on shared endpoints</h3>
                 <p>
                   The reuse of the ERP lane for Axxon assumes NET4 accepts Spain
@@ -3492,7 +3580,7 @@
               <a href="#view-index">overview</a> for the decision map, or open
               any lane's own page above. Grounded in the July 2026
               production-org audit; counts are point-in-time as of 19 July 2026
-              and will drift; the sequence is current as of 11 August 2026.
+              and will drift; the sequence is current as of 12 August 2026.
             </p>
           </footer>
         </div>
@@ -3514,7 +3602,7 @@
           </p>
           <p class="dateline">
             Grounded in the July 2026 production-org integration audit · 11
-            August 2026 · architecture proposed for review
+            August 2026
           </p>
         </header>
 
@@ -3540,8 +3628,8 @@
             request points a system offers) and holds no cross-system plumbing.
             This is the premise the whole integration set rests on, and it is
             <span class="status proposed">proposed</span> — the architecture
-            records that fix it are drafted for review, not yet ratified. The
-            concrete platform that plays the middleware role is a
+            records that fix it are written but not yet ratified. The concrete
+            platform that plays the middleware role is a
             <a href="#view-platform-choice">separate decision</a>; the
             <a href="#view-swappable-adapter">swappable-adapter pattern</a> is
             what lets us hold this stance without the platform's timeline
@@ -4089,7 +4177,7 @@
             <li>
               <strong>The architecture is proposed, not ratified.</strong> The
               records that fix the API-led three-layer shape, the contract
-              patterns, and the responsibilities split are drafted for review
+              patterns, and the responsibilities split are written
               <span class="status proposed">proposed</span>. Until they are
               accepted, the premise the rest of this set builds on is a
               recommendation, not a settled constraint — treat every downstream
@@ -4155,9 +4243,8 @@
             MuleSoft is the middleware platform — chosen, and now contracted
           </h1>
           <p class="subtitle">
-            Which product carries the integration layer? Chosen after demos,
-            with the commercial terms since agreed. What remains is standing it
-            up.
+            Which product carries the middleware? Chosen after demos, with the
+            commercial terms since agreed. What remains is standing it up.
           </p>
           <p class="dateline">
             Grounded in a platform evaluation and demos · selected 3 July 2026 ·
@@ -4197,9 +4284,9 @@
             <strong>What this changes.</strong> The platform is no longer a
             commercial unknown, so it can be depended on where depending on it
             buys something. It does: for the two edges tied to the retiring
-            TargetRecruit data — the ERP and the job board — the integration
-            layer is where the switch from the old model to the new one lives,
-            which means those two lanes are built <em>before</em> their cutovers
+            TargetRecruit data — the ERP and the job board — the middleware is
+            where the switch from the old model to the new one lives, which
+            means those two lanes are built <em>before</em> their cutovers
             rather than after. Both keep a direct connection as a tested
             fallback. Every other edge still ships direct-first and joins the
             layer on its own schedule.
@@ -4218,14 +4305,14 @@
             of it in exactly one place. For the
             <strong>edges coupled to the retiring TargetRecruit data</strong> —
             the ERP lane and the job-board lane — the interface published by the
-            integration layer is
+            middleware is
             <strong
               >where the switch from the old model to the new one lives</strong
             >. The outside system keeps calling the same address with the same
             contract; the target moves underneath. That is a better place for
             the switch than inside Salesforce, because it is changed by
-            configuration in the layer rather than by a Salesforce release, and
-            the same mechanism re-points a lane at a different Salesforce
+            configuration in the middleware rather than by a Salesforce release,
+            and the same mechanism re-points a lane at a different Salesforce
             environment when one is needed.
           </p>
           <p>
@@ -4613,7 +4700,7 @@
             <a href="#view-swappable-adapter">the swappable adapter</a> for the
             pattern that decides where each edge's switch lives and keeps a way
             back behind every one. Selection accepted 3 July 2026; commercial
-            terms agreed and current as of 11 August 2026.
+            terms agreed and current as of 12 August 2026.
           </p>
         </footer>
       </div>
@@ -4629,8 +4716,7 @@
             for free in the bargain.
           </p>
           <p class="dateline">
-            Grounded in the July 2026 production-org audit · pattern proposed
-            for peer review · 11 August 2026
+            Grounded in the July 2026 production-org audit · 11 August 2026
           </p>
         </header>
 
@@ -4660,8 +4746,8 @@
           <p>
             <strong>And the seam has two sides.</strong> The switch can sit in
             the <strong>Salesforce-side adapter</strong> or in the
-            <strong>system interface the integration layer publishes</strong>,
-            and the choice is made per edge. For the
+            <strong>system interface the middleware publishes</strong>, and the
+            choice is made per edge. For the
             <strong
               >edges coupled to the retiring data — the ERP and the job
               board</strong
@@ -4910,11 +4996,11 @@
             changed in the
             <strong>Salesforce-side adapter</strong> — Marlex's own Apex,
             deployed on a Salesforce release — or in the
-            <strong>system interface the integration layer publishes</strong>,
-            where it is a configuration change in the layer and the outside
-            system never sees a thing. Both are re-points. They differ in who
-            has to act, how fast it can be reversed, and whether an outside
-            party is involved at all.
+            <strong>system interface the middleware publishes</strong>, where it
+            is a configuration change in the layer and the outside system never
+            sees a thing. Both are re-points. They differ in who has to act, how
+            fast it can be reversed, and whether an outside party is involved at
+            all.
           </p>
           <div class="tbl-scroll">
             <table class="dtbl">
@@ -4931,7 +5017,7 @@
               </thead>
               <tbody>
                 <tr>
-                  <td><strong>The integration layer</strong></td>
+                  <td><strong>The middleware</strong></td>
                   <td>
                     The ERP (NET4) and the job board (InfoJobs) — the edges
                     coupled to the retiring data
@@ -5381,9 +5467,7 @@
       <div class="wrap-inner">
         <header class="masthead">
           <p class="eyebrow">Foundations · reference</p>
-          <h1>
-            The census that tells the integration layer what it has to move
-          </h1>
+          <h1>The census that tells the middleware what it has to move</h1>
           <p class="subtitle">
             Every point where the recruitment org meets an outside system —
             counted from the live production org's own usage records, not argued
@@ -5421,16 +5505,22 @@
             extract that pulls Salesforce out to an analytics database includes
             retiring objects in what it reads — as a read it degrades gracefully
             rather than gating the go-live.
-            <strong>Two further edges are coupled indirectly</strong>: the NET4
-            ERP link and the Humact training platform exchange data only on the
-            surviving model, but Salesforce automation they trigger reads the
-            retiring records. Those two are fixed in Marlex's own Flow and Apex,
-            with no vendor-side change, which is why they are counted apart from
-            the four direct edges. Everything else already runs on the native
-            (<code>MA_*</code>) or standard model and crosses the cutover
-            untouched.
+            <strong>The NET4 ERP link is coupled on both counts.</strong> Its
+            live candidate sync reads a retiring TargetRecruit field directly
+            and sends it to the ERP — a direct coupling, measured in the live
+            org, that the earlier class-level scan missed because the ERP's
+            field mapping is held in configuration rather than in code.
+            Separately, Salesforce automation the link triggers reads the
+            retiring records.
+            <strong
+              >The Humact training platform is coupled indirectly only</strong
+            >: its own traffic is on the surviving model, but automation it
+            triggers reads the retiring records. Those automation-side couplings
+            are fixed in Marlex's own Flow and Apex, with no vendor-side change.
+            Everything else already runs on the native (<code>MA_*</code>) or
+            standard model and crosses the cutover untouched.
           </p>
-          <!-- Orbio in-build: field creation in product UAT as of Jul-2026; offers branch deferred, fields being wired. Read-only verified: 6 MA_Orbio_* fields present in pre-production, 0 in prod. Taleva write owner-to-confirm (named-user OAuth). Ticket ids omitted: this file is published publicly. -->
+          
         </div>
 
         <section>
@@ -5513,7 +5603,7 @@
                   model and leave with the package.
                 </desc>
 
-                <!-- ================= Salesforce container ================= -->
+                
                 <rect
                   class="dg-box"
                   x="372"
@@ -5542,7 +5632,7 @@
                   two data models coexisting during the rebuild
                 </text>
 
-                <!-- · retiring model (TOP, beside the copper cluster) · -->
+                
                 <rect
                   class="dg-box-copper"
                   x="390"
@@ -5660,7 +5750,7 @@
                   integrations trigger reads them from inside.
                 </text>
 
-                <!-- rebuild arrow, models are adjacent so it is short and unambiguous -->
+                
                 <line
                   class="dg-arrow-mut"
                   x1="542"
@@ -5682,7 +5772,7 @@
                   rebuilt into
                 </text>
 
-                <!-- · surviving model (BOTTOM, beside the green cluster) · -->
+                
                 <rect
                   class="dg-box-accent"
                   x="390"
@@ -5766,7 +5856,7 @@
                   the rebuild's target model
                 </text>
 
-                <!-- · identity strip · -->
+                
                 <rect
                   class="dg-box"
                   x="390"
@@ -5795,7 +5885,7 @@
                   single sign-on · no recruitment data · unchanged
                 </text>
 
-                <!-- ================= LEFT CLUSTER — reaches the retiring model ================= -->
+                
                 <text
                   class="dg-t-copper"
                   x="160"
@@ -5807,7 +5897,7 @@
                   Reaches the retiring model — must re-point
                 </text>
 
-                <!-- InfoJobs -->
+                
                 <rect
                   class="dg-box-copper"
                   x="20"
@@ -5845,7 +5935,7 @@
                   come back in and create records — writes today
                 </text>
 
-                <!-- Taleva -->
+                
                 <rect
                   class="dg-box-copper"
                   x="20"
@@ -5883,7 +5973,7 @@
                   them — its owner must confirm
                 </text>
 
-                <!-- Orbio -->
+                
                 <rect
                   class="dg-box-mut"
                   x="20"
@@ -5921,7 +6011,7 @@
                   outcome written back — sandbox only today
                 </text>
 
-                <!-- Power BI — ONE box, TWO arrows -->
+                
                 <rect
                   class="dg-box-copper"
                   x="20"
@@ -5968,10 +6058,10 @@
                   and reports embedded back inside the screen
                 </text>
 
-                <!-- ================= ARROWS — the four direct re-point edges, drawn individually ================= -->
-                <!-- These are the edges that cost the cutover work, so each gets its own arrow. -->
+                
+                
 
-                <!-- InfoJobs <-> retiring : both -->
+                
                 <path
                   class="dg-arrow-copper"
                   d="M312 76 L378 76 L378 104 L386 104"
@@ -5991,7 +6081,7 @@
                   both
                 </text>
 
-                <!-- Taleva -> retiring : in -->
+                
                 <path
                   class="dg-arrow-copper"
                   d="M312 144 L372 144 L372 134 L386 134"
@@ -6010,7 +6100,7 @@
                   in
                 </text>
 
-                <!-- Orbio <-> retiring : both, dashed (in build) -->
+                
                 <path
                   class="dg-arrow-copper"
                   d="M312 212 L324 212 L324 164 L386 164"
@@ -6034,7 +6124,7 @@
                   both
                 </text>
 
-                <!-- Power BI, arrow 1 of 2 : the extract READS the retiring model -->
+                
                 <path
                   class="dg-arrow-copper"
                   d="M312 276 L330 276 L330 236 L386 236"
@@ -6062,7 +6152,7 @@
                   reads out
                 </text>
 
-                <!-- Power BI, arrow 2 of 2 : the report EMBED, config only, surviving side -->
+                
                 <path
                   class="dg-arrow-mut"
                   d="M312 300 L326 300 L326 430 L386 430"
@@ -6090,9 +6180,8 @@
                   embed
                 </text>
 
-                <!-- ================= RIGHT GROUP: one bracket, one arrow ================= -->
-                <!-- Nine systems make the same statement, so the group is bracketed and
-           carries ONE arrow. Per-system direction rides as a tag on each box. -->
+                
+                
                 <rect
                   class="dg-box-mut"
                   x="778"
@@ -6121,7 +6210,7 @@
                   these exchange data on the surviving model only
                 </text>
 
-                <!-- NET4 : one system, two integrations -->
+                
                 <rect
                   class="dg-box-copper"
                   x="792"
@@ -6187,7 +6276,7 @@
                   indirect
                 </text>
 
-                <!-- Signaturit -->
+                
                 <rect
                   class="dg-box"
                   x="792"
@@ -6225,7 +6314,7 @@
                   both
                 </text>
 
-                <!-- Data Cloud -->
+                
                 <rect
                   class="dg-box"
                   x="792"
@@ -6263,7 +6352,7 @@
                   out
                 </text>
 
-                <!-- Anthropic / Groq -->
+                
                 <rect
                   class="dg-box"
                   x="792"
@@ -6301,7 +6390,7 @@
                   out
                 </text>
 
-                <!-- Iberinform -->
+                
                 <rect
                   class="dg-box"
                   x="792"
@@ -6339,7 +6428,7 @@
                   out
                 </text>
 
-                <!-- Humact / Lectio -->
+                
                 <rect
                   class="dg-box-copper"
                   x="792"
@@ -6387,7 +6476,7 @@
                   indirect
                 </text>
 
-                <!-- Dolma -->
+                
                 <rect
                   class="dg-box"
                   x="792"
@@ -6425,7 +6514,7 @@
                   in
                 </text>
 
-                <!-- DocsMadeEasy + Google Maps : two named systems, side by side -->
+                
                 <rect
                   class="dg-box"
                   x="792"
@@ -6481,7 +6570,7 @@
                   addresses geocoded
                 </text>
 
-                <!-- Indra website + telephony : planned, dashed -->
+                
                 <rect
                   class="dg-box-mut"
                   x="792"
@@ -6555,13 +6644,9 @@
                   fills native fields
                 </text>
 
-                <!-- The NET4 and training-platform coupling is INDIRECT: the integrations
-           themselves touch only the surviving model. What reaches the retiring
-           model is Salesforce automation they trigger. Drawn INSIDE the org as a
-           dashed internal hop, so it is not confused with a system that reads
-           the old objects directly (as the analytics extract does). -->
+                
 
-                <!-- THE single group arrow -->
+                
                 <path
                   class="dg-arrow"
                   d="M778 400 L722 400 L722 406 L698 406"
@@ -6603,7 +6688,7 @@
                   this model
                 </text>
 
-                <!-- Azure AD identity : short hop from the left, into the identity strip -->
+                
                 <line
                   class="dg-arrow-mut"
                   x1="282"
@@ -6666,7 +6751,7 @@
                     inside the retiring model and leave with the package.
                   </desc>
 
-                  <!-- ================= Salesforce container ================= -->
+                  
                   <rect
                     class="dg-box"
                     x="372"
@@ -6695,7 +6780,7 @@
                     two data models coexisting during the rebuild
                   </text>
 
-                  <!-- · retiring model (TOP, beside the copper cluster) · -->
+                  
                   <rect
                     class="dg-box-copper"
                     x="390"
@@ -6813,7 +6898,7 @@
                     integrations trigger reads them from inside.
                   </text>
 
-                  <!-- rebuild arrow, models are adjacent so it is short and unambiguous -->
+                  
                   <line
                     class="dg-arrow-mut"
                     x1="542"
@@ -6835,7 +6920,7 @@
                     rebuilt into
                   </text>
 
-                  <!-- · surviving model (BOTTOM, beside the green cluster) · -->
+                  
                   <rect
                     class="dg-box-accent"
                     x="390"
@@ -6919,7 +7004,7 @@
                     the rebuild's target model
                   </text>
 
-                  <!-- · identity strip · -->
+                  
                   <rect
                     class="dg-box"
                     x="390"
@@ -6948,7 +7033,7 @@
                     single sign-on · no recruitment data · unchanged
                   </text>
 
-                  <!-- ================= LEFT CLUSTER — reaches the retiring model ================= -->
+                  
                   <text
                     class="dg-t-copper"
                     x="160"
@@ -6960,7 +7045,7 @@
                     Reaches the retiring model — must re-point
                   </text>
 
-                  <!-- InfoJobs -->
+                  
                   <rect
                     class="dg-box-copper"
                     x="20"
@@ -6998,7 +7083,7 @@
                     come back in and create records — writes today
                   </text>
 
-                  <!-- Taleva -->
+                  
                   <rect
                     class="dg-box-copper"
                     x="20"
@@ -7036,7 +7121,7 @@
                     them — its owner must confirm
                   </text>
 
-                  <!-- Orbio -->
+                  
                   <rect
                     class="dg-box-mut"
                     x="20"
@@ -7074,7 +7159,7 @@
                     outcome written back — sandbox only today
                   </text>
 
-                  <!-- Power BI — ONE box, TWO arrows -->
+                  
                   <rect
                     class="dg-box-copper"
                     x="20"
@@ -7121,10 +7206,10 @@
                     and reports embedded back inside the screen
                   </text>
 
-                  <!-- ================= ARROWS — the four direct re-point edges, drawn individually ================= -->
-                  <!-- These are the edges that cost the cutover work, so each gets its own arrow. -->
+                  
+                  
 
-                  <!-- InfoJobs <-> retiring : both -->
+                  
                   <path
                     class="dg-arrow-copper"
                     d="M312 76 L378 76 L378 104 L386 104"
@@ -7147,7 +7232,7 @@
                     both
                   </text>
 
-                  <!-- Taleva -> retiring : in -->
+                  
                   <path
                     class="dg-arrow-copper"
                     d="M312 144 L372 144 L372 134 L386 134"
@@ -7166,7 +7251,7 @@
                     in
                   </text>
 
-                  <!-- Orbio <-> retiring : both, dashed (in build) -->
+                  
                   <path
                     class="dg-arrow-copper"
                     d="M312 212 L324 212 L324 164 L386 164"
@@ -7190,7 +7275,7 @@
                     both
                   </text>
 
-                  <!-- Power BI, arrow 1 of 2 : the extract READS the retiring model -->
+                  
                   <path
                     class="dg-arrow-copper"
                     d="M312 276 L330 276 L330 236 L386 236"
@@ -7218,7 +7303,7 @@
                     reads out
                   </text>
 
-                  <!-- Power BI, arrow 2 of 2 : the report EMBED, config only, surviving side -->
+                  
                   <path
                     class="dg-arrow-mut"
                     d="M312 300 L326 300 L326 430 L386 430"
@@ -7246,9 +7331,8 @@
                     embed
                   </text>
 
-                  <!-- ================= RIGHT GROUP: one bracket, one arrow ================= -->
-                  <!-- Nine systems make the same statement, so the group is bracketed and
-           carries ONE arrow. Per-system direction rides as a tag on each box. -->
+                  
+                  
                   <rect
                     class="dg-box-mut"
                     x="778"
@@ -7277,7 +7361,7 @@
                     these exchange data on the surviving model only
                   </text>
 
-                  <!-- NET4 : one system, two integrations -->
+                  
                   <rect
                     class="dg-box-copper"
                     x="792"
@@ -7343,7 +7427,7 @@
                     indirect
                   </text>
 
-                  <!-- Signaturit -->
+                  
                   <rect
                     class="dg-box"
                     x="792"
@@ -7381,7 +7465,7 @@
                     both
                   </text>
 
-                  <!-- Data Cloud -->
+                  
                   <rect
                     class="dg-box"
                     x="792"
@@ -7419,7 +7503,7 @@
                     out
                   </text>
 
-                  <!-- Anthropic / Groq -->
+                  
                   <rect
                     class="dg-box"
                     x="792"
@@ -7457,7 +7541,7 @@
                     out
                   </text>
 
-                  <!-- Iberinform -->
+                  
                   <rect
                     class="dg-box"
                     x="792"
@@ -7495,7 +7579,7 @@
                     out
                   </text>
 
-                  <!-- Humact / Lectio -->
+                  
                   <rect
                     class="dg-box-copper"
                     x="792"
@@ -7543,7 +7627,7 @@
                     indirect
                   </text>
 
-                  <!-- Dolma -->
+                  
                   <rect
                     class="dg-box"
                     x="792"
@@ -7581,7 +7665,7 @@
                     in
                   </text>
 
-                  <!-- DocsMadeEasy + Google Maps : two named systems, side by side -->
+                  
                   <rect
                     class="dg-box"
                     x="792"
@@ -7637,7 +7721,7 @@
                     addresses geocoded
                   </text>
 
-                  <!-- Indra website + telephony : planned, dashed -->
+                  
                   <rect
                     class="dg-box-mut"
                     x="792"
@@ -7711,13 +7795,9 @@
                     fills native fields
                   </text>
 
-                  <!-- The NET4 and training-platform coupling is INDIRECT: the integrations
-           themselves touch only the surviving model. What reaches the retiring
-           model is Salesforce automation they trigger. Drawn INSIDE the org as a
-           dashed internal hop, so it is not confused with a system that reads
-           the old objects directly (as the analytics extract does). -->
+                  
 
-                  <!-- THE single group arrow -->
+                  
                   <path
                     class="dg-arrow"
                     d="M778 400 L722 400 L722 406 L698 406"
@@ -7759,7 +7839,7 @@
                     this model
                   </text>
 
-                  <!-- Azure AD identity : short hop from the left, into the identity strip -->
+                  
                   <line
                     class="dg-arrow-mut"
                     x1="282"
@@ -7786,27 +7866,24 @@
             <figcaption>
               One org, two data models — and the systems arranged by what the
               cutover owes them.
+              <strong>Five systems reach the retiring model directly</strong>:
+              InfoJobs (the one confirmed live writer), NET4 (its live candidate
+              sync reads a retiring field and sends it to the ERP), Taleva
+              (reads heavily and appears to write, its owner must confirm),
+              Orbio (writes by design, still in the sandbox) and Power BI, whose
+              scheduled extract reads retiring records — a read, so it returns
+              stale data rather than blocking go-live. Some edges are also
+              coupled a second way, and the distinction matters for who fixes
+              them:
               <strong
-                >Only four systems reach the retiring model directly</strong
-              >, so only four get an arrow of their own: InfoJobs (the one
-              confirmed live writer), Taleva (reads heavily and appears to
-              write, its owner must confirm), Orbio (writes by design, still in
-              the sandbox) and Power BI, whose scheduled extract reads retiring
-              records — a read, so it returns stale data rather than blocking
-              go-live. Two edges are coupled a different way, and the
-              distinction matters for who fixes them:
-              <strong
-                >NET4 and the Humact training platform never touch the retiring
-                objects themselves</strong
-              >
-              — they exchange data on the surviving model — but Salesforce
-              automation they trigger reads the retiring records. That coupling
-              lives <em>inside the org</em>, in Marlex's own Flow and Apex,
-              which is why it is drawn as the internal dashed hop rather than as
-              an arrow from those systems. Nothing changes on the vendor side to
-              fix it. The rest all make the same statement, so they share one
-              arrow rather than repeating it; each carries its own direction
-              tag. Two systems run
+                >the NET4 finance traffic and the Humact training platform stay
+                on the surviving model</strong
+              >, but Salesforce automation they trigger reads the retiring
+              records. That coupling lives <em>inside the org</em>, in Marlex's
+              own Flow and Apex, which is why it is drawn as the internal dashed
+              hop. Nothing changes on the vendor side to fix it. The rest all
+              make the same statement, so they share one arrow rather than
+              repeating it; each carries its own direction tag. Two systems run
               <strong>two integrations from one box</strong>: Power BI (the
               extract out, and reports embedded back) and the NET4 link (the
               transfer plus the finance figures feed) — the same connection
@@ -7859,10 +7936,21 @@
             </p>
             <ul>
               <li>
-                <strong>NET4</strong> — all sixteen production ERP classes are
-                free of <code>AVTRRT__</code>, and
-                <code>MA_WS_ERP_SF</code> resolves its targets dynamically from
-                <code>MA_Utilidades__c</code>. The reach is via Flow: writing
+                <strong>NET4 — correction, 2026-08-12.</strong> The class-level
+                scan was right that all sixteen production ERP classes are free
+                of <code>AVTRRT__</code>, but that was not the whole answer: the
+                ERP's field mapping is <em>data</em>, not code. It lives in
+                <code>MA_Utilidades__c</code>, and
+                <code>MA_Utilidades__c</code> row
+                <code>MA_Objeto__c='Candidato'</code> /
+                <code>MA_ERP_Value__c='Sexo'</code> maps
+                <code>AVTRRT__Gender__c</code> outbound. So NET4
+                <em>is</em> directly coupled and belongs on the direct list
+                above. Lesson for the method: a namespace grep over Apex misses
+                any integration whose field set is resolved from a custom
+                setting or custom metadata at run time — those have to be
+                queried, not read. The indirect reach below is real too, and
+                additional. It is via Flow: writing
                 <code>MA_Log_Integracion__c</code> fires
                 <code>MA_LOG_INTEG_Notificacion_NET4</code> (after-save, Active)
                 → <code>MA_Notification_NET4</code> (Active), whose
@@ -7910,14 +7998,27 @@
               <code>Campaign</code> with zero <code>AVTRRT__</code> reads.
             </p>
             <p>
-              One field-mapping note: <code>MA_Utilidades__c</code> carries
-              exactly one package field, <code>Contact.AVTRRT__Gender__c</code>,
-              switched off in both directions (102 of 129 mappings active, none
-              of them a package field). "Candidato"/"Contacto" there are ERP
-              aliases for <code>Contact</code> and
-              <code>AccountContactRelation</code>, not separate objects. The
-              integration identity <code>erp_integrations@marlex.net</code> also
-              holds <code>TR_Permission_set</code>. Verified read-only against
+              One field-mapping note, <strong>corrected 2026-08-12</strong>:
+              <code>MA_Utilidades__c</code> carries exactly one package field,
+              <code>Contact.AVTRRT__Gender__c</code> → <code>Sexo</code> on the
+              <code>Candidato</code> object. An earlier reading of this row
+              called it "switched off in both directions" — that was wrong, and
+              it is worth spelling out why, because the trap is easy to repeat.
+              <code>ERPtoSF__c</code> and <code>SFtoERP__c</code> are
+              <em>exclusion</em> filters, not enable flags: the outbound builder
+              selects
+              <code>… AND ERPtoSF__c = false</code>
+              (<code>MA_APEX_IntegrationSYNC_ERP</code>) and the inbound one
+              selects
+              <code>… and SFtoERP__c = false</code> (<code>MA_WS_ERP_SF</code>).
+              So <code>false/false</code> means the row is live in <em>both</em>
+              directions, not off in both. With
+              <code>MA_DefaultCheck__c = false</code> as well, the field is
+              selected into the dynamic outbound SOQL and sent to the ERP.
+              "Candidato"/"Contacto" there are ERP aliases for
+              <code>Contact</code> and <code>AccountContactRelation</code>, not
+              separate objects. The shared ERP integration identity also holds
+              <code>TR_Permission_set</code>. Verified read-only against
               production.
             </p>
           </div>
@@ -8588,7 +8689,7 @@
               to re-point.
             </li>
           </ul>
-          <!-- Orbio: in product UAT. Pre-production has all 6 MA_Orbio_* fields; prod has none (verified read-only 2026-07-19). Taleva named-user OAuth so connector-vs-human writes not separable from EventLogFile alone. Ticket ids omitted: published publicly. -->
+          
           <p>
             Neither changes the shape of the cutover; both firm up its count of
             write-coupled edges, and both belong to the client's IT team to
@@ -8677,7 +8778,7 @@
                     cannot yet be separated from those users' screen activity —
                     the owner must confirm.
                   </td>
-                  <!-- Taleva sourcing purpose confirmed from the delivery backlog: the public profile link is mapped via Taleva plus a sourcing add-on. Ticket id omitted: published publicly. -->
+                  
                   <td>
                     Re-pointed <strong>on the connector owner's side</strong> —
                     the mapping lives in their product. If it writes, it is a
@@ -8955,14 +9056,14 @@
               current means re-reading the backlog, not just re-running the
               query.
             </li>
-            <!-- Native writers surfaced from the delivery backlog: Dolma (prod External App); the new corporate website (forms -> Contact record type Candidato + Lead); telephony/transcription (not started). All native, survive cutover. Ticket ids omitted: published publicly. -->
+            
           </ul>
         </section>
 
         <footer>
           <p>
-            This is the counted evidence behind the integration layer — the rule
-            it supports is argued in
+            This is the counted evidence behind the middleware — the rule it
+            supports is argued in
             <a href="#view-why-middleware">why a middleware layer at all</a>;
             the first edge it feeds is
             <a href="#view-marlex-with-net4">the NET4 ERP lane</a>. Grounded in
@@ -8983,7 +9084,7 @@
           </p>
           <p class="dateline">
             Grounded in live production call volumes · 13 July 2026 · lane
-            sequencing proposed for review
+            sequencing
           </p>
         </header>
 
@@ -9003,15 +9104,17 @@
             <strong>What we chose.</strong>
             <strong>NET4 is the first lane.</strong> It has no dependency on
             anything else being built; moving it once earns a reusable
-            foundation that a second country (Axxon) plugs straight into; and a
-            candidate integration now in development means NET4 is becoming one
-            of the edges that touches the retiring candidate data — the class
-            the effort exists to route through MuleSoft first. So the effort
-            pays for itself twice and lands where the priority is. The job board
-            is heavier and is the edge that most tightly gates the core cutover,
-            so it comes second. Sequencing the lanes this way is
-            <span class="status proposed">proposed</span> for review; the
-            middleware <em>platform</em> itself is
+            foundation that a second country (Axxon) plugs straight into; and
+            its live candidate sync already reads a retiring TargetRecruit
+            field, which puts it in the class the effort exists to route through
+            MuleSoft first. So the effort pays for itself twice and lands where
+            the priority is.
+          </p>
+          <p>
+            The job board is heavier and is the edge that most tightly gates the
+            core cutover, so it comes second. Sequencing the lanes this way is
+            <span class="status proposed">proposed</span>; the middleware
+            <em>platform</em> itself is
             <span class="status decided">decided</span>
             (selected 3 July 2026).
           </p>
@@ -9665,39 +9768,43 @@
             NET4 is a two-directional connection. Salesforce calls out to the
             ERP to keep it in step, and the ERP calls back in to push finance
             data — principally invoices. Both directions are already
-            Marlex-built code running against Marlex-owned interfaces. As
-            measured today, the link reads and writes only native and standard
-            objects — the account, the contact, the offer, the invoice — with
-            <strong
-              >no coupling to the retiring TargetRecruit data model</strong
-            >
-            in the traffic the org logs.
+            Marlex-built code running against Marlex-owned interfaces.
+          </p>
+          <p>
+            The <strong>finance directions</strong> — the account, the offer,
+            the placement, the invoice — read and write only native and standard
+            objects. Nothing there touches the retiring model, and nothing there
+            re-points.
           </p>
           <p>
             <strong
-              >But that "no coupling" is about to change, and it is why NET4
+              >The candidate sync is a different matter, and it is why NET4
               leads.</strong
             >
-            A candidate integration is in development on the ERP side — NET4 is
-            growing the ability to sync candidate records to and from
-            Salesforce. The catch is that a candidate is <em>not</em> a clean
-            native object yet: today a candidate lives as a TargetRecruit record
-            type and TargetRecruit fields on the standard Contact. So a
-            candidate sync, while it is being built against Contact, is expected
-            to read and write the very TargetRecruit fields the rebuild is
-            retiring. On that basis we treat NET4 as an edge that
-            <strong>becomes coupled to the retiring model</strong> — which makes
-            its re-point a cutover concern like the job board's, not a "nothing
-            to do." This is a working assumption pending confirmation of exactly
-            which candidate fields the ERP side writes.
+            A live candidate synchronisation runs today: it reads the candidate
+            record and sends it to the ERP whenever the candidate is created or
+            changed. Because a candidate is not a clean native object yet — it
+            lives as a TargetRecruit record type and TargetRecruit fields on the
+            standard Contact — that sync reads a
+            <strong>TargetRecruit field</strong> as part of the payload it
+            sends. The coupling is present and measured, not a future
+            possibility.
           </p>
           <p>
-            So NET4 leads for two reasons that now point the same way: it earns
-            the first lane on <em>reuse</em> (one clean ERP service serves both
-            Spain and Axxon), and it is one of the edges that
-            <em>touches the retiring candidate data</em>
-            — the class the whole effort exists to route through MuleSoft first.
-            The edge is otherwise a well-behaved caller: over a measured
+            That makes NET4's re-point a cutover concern like the job board's.
+            When the candidate is rebuilt natively, the field this sync reads no
+            longer exists in its current form, and the mapping has to move to
+            the new model in step with the switch.
+          </p>
+          <p>
+            So NET4 leads for two reasons that point the same way: it earns the
+            first lane on <em>reuse</em> (one clean ERP service serves both
+            Spain and Axxon), and it
+            <em>touches the retiring candidate data today</em> — the class the
+            whole effort exists to route through MuleSoft first.
+          </p>
+          <p>
+            The edge is otherwise a well-behaved caller. Over a measured
             seven-day window it logged in tens of thousands of times but made
             only a few thousand data calls — it holds a session open constantly
             and calls when it has something to say.
@@ -9707,23 +9814,23 @@
               <span class="n">~7,059</span
               ><span class="l"
                 >data calls over 7 days <span class="lk meas">measured</span> —
-                today on the contact and native objects only</span
+                the finance directions, on native and standard objects</span
               >
             </div>
             <div class="stat">
-              <span class="n">33,448</span
+              <span class="n">~23,600</span
               ><span class="l"
-                >sign-ins over 30 days <span class="lk meas">measured</span> —
-                it logs in constantly but calls modestly; sign-ins are not a
-                work proxy</span
+                >candidate syncs in 30 days
+                <span class="lk meas">measured</span> — the live sync that reads
+                a retiring TargetRecruit field</span
               >
             </div>
             <div class="stat">
-              <span class="n">Candidate</span
+              <span class="n">1</span
               ><span class="l"
-                >integration in development — the evolutive that makes NET4
-                touch the retiring TargetRecruit candidate fields, and a
-                re-point at cutover</span
+                >TargetRecruit field in the ERP's candidate mapping
+                <span class="lk meas">measured</span> — gender, sent outbound;
+                the re-point at cutover</span
               >
             </div>
           </div>
@@ -9776,18 +9883,54 @@
                 also carry heavy hand-entry by finance staff.
               </li>
               <li>
-                <strong>Candidate integration in development.</strong> An
-                ERP-side candidate sync is being built (a NET4 candidates API,
-                plus transfer- and delete-candidate operations); today the
-                candidate is a TargetRecruit record type and TargetRecruit
-                fields on the standard <code>Contact</code>, so that sync is
-                expected to read and write those retiring fields until the
-                candidate is rebuilt natively. Whether it targets the
-                TargetRecruit fields specifically or only native
-                <code>Contact</code>/<code>MA_</code> fields is the open item
-                below — the working assumption is that it touches the
-                TargetRecruit fields, which is what turns this measured-native
-                edge into a cutover re-point.
+                <strong
+                  >Candidate sync is LIVE and TargetRecruit-coupled — confirmed
+                  2026-08-12.</strong
+                >
+                <code>MA_Flow_SyncCandidate</code> invokes
+                <code>MA_Cls_SyncCandidate</code>, which queries
+                <code>Contact.MA_Codigo_Candidato_NET4__c</code> to choose
+                <code>crear</code> vs <code>modificar</code>, then calls
+                <code
+                  >MA_APEX_IntegrationSYNC_ERP.processRecords(ids,'Candidato',…)</code
+                >
+                → <code>POST {endpoint}CandidatosSalesforce</code>. Field
+                mapping is data-driven from the
+                <code>MA_Utilidades__c</code> custom setting
+                (<code>Tipo__c='Campo'</code>,
+                <code>MA_Objeto__c='Candidato'</code>) — 19 mapped fields, of
+                which exactly one is managed-package:
+                <code>AVTRRT__Gender__c</code> → <code>Sexo</code>, outbound
+                (<code>ERPtoSF__c=false</code>). Verified by SOQL against
+                production read-only. Traffic:
+                <code
+                  >SELECT COUNT(Id) FROM MA_Log_Integracion__c WHERE
+                  MA_Objeto__c='Candidato' AND CreatedDate=LAST_N_DAYS:30</code
+                >
+                → 23,619.
+              </li>
+              <li>
+                <strong>Why the re-point is small but real.</strong> Because the
+                mapping lives in a custom setting rather than in Apex, moving
+                off <code>AVTRRT__Gender__c</code> is a configuration row
+                change, not a code release — but it still has to happen in step
+                with the cutover, and the native successor field has to exist
+                first. Also note <code>MA_ResetDataNet4_FlowAsync</code>, which
+                pushes an IBAN clear to NET4 on document delete — native fields
+                only, no re-point.
+              </li>
+              <li>
+                <strong
+                  >A second, wider candidate integration is still in
+                  build.</strong
+                >
+                An ERP-side candidates API with transfer- and delete-candidate
+                operations is being developed on the
+                <code>MA_Net4Client</code> family. That family's
+                <code>MA_Net4</code> Named Credential still points at a
+                placeholder production endpoint, so it carries no live traffic
+                yet — which field set it will map is the open item below. This
+                is additional to, not a substitute for, the live coupling above.
               </li>
             </ul>
           </div>
@@ -9993,9 +10136,9 @@
             </svg>
             <figcaption>
               One shared NET4 lane serves both countries. Building it first for
-              Spain lays the foundation Axxon plugs into with tenant routing at
-              the integration layer — the reuse that justifies moving this edge
-              before the others.
+              Spain lays the foundation Axxon plugs into with tenant routing in
+              the middleware — the reuse that justifies moving this edge before
+              the others.
             </figcaption>
           </figure>
         </section>
@@ -10195,42 +10338,51 @@
             </li>
             <li>
               <strong
-                >Answered — the load-bearing one, and the answer has two
-                tenses.</strong
+                >Answered — NET4 is coupled to the retiring model today.</strong
               >
               Does the NET4 integration reach the retiring TargetRecruit data,
               or only the native and standard records? Measured read-only
-              against production, the two must be kept apart:
-              <strong
-                >Today, the integration itself touches only the surviving
-                model</strong
-              >
-              — its offer, invoice, account and contact traffic is native and
-              standard throughout, and none of the sixteen production ERP
-              classes references the retiring namespace. What does reach the
-              retiring records is
-              <em>Salesforce automation the integration triggers</em>: writing
-              its own log entry fires a chain that looks up the retiring
-              applications belonging to the contact just touched. So the
-              coupling is real but <strong>indirect</strong>, it is a
-              <strong>read</strong>, and it is fixed inside Marlex's own
-              automation — nothing changes on the ERP side.
-              <strong
-                >Tomorrow, the candidate integration still in development is
-                expected to write the retiring candidate fields on the
-                contact</strong
-              >, which would make this a direct, write-coupled edge. That
-              remains a working assumption, not a measurement, and it is the one
-              the ERP-side team still has to confirm. Either way NET4 is on the
-              re-point list; what the confirmation decides is whether the
-              re-point is a small internal automation fix or a full
-              candidate-handler swap.
+              against production, there are three separate answers and they must
+              be kept apart.
+              <ul>
+                <li>
+                  <strong>The finance traffic is clean.</strong> Offer, invoice,
+                  account and placement are native and standard throughout. No
+                  ERP class in production references the retiring namespace.
+                  Nothing to re-point.
+                </li>
+                <li>
+                  <strong
+                    >The candidate sync is directly coupled, and it is
+                    live.</strong
+                  >
+                  It reads the candidate's gender from a retiring TargetRecruit
+                  field and sends it to the ERP, around 23,600 times in the last
+                  thirty days. This is a direct, measured re-point — not an
+                  assumption. The fix is a mapping change in configuration, but
+                  it has to land with the cutover.
+                </li>
+                <li>
+                  <strong
+                    >A second, indirect coupling sits in Marlex's own
+                    automation.</strong
+                  >
+                  Writing the integration's log entry fires a chain that looks
+                  up the retiring applications belonging to the contact just
+                  touched. That one is a read, and it is fixed inside Salesforce
+                  — nothing changes on the ERP side.
+                </li>
+              </ul>
+              What is still open is the <em>wider</em> candidate integration in
+              build: which fields it will map is not yet settled, and the
+              ERP-side team has to confirm it. That decides how much bigger the
+              re-point gets, not whether there is one.
             </li>
             <li>
               <strong>Multi-country assumption.</strong> The reuse case rests on
               NET4 accepting a second country on the shared lane with tenant
-              routing at the integration layer and no ERP-side change; if that
-              is wrong it becomes a NET4-team dependency, handled on the
+              routing in the middleware and no ERP-side change; if that is wrong
+              it becomes a NET4-team dependency, handled on the
               <a href="#view-marlex-with-axxon">Axxon → NET4</a> page.
             </li>
             <li>
@@ -10288,7 +10440,7 @@
               decision, not two — confirm the plumbing choice with the ERP side
               so the blocker is surfaced before the build, not at go-live.
             </li>
-            <!-- Verified 2026-07-20: MA_Net4Client body = setEndpoint('callout:MA_Net4' + path), does NOT read ERP_Connection__c; live outbound = legacy classes via ERP_Connection__c (internal ERP host, redacted from public copy). -->
+            
           </ul>
         </section>
 
@@ -10318,7 +10470,7 @@
           </p>
           <p class="dateline">
             Grounded in live production call volumes · 13 July 2026 · lane
-            sequencing proposed for review · 11 August 2026
+            sequencing · 11 August 2026
           </p>
         </header>
 
@@ -11495,8 +11647,7 @@
               <span class="status decided">decided</span>, its commercial terms
               have since been agreed, and the working environment is available
               from September 2026. The lane ordering, the lane's sizing and the
-              SOAP-to-REST mediation plan are
-              <strong>proposed for review</strong>
+              SOAP-to-REST mediation plan are <strong>proposed</strong>
               <span class="status proposed">proposed</span> — part of a delivery
               proposal covering the first two lanes plus shared foundation.
             </p>
@@ -11588,7 +11739,7 @@
               "alongside", and the boundary decision is the size of the swing.
             </p>
           </div>
-          <!-- Orbio: fields MA_Orbio_* present in PRE only, 0 in prod (verified read-only). Writes AVTRRT__Job_Applicant__c / AVTRRT__Job__c by design -> 3rd write edge at go-live. -->
+          
         </section>
 
         <section>
@@ -11821,7 +11972,7 @@
             <li>
               <strong>Open:</strong> the lane sequencing (second, after the ERP,
               before the portals), this lane's sizing and the SOAP-to-REST plan
-              are proposed for review. The gating dependency is the working
+              are still proposed. The gating dependency is the working
               environment arriving in September 2026 and the delivery capacity
               to build against it — not a technical blocker. Because this lane
               holds the switch to the new model, it has to be standing before
@@ -17564,8 +17715,8 @@
             already built, or get a point-to-point connection of its own?
           </p>
           <p class="dateline">
-            Grounded in the July 2026 production-org audit · lane reuse proposed
-            for review · 11 August 2026
+            Grounded in the July 2026 production-org audit · lane reuse · 11
+            August 2026
           </p>
         </header>
 
@@ -17590,12 +17741,11 @@
               multi-tenant.</strong
             >
             The Axxon org sends its placement and invoice traffic through the
-            same MuleSoft service Spain uses; the integration layer routes each
-            message to the right tenant. No second lane is built, and no
-            ERP-side change is asked for. This is the reuse case that justified
-            standing the NET4 lane up first — the second country is meant to
-            cost far less than a fresh build, because the groundwork is already
-            paid for.
+            same MuleSoft service Spain uses; the middleware routes each message
+            to the right tenant. No second lane is built, and no ERP-side change
+            is asked for. This is the reuse case that justified standing the
+            NET4 lane up first — the second country is meant to cost far less
+            than a fresh build, because the groundwork is already paid for.
           </p>
           <p>
             <strong>Two horizons — read this first.</strong> There are two
@@ -18259,9 +18409,7 @@
           <p class="section-eyebrow">
             Why this is a reuse case, not a new build
           </p>
-          <h2>
-            One shared ERP lane, two tenants routed at the integration layer
-          </h2>
+          <h2>One shared ERP lane, two tenants routed in the middleware</h2>
           <p>
             NET4 is the <em>group</em> ERP, not a Spain-only tool. Both
             companies push the same kind of traffic to it — placements and
@@ -18270,9 +18418,8 @@
             cheap and durable answer is one service that knows how to talk to
             that destination, with a routing layer in front that tags each
             message with the company it belongs to. That routing —
-            <strong>tenant routing at the integration layer</strong> — is what
-            lets a single lane serve both orgs without either knowing the other
-            exists.
+            <strong>tenant routing in the middleware</strong> — is what lets a
+            single lane serve both orgs without either knowing the other exists.
           </p>
           <figure class="diagram">
             <svg
@@ -18282,8 +18429,8 @@
             >
               <title id="axxon-lane-title">
                 Salesforce Spain and the Axxon org both reach NET4 through one
-                shared middleware lane; the integration layer routes each
-                message to its tenant
+                shared middleware lane; the middleware routes each message to
+                its tenant
               </title>
               <rect
                 class="dg-box-accent"
@@ -18438,7 +18585,7 @@
             </svg>
             <figcaption>
               Both companies reach the same ERP through one shared lane. The
-              integration layer tags each message with its company and routes
+              middleware tags each message with its company and routes
               accordingly, so a single service serves two tenants — the reuse
               the NET4 lane was built to prove.
             </figcaption>
@@ -18473,7 +18620,7 @@
             <p>
               <strong
                 >NET4 accepts Spain and Axxon on the same endpoints, with tenant
-                routing done at the integration layer and no NET4 server-side
+                routing done in the middleware and no NET4 server-side
                 change.</strong
               >
               This is a <em>working assumption</em>, not a confirmed fact. If it
@@ -18545,8 +18692,8 @@
                 Reuse the shared NET4 lane <span class="tag">Chosen</span>
               </h4>
               <p class="head-note">
-                Axxon plugs into the lane Spain built; the integration layer
-                routes each message to its tenant; no second build.
+                Axxon plugs into the lane Spain built; the middleware routes
+                each message to its tenant; no second build.
               </p>
               <ul class="dq-outcomes">
                 <li>
@@ -18693,7 +18840,7 @@
                 unconfirmed.</strong
               >
               Whether NET4 truly accepts Spain and Axxon on the same endpoints
-              with tenant routing done at the integration layer, and no NET4
+              with tenant routing done in the middleware, and no NET4
               server-side change, is the single fact this whole lane rests on —
               mitigated by confirming it with the NET4 team early, and by
               keeping the direct bridge as the fallback so a wrong answer costs
@@ -19919,7 +20066,7 @@
                 logins, no measured record traffic.
               </li>
             </ul>
-            <!-- Provenance: delivery-backlog items for Orbio field creation (product UAT) and offers; and for the Taleva profile-link mapping. Ticket ids kept out of this file because it is published publicly. -->
+            
           </div>
         </section>
 

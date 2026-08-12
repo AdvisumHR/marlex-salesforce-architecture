@@ -24323,10 +24323,17 @@
                   </td>
                   <td>
                     <strong>Preserved, not rebuilt</strong> — already behind a
-                    Marlex-owned, vendor-free client; only its reads of the old
-                    model re-point. One caveat found by the audit: two
-                    generations of that client exist side by side, and the older
-                    one carries the live traffic — which is canonical is on the
+                    Marlex-owned, vendor-free client. The finance traffic is
+                    clean, but the
+                    <strong
+                      >live candidate sync reads a retiring TargetRecruit
+                      field</strong
+                    >
+                    and sends it to the ERP, so its field mapping re-points with
+                    the cutover. Two caveats found by the audit: that mapping
+                    lives in configuration rather than in code, and two
+                    generations of the client exist side by side with the older
+                    one carrying the live traffic — which is canonical is on the
                     confirm list (see the
                     <em>measured integration surface</em> page of the
                     <strong
