@@ -1924,6 +1924,373 @@
                   </tbody>
                 </table>
               </div>
+              <figure class="diagram">
+                <a
+                  class="dg-zoom"
+                  href="#zoom-landscape"
+                  aria-label="Enlarge this diagram"
+                >
+                  <svg
+                    viewBox="0 0 1120 560"
+                    role="img"
+                    aria-labelledby="ls-t ls-d"
+                  >
+                    <title id="ls-t">
+                      The whole integration surface: one Salesforce org holding
+                      two data models, and every outside system grouped by what
+                      the cutover does to it
+                    </title>
+                    <desc id="ls-d">
+                      One Salesforce org contains two data models side by side
+                      during the rebuild: the retiring bought-package model
+                      holding vacancies, applications, interviews, placements
+                      and shortlists, and the surviving native and standard
+                      model holding offers, invoices, accounts, candidates,
+                      training records and campaigns. Outside systems are
+                      grouped in three columns by cutover consequence. Nine
+                      reach the retiring model and must be re-pointed: the ERP,
+                      the job board, pre-screening, training, the reporting
+                      extract, the sourcing connector, the campaign landing
+                      page, the CV parser and the customer data platform, the
+                      last of which is assumed rather than measured. Seven cross
+                      the cutover untouched because they only ever reach the
+                      surviving model. The self-service portals sit inside the
+                      retiring model and leave with the package rather than
+                      being re-pointed.
+                    </desc>
+
+                    <text
+                      class="dg-t"
+                      x="20"
+                      y="26"
+                      font-size="13"
+                      font-weight="700"
+                    >
+                      One org, two data models — and every outside system
+                      grouped by what the cutover does to it
+                    </text>
+                    <text class="dg-t-sm" x="20" y="44" font-size="10">
+                      Copper touches the model being retired. Teal only ever
+                      reaches the model that survives.
+                    </text>
+
+                    
+                    <rect
+                      class="dg-box-mut"
+                      x="330"
+                      y="70"
+                      width="440"
+                      height="404"
+                      rx="10"
+                    />
+                    <text
+                      class="dg-t-accent"
+                      x="550"
+                      y="92"
+                      text-anchor="middle"
+                      font-size="11.5"
+                      font-weight="700"
+                    >
+                      Salesforce — one org
+                    </text>
+                    <text
+                      class="dg-t-sm"
+                      x="550"
+                      y="106"
+                      text-anchor="middle"
+                      font-size="9"
+                    >
+                      two data models coexist during the rebuild
+                    </text>
+
+                    
+                    <rect
+                      class="dg-box-copper"
+                      x="350"
+                      y="122"
+                      width="400"
+                      height="120"
+                      rx="7"
+                    />
+                    <text
+                      class="dg-t-copper"
+                      x="370"
+                      y="144"
+                      font-size="11.5"
+                      font-weight="700"
+                    >
+                      The retiring model
+                    </text>
+                    <text class="dg-t-sm" x="370" y="160" font-size="9">
+                      the bought recruitment package being rebuilt
+                    </text>
+                    <text class="dg-t-sm" x="370" y="180" font-size="9.4">
+                      vacancies · applications · interviews
+                    </text>
+                    <text class="dg-t-sm" x="370" y="196" font-size="9.4">
+                      placements · shortlists · employment history
+                    </text>
+                    <text class="dg-t-sm" x="370" y="220" font-size="9">
+                      plus 141 of Contact's 369 fields — which is why
+                    </text>
+                    <text class="dg-t-sm" x="370" y="233" font-size="9">
+                      an edge can read a surviving object and still be coupled
+                    </text>
+
+                    
+                    <rect
+                      class="dg-box-copper"
+                      x="350"
+                      y="252"
+                      width="400"
+                      height="52"
+                      rx="7"
+                      stroke-dasharray="5 3"
+                    />
+                    <text
+                      class="dg-t-copper"
+                      x="370"
+                      y="272"
+                      font-size="10.5"
+                      font-weight="700"
+                    >
+                      Self-service portals — candidate · recruiting · staffing
+                    </text>
+                    <text class="dg-t-sm" x="370" y="288" font-size="9">
+                      built on the package, so they end when it ends — not
+                      re-pointed
+                    </text>
+
+                    
+                    <rect
+                      class="dg-box-accent"
+                      x="350"
+                      y="320"
+                      width="400"
+                      height="134"
+                      rx="7"
+                    />
+                    <text
+                      class="dg-t-accent"
+                      x="370"
+                      y="342"
+                      font-size="11.5"
+                      font-weight="700"
+                    >
+                      The surviving model
+                    </text>
+                    <text class="dg-t-sm" x="370" y="358" font-size="9">
+                      Marlex-built objects and Salesforce standard objects
+                    </text>
+                    <text class="dg-t-sm" x="370" y="378" font-size="9.4">
+                      offers · invoices · accounts · candidates
+                    </text>
+                    <text class="dg-t-sm" x="370" y="394" font-size="9.4">
+                      training records · incentives · margin per client
+                    </text>
+                    <text class="dg-t-sm" x="370" y="410" font-size="9.4">
+                      opportunities · campaigns · leads
+                    </text>
+                    <text class="dg-t-sm" x="370" y="434" font-size="9">
+                      the rebuild's target — every edge reaching only this
+                    </text>
+                    <text class="dg-t-sm" x="370" y="447" font-size="9">
+                      crosses the cutover untouched
+                    </text>
+
+                    
+                    <text
+                      class="dg-t-copper"
+                      x="20"
+                      y="92"
+                      font-size="10.5"
+                      font-weight="700"
+                    >
+                      ▲ REACHES THE RETIRING MODEL — 9
+                    </text>
+                    <text class="dg-t-sm" x="20" y="106" font-size="9">
+                      must be re-pointed
+                    </text>
+                    <rect
+                      class="dg-box-copper"
+                      x="20"
+                      y="118"
+                      width="290"
+                      height="212"
+                      rx="7"
+                    />
+                    <text class="dg-t-sm" x="34" y="140" font-size="9.6">
+                      ERP · NET4 — reads one field, sends it out
+                    </text>
+                    <text class="dg-t-sm" x="34" y="162" font-size="9.6">
+                      Job board · InfoJobs — writes, ~27,000/week
+                    </text>
+                    <text class="dg-t-sm" x="34" y="184" font-size="9.6">
+                      Pre-screening · Orbio — writes by design, in build
+                    </text>
+                    <text class="dg-t-sm" x="34" y="206" font-size="9.6">
+                      Training · Humact — two queries, via automation
+                    </text>
+                    <text class="dg-t-sm" x="34" y="228" font-size="9.6">
+                      Reporting · Power BI — reads nine objects
+                    </text>
+                    <text class="dg-t-sm" x="34" y="250" font-size="9.6">
+                      Sourcing · Taleva — reads; writes to confirm
+                    </text>
+                    <text class="dg-t-sm" x="34" y="272" font-size="9.6">
+                      Campaign landing page — writes, live unreviewed
+                    </text>
+                    <text class="dg-t-sm" x="34" y="294" font-size="9.6">
+                      CV parser — writes seven package fields
+                    </text>
+                    <text class="dg-t-sm" x="34" y="316" font-size="9.6">
+                      Customer data platform — assumed, not measured
+                    </text>
+
+                    <path
+                      class="dg-arrow-copper"
+                      d="M310 224 L327 224"
+                      marker-end="url(#ls-ahc)"
+                    />
+
+                    
+                    <text
+                      class="dg-t-accent"
+                      x="790"
+                      y="92"
+                      font-size="10.5"
+                      font-weight="700"
+                    >
+                      CROSSES UNTOUCHED — 7
+                    </text>
+                    <text class="dg-t-sm" x="790" y="106" font-size="9">
+                      reaches only the surviving model
+                    </text>
+                    <rect
+                      class="dg-box-accent"
+                      x="790"
+                      y="118"
+                      width="310"
+                      height="168"
+                      rx="7"
+                    />
+                    <text class="dg-t-sm" x="804" y="140" font-size="9.6">
+                      E-signature · Signaturit
+                    </text>
+                    <text class="dg-t-sm" x="804" y="162" font-size="9.6">
+                      Credit checks · Iberinform
+                    </text>
+                    <text class="dg-t-sm" x="804" y="184" font-size="9.6">
+                      Documents · Dolma
+                    </text>
+                    <text class="dg-t-sm" x="804" y="206" font-size="9.6">
+                      Maps · DocsMadeEasy — schema and addresses
+                    </text>
+                    <text class="dg-t-sm" x="804" y="228" font-size="9.6">
+                      Finance figures feed — native objects
+                    </text>
+                    <text class="dg-t-sm" x="804" y="250" font-size="9.6">
+                      Axxon → the ERP — reuses Spain's interface
+                    </text>
+                    <text class="dg-t-sm" x="804" y="272" font-size="9.6">
+                      Identity · Azure AD — no recruitment data
+                    </text>
+
+                    <path
+                      class="dg-arrow"
+                      d="M787 200 L773 200"
+                      marker-end="url(#ls-ah)"
+                    />
+
+                    
+                    <rect
+                      class="dg-box-mut"
+                      x="790"
+                      y="306"
+                      width="310"
+                      height="104"
+                      rx="7"
+                    />
+                    <text class="dg-t-sm" x="804" y="328" font-size="9.4">
+                      Five of the seven were re-verified at field
+                    </text>
+                    <text class="dg-t-sm" x="804" y="343" font-size="9.4">
+                      level in production on 14 August 2026 —
+                    </text>
+                    <text class="dg-t-sm" x="804" y="358" font-size="9.4">
+                      zero package references in their code.
+                    </text>
+                    <text class="dg-t-sm" x="804" y="380" font-size="9.4">
+                      Reading a surviving object is not the
+                    </text>
+                    <text class="dg-t-sm" x="804" y="395" font-size="9.4">
+                      same as reading nothing that changes.
+                    </text>
+
+                    
+                    <rect
+                      class="dg-box-copper"
+                      x="20"
+                      y="496"
+                      width="9"
+                      height="9"
+                      rx="2"
+                    />
+                    <text class="dg-t-sm" x="34" y="504" font-size="8.6">
+                      touches the retiring model — re-points
+                    </text>
+                    <rect
+                      class="dg-box-accent"
+                      x="270"
+                      y="496"
+                      width="9"
+                      height="9"
+                      rx="2"
+                    />
+                    <text class="dg-t-sm" x="284" y="504" font-size="8.6">
+                      reaches only the surviving model — no work
+                    </text>
+                    <text class="dg-t-sm" x="560" y="504" font-size="8.6">
+                      dashed = leaves with the package rather than being
+                      re-pointed
+                    </text>
+
+                    <defs>
+                      <marker
+                        id="ls-ah"
+                        markerWidth="9"
+                        markerHeight="9"
+                        refX="6.5"
+                        refY="4.5"
+                        orient="auto"
+                      >
+                        <path class="dg-fill-accent" d="M0 0 L9 4.5 L0 9 Z" />
+                      </marker>
+                      <marker
+                        id="ls-ahc"
+                        markerWidth="9"
+                        markerHeight="9"
+                        refX="6.5"
+                        refY="4.5"
+                        orient="auto"
+                      >
+                        <path class="dg-fill-copper" d="M0 0 L9 4.5 L0 9 Z" />
+                      </marker>
+                    </defs>
+                  </svg>
+                </a>
+                <figcaption>
+                  The whole surface on one screen. One Salesforce org holds both
+                  data models at once during the rebuild, which is why an edge
+                  can read a perfectly ordinary Contact and still be coupled —
+                  141 of that object's 369 fields belong to the package being
+                  retired. Nine outside systems reach the retiring model and
+                  must be re-pointed; seven reach only the surviving one and
+                  need no work. The portals are the exception to both: they are
+                  built <em>inside</em> the retiring model, so they leave with
+                  it rather than moving.
+                </figcaption>
+              </figure>
               <p>
                 <strong>Two distinctions the table cannot carry.</strong> Gating
                 is a schedule claim, not an importance one — the training
@@ -10055,6 +10422,279 @@
                       system's clean face reusable, because every consumer
                       arrives through the same door rather than cutting its own.
                     </p>
+                    <figure class="diagram">
+                      <svg
+                        viewBox="0 0 640 272"
+                        role="img"
+                        aria-labelledby="layers-title"
+                      >
+                        <title id="layers-title">
+                          Salesforce calls the experience layer, which calls the
+                          process layer, which calls the system layer; every
+                          outside system connects through the system layer's one
+                          clean face
+                        </title>
+                        <text
+                          class="dg-t-sm"
+                          x="323"
+                          y="14"
+                          text-anchor="middle"
+                          font-size="9.5"
+                        >
+                          middleware · Marlex-owned contracts between the layers
+                        </text>
+                        <g transform="translate(0,22)">
+                          <rect
+                            class="dg-box-accent"
+                            x="40"
+                            y="100"
+                            width="150"
+                            height="56"
+                            rx="6"
+                          />
+                          <text
+                            class="dg-t"
+                            x="115"
+                            y="124"
+                            text-anchor="middle"
+                            font-size="12"
+                            font-weight="700"
+                          >
+                            Salesforce
+                          </text>
+                          <text
+                            class="dg-t-sm"
+                            x="115"
+                            y="140"
+                            text-anchor="middle"
+                            font-size="10"
+                          >
+                            exposes / consumes APIs only
+                          </text>
+                          <line
+                            class="dg-arrow"
+                            x1="190"
+                            y1="128"
+                            x2="216"
+                            y2="128"
+                          />
+                          <line
+                            class="dg-arrow"
+                            x1="216"
+                            y1="128"
+                            x2="216"
+                            y2="43"
+                          />
+                          <line
+                            class="dg-arrow"
+                            x1="216"
+                            y1="43"
+                            x2="243"
+                            y2="43"
+                          />
+                          <polygon
+                            class="dg-fill-accent"
+                            points="243,43 233,38 233,48"
+                          />
+                          <text
+                            class="dg-t-sm"
+                            x="212"
+                            y="86"
+                            text-anchor="end"
+                            font-size="9"
+                          >
+                            enters at the top
+                          </text>
+                          <rect
+                            class="dg-box-copper"
+                            x="248"
+                            y="20"
+                            width="150"
+                            height="46"
+                            rx="6"
+                          />
+                          <text
+                            class="dg-t"
+                            x="323"
+                            y="40"
+                            text-anchor="middle"
+                            font-size="11"
+                            font-weight="700"
+                          >
+                            Experience layer
+                          </text>
+                          <text
+                            class="dg-t-sm"
+                            x="323"
+                            y="55"
+                            text-anchor="middle"
+                            font-size="9.5"
+                          >
+                            shaped per consumer
+                          </text>
+                          <rect
+                            class="dg-box-copper"
+                            x="248"
+                            y="105"
+                            width="150"
+                            height="46"
+                            rx="6"
+                          />
+                          <text
+                            class="dg-t"
+                            x="323"
+                            y="125"
+                            text-anchor="middle"
+                            font-size="11"
+                            font-weight="700"
+                          >
+                            Process layer
+                          </text>
+                          <text
+                            class="dg-t-sm"
+                            x="323"
+                            y="140"
+                            text-anchor="middle"
+                            font-size="9.5"
+                          >
+                            orchestrate + transform
+                          </text>
+                          <rect
+                            class="dg-box-copper"
+                            x="248"
+                            y="190"
+                            width="150"
+                            height="46"
+                            rx="6"
+                          />
+                          <text
+                            class="dg-t"
+                            x="323"
+                            y="210"
+                            text-anchor="middle"
+                            font-size="11"
+                            font-weight="700"
+                          >
+                            System layer
+                          </text>
+                          <text
+                            class="dg-t-sm"
+                            x="323"
+                            y="225"
+                            text-anchor="middle"
+                            font-size="9.5"
+                          >
+                            one clean face per system
+                          </text>
+
+                          <line
+                            class="dg-arrow"
+                            x1="323"
+                            y1="66"
+                            x2="323"
+                            y2="99"
+                          />
+                          <polygon
+                            class="dg-fill-accent"
+                            points="323,105 318,95 328,95"
+                          />
+                          <line
+                            class="dg-arrow"
+                            x1="323"
+                            y1="151"
+                            x2="323"
+                            y2="184"
+                          />
+                          <polygon
+                            class="dg-fill-accent"
+                            points="323,190 318,180 328,180"
+                          />
+                          <line
+                            class="dg-arrow-mut"
+                            x1="398"
+                            y1="205"
+                            x2="455"
+                            y2="70"
+                          />
+                          <line
+                            class="dg-arrow-mut"
+                            x1="398"
+                            y1="211"
+                            x2="455"
+                            y2="132"
+                          />
+                          <line
+                            class="dg-arrow-mut"
+                            x1="398"
+                            y1="217"
+                            x2="455"
+                            y2="196"
+                          />
+                          <rect
+                            class="dg-box"
+                            x="460"
+                            y="45"
+                            width="150"
+                            height="34"
+                            rx="6"
+                          />
+                          <text
+                            class="dg-t-sm"
+                            x="535"
+                            y="66"
+                            text-anchor="middle"
+                            font-size="10"
+                          >
+                            ERP · NET4
+                          </text>
+                          <rect
+                            class="dg-box"
+                            x="460"
+                            y="111"
+                            width="150"
+                            height="34"
+                            rx="6"
+                          />
+                          <text
+                            class="dg-t-sm"
+                            x="535"
+                            y="132"
+                            text-anchor="middle"
+                            font-size="10"
+                          >
+                            Job board · InfoJobs
+                          </text>
+                          <rect
+                            class="dg-box"
+                            x="460"
+                            y="177"
+                            width="150"
+                            height="34"
+                            rx="6"
+                          />
+                          <text
+                            class="dg-t-sm"
+                            x="535"
+                            y="198"
+                            text-anchor="middle"
+                            font-size="10"
+                          >
+                            e-signature, credit, …
+                          </text>
+                        </g>
+                      </svg>
+                      <figcaption>
+                        Salesforce speaks only in APIs, and it enters at the
+                        top: it calls the experience layer, never the layers
+                        beneath it. Each layer calls only the one below, and
+                        every outside system is reached through the system
+                        layer's one clean face — which is what makes that face
+                        reusable, because a second consumer of the ERP calls the
+                        same one. The Marlex-owned canonical contracts sit
+                        between the layers. Which product plays the middleware
+                        role is the next decision, not this one.
+                      </figcaption>
+                    </figure>
                     <p>
                       <strong>How it fails back.</strong> There is no switch to
                       throw. Any single edge simply runs direct behind its own
@@ -10237,6 +10877,175 @@
                       <strong>The rule:</strong> put the switch in the
                       middleware when the switch itself is the risk.
                     </p>
+                    <figure class="diagram">
+                      <svg
+                        viewBox="0 0 640 210"
+                        role="img"
+                        aria-labelledby="port-seam-title"
+                      >
+                        <title id="port-seam-title">
+                          Business logic calls a Marlex-owned port; behind it, a
+                          direct adapter connects today and a middleware adapter
+                          is added later, chosen at runtime by a configuration
+                          record
+                        </title>
+                        <rect
+                          class="dg-box-accent"
+                          x="20"
+                          y="75"
+                          width="160"
+                          height="56"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="100"
+                          y="99"
+                          text-anchor="middle"
+                          font-size="12"
+                          font-weight="700"
+                        >
+                          Business logic
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="100"
+                          y="115"
+                          text-anchor="middle"
+                          font-size="10"
+                        >
+                          knows only the port
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="245"
+                          y="75"
+                          width="130"
+                          height="56"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="310"
+                          y="99"
+                          text-anchor="middle"
+                          font-size="12"
+                          font-weight="700"
+                        >
+                          The port
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="310"
+                          y="115"
+                          text-anchor="middle"
+                          font-size="10"
+                        >
+                          Marlex-owned interface
+                        </text>
+                        <line
+                          class="dg-arrow"
+                          x1="180"
+                          y1="103"
+                          x2="241"
+                          y2="103"
+                        />
+                        <polygon
+                          class="dg-fill-accent"
+                          points="241,103 231,98 231,108"
+                        />
+                        <rect
+                          class="dg-box"
+                          x="450"
+                          y="20"
+                          width="170"
+                          height="52"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="535"
+                          y="42"
+                          text-anchor="middle"
+                          font-size="11"
+                          font-weight="700"
+                        >
+                          Direct adapter
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="535"
+                          y="58"
+                          text-anchor="middle"
+                          font-size="10"
+                        >
+                          day-one implementation — live
+                        </text>
+                        <rect
+                          class="dg-box-mut"
+                          x="450"
+                          y="133"
+                          width="170"
+                          height="52"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="535"
+                          y="155"
+                          text-anchor="middle"
+                          font-size="11"
+                          font-weight="700"
+                        >
+                          Middleware adapter
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="535"
+                          y="171"
+                          text-anchor="middle"
+                          font-size="10"
+                        >
+                          added later, same port
+                        </text>
+                        <line
+                          class="dg-arrow"
+                          x1="375"
+                          y1="95"
+                          x2="446"
+                          y2="52"
+                        />
+                        <polygon
+                          class="dg-fill-accent"
+                          points="446,52 436,53 441,62"
+                        />
+                        <line
+                          class="dg-arrow-mut"
+                          x1="375"
+                          y1="112"
+                          x2="446"
+                          y2="155"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="405"
+                          y="200"
+                          text-anchor="middle"
+                          font-size="10"
+                        >
+                          the selector (a configuration record) chooses at
+                          runtime — no redeployment, reversible both ways
+                        </text>
+                      </svg>
+                      <figcaption>
+                        The seam. Business logic talks to a Marlex-owned port;
+                        the port talks to whichever adapter the runtime selector
+                        names. The direct adapter runs today; a middleware
+                        adapter is added later behind the same port. Flipping
+                        between them is a configuration change, and it works in
+                        both directions.
+                      </figcaption>
+                    </figure>
                     <p>
                       <strong>A caveat on timing.</strong> Where an outside
                       system calls a Marlex endpoint directly today, no
