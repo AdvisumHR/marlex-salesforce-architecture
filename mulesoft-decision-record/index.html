@@ -1226,6 +1226,19 @@
         color: var(--ink-soft);
       }
 
+      /* ---- long API names must not push the page sideways on a phone ----
+     Verified 2026-08-14: `POST {ERP_Connection__c.EndpointIntegration__c}{resource}`
+     forced 20px of horizontal page scroll at 390px wide. Break inside the token
+     rather than let one code span set the page width. */
+      code {
+        overflow-wrap: anywhere;
+        word-break: break-word;
+      }
+      table.ct code,
+      table.reg code {
+        overflow-wrap: anywhere;
+      }
+
       /* ---- reading-time badge ---- */
       .rt {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -1935,14 +1948,7 @@
                 point: no retiring object appears in their traffic, so there is
                 nothing to describe beyond the row.
               </p>
-              <p>
-                <strong>One exception, and it is deliberate.</strong> The
-                customer data platform is counted as coupled but has no block,
-                because there is nothing verified to put in one — its field
-                selection lives in the marketing platform rather than in
-                Salesforce. It is on the plan page as an open question instead,
-                which is the honest place for it.
-              </p>
+
               <p>
                 Each block carries the mechanism, the measured volumes, the
                 contract where one exists, and the open questions specific to
@@ -3071,6 +3077,13 @@
                     So the webhook's re-point and the core cutover are one
                     event, rehearsed together.
                   </p>
+                  <p>
+                    <strong>That is the switch, not the build.</strong> The
+                    interface itself is built, deployed and proven well before
+                    the cutover — it has to be, or there is nothing to switch
+                    to. What is pinned to the weekend is only the moment the
+                    inbound feed changes target.
+                  </p>
                   <figure class="diagram">
                     <a
                       class="dg-zoom"
@@ -4124,8 +4137,8 @@
                           are returned into Salesforce; and a consultant reviews
                           what the service proposes and either accepts it or
                           overrules it. Every step is dashed and marked as not
-                          built, because the design is still in build with the
-                          supplier and no part of it carries production traffic
+                          built, because the design was removed from the
+                          delivery scope and no part of it carries traffic
                           today.
                         </desc>
                         <rect
@@ -4585,8 +4598,8 @@
                           are returned into Salesforce; and a consultant reviews
                           what the service proposes and either accepts it or
                           overrules it. Every step is dashed and marked as not
-                          built, because the design is still in build with the
-                          supplier and no part of it carries production traffic
+                          built, because the design was removed from the
+                          delivery scope and no part of it carries traffic
                           today.
                         </desc>
                         <rect
@@ -6894,6 +6907,1885 @@
 
               <details class="more">
                 <summary>
+                  The CV parser
+                  <span class="cnt"
+                    >— stays direct on latency, and is coupled anyway</span
+                  >
+                </summary>
+                <div class="more-body">
+                  <p>
+                    A recruiter drops in a CV and waits while an outside
+                    provider reads it and fills the candidate's fields. It is
+                    the one edge argued to stay directly connected permanently —
+                    the call is synchronous inference inside a flow a person is
+                    waiting on, with no shared contract to own, so a middleware
+                    hop would add delay and cost for nothing to orchestrate.
+                  </p>
+                  <p>
+                    <strong
+                      >It is also coupled, and that surprised the
+                      census.</strong
+                    >
+                    The outside call is clean, but both Salesforce-side steps
+                    write the retiring model: seven package fields go onto the
+                    candidate, and the parser queries the retiring vacancy
+                    object to create an application record.
+                  </p>
+                  <p>
+                    An object-level scan missed it because the parser reads and
+                    writes
+                    <em>standard</em> Contact — the package fields sit on it.
+                    Verified read-only in production on 14 August 2026. Both
+                    claims hold at once: the transport stays as it is, the data
+                    it writes re-points with the core wave.
+                  </p>
+                  <figure class="diagram">
+                    <a
+                      class="dg-zoom"
+                      href="#zoom-cv-proc"
+                      aria-label="Enlarge this diagram"
+                    >
+                      <svg
+                        viewBox="0 0 1150 410"
+                        role="img"
+                        aria-labelledby="cvproc-t cvproc-d"
+                      >
+                        <title id="cvproc-t">
+                          Where CV parsing sits in the candidate-intake process,
+                          and where it touches the retiring model
+                        </title>
+                        <desc id="cvproc-d">
+                          A five-step process. A recruiter uploads a CV on the
+                          candidate screen and waits; an AI provider outside
+                          Salesforce reads the document and extracts the fields;
+                          Salesforce writes those fields onto the candidate,
+                          seven of them belonging to the retiring package;
+                          automation then looks up the vacancy and creates the
+                          application record; the recruiter reviews and advances
+                          the candidate. The two Salesforce-side write steps are
+                          copper because they touch the data model being
+                          retired.
+                        </desc>
+                        <rect
+                          class="dg-box-accent"
+                          x="20"
+                          y="104"
+                          width="248"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="30"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Drop in the CV
+                        </text>
+                        <text class="dg-t-sm" x="30" y="144.0" font-size="9.6">
+                          WHO · Recruiter
+                        </text>
+                        <text class="dg-t-sm" x="30" y="157.5" font-size="9.6">
+                          SYSTEM · Salesforce — candidate screen
+                        </text>
+                        <text class="dg-t-sm" x="30" y="171.0" font-size="9.6">
+                          ACTION · upload the CV and wait for the
+                        </text>
+                        <text class="dg-t-sm" x="30" y="184.5" font-size="9.6">
+                          fields to fill
+                        </text>
+                        <rect
+                          class="dg-box"
+                          x="357.031"
+                          y="104"
+                          width="266"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="367.031"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Read the document
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="367.031"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="367.031"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · AI provider — outside Salesforce
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="367.031"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · extract name, contact, skills,
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="367.031"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          experience and education
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="710.055"
+                          y="104"
+                          width="284"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t-copper"
+                          x="720.055"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Fill the candidate
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="827.7"
+                          y="124.5"
+                          font-size="8.6"
+                          letter-spacing="0.05em"
+                        >
+                          ▲ changed
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="720.055"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="720.055"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Salesforce — candidate record
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="720.055"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · write the parsed fields onto the
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="720.055"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          candidate, seven of them retiring
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="694.055"
+                          y="268"
+                          width="292"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t-copper"
+                          x="704.055"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Create the application
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="840.3"
+                          y="288.5"
+                          font-size="8.6"
+                          letter-spacing="0.05em"
+                        >
+                          ▲ changed
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="704.055"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="704.055"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Salesforce — application record
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="704.055"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · look up the vacancy and file the
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="704.055"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          candidate against it
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="354.51699999999994"
+                          y="268"
+                          width="244"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="364.51699999999994"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Screen and advance
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="364.51699999999994"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Recruiter
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="364.51699999999994"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Salesforce — application list
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="364.51699999999994"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · review what was extracted and
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="364.51699999999994"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          move the candidate on
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M268 147.8 L354.0 147.8"
+                          marker-end="url(#cvproc-ah)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="311.0"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          document sent
+                        </text>
+                        <path
+                          class="dg-arrow-copper"
+                          d="M623.031 147.8 L707.1 147.8"
+                          marker-end="url(#cvproc-ahc)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="665.1"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          fields returned
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M852.1 191.5 L852.1 265.0"
+                          marker-end="url(#cvproc-ah)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="858.1"
+                          y="228.2"
+                          text-anchor="start"
+                          font-size="9.0"
+                        >
+                          candidate saved
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M694.055 311.8 L601.5 311.8"
+                          marker-end="url(#cvproc-ah)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="647.8"
+                          y="304.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          application on file
+                        </text>
+                        <text
+                          class="dg-t-copper"
+                          x="361.031"
+                          y="92"
+                          text-anchor="start"
+                          font-size="9.5"
+                          font-weight="700"
+                        >
+                          ▲ the integration happens here
+                        </text>
+                        <text
+                          class="dg-t"
+                          x="20"
+                          y="40"
+                          text-anchor="start"
+                          font-size="13"
+                          font-weight="700"
+                        >
+                          CV parsing — fast by design, and coupled to the
+                          retiring model
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="20"
+                          y="58"
+                          text-anchor="start"
+                          font-size="10"
+                        >
+                          The outside call is clean. Both Salesforce-side steps
+                          write the records being retired.
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="20.0"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="33.0"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          surviving model
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="110.7"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="123.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          touches the retiring model
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="240.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          ▲ changed — re-pointed at cutover
+                        </text>
+                        <defs>
+                          <marker
+                            id="cvproc-ah"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-accent"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="cvproc-ahc"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-copper"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="cvproc-ahm"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path class="dg-fill-line" d="M0 0 L9 4.5 L0 9 Z" />
+                          </marker>
+                        </defs>
+                      </svg>
+                    </a>
+                    <figcaption>
+                      The call to the outside provider is clean — it sends a
+                      document and gets fields back, and nothing about it
+                      depends on the retiring model. The coupling is entirely on
+                      the Salesforce side: the parser writes seven package
+                      fields onto the candidate, queries the retiring vacancy
+                      object and inserts an application record. That is why this
+                      edge stays directly connected and still re-points with the
+                      core wave. The two claims are about different things — the
+                      transport stays as it is because a recruiter is waiting on
+                      the answer; the data it writes moves with everything else.
+                    </figcaption>
+                  </figure>
+                  <div class="dg-lightbox" id="zoom-cv-proc">
+                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
+                    <a class="dg-close" href="#">Close</a>
+                    <div class="dg-lightbox-inner">
+                      <svg
+                        viewBox="0 0 1150 410"
+                        role="img"
+                        aria-labelledby="cvproc-t-z cvproc-d-z"
+                      >
+                        <title id="cvproc-t-z">
+                          Where CV parsing sits in the candidate-intake process,
+                          and where it touches the retiring model
+                        </title>
+                        <desc id="cvproc-d-z">
+                          A five-step process. A recruiter uploads a CV on the
+                          candidate screen and waits; an AI provider outside
+                          Salesforce reads the document and extracts the fields;
+                          Salesforce writes those fields onto the candidate,
+                          seven of them belonging to the retiring package;
+                          automation then looks up the vacancy and creates the
+                          application record; the recruiter reviews and advances
+                          the candidate. The two Salesforce-side write steps are
+                          copper because they touch the data model being
+                          retired.
+                        </desc>
+                        <rect
+                          class="dg-box-accent"
+                          x="20"
+                          y="104"
+                          width="248"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="30"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Drop in the CV
+                        </text>
+                        <text class="dg-t-sm" x="30" y="144.0" font-size="9.6">
+                          WHO · Recruiter
+                        </text>
+                        <text class="dg-t-sm" x="30" y="157.5" font-size="9.6">
+                          SYSTEM · Salesforce — candidate screen
+                        </text>
+                        <text class="dg-t-sm" x="30" y="171.0" font-size="9.6">
+                          ACTION · upload the CV and wait for the
+                        </text>
+                        <text class="dg-t-sm" x="30" y="184.5" font-size="9.6">
+                          fields to fill
+                        </text>
+                        <rect
+                          class="dg-box"
+                          x="357.031"
+                          y="104"
+                          width="266"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="367.031"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Read the document
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="367.031"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="367.031"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · AI provider — outside Salesforce
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="367.031"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · extract name, contact, skills,
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="367.031"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          experience and education
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="710.055"
+                          y="104"
+                          width="284"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t-copper"
+                          x="720.055"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Fill the candidate
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="827.7"
+                          y="124.5"
+                          font-size="8.6"
+                          letter-spacing="0.05em"
+                        >
+                          ▲ changed
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="720.055"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="720.055"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Salesforce — candidate record
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="720.055"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · write the parsed fields onto the
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="720.055"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          candidate, seven of them retiring
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="694.055"
+                          y="268"
+                          width="292"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t-copper"
+                          x="704.055"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Create the application
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="840.3"
+                          y="288.5"
+                          font-size="8.6"
+                          letter-spacing="0.05em"
+                        >
+                          ▲ changed
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="704.055"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="704.055"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Salesforce — application record
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="704.055"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · look up the vacancy and file the
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="704.055"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          candidate against it
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="354.51699999999994"
+                          y="268"
+                          width="244"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="364.51699999999994"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Screen and advance
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="364.51699999999994"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Recruiter
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="364.51699999999994"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Salesforce — application list
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="364.51699999999994"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · review what was extracted and
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="364.51699999999994"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          move the candidate on
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M268 147.8 L354.0 147.8"
+                          marker-end="url(#cvproc-ah-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="311.0"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          document sent
+                        </text>
+                        <path
+                          class="dg-arrow-copper"
+                          d="M623.031 147.8 L707.1 147.8"
+                          marker-end="url(#cvproc-ahc-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="665.1"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          fields returned
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M852.1 191.5 L852.1 265.0"
+                          marker-end="url(#cvproc-ah-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="858.1"
+                          y="228.2"
+                          text-anchor="start"
+                          font-size="9.0"
+                        >
+                          candidate saved
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M694.055 311.8 L601.5 311.8"
+                          marker-end="url(#cvproc-ah-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="647.8"
+                          y="304.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          application on file
+                        </text>
+                        <text
+                          class="dg-t-copper"
+                          x="361.031"
+                          y="92"
+                          text-anchor="start"
+                          font-size="9.5"
+                          font-weight="700"
+                        >
+                          ▲ the integration happens here
+                        </text>
+                        <text
+                          class="dg-t"
+                          x="20"
+                          y="40"
+                          text-anchor="start"
+                          font-size="13"
+                          font-weight="700"
+                        >
+                          CV parsing — fast by design, and coupled to the
+                          retiring model
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="20"
+                          y="58"
+                          text-anchor="start"
+                          font-size="10"
+                        >
+                          The outside call is clean. Both Salesforce-side steps
+                          write the records being retired.
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="20.0"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="33.0"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          surviving model
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="110.7"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="123.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          touches the retiring model
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="240.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          ▲ changed — re-pointed at cutover
+                        </text>
+                        <defs>
+                          <marker
+                            id="cvproc-ah-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-accent"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="cvproc-ahc-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-copper"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="cvproc-ahm-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path class="dg-fill-line" d="M0 0 L9 4.5 L0 9 Z" />
+                          </marker>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="tech">
+                    <span class="tech-label">For the developers</span>
+                    <p>
+                      <code>CVParserCtrl</code>, an Apex HTTP callout through
+                      named credentials <code>Anthropic_API</code> and
+                      <code>Groq_API</code>. It writes
+                      <code>AVTRRT__Gender__c</code>,
+                      <code>AVTRRT__Country__c</code>,
+                      <code>AVTRRT__Source__c</code>,
+                      <code>AVTRRT__Resume__c</code>,
+                      <code>AVTRRT__Resume_Received_Date__c</code>,
+                      <code>AVTRRT__AutoPopulate_Skillset__c</code> and
+                      <code>AVTRRT__Copilot_Summary__c</code> on the Contact.
+                    </p>
+                    <p>
+                      It also queries <code>AVTRRT__Job__c</code> and inserts
+                      <code>AVTRRT__Job_Applicant__c</code> with
+                      <code>AVTRRT__Stage__c = 'Aplicacion'</code>. Four native
+                      <code>MA_</code> summary fields and about nineteen
+                      standard fields are written too — those need no re-point.
+                    </p>
+                    <p>
+                      The job board's CV path still calls the retiring package's
+                      own parser (<code>TRINTG__</code>-bundled). Closing that
+                      is part of the job-board cutover; two parsers run in
+                      parallel by design until then.
+                    </p>
+                  </div>
+                </div>
+              </details>
+
+              <details class="more">
+                <summary>
+                  Data Cloud — the customer data platform
+                  <span class="cnt"
+                    >— the heaviest caller, and the one we could not
+                    verify</span
+                  >
+                </summary>
+                <div class="more-body">
+                  <p>
+                    Candidate and company records stream out to the customer
+                    data platform, which resolves one profile per person across
+                    its sources so marketing can segment and run campaigns. It
+                    is the heaviest caller in the whole org at around 140,041
+                    calls over seven days.
+                  </p>
+                  <p>
+                    <strong>It reads only standard objects</strong> — Contact,
+                    Account, Opportunity, Campaign — so no retiring object
+                    appears in its traffic, and an object-level census recorded
+                    it as needing no work.
+                  </p>
+                  <p>
+                    <strong>But Contact is where candidates live.</strong>
+                    1,085,882 of the org's 1,120,625 Contacts are candidates,
+                    and 141 of Contact's 369 fields belong to the retiring
+                    package. Reading Contact is therefore not the same as
+                    reading nothing that changes.
+                  </p>
+                  <p>
+                    Which fields it actually consumes is configured in the
+                    marketing platform rather than in Salesforce, so it could
+                    not be read from the org on 14 August 2026. It is carried as
+                    <strong>coupled until its owner confirms</strong>, because
+                    assuming it is clean is the more expensive error. That
+                    confirmation sets the size of the work.
+                  </p>
+                  <figure class="diagram">
+                    <a
+                      class="dg-zoom"
+                      href="#zoom-dc-proc"
+                      aria-label="Enlarge this diagram"
+                    >
+                      <svg
+                        viewBox="0 0 1150 410"
+                        role="img"
+                        aria-labelledby="dcproc-t dcproc-d"
+                      >
+                        <title id="dcproc-t">
+                          Where the customer data platform sits in the
+                          candidate-marketing process
+                        </title>
+                        <desc id="dcproc-d">
+                          A five-step process. Recruiters create and update
+                          candidates in Salesforce; a native connector streams
+                          Contact and the other standard objects out to the
+                          customer data platform; the platform resolves one
+                          profile per person across its sources; marketing
+                          builds segments and runs a campaign; a candidate
+                          responds and arrives back as an application. The
+                          ingest step is copper because Contact is where
+                          candidates live and many of its fields are being
+                          retired.
+                        </desc>
+                        <rect
+                          class="dg-box-accent"
+                          x="20"
+                          y="104"
+                          width="250"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="30"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Work the candidate
+                        </text>
+                        <text class="dg-t-sm" x="30" y="144.0" font-size="9.6">
+                          WHO · Recruiter
+                        </text>
+                        <text class="dg-t-sm" x="30" y="157.5" font-size="9.6">
+                          SYSTEM · Salesforce — day-to-day screens
+                        </text>
+                        <text class="dg-t-sm" x="30" y="171.0" font-size="9.6">
+                          ACTION · create and update candidates as
+                        </text>
+                        <text class="dg-t-sm" x="30" y="184.5" font-size="9.6">
+                          the desk runs
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="362.028"
+                          y="104"
+                          width="292"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t-copper"
+                          x="372.028"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Ingest the records
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="485.6"
+                          y="124.5"
+                          font-size="8.6"
+                          letter-spacing="0.05em"
+                        >
+                          ▲ changed
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="372.028"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="372.028"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Customer data platform — native connector
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="372.028"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · stream Contact and the other
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="372.028"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          standard objects out
+                        </text>
+                        <rect
+                          class="dg-box"
+                          x="732.043"
+                          y="104"
+                          width="246"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="742.043"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Unify the person
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="742.043"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="742.043"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Customer data platform
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="742.043"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · resolve one profile per person
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="742.043"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          across the sources
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="708.043"
+                          y="268"
+                          width="280"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="718.043"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Reach the audience
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="718.043"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Marketing
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="718.043"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Marketing platform — campaigns
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="718.043"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · build segments and run the
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="718.043"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          campaign
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="364.01700000000005"
+                          y="268"
+                          width="250"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="374.01700000000005"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Apply to a role
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.01700000000005"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Candidate
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.01700000000005"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Marlex-owned front end
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.01700000000005"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · respond, and arrive back as an
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.01700000000005"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          application
+                        </text>
+                        <path
+                          class="dg-arrow-copper"
+                          d="M270 147.8 L359.0 147.8"
+                          marker-end="url(#dcproc-ahc)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="314.5"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          records change
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M654.028 147.8 L729.0 147.8"
+                          marker-end="url(#dcproc-ah)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="691.5"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          profiles built
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M855.0 191.5 L855.0 265.0"
+                          marker-end="url(#dcproc-ah)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="861.0"
+                          y="228.2"
+                          text-anchor="start"
+                          font-size="9.0"
+                        >
+                          profiles ready
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M708.043 311.8 L617.0 311.8"
+                          marker-end="url(#dcproc-ah)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="662.5"
+                          y="304.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          campaign lands
+                        </text>
+                        <text
+                          class="dg-t-copper"
+                          x="366.028"
+                          y="92"
+                          text-anchor="start"
+                          font-size="9.5"
+                          font-weight="700"
+                        >
+                          ▲ the integration happens here
+                        </text>
+                        <text
+                          class="dg-t"
+                          x="20"
+                          y="40"
+                          text-anchor="start"
+                          font-size="13"
+                          font-weight="700"
+                        >
+                          The customer data platform — the heaviest caller in
+                          the org
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="20"
+                          y="58"
+                          text-anchor="start"
+                          font-size="10"
+                        >
+                          It reads Contact. 97% of Contacts are candidates, and
+                          141 of Contact's fields are retiring.
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="20.0"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="33.0"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          surviving model
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="110.7"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="123.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          touches the retiring model
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="240.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          ▲ changed — re-pointed at cutover
+                        </text>
+                        <defs>
+                          <marker
+                            id="dcproc-ah"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-accent"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="dcproc-ahc"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-copper"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="dcproc-ahm"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path class="dg-fill-line" d="M0 0 L9 4.5 L0 9 Z" />
+                          </marker>
+                        </defs>
+                      </svg>
+                    </a>
+                    <figcaption>
+                      This edge never touches a retiring object — everything it
+                      reads is a standard Salesforce object, which is why an
+                      object-level census recorded it as needing no work. But
+                      Contact is where candidates live: 97% of Contacts are
+                      candidates, and 141 of Contact's 369 fields belong to the
+                      retiring package. Which of those it actually consumes is
+                      configured in the marketing platform rather than in
+                      Salesforce, so it could not be read from the org. It is
+                      carried here as coupled until its owner confirms the field
+                      list, because assuming it is clean is the more expensive
+                      error.
+                    </figcaption>
+                  </figure>
+                  <div class="dg-lightbox" id="zoom-dc-proc">
+                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
+                    <a class="dg-close" href="#">Close</a>
+                    <div class="dg-lightbox-inner">
+                      <svg
+                        viewBox="0 0 1150 410"
+                        role="img"
+                        aria-labelledby="dcproc-t-z dcproc-d-z"
+                      >
+                        <title id="dcproc-t-z">
+                          Where the customer data platform sits in the
+                          candidate-marketing process
+                        </title>
+                        <desc id="dcproc-d-z">
+                          A five-step process. Recruiters create and update
+                          candidates in Salesforce; a native connector streams
+                          Contact and the other standard objects out to the
+                          customer data platform; the platform resolves one
+                          profile per person across its sources; marketing
+                          builds segments and runs a campaign; a candidate
+                          responds and arrives back as an application. The
+                          ingest step is copper because Contact is where
+                          candidates live and many of its fields are being
+                          retired.
+                        </desc>
+                        <rect
+                          class="dg-box-accent"
+                          x="20"
+                          y="104"
+                          width="250"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="30"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Work the candidate
+                        </text>
+                        <text class="dg-t-sm" x="30" y="144.0" font-size="9.6">
+                          WHO · Recruiter
+                        </text>
+                        <text class="dg-t-sm" x="30" y="157.5" font-size="9.6">
+                          SYSTEM · Salesforce — day-to-day screens
+                        </text>
+                        <text class="dg-t-sm" x="30" y="171.0" font-size="9.6">
+                          ACTION · create and update candidates as
+                        </text>
+                        <text class="dg-t-sm" x="30" y="184.5" font-size="9.6">
+                          the desk runs
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="362.028"
+                          y="104"
+                          width="292"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t-copper"
+                          x="372.028"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Ingest the records
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="485.6"
+                          y="124.5"
+                          font-size="8.6"
+                          letter-spacing="0.05em"
+                        >
+                          ▲ changed
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="372.028"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="372.028"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Customer data platform — native connector
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="372.028"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · stream Contact and the other
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="372.028"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          standard objects out
+                        </text>
+                        <rect
+                          class="dg-box"
+                          x="732.043"
+                          y="104"
+                          width="246"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="742.043"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Unify the person
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="742.043"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="742.043"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Customer data platform
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="742.043"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · resolve one profile per person
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="742.043"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          across the sources
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="708.043"
+                          y="268"
+                          width="280"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="718.043"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Reach the audience
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="718.043"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Marketing
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="718.043"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Marketing platform — campaigns
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="718.043"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · build segments and run the
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="718.043"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          campaign
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="364.01700000000005"
+                          y="268"
+                          width="250"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="374.01700000000005"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Apply to a role
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.01700000000005"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Candidate
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.01700000000005"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Marlex-owned front end
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.01700000000005"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · respond, and arrive back as an
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.01700000000005"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          application
+                        </text>
+                        <path
+                          class="dg-arrow-copper"
+                          d="M270 147.8 L359.0 147.8"
+                          marker-end="url(#dcproc-ahc-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="314.5"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          records change
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M654.028 147.8 L729.0 147.8"
+                          marker-end="url(#dcproc-ah-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="691.5"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          profiles built
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M855.0 191.5 L855.0 265.0"
+                          marker-end="url(#dcproc-ah-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="861.0"
+                          y="228.2"
+                          text-anchor="start"
+                          font-size="9.0"
+                        >
+                          profiles ready
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M708.043 311.8 L617.0 311.8"
+                          marker-end="url(#dcproc-ah-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="662.5"
+                          y="304.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          campaign lands
+                        </text>
+                        <text
+                          class="dg-t-copper"
+                          x="366.028"
+                          y="92"
+                          text-anchor="start"
+                          font-size="9.5"
+                          font-weight="700"
+                        >
+                          ▲ the integration happens here
+                        </text>
+                        <text
+                          class="dg-t"
+                          x="20"
+                          y="40"
+                          text-anchor="start"
+                          font-size="13"
+                          font-weight="700"
+                        >
+                          The customer data platform — the heaviest caller in
+                          the org
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="20"
+                          y="58"
+                          text-anchor="start"
+                          font-size="10"
+                        >
+                          It reads Contact. 97% of Contacts are candidates, and
+                          141 of Contact's fields are retiring.
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="20.0"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="33.0"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          surviving model
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="110.7"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="123.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          touches the retiring model
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="240.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          ▲ changed — re-pointed at cutover
+                        </text>
+                        <defs>
+                          <marker
+                            id="dcproc-ah-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-accent"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="dcproc-ahc-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-copper"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="dcproc-ahm-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path class="dg-fill-line" d="M0 0 L9 4.5 L0 9 Z" />
+                          </marker>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="tech">
+                    <span class="tech-label">For the developers</span>
+                    <p>
+                      It connects through the platform's native connector, not a
+                      connected app, which is why it is nearly invisible in
+                      login data and must be attributed by
+                      <code>CONNECTED_APP_ID</code> rather than by user. The
+                      Data Cloud metadata objects are not queryable from this
+                      org, so the field selection has to come from the platform
+                      side.
+                    </p>
+                    <p>
+                      The check that settles it: list the Contact fields in its
+                      ingest mapping and look for the
+                      <code>AVTRRT__</code> prefix, and confirm whether the
+                      stream is filtered by record type or takes both
+                      <code>Candidate</code> and <code>Contact</code>.
+                    </p>
+                  </div>
+                </div>
+              </details>
+
+              <details class="more">
+                <summary>
                   The portals, and the campaign landing page
                   <span class="cnt"
                     >— what retires, and what arrived early without review</span
@@ -8774,13 +10666,14 @@
                     anything new. Phase 2 covers three early re-points pulled
                     forward by the rebuild's own waves, made in Marlex's own
                     code. Phase 3 builds the ERP interface, the first thing
-                    MuleSoft builds. Phase 4 builds the job-board interface and
-                    is marked as the gate, because its re-point must land inside
-                    the core cutover window itself. Phase 5 points the
-                    pre-screening service at the new model before it ships.
-                    Phase 6 is everything else, on its own schedule. Phases 3
-                    and 4 are copper because they are the two interfaces that
-                    must be standing before the cutover.
+                    MuleSoft builds. Phase 4 builds the job-board interface,
+                    which like the ERP one must be standing in production before
+                    the cutover; it is marked as the gate because the moment its
+                    inbound feed switches target is tied to the data move
+                    itself. Phase 5 points the pre-screening service at the new
+                    model before it ships. Phase 6 is everything else, on its
+                    own schedule. Phases 3 and 4 are copper because they are the
+                    two interfaces that must be standing before the cutover.
                   </desc>
 
                   <text
@@ -8988,7 +10881,7 @@
                     text-anchor="middle"
                     font-size="9"
                   >
-                    re-point lands inside the
+                    built well before; only the
                   </text>
                   <text
                     class="dg-t-sm"
@@ -8997,7 +10890,7 @@
                     text-anchor="middle"
                     font-size="9"
                   >
-                    core cutover weekend
+                    switch is tied to the data move
                   </text>
 
                   
@@ -9105,12 +10998,13 @@
                 <figcaption>
                   The sequence at a glance. Phases 3 and 4 are the two
                   interfaces that must be standing in production before the core
-                  cutover — and phase 4 is the gate: three edges write the
-                  retiring records, but the job board is the only one Marlex
-                  controls on both sides and by far the highest volume, so its
-                  re-point has to land inside the cutover weekend itself. Phase
-                  2's three re-points come earlier in time than either
-                  interface, because the rebuild's own waves pull them forward.
+                  cutover — and phase 4 is the gate. Both interfaces are built
+                  and proven well before the cutover — that is what phases 3 and
+                  4 are. What is tied to the weekend is narrower: the moment the
+                  job board's inbound feed changes target, because it writes the
+                  very records the migration is moving. Phase 2's three
+                  re-points come earlier in time than either interface, because
+                  the rebuild's own waves pull them forward.
                 </figcaption>
               </figure>
               <div class="tw">
@@ -9182,9 +11076,12 @@
                         fallback
                       </td>
                       <td>
-                        <strong>The cutover window itself</strong> — the
-                        highest-volume writer, and the only one owned end to end
-                        on both sides
+                        <strong
+                          >Built before; its switch thrown at the
+                          cutover</strong
+                        >
+                        — the highest-volume writer, and the only one owned end
+                        to end
                       </td>
                     </tr>
                     <tr>
