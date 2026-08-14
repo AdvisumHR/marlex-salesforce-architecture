@@ -178,11 +178,15 @@
         color: var(--accent);
         margin: 0 0 0.5rem;
       }
+      /* No text-wrap:balance here. Balance evens out line lengths, which flatters a
+     short heading but on a two- or three-line sentence just leaves every line
+     short of the right edge — it looked like a broken container. Balance stays
+     on h1/h2 where the text is short enough for it to help. */
       .subtitle {
         font-size: 1.2rem;
         color: var(--ink-soft);
         margin: 0 0 1.2rem;
-        text-wrap: balance;
+        max-width: 34em;
       }
       .dateline {
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
