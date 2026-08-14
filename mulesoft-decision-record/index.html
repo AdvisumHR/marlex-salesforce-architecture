@@ -1390,7 +1390,7 @@
 
             <section>
               <p class="section-eyebrow">The finding that shapes everything</p>
-              <h2>Nine connections touch the data being retired</h2>
+              <h2>Ten connections touch the data being retired</h2>
               <p>
                 The sharpest question is not who talks to Salesforce — it is who
                 touches the old recruitment records, because that set, and only
@@ -1399,11 +1399,11 @@
               </p>
               <div class="stats">
                 <div>
-                  <span class="n">9</span>
+                  <span class="n">10</span>
                   <span class="l"
                     >integrations touch the retiring model and must be
-                    re-pointed — eight confirmed, one assumed pending its
-                    owner</span
+                    re-pointed, every one confirmed against the production
+                    metadata</span
                   >
                 </div>
                 <div>
@@ -1520,22 +1520,23 @@
                       — so "reads Contact" usually means "reads candidates".
                     </p>
                     <p>
-                      The re-check cleared five edges outright — e-signature,
-                      credit checks, geocoding and Maps, document generation and
-                      document management: zero package references in any of
-                      their classes.
+                      The re-check cleared four edges outright — e-signature,
+                      credit checks, document generation and document
+                      management: zero package references in any of their code.
                     </p>
                     <p>
-                      It reclassified <strong>two edges</strong> that an
+                      It reclassified <strong>three edges</strong> that an
                       object-level scan had recorded as uncoupled. The CV parser
-                      was confirmed coupled by its own code. The customer data
-                      platform could not be settled from the org at all, because
-                      its field selection lives in the marketing platform.
+                      writes seven package fields and creates retiring records.
+                      Geocoding calls a class inside the package itself. And the
+                      customer data platform ingests four package fields, though
+                      none of them reaches the profile it builds.
                     </p>
                     <p>
-                      That second one is carried as
-                      <em>assumed coupled</em> until its owner confirms, since
-                      assuming it is clean is the more expensive error.
+                      All three were settled from evidence, not left open. The
+                      lesson is the method's: counting which <em>objects</em> a
+                      caller touches cannot see a package field sitting on a
+                      surviving object, nor a call into package code.
                     </p>
                   </div>
                 </div>
@@ -1639,11 +1640,11 @@
             <div class="bluf">
               <p>
                 <strong>The shape of it.</strong>
-                <strong>Nine</strong> integrations touch the retiring data model
-                and must be re-pointed — eight confirmed, and the customer data
-                platform assumed until its owner confirms. Two of the nine are
-                built as middleware interfaces and gate the core cutover. Three
-                retire outright. The remaining seven cross untouched.
+                <strong>Ten</strong> integrations touch the retiring data model
+                and must be re-pointed, all ten confirmed against the production
+                metadata. Two of them are built as middleware interfaces and
+                gate the core cutover. Three retire outright. The remaining
+                seven cross untouched.
               </p>
               <p>
                 Verdicts are stated here and nowhere else. Open a row's detail
@@ -1776,21 +1777,34 @@
                       </td>
                     </tr>
                     <tr>
+                      <td><strong>Google Maps</strong> — geocoding</td>
+                      <td><span class="yes">Yes</span> — writes five fields</td>
+                      <td>
+                        <span class="yes">Yes</span> — the logic must be rebuilt
+                      </td>
+                      <td><strong>Direct</strong>, route later</td>
+                      <td>
+                        The only edge that depends on package <em>code</em>, not
+                        just package fields — it calls a class inside the
+                        package, which stops existing at uninstall
+                      </td>
+                    </tr>
+                    <tr>
                       <td>
                         <strong>Data Cloud</strong> — customer data platform
                       </td>
                       <td>
-                        <span class="yes">Assumed yes</span> — pending
-                        verification
+                        <span class="yes">Yes</span> — four fields, confirmed
                       </td>
                       <td>
-                        <span class="yes">Assumed yes</span> — scope unknown
+                        <span class="yes">Yes</span> — mapping only, nothing
+                        downstream
                       </td>
                       <td><strong>Direct</strong>, route later</td>
                       <td>
-                        The heaviest caller in the org, and it reads Contact —
-                        where 97% of records are candidates and 141 fields
-                        belong to the retiring package
+                        It ingests four retiring fields from Contact, but none
+                        reaches the unified profile — so the fix is a mapping
+                        change, not a cutover dependency
                       </td>
                     </tr>
                     <tr class="grp">
@@ -1900,15 +1914,12 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>Maps · DocsMadeEasy</strong></td>
-                      <td>
-                        <span class="no">No</span> — schema and addresses only
-                      </td>
+                      <td><strong>DocsMadeEasy</strong></td>
+                      <td><span class="no">No</span> — schema only</td>
                       <td><span class="no">No</span></td>
                       <td><strong>Direct</strong>, route later</td>
                       <td>
-                        DocsMadeEasy made 1,392 schema calls and read no records
-                        at all
+                        It made 1,392 schema calls and read no records at all
                       </td>
                     </tr>
                     <tr>
@@ -1947,16 +1958,15 @@
                       and shortlists, and the surviving native and standard
                       model holding offers, invoices, accounts, candidates,
                       training records and campaigns. Outside systems are
-                      grouped in three columns by cutover consequence. Nine
-                      reach the retiring model and must be re-pointed: the ERP,
-                      the job board, pre-screening, training, the reporting
-                      extract, the sourcing connector, the campaign landing
-                      page, the CV parser and the customer data platform, the
-                      last of which is assumed rather than measured. Seven cross
-                      the cutover untouched because they only ever reach the
-                      surviving model. The self-service portals sit inside the
-                      retiring model and leave with the package rather than
-                      being re-pointed.
+                      grouped in three columns by cutover consequence. Ten reach
+                      the retiring model and must be re-pointed: the ERP, the
+                      job board, pre-screening, training, the reporting extract,
+                      the sourcing connector, the campaign landing page, the CV
+                      parser, Google Maps geocoding and the customer data
+                      platform. Seven cross the cutover untouched because they
+                      only ever reach the surviving model. The self-service
+                      portals sit inside the retiring model and leave with the
+                      package rather than being re-pointed.
                     </desc>
 
                     <text
@@ -2106,7 +2116,7 @@
                       font-size="10.5"
                       font-weight="700"
                     >
-                      ▲ REACHES THE RETIRING MODEL — 9
+                      ▲ REACHES THE RETIRING MODEL — 10
                     </text>
                     <text class="dg-t-sm" x="20" y="106" font-size="9">
                       must be re-pointed
@@ -2116,7 +2126,7 @@
                       x="20"
                       y="118"
                       width="290"
-                      height="212"
+                      height="234"
                       rx="7"
                     />
                     <text class="dg-t-sm" x="34" y="140" font-size="9.6">
@@ -2144,12 +2154,15 @@
                       CV parser — writes seven package fields
                     </text>
                     <text class="dg-t-sm" x="34" y="316" font-size="9.6">
-                      Customer data platform — assumed, not measured
+                      Google Maps — depends on package code, not fields
+                    </text>
+                    <text class="dg-t-sm" x="34" y="338" font-size="9.6">
+                      Customer data platform — four fields, contained
                     </text>
 
                     <path
                       class="dg-arrow-copper"
-                      d="M310 224 L327 224"
+                      d="M310 235 L327 235"
                       marker-end="url(#ls-ahc)"
                     />
 
@@ -2284,11 +2297,11 @@
                   data models at once during the rebuild, which is why an edge
                   can read a perfectly ordinary Contact and still be coupled —
                   141 of that object's 369 fields belong to the package being
-                  retired. Nine outside systems reach the retiring model and
-                  must be re-pointed; seven reach only the surviving one and
-                  need no work. The portals are the exception to both: they are
-                  built <em>inside</em> the retiring model, so they leave with
-                  it rather than moving.
+                  retired. Ten outside systems reach the retiring model and must
+                  be re-pointed; seven reach only the surviving one and need no
+                  work. The portals are the exception to both: they are built
+                  <em>inside</em> the retiring model, so they leave with it
+                  rather than moving.
                 </figcaption>
               </figure>
               <p>
@@ -8225,10 +8238,74 @@
 
               <details class="more">
                 <summary>
+                  Google Maps — geocoding
+                  <span class="cnt"
+                    >— the one edge that depends on package code, not just
+                    package fields</span
+                  >
+                </summary>
+                <div class="more-body">
+                  <p>
+                    A scheduled job puts candidates on the map: it takes their
+                    address, asks Google Maps for coordinates, and writes the
+                    result back so the desk can search by distance. It looks
+                    like a minor edge, and on volume it is.
+                  </p>
+                  <p>
+                    <strong
+                      >It is the harder of the two couplings on this
+                      page.</strong
+                    >
+                    Every other coupled edge names package <em>fields</em>,
+                    which re-point by changing which field is read or written.
+                    This one calls a class that lives <em>inside</em> the
+                    retiring package.
+                  </p>
+                  <p>
+                    When the package is uninstalled that class stops existing,
+                    the job stops compiling, and the geocoding logic has to be
+                    rebuilt rather than re-aimed. It is re-point work of a
+                    different kind, and it was not in the original scope.
+                  </p>
+                  <p>
+                    It also writes five package fields on the candidate, so the
+                    coupling runs both ways: the code it depends on disappears,
+                    and the fields it writes move.
+                  </p>
+                  <div class="tech">
+                    <span class="tech-label">For the developers</span>
+                    <p>
+                      <code>TR_GeoLocationUpdaterBatch</code> instantiates
+                      <code>AVTRRT.Geocoding_GoogleMaps</code> — a class in the
+                      managed package's namespace — and reads its
+                      <code>googleResponses</code> map for status handling. That
+                      reference is what stops compiling at uninstall; a field
+                      re-point does not fix it.
+                    </p>
+                    <p>
+                      It writes <code>AVTRRT__Mapping_Status__c</code>,
+                      <code>AVTRRT__Lat__c</code>, <code>AVTRRT__Lon__c</code>,
+                      <code>AVTRRT__Geolocation__Latitude__s</code> and
+                      <code>AVTRRT__Geolocation__Longitude__s</code> on Contact,
+                      filtered by the <code>Candidate</code> record type.
+                      Verified against the retrieved production metadata, 14
+                      August 2026.
+                    </p>
+                    <p>
+                      The geolocation pair is the same two fields the customer
+                      data platform ingests, described below — one edge writes
+                      them, the other reads them.
+                    </p>
+                  </div>
+                </div>
+              </details>
+
+              <details class="more">
+                <summary>
                   Data Cloud — the customer data platform
                   <span class="cnt"
-                    >— the heaviest caller, and the one we could not
-                    verify</span
+                    >— the heaviest caller, and four fields that stop at the
+                    data lake</span
                   >
                 </summary>
                 <div class="more-body">
@@ -8253,12 +8330,29 @@
                     reading nothing that changes.
                   </p>
                   <p>
-                    Which fields it actually consumes is configured in the
-                    marketing platform rather than in Salesforce, so it could
-                    not be read from the org on 14 August 2026. It is carried as
-                    <strong>coupled until its owner confirms</strong>, because
-                    assuming it is clean is the more expensive error. That
-                    confirmation sets the size of the work.
+                    <strong
+                      >Checked, on 14 August 2026: it ingests four of
+                      them.</strong
+                    >
+                    The candidate's status, a package phone field and the two
+                    halves of the package's own geolocation are pulled into the
+                    platform's raw data lake. So the edge is coupled, and the
+                    object-level reading was wrong.
+                  </p>
+                  <p>
+                    <strong>But the blast radius is small.</strong> None of the
+                    four is promoted into the unified profile the platform
+                    builds. Of the 49 Contact fields that do reach it, not one
+                    belongs to the retiring package — so no segment, activation
+                    or campaign consumes them. They land in the raw lake and
+                    stop there.
+                  </p>
+                  <p>
+                    That changes the disposition from a cutover dependency to
+                    <strong>mapping maintenance</strong>. When those four fields
+                    retire to their native successors the ingest mapping breaks
+                    and must be re-pointed, but nothing downstream notices, and
+                    no campaign stops.
                   </p>
                   <figure class="diagram">
                     <a
@@ -9135,17 +9229,33 @@
                       It connects through the platform's native connector, not a
                       connected app, which is why it is nearly invisible in
                       login data and must be attributed by
-                      <code>CONNECTED_APP_ID</code> rather than by user. The
-                      Data Cloud metadata objects are not queryable from this
-                      org, so the field selection has to come from the platform
-                      side.
+                      <code>CONNECTED_APP_ID</code> rather than by user.
                     </p>
                     <p>
-                      The check that settles it: list the Contact fields in its
-                      ingest mapping and look for the
-                      <code>AVTRRT__</code> prefix, and confirm whether the
-                      stream is filtered by record type or takes both
-                      <code>Candidate</code> and <code>Contact</code>.
+                      <strong>The four ingested package fields</strong>, mapped
+                      source to target into the
+                      <code>Contact_Home__dll</code> data lake object:
+                      <code>AVTRRT__Candidate_Status__c</code>,
+                      <code>AVTRRT__Phone__c</code>,
+                      <code>AVTRRT__Geolocation__Latitude__s</code> and
+                      <code>AVTRRT__Geolocation__Longitude__s</code>.
+                    </p>
+                    <p>
+                      <strong
+                        >Containment, verified across 98 field-map
+                        files:</strong
+                      >
+                      49 distinct source fields are promoted to a data model
+                      object and none carries the <code>AVTRRT__</code> prefix.
+                      The stream itself is <code>FULL_REFRESH</code> with no
+                      record-type filter, so it takes every Contact rather than
+                      a candidate-only subset.
+                    </p>
+                    <p>
+                      <strong>Worth knowing:</strong> the two geolocation fields
+                      are written by the geocoding batch described above — the
+                      same package fields, on the same records, at both ends of
+                      the surface.
                     </p>
                   </div>
                 </div>
@@ -12115,23 +12225,17 @@
                 </li>
                 <li>
                   <b
-                    >Which retiring fields the customer data platform actually
-                    consumes.</b
+                    >Rebuilding the geocoding logic before the package
+                    leaves.</b
                   >
-                  It is the heaviest caller in the org and it reads Contact,
-                  where 141 of 369 fields belong to the retiring package and 97%
-                  of records are candidates. It is therefore
-                  <strong
-                    >assumed to consume retiring data and to need a
-                    re-point</strong
-                  >, and it is counted that way. Its field selection is
-                  configured in the marketing platform rather than in
-                  Salesforce, so it could not be verified from the org on 14
-                  August 2026 — only its owner can confirm the list, and that
-                  list sets the size of the work.
+                  The job that puts candidates on the map calls a class inside
+                  the retiring package, so it cannot be re-aimed at a different
+                  field — the code it depends on stops existing at uninstall and
+                  the logic has to be rebuilt. It is the only edge on this page
+                  in that position, and it was not in the original re-point
+                  scope.
                   <span class="who"
-                    >Marketing data owner with Marlex IT · before the core
-                    wave</span
+                    >Marlex IT · before the package is uninstalled</span
                   >
                 </li>
                 <li>
