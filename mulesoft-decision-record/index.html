@@ -8610,12 +8610,24 @@
                     object to create an application record.
                   </p>
                   <p>
-                    An object-level scan missed it because the parser reads and
-                    writes
-                    <em>standard</em> Contact — the package fields sit on it.
-                    Verified read-only in production on 14 August 2026. Both
-                    claims hold at once: the transport stays as it is, the data
-                    it writes re-points with the core wave.
+                    <strong
+                      >There are two of them, and only one is live.</strong
+                    >
+                    A second, older parser is still deployed and still active,
+                    calling a credential that <em>does not exist</em> in
+                    production — so it would fail on use. Its screen component
+                    is marked as available for pages, but a sweep of all 109
+                    record and app pages on 18 August 2026 found it placed on
+                    none of them. So this is dead code rather than a live fault:
+                    nothing to fix urgently, but two classes and a component to
+                    retire before they confuse the rebuild.
+                  </p>
+                  <p>
+                    An object-level scan missed the live one because the parser
+                    reads and writes <em>standard</em> Contact — the package
+                    fields sit on it. Verified read-only in production on 14
+                    August 2026. Both claims hold at once: the transport stays
+                    as it is, the data it writes re-points with the core wave.
                   </p>
                   <figure class="diagram">
                     <a
@@ -14023,17 +14035,18 @@
                   <summary>
                     Cost, and where each edge's switch lives
                     <span class="cnt"
-                      >— the estimate, and the three homes a switch can
+                      >— the relative cost, and the three homes a switch can
                       have</span
                     >
                   </summary>
                   <div class="more-body">
                     <p>
-                      <strong>Cost.</strong> The seams themselves are roughly
-                      3–5 developer-days; the fallback direct connections
-                      roughly 10–15. Running both during coexistence is a
-                      genuine carrying cost, bounded by when the fallback is
-                      stood down.
+                      <strong>Cost.</strong> Building the seam is a small
+                      fraction of building the fallback direct connection behind
+                      it — the seam is an interface and a selector, the fallback
+                      is the working integration. Running both during
+                      coexistence is a genuine carrying cost, bounded by when
+                      the fallback is stood down.
                     </p>
                     <p>
                       <strong>A switch has three possible homes</strong>, chosen
@@ -15373,6 +15386,23 @@
                   yes-or-no from the business, so the permission can be narrowed
                   or the edge cleared for good.
                   <span class="who">Marlex IT with the supplier</span>
+                </li>
+                <li>
+                  <b
+                    >The sourcing connector has no written description anywhere
+                    — somebody has to supply one.</b
+                  >
+                  It is the only coupled edge with no documentation of any kind:
+                  no automation, no credential and no code in Salesforce, and no
+                  ticket in the delivery backlog under any spelling. That is
+                  consistent with how it works — it signs in as a recruiter and
+                  needs no development — but it means what it actually does
+                  cannot be established from evidence at all. Until its owner
+                  describes it, its verdict rests on measured traffic alone, and
+                  whether it writes the retiring records stays open.
+                  <span class="who"
+                    >Marlex IT with the supplier · before its wave</span
+                  >
                 </li>
                 <li>
                   <b>Scoping the sourcing connector down to least privilege.</b>
