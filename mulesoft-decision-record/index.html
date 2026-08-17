@@ -1353,65 +1353,36 @@
                 replaced, and what is still undecided.
               </p>
               <p class="dateline">
-                Grounded in a read-only census of the live production org, 19
-                July 2026 ·
-                <span class="rt"
-                  >Four pages · about fourteen minutes, with the detail one
-                  click away</span
-                >
+                <span class="rt">Four pages · about fourteen minutes</span>
               </p>
             </header>
 
             <div class="bluf">
               <p>
-                <strong>What this is.</strong> Marlex's recruitment system talks
-                to the outside world — the ERP, the job board, e-signature,
-                credit checks, the customer data platform, the sourcing tools.
-                Today the code that does that talking lives
-                <em>inside</em> Salesforce.
+                <strong
+                  >Salesforce is the group's integration hub by
+                  accident.</strong
+                >
+                The code that talks to the ERP, the job board, e-signature and
+                the rest lives inside it. This project moves that traffic onto
+                MuleSoft so Salesforce goes back to running recruitment.
               </p>
               <p>
-                This project moves it onto MuleSoft, which sits between
-                Salesforce and each outside system. Salesforce goes back to
-                running recruitment and stops being the group's integration hub.
-              </p>
-              <p>
-                <strong>Why now.</strong> TargetRecruit is being replaced by
-                Marlex's own Salesforce build, and the old data objects retire
-                with it. Every integration that reads or writes those objects
-                has to be re-aimed at the new ones anyway — and an integration
-                being touched anyway is the cheapest one to move.
-              </p>
-              <p>
-                <strong>What the cutover waits on.</strong> One thing only: that
-                every connection touching the old records is aimed at the new
-                ones the moment the data moves. That is a change of target, and
-                it can be made whether or not the middleware is carrying that
-                connection yet — so no interface running late can move the date.
-                Twelve connections need that change; two of them will never move
-                onto the middleware at all, because in neither case is there a
-                point in the path where a middleware could sit. Three retire
-                with the package, and the rest are untouched.
-              </p>
-              <p>
-                <strong>If you have seen an earlier version of this.</strong> An
-                earlier assessment counted the coupled edges by asking which
-                <em>objects</em> each caller touched. That test cannot see a
-                package field on a surviving record, a call into package code,
-                or a dependency stored in configuration — so it returned several
-                clean verdicts that were wrong. This page is the re-check at
-                field level, and where a finding changed, both the old reading
-                and the new one are stated so you can tell which you are
-                holding. The test now used is set out in full below.
+                <strong>The work is forced anyway.</strong> The bought
+                recruitment package is being replaced by Marlex's own build, so
+                every connection reading or writing its data has to be re-aimed
+                regardless — and an integration being touched anyway is the
+                cheapest one to move.
               </p>
               <p>
                 <strong
-                  >What the middleware sequence is really driven by.</strong
+                  >Twelve of the twenty-three connections need that
+                  change.</strong
                 >
-                The ERP goes first because a second country reuses the same
-                interface, and the job board second because it carries the
-                heaviest traffic. After those two, the order follows whatever
-                capacity is free — value and volume, not the cutover calendar.
+                Which page you want: <a href="#view-edges">the edges</a> for
+                what happens to each one,
+                <a href="#view-decisions">the decisions</a> for why, and
+                <a href="#view-plan">the plan</a> for the order.
               </p>
             </div>
 
@@ -1449,6 +1420,39 @@
                   >
                 </div>
               </div>
+              <p>
+                <strong>What the cutover waits on.</strong> Not the middleware.
+                It waits for every coupled connection to be aimed at the new
+                records the moment the data moves — a change of target, not a
+                change of route.
+              </p>
+              <p>
+                That change can be made whether or not the middleware is
+                carrying the connection yet, so no interface running late can
+                move the date. Three of the twelve will never move onto it at
+                all: there is no point in their path where a middleware could
+                sit.
+              </p>
+              <p>
+                <strong>What the middleware order is driven by, then.</strong>
+                Reuse and volume. The ERP goes first because a second country
+                reuses the same interface, the job board second because it
+                carries the heaviest traffic, and the rest follow as capacity
+                allows.
+              </p>
+              <p>
+                <strong>If you have seen an earlier version of this.</strong> An
+                earlier assessment counted the coupled connections by asking
+                which <em>objects</em>
+                each caller touched. That test returned several clean verdicts
+                that were wrong.
+              </p>
+              <p>
+                It cannot see a package field on a surviving record, a call into
+                package code, or a dependency stored in configuration. This page
+                is the re-check at field level; where a finding changed, both
+                readings are stated.
+              </p>
               <p>
                 Writes are unforgiving, reads are not. If a write lands in a
                 dead model, applications are lost; if a read misses, a report
@@ -1609,10 +1613,12 @@
                     <p>
                       It reclassified <strong>four edges</strong> that an
                       object-level scan had recorded as uncoupled. The CV parser
-                      writes seven package fields and creates retiring records.
-                      Geocoding calls a class inside the package itself. The
-                      customer data platform ingests four package fields, though
-                      none of them reaches the profile it builds. And the
+                      writes seven package fields and creates retiring records;
+                      geocoding calls a class inside the package itself.
+                    </p>
+                    <p>
+                      The customer data platform ingests four package fields,
+                      though none reaches the profile it builds. And the
                       document generator keeps its dependency in saved
                       configuration rather than in code — 35 package fields
                       named in the queries behind its candidate reports.
@@ -2884,14 +2890,20 @@
                 >
                 The table says <em>whether</em> an edge touches the retiring
                 data. It does not say <em>who fixes it</em>, and that split is
-                worth keeping in view. Most of these name the retiring model
-                themselves — their own query, mapping or code has to change. But
-                two are clean on their own side and are dragged in by Salesforce
-                automation they set off: the ERP's integration log fires a chain
-                that reads applications, and the training platform's enrolment
-                does the same. For those the fix is entirely inside Marlex, with
-                nothing for the supplier to do — which usually makes them the
-                cheaper half of the list.
+                worth keeping in view.
+              </p>
+              <p>
+                Most of these name the retiring model themselves: their own
+                query, mapping or code has to change. But two are clean on their
+                own side and are dragged in by Salesforce automation they set
+                off — the ERP's integration log fires a chain that reads
+                applications, and the training platform's enrolment does the
+                same.
+              </p>
+              <p>
+                For those the fix is entirely inside Marlex, with nothing for
+                the supplier to do, which usually makes them the cheaper half of
+                the list.
               </p>
               <p>
                 Four things in the table are easy to misread. Each is worth a
@@ -2931,12 +2943,14 @@
                   permanent.</strong
                 >
                 Three edges can never move onto the middleware, because in none
-                of them is there a point in the path where one could sit. The
-                customer data platform arrives through Salesforce's own built-in
-                connector; the document generator is installed inside the org
-                and never sends anything across a network; and the sourcing
+                of them is there a point in the path where one could sit.
+              </p>
+              <p>
+                The customer data platform arrives through Salesforce's own
+                built-in connector. The document generator is installed inside
+                the org and never sends anything across a network. The sourcing
                 browser extension runs in each recruiter's own browser, on their
-                own session. Nothing can be placed in front of any of the three.
+                own session.
               </p>
               <p>
                 <strong>Never routing is not the same as nothing to do.</strong>
@@ -3386,13 +3400,15 @@
               <p>
                 <strong>Two rules for anyone re-checking this surface.</strong>
                 Attribute traffic by connection (<code>CONNECTED_APP_ID</code>),
-                never by user, or the ERP, the finance write-back and the
-                reporting extract merge into one meaningless row. And the call
-                log records the <em>entity</em> a call touched, not the fields
-                inside it: an edge writing <code>Contact</code> may still carry
-                a package field on that record, which is exactly how the ERP's
-                own <code>AVTRRT__Gender__c</code> mapping stays invisible to a
-                traffic census. Traffic proves which objects are touched; only
+                never by user — otherwise the ERP, the finance write-back and
+                the reporting extract merge into one meaningless row.
+              </p>
+              <p>
+                And the call log records the <em>entity</em> a call touched, not
+                the fields inside it. An edge writing <code>Contact</code> may
+                still carry a package field on that record, which is exactly how
+                the ERP's own <code>AVTRRT__Gender__c</code> mapping stays
+                invisible. Traffic proves which objects are touched; only
                 metadata proves which fields are.
               </p>
             </section>
@@ -3448,10 +3464,12 @@
                     which is worth knowing before anyone re-checks this edge and
                     concludes it is clean. The candidate sync writes the
                     ordinary contact record, so the package field it carries
-                    rides inside a record that survives. And the second coupling
-                    is not the ERP calling at all — it is Salesforce automation
-                    firing afterwards. Both were found by reading the
-                    configuration, and both were confirmed there again on 17
+                    rides inside a record that survives.
+                  </p>
+                  <p>
+                    The second coupling is not the ERP calling at all — it is
+                    Salesforce automation firing afterwards. Both were found by
+                    reading the configuration, and confirmed there again on 17
                     August 2026: the field, the rule that requires it and the
                     automation that writes it are all still active.
                   </p>
@@ -4562,14 +4580,18 @@
                       route.</strong
                     >
                     What is pinned to the weekend is only the moment the inbound
-                    feed starts writing the new records. Whether that feed is
-                    arriving through the middleware by then is a separate
-                    decision: if the interface is ready, the switch is a setting
-                    inside it, which is the safer place for it; if it is not,
-                    the same switch is thrown in the Salesforce code that
-                    carries the feed today. Either way the date holds — which is
-                    precisely why the fallback connection is built and tested
-                    rather than assumed.
+                    feed starts writing the new records.
+                  </p>
+                  <p>
+                    Whether that feed arrives through the middleware by then is
+                    a separate decision. If the interface is ready, the switch
+                    is a setting inside it — the safer place for it. If not, the
+                    same switch is thrown in the Salesforce code that carries
+                    the feed today.
+                  </p>
+                  <p>
+                    Either way the date holds, which is precisely why the
+                    fallback connection is built and tested rather than assumed.
                   </p>
                   <figure class="diagram">
                     <a
@@ -7526,15 +7548,18 @@
                     <p>
                       <strong>Two details with consequences.</strong> It uses
                       <code>queryAll</code>, which returns
-                      <em>deleted and archived</em> records as well as live ones
-                      — a deliberate choice nobody has written down, and one
-                      that matters for what the analytics side believes about
-                      deletions. And it extracts <code>__History</code> objects:
+                      <em>deleted and archived</em>
+                      records as well as live ones — a deliberate choice nobody
+                      has written down, and one that matters for what the
+                      analytics side believes about deletions.
+                    </p>
+                    <p>
+                      And it extracts <code>__History</code> objects:
                       <code>AVTRRT__Job_Applicant__History</code> alone is 2.6M
                       rows a night, plus <code>AVTRRT__Job__History</code>.
                       Field history on a retiring object has no obvious native
                       successor, so the reporting side has to decide whether
-                      that history is rebuilt, archived, or dropped.
+                      that history is rebuilt, archived or dropped.
                     </p>
                     <p>
                       <strong>The nine retiring objects</strong> it reads are
@@ -8490,14 +8515,16 @@
                     <strong>The bigger question is not the connector.</strong>
                     The same supplier is one of the candidates to provide the
                     <strong>matching engine</strong> the rebuild needs — the
-                    capability the retiring package supplies today and the
-                    hardest single thing to replace. A decision to buy it would
-                    change what this edge <em>is</em>: not a sourcing connector
-                    filing candidates in, but the search and matching engine the
-                    recruitment process runs on. That is a different
-                    integration, with a different contract and a different
-                    failure mode, and it would need designing rather than
-                    re-pointing.
+                    capability the retiring package supplies today, and the
+                    hardest single thing to replace.
+                  </p>
+                  <p>
+                    Buying it would change what this edge <em>is</em>: not a
+                    sourcing connector filing candidates in, but the search and
+                    matching engine the recruitment process runs on. That is a
+                    different integration, with a different contract and a
+                    different failure mode, and it would need designing rather
+                    than re-pointing.
                   </p>
                   <p>
                     That decision is <strong>open</strong>, and it has moved in
