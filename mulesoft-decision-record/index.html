@@ -1386,15 +1386,17 @@
                 <strong>What the cutover waits on.</strong> Two interfaces must
                 be standing in production first — the ERP and the job board —
                 because those two hold their switch from old data to new inside
-                the middleware itself. Seven more connections are re-pointed on
-                the rebuild's own schedule, three retire with the package, and
-                the rest are untouched.
+                the middleware itself. Nine more connections are re-pointed on
+                the rebuild's own schedule — two of them without ever moving
+                onto the middleware, because neither has a seam one could
+                occupy. Three retire with the package, and the rest are
+                untouched.
               </p>
             </div>
 
             <section>
               <p class="section-eyebrow">The finding that shapes everything</p>
-              <h2>Ten connections touch the data being retired</h2>
+              <h2>Eleven connections touch the data being retired</h2>
               <p>
                 The sharpest question is not who talks to Salesforce — it is who
                 touches the old recruitment records, because that set, and only
@@ -1403,7 +1405,7 @@
               </p>
               <div class="stats">
                 <div>
-                  <span class="n">10</span>
+                  <span class="n">11</span>
                   <span class="l"
                     >integrations touch the retiring model and must be
                     re-pointed, every one confirmed against the production
@@ -1524,23 +1526,29 @@
                       — so "reads Contact" usually means "reads candidates".
                     </p>
                     <p>
-                      The re-check cleared four edges outright — e-signature,
-                      credit checks, document generation and document
-                      management: zero package references in any of their code.
+                      The re-check cleared three edges outright — e-signature,
+                      credit checks and document management: zero package
+                      references in any of their code.
                     </p>
                     <p>
-                      It reclassified <strong>three edges</strong> that an
+                      It reclassified <strong>four edges</strong> that an
                       object-level scan had recorded as uncoupled. The CV parser
                       writes seven package fields and creates retiring records.
-                      Geocoding calls a class inside the package itself. And the
+                      Geocoding calls a class inside the package itself. The
                       customer data platform ingests four package fields, though
-                      none of them reaches the profile it builds.
+                      none of them reaches the profile it builds. And the
+                      document generator keeps its dependency in saved
+                      configuration rather than in code — 35 package fields
+                      named in the queries behind its candidate reports.
                     </p>
                     <p>
-                      All three were settled from evidence, not left open. The
+                      All four were settled from evidence, not left open. The
                       lesson is the method's: counting which <em>objects</em> a
                       caller touches cannot see a package field sitting on a
-                      surviving object, nor a call into package code.
+                      surviving object, nor a call into package code — and
+                      counting network traffic cannot see a tool that reads from
+                      inside the org, which is how the document generator was
+                      missed twice.
                     </p>
                   </div>
                 </div>
@@ -1644,11 +1652,12 @@
             <div class="bluf">
               <p>
                 <strong>The shape of it.</strong>
-                <strong>Ten</strong> integrations touch the retiring data model
-                and must be re-pointed, all ten confirmed against the production
-                metadata. Two of them are built as middleware interfaces and
-                gate the core cutover. Three retire outright. The remaining
-                seven cross untouched.
+                <strong>Eleven</strong> integrations touch the retiring data
+                model and must be re-pointed, all eleven confirmed against the
+                production metadata. Two of them are built as middleware
+                interfaces and gate the core cutover. Two will never route
+                through a middleware at all, and still need re-pointing. Three
+                retire outright. The remaining six cross untouched.
               </p>
               <p>
                 Verdicts are stated here and nowhere else. Open a row's detail
@@ -1804,11 +1813,32 @@
                         <span class="yes">Yes</span> — mapping only, nothing
                         downstream
                       </td>
-                      <td><strong>Direct</strong>, route later</td>
+                      <td><strong>Direct</strong> — never routes</td>
                       <td>
                         It ingests four retiring fields from Contact, but none
                         reaches the unified profile — so the fix is a mapping
-                        change, not a cutover dependency
+                        change, not a cutover dependency. It arrives on the
+                        platform's own connector, so there is no seam to put a
+                        middleware in front of
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>DocsMadeEasy</strong> — document generation
+                      </td>
+                      <td>
+                        <span class="yes">Yes</span> — 35 fields, confirmed
+                      </td>
+                      <td>
+                        <span class="yes">Yes</span>, early — its reports read
+                        the Phase 1 objects
+                      </td>
+                      <td><strong>Direct</strong> — never routes</td>
+                      <td>
+                        An installed package running inside the org, so nothing
+                        crosses a network and no middleware can sit in the path
+                        — but its saved report queries name the retiring objects
+                        outright, so they break at cutover
                       </td>
                     </tr>
                     <tr class="grp">
@@ -1918,15 +1948,6 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>DocsMadeEasy</strong></td>
-                      <td><span class="no">No</span> — schema only</td>
-                      <td><span class="no">No</span></td>
-                      <td><strong>Direct</strong>, route later</td>
-                      <td>
-                        It made 1,392 schema calls and read no records at all
-                      </td>
-                    </tr>
-                    <tr>
                       <td><strong>Finance figures feed</strong></td>
                       <td><span class="no">No</span> — native objects</td>
                       <td><span class="no">No</span></td>
@@ -1962,15 +1983,16 @@
                       and shortlists, and the surviving native and standard
                       model holding offers, invoices, accounts, candidates,
                       training records and campaigns. Outside systems are
-                      grouped in three columns by cutover consequence. Ten reach
-                      the retiring model and must be re-pointed: the ERP, the
-                      job board, pre-screening, training, the reporting extract,
-                      the sourcing connector, the campaign landing page, the CV
-                      parser, Google Maps geocoding and the customer data
-                      platform. Seven cross the cutover untouched because they
-                      only ever reach the surviving model. The self-service
-                      portals sit inside the retiring model and leave with the
-                      package rather than being re-pointed.
+                      grouped in three columns by cutover consequence. Eleven
+                      reach the retiring model and must be re-pointed: the ERP,
+                      the job board, pre-screening, training, the reporting
+                      extract, the sourcing connector, the campaign landing
+                      page, the CV parser, Google Maps geocoding, the customer
+                      data platform and the document generator. Six cross the
+                      cutover untouched because they only ever reach the
+                      surviving model. The self-service portals sit inside the
+                      retiring model and leave with the package rather than
+                      being re-pointed.
                     </desc>
 
                     <text
@@ -2120,7 +2142,7 @@
                       font-size="10.5"
                       font-weight="700"
                     >
-                      ▲ REACHES THE RETIRING MODEL — 10
+                      ▲ REACHES THE RETIRING MODEL — 11
                     </text>
                     <text class="dg-t-sm" x="20" y="106" font-size="9">
                       must be re-pointed
@@ -2130,7 +2152,7 @@
                       x="20"
                       y="118"
                       width="290"
-                      height="234"
+                      height="256"
                       rx="7"
                     />
                     <text class="dg-t-sm" x="34" y="140" font-size="9.6">
@@ -2163,6 +2185,9 @@
                     <text class="dg-t-sm" x="34" y="338" font-size="9.6">
                       Customer data platform — four fields, contained
                     </text>
+                    <text class="dg-t-sm" x="34" y="360" font-size="9.6">
+                      Document generator — 35 fields in saved queries
+                    </text>
 
                     <path
                       class="dg-arrow-copper"
@@ -2178,7 +2203,7 @@
                       font-size="10.5"
                       font-weight="700"
                     >
-                      CROSSES UNTOUCHED — 7
+                      CROSSES UNTOUCHED — 6
                     </text>
                     <text class="dg-t-sm" x="790" y="106" font-size="9">
                       reaches only the surviving model
@@ -2188,7 +2213,7 @@
                       x="790"
                       y="118"
                       width="310"
-                      height="168"
+                      height="146"
                       rx="7"
                     />
                     <text class="dg-t-sm" x="804" y="140" font-size="9.6">
@@ -2201,15 +2226,12 @@
                       Documents · Dolma
                     </text>
                     <text class="dg-t-sm" x="804" y="206" font-size="9.6">
-                      Maps · DocsMadeEasy — schema and addresses
-                    </text>
-                    <text class="dg-t-sm" x="804" y="228" font-size="9.6">
                       Finance figures feed — native objects
                     </text>
-                    <text class="dg-t-sm" x="804" y="250" font-size="9.6">
+                    <text class="dg-t-sm" x="804" y="228" font-size="9.6">
                       Axxon → the ERP — reuses Spain's interface
                     </text>
-                    <text class="dg-t-sm" x="804" y="272" font-size="9.6">
+                    <text class="dg-t-sm" x="804" y="250" font-size="9.6">
                       Identity · Azure AD — no recruitment data
                     </text>
 
@@ -2229,7 +2251,7 @@
                       rx="7"
                     />
                     <text class="dg-t-sm" x="804" y="328" font-size="9.4">
-                      Five of the seven were re-verified at field
+                      Five of the six were re-verified at field
                     </text>
                     <text class="dg-t-sm" x="804" y="343" font-size="9.4">
                       level in production on 14 August 2026 —
@@ -2301,20 +2323,26 @@
                   data models at once during the rebuild, which is why an edge
                   can read a perfectly ordinary Contact and still be coupled —
                   141 of that object's 369 fields belong to the package being
-                  retired. Ten outside systems reach the retiring model and must
-                  be re-pointed; seven reach only the surviving one and need no
-                  work. The portals are the exception to both: they are built
+                  retired. Eleven outside systems reach the retiring model and
+                  must be re-pointed; six reach only the surviving one and need
+                  no work. The portals are the exception to both: they are built
                   <em>inside</em> the retiring model, so they leave with it
                   rather than moving.
                 </figcaption>
               </figure>
               <p>
-                <strong>Two distinctions the table cannot carry.</strong> Gating
-                is a schedule claim, not an importance one — the training
+                <strong>Three distinctions the table cannot carry.</strong>
+                Gating is a schedule claim, not an importance one — the training
                 platform is two queries and never moves the date, but if a
-                certificate does not arrive a worker cannot start. And "direct
-                for now" is a deferral per edge, not a permanent verdict: every
-                Marlex-built edge is expected to route in time.
+                certificate does not arrive a worker cannot start. "Direct for
+                now" is a deferral per edge, not a permanent verdict: every
+                Marlex-built edge is expected to route in time. But two edges
+                read <strong>never routes</strong> instead, and that is
+                permanent — the customer data platform arrives on Salesforce's
+                own connector, and the document generator runs inside the org,
+                so in neither case is there a seam a middleware could occupy.
+                Never routing is not the same as no work: both still need
+                re-pointing.
               </p>
             </section>
 
@@ -9267,6 +9295,98 @@
 
               <details class="more">
                 <summary>
+                  The document generator
+                  <span class="cnt"
+                    >— the coupling a traffic census could not see</span
+                  >
+                </summary>
+                <div class="more-body">
+                  <p>
+                    Candidate and commercial documents — reports, proposals,
+                    contracts — are produced by a bought document generator
+                    installed inside the org. It is not a connection to
+                    anywhere: it runs on the platform itself, reads the records
+                    in place and writes the finished file back. Nothing crosses
+                    a network, so no middleware can sit in its path, now or
+                    later.
+                  </p>
+                  <p>
+                    <strong
+                      >It was previously recorded as touching nothing.</strong
+                    >
+                    A census of the org's outbound traffic found it making
+                    schema look-ups and reading no records at all, and it was
+                    written down as needing no work.
+                  </p>
+                  <p>
+                    <strong
+                      >That reading was wrong, and the method is why.</strong
+                    >
+                    The census measured calls arriving over the network. This
+                    tool never makes any — it reads from inside. Its dependency
+                    does not live in traffic at all: it lives in saved
+                    configuration, where each report keeps its own stored query
+                    naming the objects and fields to read.
+                  </p>
+                  <p>
+                    <strong>Checked in the live org, 17 August 2026:</strong> of
+                    five saved queries, four name the retiring objects outright
+                    — candidates' employment history and education history, and
+                    the application record — across
+                    <strong>35 retiring fields</strong>. Ten document templates
+                    are live, and four of the candidate reports were built
+                    between March and June 2026, so this is current work, not a
+                    leftover.
+                  </p>
+                  <p>
+                    The consequence is a firm one: employment history and
+                    education history are among the first records rebuilt, so
+                    when they change over, these saved queries stop returning
+                    data and the reports come out blank. It re-points
+                    <strong>early</strong>, with that first wave — and because
+                    the queries are configuration rather than code, the fix is
+                    editing them in place, not a development task.
+                  </p>
+                  <div class="tech">
+                    <span class="tech-label">For the developers</span>
+                    <p>
+                      The package namespace is <code>hic_docmerge</code> (HIC
+                      Global Solutions), installed June 2024. Saved queries are
+                      records on <code>hic_docmerge__Document_Query__c</code>,
+                      with literal SOQL in
+                      <code>hic_docmerge__Query_String__c</code>; templates are
+                      <code>hic_docmerge__Document_Template__c</code>.
+                    </p>
+                    <p>
+                      <strong>The four coupled queries</strong> —
+                      <code>Query1</code> and <code>Query1_Contact</code> select
+                      24 and 22 <code>AVTRRT__</code> fields from
+                      <code>AVTRRT__Employment_History__c</code>;
+                      <code>Query2</code> and <code>Query2_Contact</code> select
+                      20 and 18 from
+                      <code>AVTRRT__Educational_History__c</code>.
+                      <code>Query1</code> and <code>Query2</code> additionally
+                      filter through a subquery on
+                      <code>AVTRRT__Job_Applicant__c</code>. The fifth,
+                      <code>DMEP</code>, is <code>MA_</code>-only and survives
+                      untouched.
+                    </p>
+                    <p>
+                      <strong>Worth knowing:</strong> the vendor documents no
+                      validation for a queried field or object that no longer
+                      exists, so expect a silent empty result rather than an
+                      error at cutover. Re-point by editing
+                      <code>hic_docmerge__Query_String__c</code> to the native
+                      successors and re-checking each template's merge fields,
+                      since field names appear in the template body as well as
+                      the query.
+                    </p>
+                  </div>
+                </div>
+              </details>
+
+              <details class="more">
+                <summary>
                   The portals, and the campaign landing page
                   <span class="cnt"
                     >— what retires, and what arrived early without review</span
@@ -11333,16 +11453,36 @@
                     >Where a tool connects through a fixed vendor connector, the
                     routing rule cannot apply</strong
                   >
-                  — there is no Marlex-owned seam to put in front of it. But
-                  <strong>no tool is yet confirmed to be in that class.</strong>
+                  — there is no Marlex-owned seam to put in front of it.
+                  <strong
+                    >Two tools are now confirmed to be in that class</strong
+                  >, on mechanisms verified in the live org.
                 </p>
                 <p class="because">
                   The rule is a technical impossibility, not a judgement — the
                   middleware cannot impersonate Salesforce to a packaged
                   connector. The danger is using it to excuse an edge from
-                  routing before the mechanism is actually confirmed.
+                  routing before the mechanism is actually confirmed. Membership
+                  also says nothing about whether an edge needs re-pointing:
+                  both confirmed members do.
                 </p>
                 <ul class="opts">
+                  <li>
+                    <span class="m in">Confirmed</span>
+                    <span
+                      >The customer data platform — it ingests on Salesforce's
+                      own first-party connector, which nothing can be placed in
+                      front of</span
+                    >
+                  </li>
+                  <li>
+                    <span class="m in">Confirmed</span>
+                    <span
+                      >The document generator — an installed package reading
+                      records inside the org, so there is no network hop to
+                      intercept</span
+                    >
+                  </li>
                   <li>
                     <span class="m open">Provisional</span>
                     <span
@@ -11385,6 +11525,18 @@
                       window and the signal have to be agreed
                       <em>in advance</em>, before any fallback window opens,
                       backed by a current old-to-new substitution map.
+                    </p>
+                    <p>
+                      <strong
+                        >The two confirmed members are the easier half of
+                        this.</strong
+                      >
+                      Both are unroutable but Marlex owns both ends, so their
+                      re-point — an ingest mapping on one, saved report queries
+                      on the other — is Marlex's own to make and to reverse. The
+                      hard case is a tool whose connector an outside party
+                      controls, which is why membership is worth keeping
+                      separate from ownership.
                     </p>
                     <p>
                       <strong>Measured:</strong> Taleva read the application
