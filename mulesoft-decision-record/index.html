@@ -1388,9 +1388,9 @@
                 because those two hold their switch from old data to new inside
                 the middleware itself. Ten more connections are re-pointed on
                 the rebuild's own schedule — two of them without ever moving
-                onto the middleware, because neither has a seam one could
-                occupy. Three retire with the package, and the rest are
-                untouched.
+                onto the middleware, because in neither case is there a point in
+                the path where a middleware could sit. Three retire with the
+                package, and the rest are untouched.
               </p>
             </div>
 
@@ -1818,8 +1818,8 @@
                         It ingests four retiring fields from Contact, but none
                         reaches the unified profile — so the fix is a mapping
                         change, not a cutover dependency. It arrives on the
-                        platform's own connector, so there is no seam to put a
-                        middleware in front of
+                        platform's own connector, so there is nowhere in its
+                        path to put a middleware
                       </td>
                     </tr>
                     <tr>
@@ -11912,8 +11912,20 @@
               <p>
                 <strong>Read this first.</strong> Decisions 1 to 3 set the
                 shape: integration logic moves out of Salesforce, MuleSoft is
-                the platform, and every edge ships behind a Marlex-owned seam so
-                the transport can change later without a rebuild.
+                the platform, and every edge ships behind a Marlex-owned
+                <strong>seam</strong> so the transport can change later without
+                a rebuild.
+              </p>
+              <p>
+                <strong>One word used throughout.</strong> A
+                <strong>seam</strong> is a deliberate joint in the design — the
+                point where what an integration <em>does</em> is separated from
+                <em>who it talks to</em>. Marlex's own code calls the seam;
+                behind it sits an interchangeable piece that decides whether the
+                call goes straight out to the supplier or through the
+                middleware. Changing which one is a setting, not a rewrite. The
+                name is the sewing sense: a seam is where a garment can be
+                unpicked and re-joined without remaking it.
               </p>
               <p>
                 Decisions 4 to 6 handle the exceptions: the one edge argued to
@@ -13447,7 +13459,9 @@
                       <td>Stand up the platform</td>
                       <td>
                         The working environment, the shared foundation, and the
-                        seam interfaces every later edge is built behind
+                        Marlex-owned joints every later edge is built behind —
+                        the point in each connection where the supplier on the
+                        other end can be changed without rewriting the logic
                       </td>
                       <td>
                         Nothing routes before this exists — but every edge has a
@@ -13674,10 +13688,10 @@
                   <span class="who">Marlex IT with the ERP vendor</span>
                 </li>
                 <li>
-                  <b>Rollback owners for the bought connectors.</b> Where a tool
-                  cannot be fronted by a Marlex seam, rolling back means its
-                  vendor re-points it — who does it, in what window, on what
-                  signal, all agreed before any fallback window opens.
+                  <b>Rollback owners for the bought connectors.</b> Where
+                  nothing Marlex-owned can sit in front of a tool, rolling back
+                  means its vendor re-points it — who does it, in what window,
+                  on what signal, all agreed before any fallback window opens.
                   <span class="who">Marlex IT with each vendor</span>
                 </li>
                 <li>
@@ -13782,10 +13796,10 @@
                 </li>
                 <li>
                   <b>Keeping the old-to-new substitution map current.</b> Where
-                  a tool cannot be fronted by a Marlex seam, that map is the
-                  whole mitigation — and it only stays useful if it is updated
-                  every time the native model changes and re-shared with each
-                  connector owner.
+                  nothing Marlex-owned can sit in front of a tool, that map is
+                  the whole mitigation — and it only stays useful if it is
+                  updated every time the native model changes and re-shared with
+                  each connector owner.
                   <span class="who">Marlex IT · ongoing</span>
                 </li>
                 <li>
