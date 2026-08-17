@@ -2375,8 +2375,8 @@
                 </figcaption>
               </figure>
               <div class="dg-lightbox" id="zoom-landscape">
-                <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                <a class="dg-close" href="#">Close</a>
+                <a class="dg-backdrop" href="#dg-closed" aria-label="Close"></a>
+                <a class="dg-close" href="#dg-closed">Close</a>
                 <div class="dg-lightbox-inner">
                   <svg
                     viewBox="0 0 1120 560"
@@ -3460,8 +3460,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-n4-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -4547,8 +4551,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-ij-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -5592,8 +5600,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-ob-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -6512,8 +6524,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-hm-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -7463,8 +7479,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-pb-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -8407,8 +8427,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-cv-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -9436,8 +9460,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-dc-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -10334,8 +10362,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-dme-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -11213,8 +11245,12 @@
                     </figcaption>
                   </figure>
                   <div class="dg-lightbox" id="zoom-pt-proc">
-                    <a class="dg-backdrop" href="#" aria-label="Close"></a>
-                    <a class="dg-close" href="#">Close</a>
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
                     <div class="dg-lightbox-inner">
                       <svg
                         viewBox="0 0 1150 410"
@@ -13844,8 +13880,23 @@
             );
           window.scrollTo(0, 0);
         }
+        var booted = false;
         function fromHash() {
-          show((location.hash || "#view-index").replace("#view-", ""));
+          var h = location.hash || "";
+          // Only view-* hashes drive the switcher. Everything else on this page uses
+          // the fragment for its own purposes — the diagram lightboxes are :target
+          // based (#zoom-*), and their close links clear the hash to '' or '#' — and
+          // must not reset the view or scroll the reader to the top. Without this
+          // guard, clicking a diagram inside a subpage silently returned to the index,
+          // and closing it did the same.
+          if (booted && h.indexOf("#view-") !== 0) return;
+          booted = true;
+          show(
+            (h.indexOf("#view-") === 0 ? h : "#view-index").replace(
+              "#view-",
+              ""
+            )
+          );
         }
         window.addEventListener("hashchange", fromHash);
         fromHash();
