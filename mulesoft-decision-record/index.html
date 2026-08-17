@@ -1394,6 +1394,17 @@
                 with the package, and the rest are untouched.
               </p>
               <p>
+                <strong>If you have seen an earlier version of this.</strong> An
+                earlier assessment counted the coupled edges by asking which
+                <em>objects</em> each caller touched. That test cannot see a
+                package field on a surviving record, a call into package code,
+                or a dependency stored in configuration — so it returned several
+                clean verdicts that were wrong. This page is the re-check at
+                field level, and where a finding changed, both the old reading
+                and the new one are stated so you can tell which you are
+                holding. The test now used is set out in full below.
+              </p>
+              <p>
                 <strong
                   >What the middleware sequence is really driven by.</strong
                 >
@@ -1472,6 +1483,59 @@
                     carrying production traffic is invisible to it — which is
                     exactly the case of the campaign landing page on the next
                     page. A second one could exist on the same terms.
+                  </p>
+                  <p>
+                    <strong
+                      >What counts as "touches the retiring data" — the test,
+                      stated.</strong
+                    >
+                    This is the question the whole register turns on, and an
+                    earlier pass answered it too narrowly, so it is worth
+                    writing down rather than leaving to be re-derived. An
+                    integration is coupled if <em>any</em> of the following is
+                    true, and a "no" is only a "no" when all four have been
+                    checked:
+                  </p>
+                  <ol>
+                    <li>
+                      <strong>It reads or writes a retiring object.</strong> The
+                      obvious case, and the only one an object-level traffic
+                      census can see.
+                    </li>
+                    <li>
+                      <strong
+                        >It reads or writes a retiring field on an object that
+                        survives.</strong
+                      >
+                      The candidate record is ordinary and stays, but 141 of its
+                      369 fields belong to the retiring package — so "it only
+                      touches the candidate" settles nothing.
+                    </li>
+                    <li>
+                      <strong>It calls code inside the package.</strong> Not a
+                      field that can be re-aimed but a class that stops existing
+                      at uninstall, taking the calling job with it.
+                    </li>
+                    <li>
+                      <strong
+                        >It names the retiring model in stored
+                        configuration.</strong
+                      >
+                      Saved queries, ingest field maps, mapping tables read at
+                      run time. This is invisible to both a traffic census and a
+                      scan of the code.
+                    </li>
+                  </ol>
+                  <p>
+                    <strong
+                      >Two consequences worth being explicit about.</strong
+                    >
+                    A negative from network traffic alone is not a negative — a
+                    tool installed inside the org makes no calls to observe, and
+                    reads from within. And a permission <em>granted</em> is not
+                    a dependency <em>used</em>: one edge here can reach four
+                    retiring fields and measurably never does, which is recorded
+                    as a question for its owner rather than as work to schedule.
                   </p>
                   <p>
                     <strong>Three things logs cannot resolve.</strong> Where a
@@ -1586,52 +1650,84 @@
                 it.
               </p>
 
-              <details class="more">
-                <summary>
-                  The words this set uses precisely
-                  <span class="cnt">— six terms that are easy to conflate</span>
-                </summary>
-                <div class="more-body">
-                  <ul>
-                    <li>
-                      <strong>Edge</strong> — one integration: Salesforce and
-                      one outside system, and the traffic between them. Every
-                      integration is an edge.
-                    </li>
-                    <li>
-                      <strong>Interface</strong> — a piece of middleware built
-                      to carry an edge. Only some edges get one. "The first
-                      interface" always means the first thing MuleSoft builds,
-                      not the first edge to change.
-                    </li>
-                    <li>
-                      <strong>Re-point</strong> — changing which data an edge
-                      reads or writes, from the retiring objects to the new
-                      ones. A change of <em>target</em>.
-                    </li>
-                    <li>
-                      <strong>Route</strong> — moving an edge to travel through
-                      the middleware instead of connecting directly. A change of
-                      <em>transport</em>. Re-pointing and routing are separate
-                      jobs on separate clocks.
-                    </li>
-                    <li>
-                      <strong>The core cutover</strong> — the single rehearsed
-                      weekend when candidates, vacancies and applications move
-                      to the new model. It is its own milestone: the only thing
-                      it requires of the integrations is that each one is aimed
-                      at the new records by the end of that weekend.
-                    </li>
-                    <li>
-                      <strong>Reaching production</strong> — one interface going
-                      live. Each has its own date; the ERP's interface can be
-                      live months before the job board's, and either can be live
-                      after the cutover. This is <em>not</em> the core cutover,
-                      and the cutover does not wait for it.
-                    </li>
-                  </ul>
-                </div>
-              </details>
+              <p class="section-eyebrow" style="margin-top: 2.2rem">
+                Before the register
+              </p>
+              <h2>The words this set uses precisely</h2>
+              <p>
+                Ten terms carry specific meanings here, and several are easy to
+                conflate. The register on the next page assumes all of them.
+              </p>
+              <div class="rule-note">
+                <ul>
+                  <li>
+                    <strong>Edge</strong> — one integration: Salesforce and one
+                    outside system, and the traffic between them. Every
+                    integration is an edge.
+                  </li>
+                  <li>
+                    <strong>Interface</strong> — a piece of middleware built to
+                    carry an edge. Only some edges get one. "The first
+                    interface" always means the first thing MuleSoft builds, not
+                    the first edge to change.
+                  </li>
+                  <li>
+                    <strong>Re-point</strong> — changing which data an edge
+                    reads or writes, from the retiring objects to the new ones.
+                    A change of <em>target</em>.
+                  </li>
+                  <li>
+                    <strong>Route</strong> — moving an edge to travel through
+                    the middleware instead of connecting directly. A change of
+                    <em>transport</em>. Re-pointing and routing are separate
+                    jobs on separate clocks.
+                  </li>
+                  <li>
+                    <strong>The core cutover</strong> — the single rehearsed
+                    weekend when candidates, vacancies and applications move to
+                    the new model. It is its own milestone: the only thing it
+                    requires of the integrations is that each one is aimed at
+                    the new records by the end of that weekend.
+                  </li>
+                  <li>
+                    <strong>Reaching production</strong> — one interface going
+                    live. Each has its own date; the ERP's interface can be live
+                    months before the job board's, and either can be live after
+                    the cutover. This is <em>not</em> the core cutover, and the
+                    cutover does not wait for it.
+                  </li>
+                  <li>
+                    <strong>The rebuild</strong> — the programme replacing the
+                    bought recruitment package with Marlex's own Salesforce
+                    build. It is the reason the old objects retire, and the
+                    reason every edge on them has to be re-pointed.
+                  </li>
+                  <li>
+                    <strong>Coupled</strong> — an edge that touches the retiring
+                    model, by any of the four tests set out above. Coupled edges
+                    re-point; the rest cross the cutover untouched.
+                  </li>
+                  <li>
+                    <strong>Waves</strong> — the rebuild moves in stages, and
+                    each stage moves a set of records. The capabilities that
+                    separate cleanly go first: interviews, then the talent pool,
+                    then placements — each is a <em>wave</em>. The
+                    <strong>core wave</strong> is the last and largest:
+                    candidates, vacancies and applications, moved together in
+                    the single weekend the core cutover names. So "re-points
+                    with the core wave" means the records it touches move that
+                    weekend, and "re-points early" means they move in one of the
+                    earlier waves.
+                  </li>
+                  <li>
+                    <strong>A seam</strong> — a deliberate joint in the design:
+                    the point where what an integration <em>does</em> is
+                    separated from <em>who it talks to</em>, so the transport
+                    behind it can change by configuration rather than by
+                    rewrite. An edge with no seam cannot be routed at all.
+                  </li>
+                </ul>
+              </div>
             </section>
 
             <footer>
@@ -1765,7 +1861,9 @@
                     </tr>
                     <tr>
                       <td><strong>Power BI</strong> — the extract</td>
-                      <td><span class="yes">Yes</span> — nine objects</td>
+                      <td>
+                        <span class="yes">Yes</span> — nine of its 34 objects
+                      </td>
                       <td>
                         <span class="yes">Yes</span>, straddling both waves
                       </td>
@@ -1786,7 +1884,9 @@
                       <td><span class="opn">Open</span> owner-dependent</td>
                       <td>
                         Named-user sign-in means its writes are not separable
-                        from a person's own screen work
+                        from a person's own screen work — and a live commercial
+                        decision may turn this supplier into the rebuild's
+                        matching engine, which is a different kind of edge
                       </td>
                     </tr>
                     <tr>
@@ -1852,8 +1952,8 @@
                         <span class="yes">Yes</span> — 35 fields, confirmed
                       </td>
                       <td>
-                        <span class="yes">Yes</span>, early — its reports read
-                        the Phase 1 objects
+                        <span class="yes">Yes</span>, early — with the first
+                        wave, which moves the records its reports read
                       </td>
                       <td><strong>Direct</strong> — never routes</td>
                       <td>
@@ -1867,15 +1967,34 @@
                       <td>
                         <strong>Sourcing browser extension</strong> — PipeLaunch
                       </td>
-                      <td><span class="yes">Yes</span> — reads vacancies</td>
+                      <td><span class="yes">Yes</span> — reads and writes</td>
                       <td><span class="yes">Yes</span>, with the core wave</td>
                       <td><strong>Direct</strong> — never routes</td>
                       <td>
                         A bought extension recruiters run in their own browser
                         to source from LinkedIn, so it signs in as each of them
-                        and no middleware sits in that path — but it reads the
-                        vacancy being retired, so its configuration re-points
-                        with the core
+                        and no middleware sits in that path. It reads the
+                        vacancy being retired and creates records on one of the
+                        package's own objects, so it re-points with the core
+                      </td>
+                    </tr>
+                    <tr class="grp">
+                      <td colspan="5">
+                        Not yet carrying traffic — no verdict until it does
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Rainmakers</strong> — B2B lead capture</td>
+                      <td>
+                        <span class="opn">Open</span> — nothing measured yet
+                      </td>
+                      <td><span class="opn">Open</span></td>
+                      <td><span class="opn">Open</span></td>
+                      <td>
+                        A pilot with a sign-in configured and no measured
+                        traffic. It writes leads, which survive the cutover —
+                        but until it runs, there is nothing to measure, so it
+                        carries no verdict rather than a false clean one
                       </td>
                     </tr>
                     <tr class="grp">
@@ -2317,13 +2436,13 @@
                       rx="7"
                     />
                     <text class="dg-t-sm" x="804" y="328" font-size="9.4">
-                      Five of the seven were re-verified at field
+                      Every one of these was re-verified at field
                     </text>
                     <text class="dg-t-sm" x="804" y="343" font-size="9.4">
-                      level in production on 14 August 2026 —
+                      level in production, 14 August 2026 —
                     </text>
                     <text class="dg-t-sm" x="804" y="358" font-size="9.4">
-                      zero package references in their code.
+                      none of them reads a retiring field.
                     </text>
                     <text class="dg-t-sm" x="804" y="380" font-size="9.4">
                       Reading a surviving object is not the
@@ -2691,13 +2810,13 @@
                       rx="7"
                     />
                     <text class="dg-t-sm" x="804" y="328" font-size="9.4">
-                      Five of the seven were re-verified at field
+                      Every one of these was re-verified at field
                     </text>
                     <text class="dg-t-sm" x="804" y="343" font-size="9.4">
-                      level in production on 14 August 2026 —
+                      level in production, 14 August 2026 —
                     </text>
                     <text class="dg-t-sm" x="804" y="358" font-size="9.4">
-                      zero package references in their code.
+                      none of them reads a retiring field.
                     </text>
                     <text class="dg-t-sm" x="804" y="380" font-size="9.4">
                       Reading a surviving object is not the
@@ -2760,6 +2879,21 @@
                 </div>
               </div>
               <p>
+                <strong
+                  >Coupled directly, or through Marlex's own automation.</strong
+                >
+                The table says <em>whether</em> an edge touches the retiring
+                data. It does not say <em>who fixes it</em>, and that split is
+                worth keeping in view. Most of these name the retiring model
+                themselves — their own query, mapping or code has to change. But
+                two are clean on their own side and are dragged in by Salesforce
+                automation they set off: the ERP's integration log fires a chain
+                that reads applications, and the training platform's enrolment
+                does the same. For those the fix is entirely inside Marlex, with
+                nothing for the supplier to do — which usually makes them the
+                cheaper half of the list.
+              </p>
+              <p>
                 Four things in the table are easy to misread. Each is worth a
                 line.
               </p>
@@ -2796,12 +2930,13 @@
                   >"Never routes" is the real exception, and it is
                   permanent.</strong
                 >
-                Two edges can never move onto the middleware, because there is
-                no point in the path where one could sit. The customer data
-                platform arrives through Salesforce's own built-in connector,
-                and the document generator is installed inside the org and never
-                sends anything across a network. Nothing can be placed in front
-                of either.
+                Three edges can never move onto the middleware, because in none
+                of them is there a point in the path where one could sit. The
+                customer data platform arrives through Salesforce's own built-in
+                connector; the document generator is installed inside the org
+                and never sends anything across a network; and the sourcing
+                browser extension runs in each recruiter's own browser, on their
+                own session. Nothing can be placed in front of any of the three.
               </p>
               <p>
                 <strong>Never routing is not the same as nothing to do.</strong>
@@ -2850,7 +2985,8 @@
                   <thead>
                     <tr>
                       <th>Edge</th>
-                      <th>Authenticating component</th>
+                      <th>Mechanism</th>
+                      <th>Component</th>
                       <th>Runs as (Salesforce user)</th>
                       <th>OAuth scopes</th>
                       <th>Notes</th>
@@ -2858,7 +2994,7 @@
                   </thead>
                   <tbody>
                     <tr class="grp">
-                      <td colspan="5">
+                      <td colspan="6">
                         One service user, three connections — the sharing that
                         has to be unpicked
                       </td>
@@ -2866,10 +3002,15 @@
                     <tr>
                       <td><strong>NET4</strong> — the ERP, inbound half</td>
                       <td>
+                        <strong>Connected App</strong><br /><span class="no"
+                          >the legacy type</span
+                        >
+                      </td>
+                      <td>
                         <code>MX_Integration_Conn_App</code><br /><span
                           class="no"
-                          >still a legacy <code>ConnectedApplication</code>, not
-                          an External Client App</span
+                          >the <code>MX_</code> prefix is the integrator's, not
+                          a typo for <code>MA_</code></span
                         >
                       </td>
                       <td rowspan="3">
@@ -2888,6 +3029,7 @@
                     </tr>
                     <tr>
                       <td><strong>Finance write-back</strong></td>
+                      <td>External Client App</td>
                       <td><code>API_Marlex_Data_Source</code></td>
                       <td><code>Api, Full, RefreshToken</code></td>
                       <td>
@@ -2896,22 +3038,56 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>Reporting extract</strong></td>
-                      <td>A separate reporting client on the same user</td>
+                      <td>
+                        <strong>Reporting queries</strong> — the ad-hoc client
+                      </td>
+                      <td>External Client App</td>
+                      <td>A separate reporting client</td>
                       <td>—</td>
                       <td>
-                        Reads six of the retiring objects — which is what makes
-                        this sharing a cutover problem, not a tidiness one
+                        Reads six of the retiring objects. Distinct from the
+                        nightly extract below, which carries the bulk of the
+                        reporting traffic
+                      </td>
+                    </tr>
+                    <tr class="grp">
+                      <td colspan="6">
+                        Its own user, but a person's profile rather than a
+                        service account
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>The nightly reporting extract</strong> — the
+                        Python job
+                      </td>
+                      <td>
+                        <span class="no">None</span> — Bulk API on a user
+                        session, no app
+                      </td>
+                      <td><span class="no">No app to name</span></td>
+                      <td>
+                        <code>it@marlex.net</code><br /><span class="yes"
+                          >System Administrator — a separate identity from the
+                          three above, corrected 18 August 2026</span
+                        >
+                      </td>
+                      <td><span class="no">None</span></td>
+                      <td>
+                        ~8.2M records a night across 34 objects. It is
+                        <em>not</em> part of the shared-sign-in problem above,
+                        and scoping it down is its own piece of work
                       </td>
                     </tr>
 
                     <tr class="grp">
-                      <td colspan="5">
+                      <td colspan="6">
                         Its own service user — separable and scopable
                       </td>
                     </tr>
                     <tr>
                       <td><strong>Document management</strong> — Dolma</td>
+                      <td>External Client App</td>
                       <td><code>Integration_Dolma</code></td>
                       <td>
                         <code>integrations.dolma@marlex.net.prod</code
@@ -2925,6 +3101,7 @@
                     </tr>
                     <tr>
                       <td><strong>Security log collector</strong> — Wazuh</td>
+                      <td>External Client App</td>
                       <td><code>Wazuh_siem_logs</code></td>
                       <td>The helpdesk user — System Administrator</td>
                       <td>
@@ -2942,6 +3119,11 @@
                         <strong>Training platform</strong> — Humact / Lectio,
                         inbound half
                       </td>
+                      <td>
+                        <strong>Connected App</strong><br /><span class="no"
+                          >the legacy type</span
+                        >
+                      </td>
                       <td><code>Humact_Inbound</code></td>
                       <td>
                         A dedicated service user supplied by the provider —
@@ -2956,13 +3138,14 @@
                     </tr>
 
                     <tr class="grp">
-                      <td colspan="5">
+                      <td colspan="6">
                         Runs as a real person — its writes cannot be separated
                         from theirs
                       </td>
                     </tr>
                     <tr>
                       <td><strong>Sourcing</strong> — Taleva</td>
+                      <td>External Client App</td>
                       <td><code>Taleva</code></td>
                       <td>A named person's own login</td>
                       <td><code>Api, Full, RefreshToken</code></td>
@@ -2975,6 +3158,7 @@
                     </tr>
                     <tr>
                       <td><strong>B2B leads</strong> — Rainmakers</td>
+                      <td>External Client App</td>
                       <td><code>Rainmakers</code></td>
                       <td>A named person's own login</td>
                       <td>
@@ -2991,6 +3175,11 @@
                       <td>
                         <strong>Sourcing browser extension</strong> — PipeLaunch
                       </td>
+                      <td>
+                        <strong>Connected App</strong><br /><span class="no"
+                          >the legacy type</span
+                        >
+                      </td>
                       <td><code>Pipelaunch_Chrome_Extension</code></td>
                       <td>
                         Each recruiter running it — three people over the window
@@ -3000,9 +3189,10 @@
                     </tr>
                     <tr>
                       <td><strong>Document generator</strong></td>
+                      <td><strong>None</strong> — in-process package</td>
                       <td>
-                        <span class="no">Neither</span> — an installed package
-                        running in-process, so no app and no credential
+                        <span class="no">No app, no credential</span> — it runs
+                        inside the org
                       </td>
                       <td>
                         Each user who presses the button — 98 people over the
@@ -3016,7 +3206,7 @@
                     </tr>
 
                     <tr class="grp">
-                      <td colspan="5">Authenticates as nothing</td>
+                      <td colspan="6">Authenticates as nothing</td>
                     </tr>
                     <tr>
                       <td>
@@ -3024,7 +3214,11 @@
                         webhook
                       </td>
                       <td>
-                        A public <code>Site</code> — subdomain
+                        <strong class="yes">Salesforce Site</strong> — no
+                        authentication at all
+                      </td>
+                      <td>
+                        A public <code>Site</code>, subdomain
                         <code>Infojobs</code>, Active
                       </td>
                       <td>
@@ -4352,14 +4546,15 @@
                     retiring objects.
                   </p>
                   <p>
-                    <strong>Why its timing is tight.</strong> Three edges write
-                    the retiring records, but this is the only one Marlex
-                    controls on both sides — and by far the highest volume.
-                    Re-point the webhook before the core moves and it writes
-                    objects the live desk cannot see; re-point it after, and
-                    every application submitted in the gap is lost. So the
-                    webhook's re-point and the data move are one event,
-                    rehearsed together.
+                    <strong>Why its timing is tight.</strong> Several edges
+                    write the retiring records, but this is by far the highest
+                    volume and the only one Marlex controls on both sides — its
+                    own service publishes the vacancies and its own code
+                    receives the applications. Re-point the webhook before the
+                    core moves and it writes objects the live desk cannot see;
+                    re-point it after, and every application submitted in the
+                    gap is lost. So the webhook's re-point and the data move are
+                    one event, rehearsed together.
                   </p>
                   <p>
                     <strong
@@ -7235,11 +7430,23 @@
                 </summary>
                 <div class="more-body">
                   <p>
-                    A scheduled job copies around forty objects out to an
-                    analytics database, and a separate embedded panel renders
+                    A scheduled job copies the org's records out to an analytics
+                    database every night, and a separate embedded panel renders
                     finished reports back inside Salesforce. They share a vendor
                     and nothing else. Only the extract is coupled; the panel
                     moves no data and survives untouched.
+                  </p>
+                  <p>
+                    <strong
+                      >It is much larger than "a report feed" suggests.</strong
+                    >
+                    Three consecutive days of platform logs show it pulling
+                    <strong
+                      >around 8.2 million records a night across 34
+                      objects</strong
+                    >, in roughly 320 batches. Whatever replaces it has to
+                    sustain that, which is why "just point it at the new model"
+                    is not a small instruction.
                   </p>
                   <p>
                     <strong>Measured:</strong> nine of the objects the extract
@@ -7269,27 +7476,95 @@
                   <div class="tech">
                     <span class="tech-label">For the developers</span>
                     <p>
-                      <strong>One identity, two jobs.</strong> The
-                      <code>API Marlex Data Source</code> external client app
-                      fronts <em>both</em> a finance write feed — upsert and
-                      delete onto <code>MA_Incentivos__c</code> and
-                      <code>MX_Margen_Mensual_Por_Cliente__c</code>, native
-                      objects with no retiring coupling — <em>and</em> this
-                      scheduled extract.
+                      <strong
+                        >Three identities, not one — corrected 18 August
+                        2026.</strong
+                      >
+                      This edge was previously recorded as running under the
+                      <code>API Marlex Data Source</code> external client app,
+                      sharing a login with the ERP. Measurement does not support
+                      that. Three separate identities appear in the logs, and
+                      only the first is the nightly extract:
+                    </p>
+                    <ul>
+                      <li>
+                        <strong>The extract</strong> runs as
+                        <code>it@marlex.net</code> — a
+                        <strong>System Administrator</strong>, not an API-only
+                        service account — over the <strong>Bulk API</strong>.
+                      </li>
+                      <li>
+                        <code>API_Marlex_Data_Source</code> is the
+                        <em>finance write-back</em> and nothing else: 176 REST
+                        calls over fourteen days, upserting and deleting
+                        <code>MA_Incentivos__c</code> and
+                        <code>MX_Margen_Mensual_Por_Cliente__c</code>. Native
+                        objects, no retiring coupling.
+                      </li>
+                      <li>
+                        A third client, separate again, makes about 1,900 REST
+                        reads over the same window.
+                      </li>
+                    </ul>
+                    <p>
+                      The shared-identity problem is real but belongs to the
+                      other two: they and the ERP do share one service login,
+                      which is why traffic there must be split by
+                      <code>CONNECTED_APP_ID</code>. The extract is not part of
+                      that sharing — it is separable, and its owner is separable
+                      with it.
                     </p>
                     <p>
-                      It also shares its login lineage with the ERP, so traffic
-                      on this identity must be split by
-                      <code>CONNECTED_APP_ID</code> rather than by user. That is
-                      why "ownership of the two analytics jobs" is one open item
-                      and not two.
+                      <strong
+                        >The extract itself, measured 14–16 August 2026.</strong
+                      >
+                      <code>query</code> and <code>queryAll</code> operations
+                      over the Bulk API: ~8.2M records a night, 34 objects, ~320
+                      batches, running daily without variation across the three
+                      days sampled.
                     </p>
                     <p>
-                      <strong>The extract itself.</strong> A scheduled job reads
-                      about forty objects over the Bulk API into an external SQL
-                      Server analytics database. The nine retiring objects are
-                      what make it a cutover re-point; the rest are native or
-                      standard.
+                      <strong>Two details with consequences.</strong> It uses
+                      <code>queryAll</code>, which returns
+                      <em>deleted and archived</em> records as well as live ones
+                      — a deliberate choice nobody has written down, and one
+                      that matters for what the analytics side believes about
+                      deletions. And it extracts <code>__History</code> objects:
+                      <code>AVTRRT__Job_Applicant__History</code> alone is 2.6M
+                      rows a night, plus <code>AVTRRT__Job__History</code>.
+                      Field history on a retiring object has no obvious native
+                      successor, so the reporting side has to decide whether
+                      that history is rebuilt, archived, or dropped.
+                    </p>
+                    <p>
+                      <strong>The nine retiring objects</strong> it reads are
+                      <code>AVTRRT__Job__c</code>,
+                      <code>AVTRRT__Job_Applicant__c</code>,
+                      <code>AVTRRT__Interview__c</code>,
+                      <code>AVTRRT__Placement__c</code>,
+                      <code>AVTRRT__Employment_History__c</code>,
+                      <code>AVTRRT__Hotbook__c</code>,
+                      <code>AVTRRT__Candidate_to_Hotbook__c</code> and the two
+                      history objects above.
+                    </p>
+                    <p>
+                      <strong>What runs it.</strong> The extraction is a
+                      <strong>Python script</strong> maintained by Marlex's data
+                      team — confirmed by the team, not visible in the logs,
+                      where <code>CLIENT_NAME</code> is empty and the category
+                      is only <code>EXTERNAL_APPLICATION</code>. That matters
+                      for the re-point: there is no vendor to coordinate and no
+                      product configuration to change, so the work is an edit to
+                      code Marlex owns. It also means the field and object names
+                      are hard-coded somewhere in that script, and nothing in
+                      Salesforce will warn when they stop existing.
+                    </p>
+                    <p>
+                      <strong>A least-privilege note.</strong> An
+                      8-million-record nightly read running on a System
+                      Administrator profile reaches far more than it needs.
+                      Scoping it to the objects it actually queries is the same
+                      lever recommended for the sourcing connector.
                     </p>
                     <p>
                       <strong>The two options, both open.</strong> Route the
@@ -8211,6 +8486,62 @@
                     System-Administrator profile, which is far more access than
                     it needs.
                   </p>
+                  <p>
+                    <strong>The bigger question is not the connector.</strong>
+                    The same supplier is one of the candidates to provide the
+                    <strong>matching engine</strong> the rebuild needs — the
+                    capability the retiring package supplies today and the
+                    hardest single thing to replace. A decision to buy it would
+                    change what this edge <em>is</em>: not a sourcing connector
+                    filing candidates in, but the search and matching engine the
+                    recruitment process runs on. That is a different
+                    integration, with a different contract and a different
+                    failure mode, and it would need designing rather than
+                    re-pointing.
+                  </p>
+                  <p>
+                    That decision is <strong>open</strong>, and it has moved in
+                    both directions: buy was the recorded direction in early
+                    July, and by the end of the month the discussion had shifted
+                    toward building in-house. Until it settles, this edge is
+                    carried as the sourcing connector it is today.
+                  </p>
+                  <div class="tech">
+                    <span class="tech-label">For the developers</span>
+                    <p>
+                      <strong
+                        >Why the writes cannot be attributed,
+                        mechanically.</strong
+                      >
+                      The <code>Taleva</code> external client app has the
+                      <strong>client-credentials flow disabled</strong>, so it
+                      cannot hold a service identity of its own — it has to ride
+                      a user session. That is not an operational oversight; it
+                      is the app's configuration, and it is why the connector's
+                      writes and that person's own screen work are one stream in
+                      the log. Enabling client-credentials and assigning a
+                      dedicated API-only run-as user is what makes this edge
+                      measurable.
+                    </p>
+                    <p>
+                      <strong>Confirmed 2026-07-21:</strong> its connection
+                      mechanism was the last open question of the census — the
+                      same session ruled the pre-screening service in as
+                      ordinary API calls, and this one was left as the only
+                      doubt. The app is granted
+                      <code>Api, Full, RefreshToken</code>.
+                    </p>
+                    <p>
+                      <strong>If the engine is bought,</strong> the shape to
+                      check first is whether it arrives as an installable
+                      package or as an external API. A package inside the org
+                      has no seam to route and re-points like the document
+                      generator; an external API is routable like any other
+                      edge. That distinction changes the coupling and the
+                      rollback, and it should be known before the commercial
+                      choice is made rather than after.
+                    </p>
+                  </div>
                 </div>
               </details>
 
@@ -11039,6 +11370,119 @@
 
               <details class="more">
                 <summary>
+                  The sourcing browser extension
+                  <span class="cnt"
+                    >— small, but it writes the package's own model</span
+                  >
+                </summary>
+                <div class="more-body">
+                  <p>
+                    A bought browser extension that recruiters run themselves
+                    while sourcing on LinkedIn. It signs in as each of them, so
+                    it is not a service integration in the usual sense — there
+                    is no middleware path to occupy and nothing central to
+                    re-route.
+                  </p>
+                  <p>
+                    <strong>It is coupled, and by more than reading.</strong>
+                    Over fourteen days it read the retiring vacancy object 85
+                    times and <em>created</em> 7 records on one of the package's
+                    own objects. So it is not only a query to re-aim: it writes
+                    into a model that is going away, and that write has to land
+                    somewhere native instead.
+                  </p>
+                  <p>
+                    The volumes are small and it is three people using it, so
+                    this does not move any date. It is listed because a write to
+                    the retiring model is a write regardless of size, and
+                    because an extension configured per-user is easy to forget
+                    when the model changes underneath it.
+                  </p>
+                  <div class="tech">
+                    <span class="tech-label">For the developers</span>
+                    <p>
+                      Measured 3–16 August 2026 from the platform's own call
+                      log, attributed by connection:
+                      <code>AVTRRT__Job__c</code> 85 <code>GET</code>,
+                      <code>AVTRRT__ETCObject__c</code> 7 <code>POST</code>.
+                      Everything else it touches is standard —
+                      <code>Account</code>, <code>Contact</code>,
+                      <code>Event</code>, <code>Task</code>,
+                      <code>ContentVersion</code>.
+                    </p>
+                    <p>
+                      It authenticates through the
+                      <code>Pipelaunch_Chrome_Extension</code>
+                      connected app on each recruiter's own session, which is
+                      why its writes appear in the log beside their ordinary
+                      screen work.
+                    </p>
+                  </div>
+                </div>
+              </details>
+
+              <details class="more">
+                <summary>
+                  The three inbound email services
+                  <span class="cnt"
+                    >— they belong to packages, so they leave with them</span
+                  >
+                </summary>
+                <div class="more-body">
+                  <p>
+                    Three email services are live in the org: candidates and
+                    applications can arrive by email as well as by web form. An
+                    earlier assessment recorded one of them as writing the
+                    retiring model and needing a re-point with the core wave.
+                    That is worth stating precisely, because the correction
+                    changes what has to be done.
+                  </p>
+                  <p>
+                    <strong>They are not Marlex's code.</strong> Two of the
+                    three run classes that belong to installed packages — one to
+                    the retiring recruitment package, the other to a
+                    job-broadcasting package. Their logic cannot be read, edited
+                    or re-pointed: it is vendor code, and it stops existing when
+                    the package is uninstalled.
+                  </p>
+                  <p>
+                    So the disposition is not "re-point" but the same question
+                    the other package-bundled capabilities face:
+                    <strong
+                      >is this arrival route still needed, and if so what
+                      replaces it?</strong
+                    >
+                    That is a product decision about whether email intake
+                    survives at all, not integration work — which is why these
+                    do not appear in the register above.
+                  </p>
+                  <div class="tech">
+                    <span class="tech-label">For the developers</span>
+                    <p>
+                      Confirmed in production 18 August 2026. All three
+                      <code>EmailServicesFunction</code> records are
+                      <code>IsActive: true</code>:
+                      <code>ProcessJobApplicantEmail</code> runs
+                      <code>BCST.ProcessJobApplicantEmail</code> (Job
+                      Broadcasting package), <code>EmailToCandidate</code> runs
+                      <code>AVTRRT.EmailToCandidateEmailHandler</code> (the
+                      retiring package), and <code>EmailToSalesforce</code> is
+                      the Salesforce-standard feature with no Apex class of its
+                      own.
+                    </p>
+                    <p>
+                      Both package classes return <code>(hidden)</code> bodies
+                      over the Tooling API, which is the tell: a managed class
+                      cannot be inspected, so no field-level coupling claim
+                      about them can be made from inside the org. What can be
+                      said is structural — they retire with their packages.
+                    </p>
+                  </div>
+                </div>
+              </details>
+
+              <details class="more">
+                <summary>
                   The portals, and the campaign landing page
                   <span class="cnt"
                     >— what retires, and what arrived early without review</span
@@ -12171,6 +12615,18 @@
                     InfoJobs already have live native replacements.
                   </p>
                   <p>
+                    <strong
+                      >Geocoding appears in two places, deliberately.</strong
+                    >
+                    The package supplies the capability, and it is listed here
+                    with the rest that die at uninstall. It also has its own row
+                    in the register above, because Marlex wrote its own
+                    scheduled job on top of that packaged capability — so there
+                    is a Marlex-owned thing to rebuild as well as a vendor-owned
+                    thing that disappears. It is one edge counted once in the
+                    register; this list is the capability, not a second edge.
+                  </p>
+                  <p>
                     The other five are a keep-or-drop decision for the product
                     owners, and every "keep" needs a working native successor
                     built and verified
@@ -12606,15 +13062,16 @@
                       <strong>The honest weakness.</strong> The discipline is
                       cultural, not structural. Nothing physically stops a
                       hurried edge bypassing its contract — it is held by a
-                      code-review rule and a register, not by a runtime guard.
+                      code-review rule and a catalogue of agreed data shapes,
+                      not by a runtime guard.
                     </p>
                     <p>
-                      <strong>And the register does not exist yet.</strong> The
-                      canonical-contract catalogue — the shared, vendor-neutral
-                      data shapes the middleware would standardise on — has not
-                      been drawn up. The first interfaces will define it in
-                      practice, which means the control this decision leans on
-                      is still to be built.
+                      <strong>And that catalogue does not exist yet.</strong>
+                      The canonical-contract catalogue — the shared,
+                      vendor-neutral data shapes the middleware would
+                      standardise on — has not been drawn up. The first
+                      interfaces will define it in practice, which means the
+                      control this decision leans on is still to be built.
                     </p>
                   </div>
                 </details>
@@ -13778,8 +14235,8 @@
                 <table class="reg">
                   <thead>
                     <tr>
-                      <th>#</th>
                       <th>Phase</th>
+                      <th>What it is</th>
                       <th>What happens</th>
                       <th>Does the cutover wait for it?</th>
                     </tr>
