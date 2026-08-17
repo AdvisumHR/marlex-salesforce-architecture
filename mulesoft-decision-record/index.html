@@ -1383,14 +1383,24 @@
                 being touched anyway is the cheapest one to move.
               </p>
               <p>
-                <strong>What the cutover waits on.</strong> Two interfaces must
-                be standing in production first — the ERP and the job board —
-                because those two hold their switch from old data to new inside
-                the middleware itself. Ten more connections are re-pointed on
-                the rebuild's own schedule — two of them without ever moving
-                onto the middleware, because in neither case is there a point in
-                the path where a middleware could sit. Three retire with the
-                package, and the rest are untouched.
+                <strong>What the cutover waits on.</strong> One thing only: that
+                every connection touching the old records is aimed at the new
+                ones the moment the data moves. That is a change of target, and
+                it can be made whether or not the middleware is carrying that
+                connection yet — so no interface running late can move the date.
+                Twelve connections need that change; two of them will never move
+                onto the middleware at all, because in neither case is there a
+                point in the path where a middleware could sit. Three retire
+                with the package, and the rest are untouched.
+              </p>
+              <p>
+                <strong
+                  >What the middleware sequence is really driven by.</strong
+                >
+                The ERP goes first because a second country reuses the same
+                interface, and the job board second because it carries the
+                heaviest traffic. After those two, the order follows whatever
+                capacity is free — value and volume, not the cutover calendar.
               </p>
             </div>
 
@@ -1415,7 +1425,9 @@
                 <div>
                   <span class="n">2</span>
                   <span class="l"
-                    >of those gate the cutover — the ERP and the job board</span
+                    >of those are the first interfaces built — the ERP, for a
+                    second country's reuse, and the job board, for its
+                    volume</span
                   >
                 </div>
                 <div>
@@ -1427,10 +1439,10 @@
                 </div>
               </div>
               <p>
-                Writes gate, reads degrade. If a write lands in a dead model,
-                applications are lost; if a read misses, a report goes stale.
-                That difference decides which connections set the date and which
-                merely need doing.
+                Writes are unforgiving, reads are not. If a write lands in a
+                dead model, applications are lost; if a read misses, a report
+                goes stale. That difference decides which connections set the
+                date and which merely need doing.
               </p>
 
               <details class="more">
@@ -1606,14 +1618,16 @@
                     <li>
                       <strong>The core cutover</strong> — the single rehearsed
                       weekend when candidates, vacancies and applications move
-                      to the new model. When this set says an edge "gates", it
-                      means this.
+                      to the new model. It is its own milestone: the only thing
+                      it requires of the integrations is that each one is aimed
+                      at the new records by the end of that weekend.
                     </li>
                     <li>
                       <strong>Reaching production</strong> — one interface going
                       live. Each has its own date; the ERP's interface can be
-                      live months before the job board's. This is
-                      <em>not</em> the core cutover.
+                      live months before the job board's, and either can be live
+                      after the cutover. This is <em>not</em> the core cutover,
+                      and the cutover does not wait for it.
                     </li>
                   </ul>
                 </div>
@@ -1654,10 +1668,18 @@
                 <strong>The shape of it.</strong>
                 <strong>Twelve</strong> integrations touch the retiring data
                 model and must be re-pointed, all twelve confirmed against the
-                production metadata. Two of them are built as middleware
-                interfaces and gate the core cutover. Two will never route
-                through a middleware at all, and still need re-pointing. Three
-                retire outright. The remaining seven cross untouched.
+                production metadata. Two of them are the first two middleware
+                interfaces built. Two will never route through a middleware at
+                all, and still need re-pointing. Three retire outright. The
+                remaining seven cross untouched.
+              </p>
+              <p>
+                <strong>What the cutover actually waits for.</strong> Not the
+                middleware. It waits for every coupled edge to be
+                <em>aimed at the new records</em> the moment the data moves — a
+                change of target, not a change of route. Which connections are
+                on the middleware by then is a separate question, decided by
+                reuse and volume rather than by the cutover date.
               </p>
               <p>
                 Verdicts are stated here and nowhere else. Open a row's detail
@@ -1682,8 +1704,8 @@
                   <tbody>
                     <tr class="grp">
                       <td colspan="5">
-                        Gates the core cutover — and holds its switch on the
-                        middleware
+                        The first two middleware interfaces — highest reuse,
+                        highest volume
                       </td>
                     </tr>
                     <tr>
@@ -1706,15 +1728,15 @@
                         <strong>Middleware</strong> — second interface built
                       </td>
                       <td>
-                        The only edge that writes the retiring records
-                        <em>and</em> that Marlex controls on both sides, so its
-                        re-point is the gate
+                        The highest-volume writer of the retiring records, and
+                        the only one Marlex controls on both sides — so it is
+                        built early, and its target switch is the one that has
+                        to land with the data move
                       </td>
                     </tr>
                     <tr class="grp">
                       <td colspan="5">
-                        Re-pointed, but the core cutover date does not wait on
-                        them
+                        Re-pointed too, on the schedule their own objects set
                       </td>
                     </tr>
                     <tr>
@@ -2738,19 +2760,29 @@
                 </div>
               </div>
               <p>
-                Three things in the table are easy to misread. Each is worth a
+                Four things in the table are easy to misread. Each is worth a
                 line.
               </p>
               <p>
                 <strong
-                  >"Gates the cutover" is about the calendar, not
-                  importance.</strong
+                  >The cutover waits on targets, not on the middleware.</strong
                 >
-                An edge gates the cutover only if the date waits for it. The
-                training platform does not: it is two queries, fixed in an
-                afternoon. That says nothing about how much it matters — if a
-                safety certificate does not arrive, a worker cannot start their
-                shift.
+                Every coupled edge has to be pointing at the new records the
+                moment the data moves — that is the only integration condition
+                the date genuinely depends on, and it is true whether the call
+                arrives through the middleware or straight from Salesforce as it
+                does today. So no interface being late can move the cutover: the
+                switch can be thrown in Marlex's own code instead, which is what
+                the fallback connection exists for.
+              </p>
+              <p>
+                <strong
+                  >Being built first is about value, not about the date.</strong
+                >
+                The ERP and the job board are the first two interfaces because
+                one is reused by a second country and the other carries the
+                heaviest traffic — not because the cutover is waiting for them.
+                Everything after them is sequenced by whatever capacity is free.
               </p>
               <p>
                 <strong>"Direct for now" means later, not never.</strong> Every
@@ -4075,7 +4107,8 @@
                 <summary>
                   InfoJobs — the job board
                   <span class="cnt"
-                    >— the cutover gate, and one contract that is missing</span
+                    >— the switch that lands with the data move, and one
+                    contract that is missing</span
                   >
                 </summary>
                 <div class="more-body">
@@ -4087,23 +4120,29 @@
                     retiring objects.
                   </p>
                   <p>
-                    <strong>Why it is the gate.</strong> Three edges write the
-                    retiring records, but this is the only one Marlex controls
-                    on both sides — and by far the highest volume. Re-point the
-                    webhook before the core moves and it writes objects the live
-                    desk cannot see; re-point it after, and every application
-                    submitted in the gap lands is lost.
+                    <strong>Why its timing is tight.</strong> Three edges write
+                    the retiring records, but this is the only one Marlex
+                    controls on both sides — and by far the highest volume.
+                    Re-point the webhook before the core moves and it writes
+                    objects the live desk cannot see; re-point it after, and
+                    every application submitted in the gap is lost. So the
+                    webhook's re-point and the data move are one event,
+                    rehearsed together.
                   </p>
                   <p>
-                    So the webhook's re-point and the core cutover are one
-                    event, rehearsed together.
-                  </p>
-                  <p>
-                    <strong>That is the switch, not the build.</strong> The
-                    interface itself is built, deployed and proven well before
-                    the cutover — it has to be, or there is nothing to switch
-                    to. What is pinned to the weekend is only the moment the
-                    inbound feed changes target.
+                    <strong
+                      >That is a change of target, not a change of
+                      route.</strong
+                    >
+                    What is pinned to the weekend is only the moment the inbound
+                    feed starts writing the new records. Whether that feed is
+                    arriving through the middleware by then is a separate
+                    decision: if the interface is ready, the switch is a setting
+                    inside it, which is the safer place for it; if it is not,
+                    the same switch is thrown in the Salesforce code that
+                    carries the feed today. Either way the date holds — which is
+                    precisely why the fallback connection is built and tested
+                    rather than assumed.
                   </p>
                   <figure class="diagram">
                     <a
@@ -4987,8 +5026,8 @@
                   <p>
                     <strong>The gap, stated rather than filled.</strong> Nine
                     outbound services are documented. The inbound webhook — the
-                    path carrying those 27,000 applications a week, and the
-                    single edge whose re-point gates the cutover — has no
+                    path carrying those 27,000 applications a week, and the one
+                    whose target switch has to land with the data move — has no
                     contract entry anywhere. Its endpoint, payload and error
                     behaviour are known only from the code.
                   </p>
@@ -5054,7 +5093,8 @@
                         </tr>
                         <tr class="grp">
                           <td colspan="3">
-                            Inbound — the applications, and the gate
+                            Inbound — the applications, and the switch that
+                            moves with the data
                           </td>
                         </tr>
                         <tr>
@@ -12412,13 +12452,28 @@
                     </p>
                     <p>
                       <strong
-                        >The September date is now on the critical path.</strong
+                        >What the environment date actually puts at
+                        risk.</strong
                       >
-                      The two interfaces holding the switch must be standing
-                      before their cutovers. If the environment or the delivery
-                      capacity slips, they fall back to switching inside
-                      Salesforce — which gives up precisely the control the
-                      design was chosen for.
+                      Not the cutover — that has a fallback and keeps its date
+                      regardless. What slips is
+                      <em>where the switch is thrown</em>: with the interfaces
+                      standing, it is a setting inside the middleware, which is
+                      the safer place for a change made during a freeze; without
+                      them, the same switch is a Salesforce deployment in that
+                      window. So a slip costs control and weekend risk, not the
+                      milestone.
+                    </p>
+                    <p>
+                      <strong
+                        >Worth stating plainly, because it is easy to assume
+                        otherwise.</strong
+                      >
+                      No interface reaching production is a precondition of the
+                      data move. The interfaces are sequenced by reuse and
+                      volume; the cutover is its own milestone, and the two
+                      schedules meet only at the moment each coupled connection
+                      changes target.
                     </p>
                     <p>
                       <strong>Proportion is the signal to watch.</strong> The
@@ -12685,9 +12740,12 @@
                       caller's address points at it.
                     </p>
                     <p>
-                      The switch table is therefore a target state — which is
-                      exactly why the interface must be standing before the
-                      switch is thrown.
+                      The switch table is therefore a target state, not a
+                      precondition. Until an interface exists, that edge's
+                      switch stays in the Apex behind the endpoint — which still
+                      works; it is a deployment rather than a setting, and a
+                      deployment inside a freeze window is the cost of not
+                      having the interface yet.
                     </p>
                     <p>
                       <strong>Not yet built.</strong> The seam interfaces are
@@ -13106,7 +13164,8 @@
                 <div>
                   <span class="n">2</span>
                   <span class="l"
-                    >interfaces must be standing before the core cutover</span
+                    >interfaces built first — for reuse and volume, not because
+                    the date waits</span
                   >
                 </div>
                 <div>
@@ -13129,7 +13188,8 @@
                   aria-labelledby="seq-t seq-d"
                 >
                   <title id="seq-t">
-                    The seven phases in order, with the cutover gate at phase 4
+                    The seven phases in order, and the one switch tied to the
+                    data move
                   </title>
                   <desc id="seq-d">
                     A left-to-right sequence of seven phases. Phase 0 stands up
@@ -13138,14 +13198,15 @@
                     forward by the rebuild's own waves, made in Marlex's own
                     configuration and code. Phase 3 builds the ERP interface,
                     the first thing MuleSoft builds. Phase 4 builds the
-                    job-board interface, which like the ERP one must be standing
-                    in production before the cutover; it is marked as the gate
-                    because the moment its inbound feed switches target is tied
-                    to the data move itself. Phase 5 points the pre-screening
-                    service at the new model before it ships. Phase 6 is
-                    everything else, on its own schedule. Phases 3 and 4 are
-                    copper because they are the two interfaces that must be
-                    standing before the cutover.
+                    job-board interface, second because it carries the heaviest
+                    traffic; it is marked because the moment its inbound feed
+                    changes target is tied to the data move itself, though that
+                    switch can equally be thrown in Salesforce if the interface
+                    is not ready. Phase 5 points the pre-screening service at
+                    the new model before it ships. Phase 6 is everything else,
+                    on its own schedule. Phases 3 and 4 are copper because they
+                    are the two interfaces built first, and because the job
+                    board's target switch lands with the data move.
                   </desc>
 
                   <text
@@ -13334,7 +13395,7 @@
                     font-size="10"
                     font-weight="700"
                   >
-                    &#9650; THE GATE
+                    &#9650; ITS SWITCH MOVES WITH THE DATA
                   </text>
                   <text
                     class="dg-t-copper"
@@ -13353,7 +13414,7 @@
                     text-anchor="middle"
                     font-size="9"
                   >
-                    built well before; only the
+                    built when capacity allows; only the
                   </text>
                   <text
                     class="dg-t-sm"
@@ -13450,8 +13511,8 @@
                     rx="2"
                   />
                   <text class="dg-t-sm" x="194" y="226" font-size="8.6">
-                    touches the retiring model — must be standing before the
-                    cutover
+                    touches the retiring model — built first, for reuse and
+                    volume
                   </text>
 
                   <defs>
@@ -13468,15 +13529,17 @@
                   </defs>
                 </svg>
                 <figcaption>
-                  The sequence at a glance. Phases 3 and 4 are the two
-                  interfaces that must be standing in production before the core
-                  cutover — and phase 4 is the gate. Both interfaces are built
-                  and proven well before the cutover — that is what phases 3 and
-                  4 are. What is tied to the weekend is narrower: the moment the
-                  job board's inbound feed changes target, because it writes the
-                  very records the migration is moving. Phase 2's three
-                  re-points come earlier in time than either interface, because
-                  the rebuild's own waves pull them forward.
+                  The sequence at a glance. Phases 3 and 4 are the first two
+                  interfaces built — the ERP because a second country reuses it,
+                  the job board because it carries the heaviest traffic. Neither
+                  is a precondition of the cutover date. What <em>is</em> tied
+                  to the weekend is narrower: the moment the job board's inbound
+                  feed changes target, because it writes the very records the
+                  data move is moving. If the interface is live by then, that
+                  switch is a setting inside it; if not, it is thrown in
+                  Salesforce instead. Phase 2's four re-points come earlier in
+                  time than either interface, because the rebuild's own waves
+                  pull them forward.
                 </figcaption>
               </figure>
               <div class="tw">
@@ -13486,7 +13549,7 @@
                       <th>#</th>
                       <th>Phase</th>
                       <th>What happens</th>
-                      <th>What it gates</th>
+                      <th>Does the cutover wait for it?</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -13554,11 +13617,13 @@
                       </td>
                       <td>
                         <strong
-                          >Built before; its switch thrown at the
-                          cutover</strong
+                          >Nothing — the date does not wait for it.</strong
                         >
-                        — the highest-volume writer, and the only one owned end
-                        to end
+                        Second because it is the highest-volume writer and the
+                        only one owned end to end. Its
+                        <em>target switch</em> lands with the data move either
+                        way: in the interface if that is ready, in Salesforce if
+                        it is not
                       </td>
                     </tr>
                     <tr>
