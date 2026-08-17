@@ -1386,7 +1386,7 @@
                 <strong>What the cutover waits on.</strong> Two interfaces must
                 be standing in production first — the ERP and the job board —
                 because those two hold their switch from old data to new inside
-                the middleware itself. Nine more connections are re-pointed on
+                the middleware itself. Ten more connections are re-pointed on
                 the rebuild's own schedule — two of them without ever moving
                 onto the middleware, because neither has a seam one could
                 occupy. Three retire with the package, and the rest are
@@ -1396,7 +1396,7 @@
 
             <section>
               <p class="section-eyebrow">The finding that shapes everything</p>
-              <h2>Eleven connections touch the data being retired</h2>
+              <h2>Twelve connections touch the data being retired</h2>
               <p>
                 The sharpest question is not who talks to Salesforce — it is who
                 touches the old recruitment records, because that set, and only
@@ -1405,7 +1405,7 @@
               </p>
               <div class="stats">
                 <div>
-                  <span class="n">11</span>
+                  <span class="n">12</span>
                   <span class="l"
                     >integrations touch the retiring model and must be
                     re-pointed, every one confirmed against the production
@@ -1652,12 +1652,12 @@
             <div class="bluf">
               <p>
                 <strong>The shape of it.</strong>
-                <strong>Eleven</strong> integrations touch the retiring data
-                model and must be re-pointed, all eleven confirmed against the
+                <strong>Twelve</strong> integrations touch the retiring data
+                model and must be re-pointed, all twelve confirmed against the
                 production metadata. Two of them are built as middleware
                 interfaces and gate the core cutover. Two will never route
                 through a middleware at all, and still need re-pointing. Three
-                retire outright. The remaining six cross untouched.
+                retire outright. The remaining seven cross untouched.
               </p>
               <p>
                 Verdicts are stated here and nowhere else. Open a row's detail
@@ -1841,6 +1841,21 @@
                         outright, so they break at cutover
                       </td>
                     </tr>
+                    <tr>
+                      <td>
+                        <strong>Sourcing browser extension</strong> — PipeLaunch
+                      </td>
+                      <td><span class="yes">Yes</span> — reads vacancies</td>
+                      <td><span class="yes">Yes</span>, with the core wave</td>
+                      <td><strong>Direct</strong> — never routes</td>
+                      <td>
+                        A bought extension recruiters run in their own browser
+                        to source from LinkedIn, so it signs in as each of them
+                        and no middleware sits in that path — but it reads the
+                        vacancy being retired, so its configuration re-points
+                        with the core
+                      </td>
+                    </tr>
                     <tr class="grp">
                       <td colspan="5">
                         Retires — not re-pointed, not preserved
@@ -1955,13 +1970,29 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>Finance figures feed</strong></td>
+                      <td>
+                        <strong>Finance write-back</strong> — incentives and
+                        margins
+                      </td>
                       <td><span class="no">No</span> — native objects</td>
                       <td><span class="no">No</span></td>
                       <td><strong>Direct</strong>, route later</td>
                       <td>
-                        Shares one identity with the reporting extract; its
-                        owner is unconfirmed
+                        It writes calculated figures <em>into</em> Salesforce
+                        rather than reading them out, and it shares one sign-in
+                        with the ERP and the reporting extract — so its owner
+                        has to be settled per job, not per sign-in
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Security log collector</strong> — Wazuh</td>
+                      <td><span class="no">No</span> — platform logs only</td>
+                      <td><span class="no">No</span></td>
+                      <td><strong>Direct</strong>, route later</td>
+                      <td>
+                        It reads the org's own login and event records to
+                        centralise them for security monitoring, and never
+                        touches recruitment data
                       </td>
                     </tr>
                   </tbody>
@@ -1990,16 +2021,16 @@
                       and shortlists, and the surviving native and standard
                       model holding offers, invoices, accounts, candidates,
                       training records and campaigns. Outside systems are
-                      grouped in three columns by cutover consequence. Eleven
+                      grouped in three columns by cutover consequence. Twelve
                       reach the retiring model and must be re-pointed: the ERP,
                       the job board, pre-screening, training, the reporting
                       extract, the sourcing connector, the campaign landing
                       page, the CV parser, Google Maps geocoding, the customer
-                      data platform and the document generator. Six cross the
-                      cutover untouched because they only ever reach the
-                      surviving model. The self-service portals sit inside the
-                      retiring model and leave with the package rather than
-                      being re-pointed.
+                      data platform, the document generator and the sourcing
+                      browser extension. Seven cross the cutover untouched
+                      because they only ever reach the surviving model. The
+                      self-service portals sit inside the retiring model and
+                      leave with the package rather than being re-pointed.
                     </desc>
 
                     <text
@@ -2149,7 +2180,7 @@
                       font-size="10.5"
                       font-weight="700"
                     >
-                      ▲ REACHES THE RETIRING MODEL — 11
+                      ▲ REACHES THE RETIRING MODEL — 12
                     </text>
                     <text class="dg-t-sm" x="20" y="106" font-size="9">
                       must be re-pointed
@@ -2159,7 +2190,7 @@
                       x="20"
                       y="118"
                       width="290"
-                      height="256"
+                      height="278"
                       rx="7"
                     />
                     <text class="dg-t-sm" x="34" y="140" font-size="9.6">
@@ -2195,6 +2226,9 @@
                     <text class="dg-t-sm" x="34" y="360" font-size="9.6">
                       Document generator — 35 fields in saved queries
                     </text>
+                    <text class="dg-t-sm" x="34" y="382" font-size="9.6">
+                      Sourcing extension — reads the vacancy
+                    </text>
 
                     <path
                       class="dg-arrow-copper"
@@ -2210,7 +2244,7 @@
                       font-size="10.5"
                       font-weight="700"
                     >
-                      CROSSES UNTOUCHED — 6
+                      CROSSES UNTOUCHED — 7
                     </text>
                     <text class="dg-t-sm" x="790" y="106" font-size="9">
                       reaches only the surviving model
@@ -2220,7 +2254,7 @@
                       x="790"
                       y="118"
                       width="310"
-                      height="146"
+                      height="168"
                       rx="7"
                     />
                     <text class="dg-t-sm" x="804" y="140" font-size="9.6">
@@ -2233,13 +2267,16 @@
                       Documents · Dolma
                     </text>
                     <text class="dg-t-sm" x="804" y="206" font-size="9.6">
-                      Finance figures feed — native objects
+                      Finance write-back — native objects
                     </text>
                     <text class="dg-t-sm" x="804" y="228" font-size="9.6">
                       Axxon → the ERP — reuses Spain's interface
                     </text>
                     <text class="dg-t-sm" x="804" y="250" font-size="9.6">
                       Identity · Azure AD — no recruitment data
+                    </text>
+                    <text class="dg-t-sm" x="804" y="272" font-size="9.6">
+                      Security logs · Wazuh — platform logs only
                     </text>
 
                     <path
@@ -2258,7 +2295,7 @@
                       rx="7"
                     />
                     <text class="dg-t-sm" x="804" y="328" font-size="9.4">
-                      Five of the six were re-verified at field
+                      Five of the seven were re-verified at field
                     </text>
                     <text class="dg-t-sm" x="804" y="343" font-size="9.4">
                       level in production on 14 August 2026 —
@@ -2330,11 +2367,11 @@
                   data models at once during the rebuild, which is why an edge
                   can read a perfectly ordinary Contact and still be coupled —
                   141 of that object's 369 fields belong to the package being
-                  retired. Eleven outside systems reach the retiring model and
-                  must be re-pointed; six reach only the surviving one and need
-                  no work. The portals are the exception to both: they are built
-                  <em>inside</em> the retiring model, so they leave with it
-                  rather than moving.
+                  retired. Twelve outside systems reach the retiring model and
+                  must be re-pointed; seven reach only the surviving one and
+                  need no work. The portals are the exception to both: they are
+                  built <em>inside</em> the retiring model, so they leave with
+                  it rather than moving.
                 </figcaption>
               </figure>
               <div class="dg-lightbox" id="zoom-landscape">
@@ -2358,16 +2395,16 @@
                       and shortlists, and the surviving native and standard
                       model holding offers, invoices, accounts, candidates,
                       training records and campaigns. Outside systems are
-                      grouped in three columns by cutover consequence. Eleven
+                      grouped in three columns by cutover consequence. Twelve
                       reach the retiring model and must be re-pointed: the ERP,
                       the job board, pre-screening, training, the reporting
                       extract, the sourcing connector, the campaign landing
                       page, the CV parser, Google Maps geocoding, the customer
-                      data platform and the document generator. Six cross the
-                      cutover untouched because they only ever reach the
-                      surviving model. The self-service portals sit inside the
-                      retiring model and leave with the package rather than
-                      being re-pointed.
+                      data platform, the document generator and the sourcing
+                      browser extension. Seven cross the cutover untouched
+                      because they only ever reach the surviving model. The
+                      self-service portals sit inside the retiring model and
+                      leave with the package rather than being re-pointed.
                     </desc>
 
                     <text
@@ -2517,7 +2554,7 @@
                       font-size="10.5"
                       font-weight="700"
                     >
-                      ▲ REACHES THE RETIRING MODEL — 11
+                      ▲ REACHES THE RETIRING MODEL — 12
                     </text>
                     <text class="dg-t-sm" x="20" y="106" font-size="9">
                       must be re-pointed
@@ -2527,7 +2564,7 @@
                       x="20"
                       y="118"
                       width="290"
-                      height="256"
+                      height="278"
                       rx="7"
                     />
                     <text class="dg-t-sm" x="34" y="140" font-size="9.6">
@@ -2563,6 +2600,9 @@
                     <text class="dg-t-sm" x="34" y="360" font-size="9.6">
                       Document generator — 35 fields in saved queries
                     </text>
+                    <text class="dg-t-sm" x="34" y="382" font-size="9.6">
+                      Sourcing extension — reads the vacancy
+                    </text>
 
                     <path
                       class="dg-arrow-copper"
@@ -2578,7 +2618,7 @@
                       font-size="10.5"
                       font-weight="700"
                     >
-                      CROSSES UNTOUCHED — 6
+                      CROSSES UNTOUCHED — 7
                     </text>
                     <text class="dg-t-sm" x="790" y="106" font-size="9">
                       reaches only the surviving model
@@ -2588,7 +2628,7 @@
                       x="790"
                       y="118"
                       width="310"
-                      height="146"
+                      height="168"
                       rx="7"
                     />
                     <text class="dg-t-sm" x="804" y="140" font-size="9.6">
@@ -2601,13 +2641,16 @@
                       Documents · Dolma
                     </text>
                     <text class="dg-t-sm" x="804" y="206" font-size="9.6">
-                      Finance figures feed — native objects
+                      Finance write-back — native objects
                     </text>
                     <text class="dg-t-sm" x="804" y="228" font-size="9.6">
                       Axxon → the ERP — reuses Spain's interface
                     </text>
                     <text class="dg-t-sm" x="804" y="250" font-size="9.6">
                       Identity · Azure AD — no recruitment data
+                    </text>
+                    <text class="dg-t-sm" x="804" y="272" font-size="9.6">
+                      Security logs · Wazuh — platform logs only
                     </text>
 
                     <path
@@ -2626,7 +2669,7 @@
                       rx="7"
                     />
                     <text class="dg-t-sm" x="804" y="328" font-size="9.4">
-                      Five of the six were re-verified at field
+                      Five of the seven were re-verified at field
                     </text>
                     <text class="dg-t-sm" x="804" y="343" font-size="9.4">
                       level in production on 14 August 2026 —
@@ -2737,6 +2780,166 @@
             </section>
 
             <section>
+              <p class="section-eyebrow">Who each edge signs in as</p>
+              <h2>
+                The sign-ins behind the table, and the three that share one
+              </h2>
+              <p>
+                The table above is organised by system, which hides something
+                that matters at cutover:
+                <strong
+                  >an integration is only as separable as the sign-in it
+                  uses.</strong
+                >
+                Where two systems share one, no amount of log reading can tell
+                you which of them did what — so ownership, least privilege and
+                rollback all have to be settled per job rather than per sign-in.
+              </p>
+              <p>
+                Measured across fourteen days of the org's own API records, to
+                17 August 2026.
+              </p>
+              <div class="tw">
+                <table class="reg">
+                  <thead>
+                    <tr>
+                      <th>Edge</th>
+                      <th>Signs in as</th>
+                      <th>What that means</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="grp">
+                      <td colspan="3">
+                        One sign-in, three different jobs — the case that needs
+                        unpicking
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>The ERP</strong> — candidate and finance traffic
+                      </td>
+                      <td rowspan="3">
+                        <strong>One shared service sign-in</strong>
+                      </td>
+                      <td>
+                        The heaviest of the three by far, and the only one that
+                        writes candidate records
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Finance write-back</strong></td>
+                      <td>Writes calculated incentive and margin figures in</td>
+                    </tr>
+                    <tr>
+                      <td><strong>The reporting extract</strong></td>
+                      <td>
+                        Reads records out, including six of the objects being
+                        retired — which is what makes this sharing a cutover
+                        problem rather than a tidiness one
+                      </td>
+                    </tr>
+                    <tr class="grp">
+                      <td colspan="3">
+                        Its own service sign-in — separable, attributable,
+                        scopable
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Training platform</strong> — Humact / Lectio
+                      </td>
+                      <td>A dedicated service sign-in</td>
+                      <td>
+                        Supplied by the training provider, not a Marlex person
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Document management</strong> — Dolma</td>
+                      <td>A dedicated service sign-in</td>
+                      <td>
+                        Clean to attribute, which is how its reads were measured
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Security log collector</strong> — Wazuh</td>
+                      <td>The helpdesk sign-in</td>
+                      <td>Reads platform logs only</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Job board</strong> — InfoJobs</td>
+                      <td>
+                        <strong>No sign-in at all</strong> — public guest access
+                      </td>
+                      <td>
+                        Nothing authenticates, which is its own hardening
+                        question separate from the re-point
+                      </td>
+                    </tr>
+                    <tr class="grp">
+                      <td colspan="3">
+                        Signs in as real people — writes cannot be separated
+                        from their own screen work
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Document generator</strong></td>
+                      <td>Each user who presses the button</td>
+                      <td>
+                        Ninety-eight people over the window — which is why its
+                        reads of the retiring records look like ordinary user
+                        activity
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Sourcing</strong> — Taleva</td>
+                      <td>A named person's sign-in</td>
+                      <td>
+                        The reason its writes are recorded as owner-dependent
+                        above: the connector and that person are
+                        indistinguishable in the record
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Sourcing browser extension</strong></td>
+                      <td>Each recruiter running it</td>
+                      <td>Three people over the window</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>
+                <strong>The rule this sets.</strong> Where a sign-in is shared,
+                split the work by connection rather than by user before drawing
+                any conclusion about who owns it — and where an integration
+                signs in as a person, accept that its activity cannot be cleanly
+                separated from theirs, and scope its access rather than trying
+                to measure its intent.
+              </p>
+              <div class="tech">
+                <span class="tech-label">For the developers</span>
+                <p>
+                  Attribute by <code>CONNECTED_APP_ID</code>, never by
+                  <code>USER_ID</code>. The shared ERP sign-in fronts
+                  <code>MX_Integration_Conn_App</code>,
+                  <code>API_Marlex_Data_Source</code> and the reporting client,
+                  so a per-user grouping conflates all three. The measurement
+                  behind this table is the <code>ApiTotalUsage</code> event log,
+                  which retains 194 days.
+                </p>
+                <p>
+                  <strong>One limit worth knowing.</strong> That log records the
+                  <em>entity</em> a call touched, not the fields inside it. An
+                  edge that writes <code>Contact</code> may still be carrying a
+                  package field on that record — which is exactly how the ERP's
+                  own <code>AVTRRT__Gender__c</code> mapping stays invisible to
+                  a traffic census. Traffic proves which objects are touched;
+                  only metadata proves which fields are.
+                </p>
+              </div>
+            </section>
+
+            <section>
               <p class="section-eyebrow">The detail, on demand</p>
               <h2>What each edge actually does</h2>
               <p>
@@ -2781,6 +2984,18 @@
                     retiring model — a read only. The finance traffic is clean.
                     Both fixes are inside Marlex; nothing changes on the ERP
                     side.
+                  </p>
+                  <p>
+                    <strong>Neither of the two shows up in the traffic</strong>,
+                    which is worth knowing before anyone re-checks this edge and
+                    concludes it is clean. The candidate sync writes the
+                    ordinary contact record, so the package field it carries
+                    rides inside a record that survives. And the second coupling
+                    is not the ERP calling at all — it is Salesforce automation
+                    firing afterwards. Both were found by reading the
+                    configuration, and both were confirmed there again on 17
+                    August 2026: the field, the rule that requires it and the
+                    automation that writes it are all still active.
                   </p>
                   <p>
                     <strong>Measured:</strong> about 7,059 data calls over 7
