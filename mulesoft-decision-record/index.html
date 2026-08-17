@@ -2813,38 +2813,45 @@
 
             <section>
               <p class="section-eyebrow">How each edge authenticates</p>
-              <h2>The sign-in behind every connection, named</h2>
+              <h2>Two directions, two identities — and some edges have both</h2>
               <p>
-                The register above is organised by system, which hides two
-                things that decide the re-point work:
-                <strong>which component authenticates the connection</strong>,
-                and <strong>which identity it runs as</strong>. An integration
-                is only as separable as its sign-in — where two systems share
-                one, no amount of log reading will tell you which of them did
-                what.
+                Direction decides everything about an integration's identity,
+                and the two cases share nothing.
               </p>
               <p>
-                Inbound and outbound are different mechanisms and are not
-                interchangeable. Inbound callers authenticate against an
-                <code>ExternalClientApplication</code> — the modern replacement
-                for <code>ConnectedApplication</code> — and run as a Salesforce
-                user. Outbound callouts authenticate <em>outward</em> through a
-                <code>NamedCredential</code>, which holds no Salesforce user at
-                all. So an inbound edge re-points by re-checking its run-as user
-                and object permissions; an outbound one by changing an endpoint
-                and a principal.
+                <strong>Inbound</strong> — an outside system calling Salesforce
+                — authenticates against an
+                <code>ExternalClientApplication</code> (the modern replacement
+                for <code>ConnectedApplication</code>) and then
+                <em>runs as a Salesforce user</em>. That user's profile and
+                object permissions are what the call can reach, so an inbound
+                re-point means re-checking a user.
               </p>
               <p>
-                Read from the org and its retrieved metadata, 17 August 2026.
+                <strong>Outbound</strong> — Salesforce calling out —
+                authenticates through a <code>NamedCredential</code>, which
+                holds <em>no Salesforce user at all</em>. What it holds is an
+                endpoint and a principal for the far side. An outbound re-point
+                means changing a URL and a secret.
+              </p>
+              <p>
+                <strong
+                  >A bidirectional edge therefore has two separate
+                  identities</strong
+                >, and they are independent: the ERP has a service user for what
+                it sends <em>in</em> and a credential for what Salesforce sends
+                <em>out</em>. Fixing one does nothing for the other. Read from
+                the org and its metadata, 17 August 2026.
               </p>
 
+              <h3>Inbound — who the call runs as</h3>
               <div class="tw">
                 <table class="reg">
                   <thead>
                     <tr>
                       <th>Edge</th>
                       <th>Authenticating component</th>
-                      <th>Runs as</th>
+                      <th>Runs as (Salesforce user)</th>
                       <th>OAuth scopes</th>
                       <th>Notes</th>
                     </tr>
@@ -2852,12 +2859,12 @@
                   <tbody>
                     <tr class="grp">
                       <td colspan="5">
-                        One identity, three jobs — the sharing that has to be
-                        unpicked
+                        One service user, three connections — the sharing that
+                        has to be unpicked
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>NET4</strong> — the ERP</td>
+                      <td><strong>NET4</strong> — the ERP, inbound half</td>
                       <td>
                         <code>MX_Integration_Conn_App</code><br /><span
                           class="no"
@@ -2869,14 +2876,14 @@
                         <code>erp_integrations@marlex.net</code><br /><strong
                           >Salesforce API Only System Integrations</strong
                         ><br /><span class="no"
-                          >the correct pattern — no interactive login. One
-                          sign-in, three connections</span
+                          >the correct pattern — no interactive login. One user,
+                          three connections</span
                         >
                       </td>
                       <td><code>Api, Full, RefreshToken</code></td>
                       <td>
-                        Client-credentials enabled. The heaviest of the three
-                        and the only one writing candidate records
+                        Client-credentials enabled. Writes candidate records;
+                        the only one of the three that does
                       </td>
                     </tr>
                     <tr>
@@ -2890,19 +2897,17 @@
                     </tr>
                     <tr>
                       <td><strong>Reporting extract</strong></td>
-                      <td>A separate reporting client on the same sign-in</td>
+                      <td>A separate reporting client on the same user</td>
                       <td>—</td>
                       <td>
                         Reads six of the retiring objects — which is what makes
-                        this sharing a cutover problem rather than a tidiness
-                        one
+                        this sharing a cutover problem, not a tidiness one
                       </td>
                     </tr>
 
                     <tr class="grp">
                       <td colspan="5">
-                        Its own service identity — separable, attributable,
-                        scopable
+                        Its own service user — separable and scopable
                       </td>
                     </tr>
                     <tr>
@@ -2916,18 +2921,15 @@
                         >
                       </td>
                       <td><code>Api, Full, RefreshToken</code></td>
-                      <td>
-                        Client-credentials enabled. Clean to attribute, which is
-                        how its reads were measured
-                      </td>
+                      <td>Client-credentials enabled. Clean to attribute</td>
                     </tr>
                     <tr>
                       <td><strong>Security log collector</strong> — Wazuh</td>
                       <td><code>Wazuh_siem_logs</code></td>
-                      <td>The helpdesk sign-in — System Administrator</td>
+                      <td>The helpdesk user — System Administrator</td>
                       <td>
                         <code>Api, RefreshToken</code><br /><span class="no"
-                          >the only app on this page <em>not</em> granted
+                          >the only app here <em>not</em> granted
                           <code>Full</code></span
                         >
                       </td>
@@ -2937,36 +2939,32 @@
                     </tr>
                     <tr>
                       <td>
-                        <strong>Training platform</strong> — Humact / Lectio
+                        <strong>Training platform</strong> — Humact / Lectio,
+                        inbound half
                       </td>
+                      <td><code>Humact_Inbound</code></td>
                       <td>
-                        <code>Humact_Inbound</code> inbound;
-                        <code>Humact_API</code> →
-                        <code>Humact_API_EC</code> outbound
-                      </td>
-                      <td>
-                        A dedicated service sign-in supplied by the training
-                        provider —
+                        A dedicated service user supplied by the provider —
                         <strong>Salesforce API Only System Integrations</strong>
                       </td>
                       <td>—</td>
                       <td>
-                        Outbound secret is an <code>X-API-Key</code> header
-                        resolved from the external credential, so nothing sits
-                        in Apex
+                        Posts certificates to
+                        <code>/Api/Humact/Certificado/*</code>. Its run-as user
+                        is assigned manually after deploy
                       </td>
                     </tr>
 
                     <tr class="grp">
                       <td colspan="5">
-                        Signs in as a real person — its writes cannot be
-                        separated from theirs
+                        Runs as a real person — its writes cannot be separated
+                        from theirs
                       </td>
                     </tr>
                     <tr>
                       <td><strong>Sourcing</strong> — Taleva</td>
                       <td><code>Taleva</code></td>
-                      <td>A named person's own sign-in</td>
+                      <td>A named person's own login</td>
                       <td><code>Api, Full, RefreshToken</code></td>
                       <td>
                         <strong>Client-credentials disabled</strong> — which is
@@ -2978,7 +2976,7 @@
                     <tr>
                       <td><strong>B2B leads</strong> — Rainmakers</td>
                       <td><code>Rainmakers</code></td>
-                      <td>A named person's own sign-in</td>
+                      <td>A named person's own login</td>
                       <td>
                         <code>Full, RefreshToken</code><br /><span class="no"
                           >no <code>Api</code> scope</span
@@ -2986,23 +2984,7 @@
                       </td>
                       <td>
                         <strong>Client-credentials disabled.</strong> Pilot; no
-                        measured traffic
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><strong>Document generator</strong></td>
-                      <td>
-                        An installed package — no app, no credential; it runs
-                        in-process
-                      </td>
-                      <td>
-                        Each user who presses the button — 98 people over the
-                        window
-                      </td>
-                      <td>—</td>
-                      <td>
-                        Which is why its reads of the retiring records look like
-                        ordinary user activity
+                        traffic
                       </td>
                     </tr>
                     <tr>
@@ -3016,80 +2998,20 @@
                       <td>—</td>
                       <td>Reads the vacancy being retired</td>
                     </tr>
-
-                    <tr class="grp">
-                      <td colspan="5">
-                        Outbound only — a credential, and no Salesforce identity
-                        at all
-                      </td>
-                    </tr>
                     <tr>
-                      <td><strong>Credit checks</strong> — Iberinform</td>
+                      <td><strong>Document generator</strong></td>
                       <td>
-                        <code>MA_Iberinform</code> →
-                        <code>MA_Iberinform_EC</code>
+                        <span class="no">Neither</span> — an installed package
+                        running in-process, so no app and no credential
                       </td>
                       <td>
-                        <span class="no">None</span> — outbound credential
+                        Each user who presses the button — 98 people over the
+                        window
                       </td>
                       <td>—</td>
                       <td>
-                        <code>X-IBM-CLIENT-ID</code> +
-                        <code>X-IBM-CLIENT-SECRET</code>
-                        headers, resolved through a named principal
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><strong>E-signature</strong> — Signaturit</td>
-                      <td>
-                        <code>MA_Signaturit</code> →
-                        <code>MA_Signaturit_EC</code> outbound;
-                        <code>/SG_subscriptionsEvents</code> inbound
-                      </td>
-                      <td>
-                        <span class="no">None</span> — outbound credential
-                      </td>
-                      <td>—</td>
-                      <td>
-                        <code>Authorization: Bearer</code> from the external
-                        credential
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <strong>Job board</strong> — InfoJobs (outbound half)
-                      </td>
-                      <td>
-                        <code>MA_InfoJobs</code> →
-                        <code>https://api.infojobs.net</code>
-                      </td>
-                      <td>
-                        <span class="yes">Legacy</span>
-                        <code>principalType: NamedUser</code>
-                        — no external credential
-                      </td>
-                      <td>—</td>
-                      <td>
-                        The older shape; moving it to an external credential is
-                        the standing recommendation
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><strong>NET4</strong> — the ERP (outbound half)</td>
-                      <td>
-                        <code>MA_Net4</code> →
-                        <code>https://net4.example.com/api</code>
-                      </td>
-                      <td>
-                        <span class="yes">Legacy</span>
-                        <code>principalType: NamedUser</code>
-                        — no external credential
-                      </td>
-                      <td>—</td>
-                      <td>
-                        The generation behind the password-expiry outage, and
-                        the endpoint is still a <strong>placeholder</strong> —
-                        it cannot carry live traffic until repointed
+                        Which is why its reads of the retiring records look like
+                        ordinary user activity
                       </td>
                     </tr>
 
@@ -3098,8 +3020,8 @@
                     </tr>
                     <tr>
                       <td>
-                        <strong>Job board</strong> — InfoJobs (the inbound
-                        webhook)
+                        <strong>Job board</strong> — InfoJobs, the application
+                        webhook
                       </td>
                       <td>
                         A public <code>Site</code> — subdomain
@@ -3119,44 +3041,165 @@
                 </table>
               </div>
 
+              <h3>Outbound — which credential Salesforce calls with</h3>
+              <p>
+                No Salesforce user appears in this table, because a Named
+                Credential does not hold one. Two generations are in place: the
+                current shape delegates its secret to an
+                <code>ExternalCredential</code> resolved through a named
+                principal, so nothing sits in Apex; the older shape carries
+                <code>principalType: NamedUser</code> with the secret inline.
+              </p>
+              <div class="tw">
+                <table class="reg">
+                  <thead>
+                    <tr>
+                      <th>Edge</th>
+                      <th>Named Credential</th>
+                      <th>External Credential</th>
+                      <th>How the far side authenticates us</th>
+                      <th>Notes</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr class="grp">
+                      <td colspan="5">
+                        Current shape — secret held outside Apex
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Credit checks</strong> — Iberinform</td>
+                      <td><code>MA_Iberinform</code></td>
+                      <td><code>MA_Iberinform_EC</code></td>
+                      <td>
+                        <code>X-IBM-CLIENT-ID</code> and
+                        <code>X-IBM-CLIENT-SECRET</code>
+                        headers
+                      </td>
+                      <td>Called on demand from Apex; low volume</td>
+                    </tr>
+                    <tr>
+                      <td><strong>E-signature</strong> — Signaturit</td>
+                      <td><code>MA_Signaturit</code></td>
+                      <td><code>MA_Signaturit_EC</code></td>
+                      <td><code>Authorization: Bearer</code></td>
+                      <td>
+                        Its inbound half is separate: signing events arrive at
+                        <code>/SG_subscriptionsEvents</code>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Training platform</strong> — Humact / Lectio,
+                        outbound half
+                      </td>
+                      <td><code>Humact_API</code></td>
+                      <td><code>Humact_API_EC</code></td>
+                      <td><code>X-API-Key</code></td>
+                      <td>
+                        The same edge as the inbound row above — two identities,
+                        one supplier
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>CV parsing</strong> — the AI services</td>
+                      <td>
+                        <code>Anthropic_API</code>, <code>Groq_API</code>,
+                        <code>AWS_Bedrock</code>
+                      </td>
+                      <td>
+                        <code>Anthropic_API_EC</code>, <code>Groq_API_EC</code>,
+                        <code>AVTRRT__AWS_v4_Bedrock</code>
+                      </td>
+                      <td>Per-provider API keys</td>
+                      <td>
+                        Three live credentials for the in-house parser. The
+                        Bedrock pair is supplied by the retiring package, so it
+                        goes when the package does
+                      </td>
+                    </tr>
+
+                    <tr class="grp">
+                      <td colspan="5">
+                        Older shape — <code>principalType: NamedUser</code>, no
+                        external credential
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Job board</strong> — InfoJobs, outbound half
+                      </td>
+                      <td>
+                        <code>MA_InfoJobs</code> →
+                        <code>https://api.infojobs.net</code>
+                      </td>
+                      <td><span class="no">None</span></td>
+                      <td>
+                        SOAP with a WS-Security header plus a service-issued
+                        access token
+                      </td>
+                      <td>
+                        Nine documented outbound services. Moving it to an
+                        external credential is the standing recommendation
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>NET4</strong> — the ERP, outbound half</td>
+                      <td>
+                        <code>MA_Net4</code> →
+                        <code>https://net4.example.com/api</code>
+                      </td>
+                      <td><span class="no">None</span></td>
+                      <td>
+                        User, password and token passed in the request headers
+                      </td>
+                      <td>
+                        <strong>Two problems.</strong> This is the generation
+                        behind the password-expiry outage; and the endpoint is
+                        still a <strong>placeholder</strong>, so this credential
+                        cannot carry live traffic until it is repointed
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <p>
+                <strong>The edges with an identity on each side</strong> are the
+                ERP, the job board and the training platform. Each appears twice
+                above, once per direction, and the two halves re-point
+                independently — the ERP's inbound service user is healthy while
+                its outbound credential is both legacy and pointed at a
+                placeholder.
+              </p>
               <p>
                 <strong
-                  >Every app but one holds the <code>Full</code> OAuth
+                  >Every inbound app but one holds the <code>Full</code> OAuth
                   scope.</strong
                 >
-                That is far wider than any of them needs, and narrowing it is
-                the single most useful hardening job on this page. The security
-                log collector shows it can be done: it runs on
+                That is far wider than any needs, and narrowing it is the single
+                most useful hardening job on this page. The security log
+                collector shows it is possible: it runs on
                 <code>Api, RefreshToken</code> alone.
               </p>
               <p>
-                <strong>The run-as identity is not in the metadata.</strong>
+                <strong>The run-as user is not in the metadata.</strong>
                 <code>clientCredentialsUser</code> is absent from every policy
                 file, so it is assigned by hand in Setup after a deploy. A fresh
-                org therefore gets the app but not its identity — which makes
-                the assignment part of the runbook, not part of the deployment.
+                org gets the app but not its identity — which puts the
+                assignment in the runbook, not the deployment.
               </p>
               <p>
-                <strong>The four inbound Apex endpoints</strong>, each an
-                <code>@RestResource</code>: <code>/infojobsHook</code>,
-                <code>/Api/ERP_SF_Integration</code>,
-                <code>/Api/Humact/Certificado/*</code> and
-                <code>/SG_subscriptionsEvents</code>.
-              </p>
-              <p>
-                <strong
-                  >Two rules this sets for anyone re-checking the
-                  surface.</strong
-                >
+                <strong>Two rules for anyone re-checking this surface.</strong>
                 Attribute traffic by connection (<code>CONNECTED_APP_ID</code>),
                 never by user, or the ERP, the finance write-back and the
-                reporting extract merge into one meaningless row. And remember
-                the call log records the <em>entity</em> a call touched, not the
-                fields inside it: an edge writing <code>Contact</code> may still
-                carry a package field on that record, which is exactly how the
-                ERP's own <code>AVTRRT__Gender__c</code> mapping stays invisible
-                to a traffic census. Traffic proves which objects are touched;
-                only metadata proves which fields are.
+                reporting extract merge into one meaningless row. And the call
+                log records the <em>entity</em> a call touched, not the fields
+                inside it: an edge writing <code>Contact</code> may still carry
+                a package field on that record, which is exactly how the ERP's
+                own <code>AVTRRT__Gender__c</code> mapping stays invisible to a
+                traffic census. Traffic proves which objects are touched; only
+                metadata proves which fields are.
               </p>
             </section>
 
