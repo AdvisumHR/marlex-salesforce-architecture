@@ -8495,6 +8495,17 @@
                     heavily and appears to write them.
                   </p>
                   <p>
+                    <strong>It has left no documentary trace either.</strong>
+                    Checked 2026-08-18: the delivery backlog holds no ticket for
+                    it under any spelling. That is consistent rather than
+                    surprising — an integration that rides a recruiter's own
+                    session needs no Salesforce development, so it never
+                    generated work for anyone to raise a ticket about. But it
+                    means there is no written description of what it does
+                    anywhere: not in the logs, not in the code, not in the
+                    backlog. Its process has to come from its owner.
+                  </p>
+                  <p>
                     <strong>Why it cannot be settled from the logs.</strong> It
                     signs in as named people, so its own writes cannot be
                     separated from those of the people it signs in as. Its owner
@@ -12465,6 +12476,766 @@
                     — and somebody outside Marlex has to do it, on the
                     programme's schedule.
                   </p>
+                  <p>
+                    <strong>It is four writes, not one.</strong> The delivery
+                    ticket specifies the sequence: create the candidate if they
+                    do not already exist, create the application, link it to the
+                    vacancy the campaign points at, and upload the CV. So the
+                    re-point is a chain rather than a single query — and each
+                    link in it sits in code Marlex does not own.
+                  </p>
+                  <figure class="diagram">
+                    <a
+                      class="dg-zoom"
+                      href="#zoom-ld-proc"
+                      aria-label="Enlarge this diagram"
+                    >
+                      <svg
+                        viewBox="0 0 1150 410"
+                        role="img"
+                        aria-labelledby="ldproc-t ldproc-d"
+                      >
+                        <title id="ldproc-t">
+                          Where the campaign landing page writes into the
+                          recruitment model
+                        </title>
+                        <desc id="ldproc-d">
+                          A four-step process. Marketing creates the generic
+                          vacancies the campaign points at and hands over their
+                          record ids; a candidate fills the form on a Marlex
+                          landing page built outside Salesforce, attaching a CV
+                          and carrying the advert's tracking tags; the landing
+                          page's own code writes four linked records straight
+                          into the org over the standard API — the candidate if
+                          new, the application, the link between them and the CV
+                          file; a recruiter then works the applicant like any
+                          other. The writing step is copper because those
+                          records belong to the model being retired.
+                        </desc>
+                        <rect
+                          class="dg-box-accent"
+                          x="20"
+                          y="104"
+                          width="250"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="30"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Set the campaign up
+                        </text>
+                        <text class="dg-t-sm" x="30" y="144.0" font-size="9.6">
+                          WHO · Marketing
+                        </text>
+                        <text class="dg-t-sm" x="30" y="157.5" font-size="9.6">
+                          SYSTEM · Salesforce — generic vacancies
+                        </text>
+                        <text class="dg-t-sm" x="30" y="171.0" font-size="9.6">
+                          ACTION · create the roles the campaign
+                        </text>
+                        <text class="dg-t-sm" x="30" y="184.5" font-size="9.6">
+                          points at, and hand over their ids
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="364.03499999999997"
+                          y="104"
+                          width="268"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="374.03499999999997"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Apply from the campaign
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.03499999999997"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Candidate
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.03499999999997"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Marlex landing page — outside Salesforce
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.03499999999997"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · fill the form and attach a CV,
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.03499999999997"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          carrying the advert's tracking tags
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="721.5519999999999"
+                          y="104"
+                          width="292"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t-copper"
+                          x="731.5519999999999"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Write the four records
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="866.3"
+                          y="124.5"
+                          font-size="8.6"
+                          letter-spacing="0.05em"
+                        >
+                          ▲ changed
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="731.5519999999999"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="731.5519999999999"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · The landing page's own code — direct to the
+                          API
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="731.5519999999999"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · create the candidate if new, the
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="731.5519999999999"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          application, the link and the CV
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="697.5519999999999"
+                          y="268"
+                          width="296"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="707.5519999999999"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Work the applicant
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="707.5519999999999"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Recruiter
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="707.5519999999999"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Salesforce — application list
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="707.5519999999999"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · screen and advance them like
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="707.5519999999999"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          any other application
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M270 147.8 L361.0 147.8"
+                          marker-end="url(#ldproc-ah)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="315.5"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          ids handed over
+                        </text>
+                        <path
+                          class="dg-arrow-copper"
+                          d="M632.035 147.8 L718.6 147.8"
+                          marker-end="url(#ldproc-ahc)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="675.3"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          form submitted
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M867.6 191.5 L867.6 265.0"
+                          marker-end="url(#ldproc-ah)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="873.6"
+                          y="228.2"
+                          text-anchor="start"
+                          font-size="9.0"
+                        >
+                          application on file
+                        </text>
+                        <text
+                          class="dg-t-copper"
+                          x="368.03499999999997"
+                          y="92"
+                          text-anchor="start"
+                          font-size="9.5"
+                          font-weight="700"
+                        >
+                          ▲ the integration happens here
+                        </text>
+                        <text
+                          class="dg-t"
+                          x="20"
+                          y="40"
+                          text-anchor="start"
+                          font-size="13"
+                          font-weight="700"
+                        >
+                          A campaign landing page, built and run outside
+                          Salesforce
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="20"
+                          y="58"
+                          text-anchor="start"
+                          font-size="10"
+                        >
+                          Four linked records, written by a third party's code
+                          straight into the retiring model.
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="20.0"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="33.0"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          surviving model
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="110.7"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="123.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          touches the retiring model
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="240.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          ▲ changed — re-pointed at cutover
+                        </text>
+                        <defs>
+                          <marker
+                            id="ldproc-ah"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-accent"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="ldproc-ahc"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-copper"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="ldproc-ahm"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path class="dg-fill-line" d="M0 0 L9 4.5 L0 9 Z" />
+                          </marker>
+                        </defs>
+                      </svg>
+                    </a>
+                    <figcaption>
+                      This is the one edge whose code sits with a third party
+                      and names the retiring objects. The delivery ticket
+                      specifies four writes in sequence — candidate,
+                      application, the link to the vacancy, and the CV upload —
+                      so a re-point is not one query but a chain, and it is a
+                      chain Marlex does not own. The tracking tags the campaign
+                      depends on are a second problem: the fields that would
+                      hold them do not exist on the application object in
+                      production, so attribution has nowhere to land until they
+                      are created. It reached product-owner testing without an
+                      architecture review, which is how an edge arrives already
+                      built.
+                    </figcaption>
+                  </figure>
+                  <div class="dg-lightbox" id="zoom-ld-proc">
+                    <a
+                      class="dg-backdrop"
+                      href="#dg-closed"
+                      aria-label="Close"
+                    ></a>
+                    <a class="dg-close" href="#dg-closed">Close</a>
+                    <div class="dg-lightbox-inner">
+                      <svg
+                        viewBox="0 0 1150 410"
+                        role="img"
+                        aria-labelledby="ldproc-t-z ldproc-d-z"
+                      >
+                        <title id="ldproc-t-z">
+                          Where the campaign landing page writes into the
+                          recruitment model
+                        </title>
+                        <desc id="ldproc-d-z">
+                          A four-step process. Marketing creates the generic
+                          vacancies the campaign points at and hands over their
+                          record ids; a candidate fills the form on a Marlex
+                          landing page built outside Salesforce, attaching a CV
+                          and carrying the advert's tracking tags; the landing
+                          page's own code writes four linked records straight
+                          into the org over the standard API — the candidate if
+                          new, the application, the link between them and the CV
+                          file; a recruiter then works the applicant like any
+                          other. The writing step is copper because those
+                          records belong to the model being retired.
+                        </desc>
+                        <rect
+                          class="dg-box-accent"
+                          x="20"
+                          y="104"
+                          width="250"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="30"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Set the campaign up
+                        </text>
+                        <text class="dg-t-sm" x="30" y="144.0" font-size="9.6">
+                          WHO · Marketing
+                        </text>
+                        <text class="dg-t-sm" x="30" y="157.5" font-size="9.6">
+                          SYSTEM · Salesforce — generic vacancies
+                        </text>
+                        <text class="dg-t-sm" x="30" y="171.0" font-size="9.6">
+                          ACTION · create the roles the campaign
+                        </text>
+                        <text class="dg-t-sm" x="30" y="184.5" font-size="9.6">
+                          points at, and hand over their ids
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="364.03499999999997"
+                          y="104"
+                          width="268"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="374.03499999999997"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Apply from the campaign
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.03499999999997"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Candidate
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.03499999999997"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Marlex landing page — outside Salesforce
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.03499999999997"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · fill the form and attach a CV,
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="374.03499999999997"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          carrying the advert's tracking tags
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="721.5519999999999"
+                          y="104"
+                          width="292"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t-copper"
+                          x="731.5519999999999"
+                          y="124.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Write the four records
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="866.3"
+                          y="124.5"
+                          font-size="8.6"
+                          letter-spacing="0.05em"
+                        >
+                          ▲ changed
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="731.5519999999999"
+                          y="144.0"
+                          font-size="9.6"
+                        >
+                          WHO · Automation
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="731.5519999999999"
+                          y="157.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · The landing page's own code — direct to the
+                          API
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="731.5519999999999"
+                          y="171.0"
+                          font-size="9.6"
+                        >
+                          ACTION · create the candidate if new, the
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="731.5519999999999"
+                          y="184.5"
+                          font-size="9.6"
+                        >
+                          application, the link and the CV
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="697.5519999999999"
+                          y="268"
+                          width="296"
+                          height="87.5"
+                          rx="6"
+                        />
+                        <text
+                          class="dg-t"
+                          x="707.5519999999999"
+                          y="288.5"
+                          font-size="12.5"
+                          font-weight="700"
+                        >
+                          Work the applicant
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="707.5519999999999"
+                          y="308.0"
+                          font-size="9.6"
+                        >
+                          WHO · Recruiter
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="707.5519999999999"
+                          y="321.5"
+                          font-size="9.6"
+                        >
+                          SYSTEM · Salesforce — application list
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="707.5519999999999"
+                          y="335.0"
+                          font-size="9.6"
+                        >
+                          ACTION · screen and advance them like
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="707.5519999999999"
+                          y="348.5"
+                          font-size="9.6"
+                        >
+                          any other application
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M270 147.8 L361.0 147.8"
+                          marker-end="url(#ldproc-ah-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="315.5"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          ids handed over
+                        </text>
+                        <path
+                          class="dg-arrow-copper"
+                          d="M632.035 147.8 L718.6 147.8"
+                          marker-end="url(#ldproc-ahc-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="675.3"
+                          y="140.3"
+                          text-anchor="middle"
+                          font-size="9.0"
+                        >
+                          form submitted
+                        </text>
+                        <path
+                          class="dg-arrow"
+                          d="M867.6 191.5 L867.6 265.0"
+                          marker-end="url(#ldproc-ah-z)"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="873.6"
+                          y="228.2"
+                          text-anchor="start"
+                          font-size="9.0"
+                        >
+                          application on file
+                        </text>
+                        <text
+                          class="dg-t-copper"
+                          x="368.03499999999997"
+                          y="92"
+                          text-anchor="start"
+                          font-size="9.5"
+                          font-weight="700"
+                        >
+                          ▲ the integration happens here
+                        </text>
+                        <text
+                          class="dg-t"
+                          x="20"
+                          y="40"
+                          text-anchor="start"
+                          font-size="13"
+                          font-weight="700"
+                        >
+                          A campaign landing page, built and run outside
+                          Salesforce
+                        </text>
+                        <text
+                          class="dg-t-sm"
+                          x="20"
+                          y="58"
+                          text-anchor="start"
+                          font-size="10"
+                        >
+                          Four linked records, written by a third party's code
+                          straight into the retiring model.
+                        </text>
+                        <rect
+                          class="dg-box-accent"
+                          x="20.0"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="33.0"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          surviving model
+                        </text>
+                        <rect
+                          class="dg-box-copper"
+                          x="110.7"
+                          y="388.0"
+                          width="9"
+                          height="9"
+                          rx="2"
+                        />
+                        <text
+                          class="dg-t-sm"
+                          x="123.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          touches the retiring model
+                        </text>
+                        <text
+                          class="dg-tag-changed"
+                          x="240.7"
+                          y="396.0"
+                          font-size="8.6"
+                        >
+                          ▲ changed — re-pointed at cutover
+                        </text>
+                        <defs>
+                          <marker
+                            id="ldproc-ah-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-accent"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="ldproc-ahc-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path
+                              class="dg-fill-copper"
+                              d="M0 0 L9 4.5 L0 9 Z"
+                            />
+                          </marker>
+                          <marker
+                            id="ldproc-ahm-z"
+                            markerWidth="9"
+                            markerHeight="9"
+                            refX="6.5"
+                            refY="4.5"
+                            orient="auto"
+                          >
+                            <path class="dg-fill-line" d="M0 0 L9 4.5 L0 9 Z" />
+                          </marker>
+                        </defs>
+                      </svg>
+                    </div>
+                  </div>
                   <p>
                     <strong>A blocker before the next campaign runs.</strong>
                     The page records which campaign a candidate came from, but
