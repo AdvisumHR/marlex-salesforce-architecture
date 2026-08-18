@@ -1726,6 +1726,16 @@
                     earlier waves.
                   </li>
                   <li>
+                    <strong>The switch</strong> — the setting that decides which
+                    data model a connection reads and writes: the retiring
+                    package objects, or the new native ones. Both exist side by
+                    side during the rebuild, so <em>every</em> coupled edge
+                    needs one, so that its target can be changed at the moment
+                    its records move without redeploying anything. What varies
+                    is where the setting lives — inside a middleware interface,
+                    or in Marlex's own Salesforce code.
+                  </li>
+                  <li>
                     <strong>A seam</strong> — a deliberate joint in the design:
                     the point where what an integration <em>does</em> is
                     separated from <em>who it talks to</em>, so the transport
@@ -2005,26 +2015,60 @@
                     </tr>
                     <tr class="grp">
                       <td colspan="5">
-                        Retires — not re-pointed, not preserved
+                        The old one goes; a replacement has to be built — new
+                        integration work, not a retirement
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Self-service portals</strong> — candidate,
+                        recruiting, staffing
+                      </td>
+                      <td>
+                        Built <strong>on</strong> it — the pages cannot survive
+                      </td>
+                      <td>
+                        <span class="opn">Open</span> — the replacement is a new
+                        build
+                      </td>
+                      <td>
+                        <span class="opn">Open</span> — the new portals need a
+                        Marlex-owned pipe
+                      </td>
+                      <td>
+                        The current pages are guest-user sites inside the
+                        retiring package, so they cannot be re-pointed — they
+                        go. But three portals in use do not simply stop:
+                        replacements are built outside Salesforce, and whatever
+                        is built has to write candidates and applications back
+                        in. That is a new integration to design, and it has no
+                        owner or date yet
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>LinkedIn</strong></td>
+                      <td>Reached <strong>through</strong> it</td>
+                      <td>
+                        <span class="opn">Open</span> — the reach has to be
+                        rebuilt
+                      </td>
+                      <td>
+                        <span class="opn">Open</span> — depends on how it is
+                        re-obtained
+                      </td>
+                      <td>
+                        The package supplies LinkedIn's own connector, so the
+                        reach leaves with it. Restoring it is not a re-point but
+                        a rebuild, and the first obstacle is commercial rather
+                        than technical: LinkedIn licenses this to global
+                        vendors, not to individual employers
                       </td>
                     </tr>
                     <tr class="gone">
-                      <td><strong>Self-service portals</strong></td>
-                      <td>Hosted <strong>on</strong> it</td>
                       <td>
-                        <span class="no">No</span> — retires with the package
+                        <strong>Package-bundled connectors</strong> — the other
+                        five
                       </td>
-                      <td>
-                        <span class="no">Neither</span> — rebuilt outside
-                        Salesforce
-                      </td>
-                      <td>
-                        Guest-user public sites on the retiring package; they
-                        leave when it does
-                      </td>
-                    </tr>
-                    <tr class="gone">
-                      <td><strong>Package-bundled connectors</strong></td>
                       <td>Inside the package</td>
                       <td>
                         <span class="no">No</span> — each rebuilt or dropped
@@ -2036,18 +2080,6 @@
                       <td>
                         They die at uninstall, and which ones Marlex still needs
                         is a business decision
-                      </td>
-                    </tr>
-                    <tr class="gone">
-                      <td><strong>LinkedIn</strong></td>
-                      <td>Via the package</td>
-                      <td><span class="no">No</span></td>
-                      <td>
-                        <span class="no">Neither</span> — needs an entitlement
-                      </td>
-                      <td>
-                        The reach leaves with the package, and certified-partner
-                        status is the real work, not the transport
                       </td>
                     </tr>
                     <tr class="grp">
@@ -12465,6 +12497,22 @@
                     Spain alone or the group.
                   </p>
                   <p>
+                    <strong>And the replacement is not a small job.</strong> It
+                    was described in delivery discussion as work with a creative
+                    and design component, not something done in a couple of
+                    afternoons — three portals that candidates, recruiters and
+                    staffing clients use today. So this is a build to plan and
+                    resource, and the integration back into Salesforce is a
+                    second piece of work behind it.
+                  </p>
+                  <p>
+                    Which is why these rows read <strong>open</strong> rather
+                    than retired. The pages that exist go; the capability does
+                    not. Counting them as retirements would hide two new
+                    integrations from the plan — the portal pipe and whatever
+                    replaces LinkedIn's reach.
+                  </p>
+                  <p>
                     <strong>One piece arrived early.</strong> A marketing
                     campaign landing page, built on WordPress outside
                     Salesforce, already writes candidates and applications
@@ -13409,20 +13457,41 @@
                     middleware and no ERP-side change.
                   </p>
                   <p>
-                    <strong>LinkedIn.</strong> The package bundles
+                    <strong
+                      >LinkedIn is a rebuild, and the obstacle is
+                      commercial.</strong
+                    >
+                    The package bundles
                     <strong>Recruiter System Connect</strong>, LinkedIn's own
-                    integration feature, and it leaves with the package.
-                    Restoring parity needs LinkedIn certified-partner status —
-                    an entitlement the middleware can carry the transport for
-                    but cannot grant. The real work is commercial, not
-                    technical.
+                    integration feature, and it leaves with the package. Nothing
+                    here can be re-pointed; the reach has to be obtained again
+                    from scratch.
+                  </p>
+                  <p>
+                    The blocker is not the transport. LinkedIn licenses this
+                    integration to
+                    <em>global vendors</em> — the recruitment platforms and the
+                    large HR suites — and, when asked directly, said it does not
+                    offer a direct integration to an individual employer. So the
+                    question to settle first is whether Marlex can hold that
+                    entitlement at all, and if not, what covers the need
+                    instead. The middleware can carry whatever is agreed; it
+                    cannot grant the right to connect.
+                  </p>
+                  <p>
+                    Until that is answered, this edge is carried as
+                    <strong>open</strong> rather than retired. A capability
+                    three recruiting teams use today does not disappear quietly
+                    because the package that supplied it does.
                   </p>
                   <p>
                     <strong>Package-bundled connectors.</strong> Seven
                     capabilities ship inside the retiring package and are
                     deleted with it: CV parsing, job boards, e-signature,
-                    Prophecy, geocoding, Bitly and CallEmAll. CV parsing and
-                    InfoJobs already have live native replacements.
+                    Prophecy, geocoding, Bitly and CallEmAll. CV parsing and the
+                    job board already have live native replacements, and
+                    LinkedIn and geocoding have rows of their own above because
+                    each carries Marlex-side work beyond the vendor capability.
                   </p>
                   <p>
                     <strong
@@ -14049,6 +14118,26 @@
                       the fallback is stood down.
                     </p>
                     <p>
+                      <strong>What the switch is, first.</strong> It is the
+                      setting that decides which data model a connection reads
+                      and writes — the old package objects, or the new native
+                      ones. Both models exist side by side during the rebuild,
+                      so every coupled edge needs one: something that can be
+                      flipped at the moment its records move, without
+                      redeploying the integration.
+                    </p>
+                    <p>
+                      <strong
+                        >So every coupled edge has a switch, wherever it
+                        lives.</strong
+                      >
+                      That is the part worth being plain about, because "switch
+                      holders" reads as if only two edges have one. Twelve edges
+                      are coupled and twelve need a way to change target. What
+                      differs is <em>where</em> that setting sits, and only
+                      that.
+                    </p>
+                    <p>
                       <strong>A switch has three possible homes</strong>, chosen
                       per edge. In <em>the middleware</em> — for the ERP, the
                       job board and Orbio, where the target must change at
@@ -14061,6 +14150,21 @@
                     <p>
                       <strong>The rule:</strong> put the switch in the
                       middleware when the switch itself is the risk.
+                    </p>
+                    <p>
+                      <strong
+                        >Which is why only two interfaces are named as needed
+                        early.</strong
+                      >
+                      The ERP and the job board are the two whose switch we want
+                      held in the middleware — the ERP because a second country
+                      reuses the same interface, the job board because it is the
+                      heaviest writer and the switch has to land in a freeze
+                      window. For every other coupled edge the switch lives in
+                      Marlex's own Salesforce code, which works today and needs
+                      no middleware at all. Those edges move onto the middleware
+                      when there is capacity, and that move is a change of
+                      route, not of target.
                     </p>
                     <figure class="diagram">
                       <svg
