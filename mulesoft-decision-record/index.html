@@ -1783,7 +1783,7 @@
                 <strong>Twelve</strong> integrations touch the retiring data
                 model and must be re-pointed, all twelve confirmed against the
                 production metadata. Two of them are the first two middleware
-                interfaces built. Two will never route through a middleware at
+                interfaces built. Three will never route through a middleware at
                 all, and still need re-pointing. Three retire outright. The
                 remaining seven cross untouched.
               </p>
@@ -2229,7 +2229,7 @@
                       reaches the model that survives.
                     </text>
 
-                    
+                    <!-- the org -->
                     <rect
                       class="dg-box-mut"
                       x="330"
@@ -2258,7 +2258,7 @@
                       two data models coexist during the rebuild
                     </text>
 
-                    
+                    <!-- retiring model -->
                     <rect
                       class="dg-box-copper"
                       x="350"
@@ -2292,7 +2292,7 @@
                       an edge can read a surviving object and still be coupled
                     </text>
 
-                    
+                    <!-- portals sit inside it -->
                     <rect
                       class="dg-box-copper"
                       x="350"
@@ -2316,7 +2316,7 @@
                       re-pointed
                     </text>
 
-                    
+                    <!-- surviving model -->
                     <rect
                       class="dg-box-accent"
                       x="350"
@@ -2353,7 +2353,7 @@
                       crosses the cutover untouched
                     </text>
 
-                    
+                    <!-- LEFT: coupled -->
                     <text
                       class="dg-t-copper"
                       x="20"
@@ -2417,7 +2417,7 @@
                       marker-end="url(#ls-ahc)"
                     />
 
-                    
+                    <!-- RIGHT: untouched -->
                     <text
                       class="dg-t-accent"
                       x="790"
@@ -2466,7 +2466,7 @@
                       marker-end="url(#ls-ah)"
                     />
 
-                    
+                    <!-- note -->
                     <rect
                       class="dg-box-mut"
                       x="790"
@@ -2491,7 +2491,7 @@
                       same as reading nothing that changes.
                     </text>
 
-                    
+                    <!-- legend -->
                     <rect
                       class="dg-box-copper"
                       x="20"
@@ -2603,7 +2603,7 @@
                       reaches the model that survives.
                     </text>
 
-                    
+                    <!-- the org -->
                     <rect
                       class="dg-box-mut"
                       x="330"
@@ -2632,7 +2632,7 @@
                       two data models coexist during the rebuild
                     </text>
 
-                    
+                    <!-- retiring model -->
                     <rect
                       class="dg-box-copper"
                       x="350"
@@ -2666,7 +2666,7 @@
                       an edge can read a surviving object and still be coupled
                     </text>
 
-                    
+                    <!-- portals sit inside it -->
                     <rect
                       class="dg-box-copper"
                       x="350"
@@ -2690,7 +2690,7 @@
                       re-pointed
                     </text>
 
-                    
+                    <!-- surviving model -->
                     <rect
                       class="dg-box-accent"
                       x="350"
@@ -2727,7 +2727,7 @@
                       crosses the cutover untouched
                     </text>
 
-                    
+                    <!-- LEFT: coupled -->
                     <text
                       class="dg-t-copper"
                       x="20"
@@ -2791,7 +2791,7 @@
                       marker-end="url(#ls-ahc-z)"
                     />
 
-                    
+                    <!-- RIGHT: untouched -->
                     <text
                       class="dg-t-accent"
                       x="790"
@@ -2840,7 +2840,7 @@
                       marker-end="url(#ls-ah-z)"
                     />
 
-                    
+                    <!-- note -->
                     <rect
                       class="dg-box-mut"
                       x="790"
@@ -2865,7 +2865,7 @@
                       same as reading nothing that changes.
                     </text>
 
-                    
+                    <!-- legend -->
                     <rect
                       class="dg-box-copper"
                       x="20"
@@ -14308,18 +14308,22 @@
                     </p>
                     <p>
                       <strong
-                        >Which is why only two interfaces are named as needed
-                        early.</strong
+                        >Which is why only two interfaces are named as built
+                        first.</strong
                       >
-                      The ERP and the job board are the two whose switch we want
-                      held in the middleware — the ERP because a second country
-                      reuses the same interface, the job board because it is the
-                      heaviest writer and the switch has to land in a freeze
-                      window. For every other coupled edge the switch lives in
-                      Marlex's own Salesforce code, which works today and needs
-                      no middleware at all. Those edges move onto the middleware
-                      when there is capacity, and that move is a change of
-                      route, not of target.
+                      Three edges want their switch held in the middleware, but
+                      only two of them force an interface early: the ERP,
+                      because a second country reuses the same interface, and
+                      the job board, because it is the heaviest writer and its
+                      switch has to land in a freeze window. The third — the
+                      pre-screening service — also wants a middleware-held
+                      switch, but it does not force an early build, because that
+                      service has not shipped yet: its interface only has to
+                      exist before it does. For every other coupled edge the
+                      switch lives in Marlex's own Salesforce code, which works
+                      today and needs no middleware at all. Those edges move
+                      onto the middleware when there is capacity, and that move
+                      is a change of route, not of target.
                     </p>
                     <figure class="diagram">
                       <svg
@@ -14942,7 +14946,7 @@
               <h2>Seven phases</h2>
               <figure class="diagram">
                 <svg
-                  viewBox="0 0 1100 250"
+                  viewBox="0 0 1100 300"
                   role="img"
                   aria-labelledby="seq-t seq-d"
                 >
@@ -14951,21 +14955,23 @@
                     data move
                   </title>
                   <desc id="seq-d">
-                    A left-to-right sequence of seven phases. Phase 0 stands up
-                    the platform. Phase 1 confirms designs before building
-                    anything new. Phase 2 covers four early re-points pulled
-                    forward by the rebuild's own waves, made in Marlex's own
-                    configuration and code. Phase 3 builds the ERP interface,
-                    the first thing MuleSoft builds. Phase 4 builds the
-                    job-board interface, second because it carries the heaviest
-                    traffic; it is marked because the moment its inbound feed
-                    changes target is tied to the data move itself, though that
-                    switch can equally be thrown in Salesforce if the interface
-                    is not ready. Phase 5 points the pre-screening service at
-                    the new model before it ships. Phase 6 is everything else,
-                    on its own schedule. Phases 3 and 4 are copper because they
-                    are the two interfaces built first, and because the job
-                    board's target switch lands with the data move.
+                    A left-to-right sequence of seven phases, with the cutover
+                    weekend marked as a milestone on the spine between phase 4
+                    and phase 5. Phase 0 stands up the platform. Phase 1
+                    confirms designs before building anything new. Phase 2
+                    covers four re-points pulled forward because the records
+                    they read are rebuilt in the earlier waves, before the core:
+                    the training feed and the reporting extract both read
+                    placements, the sourcing tool reads the talent pool, and the
+                    document generator reads employment and education history.
+                    All four are fixed in Marlex's own configuration and code.
+                    Phase 3 builds the ERP interface, the first thing MuleSoft
+                    builds. Phase 4 builds the job-board interface, second
+                    because it carries the heaviest traffic. The cutover
+                    milestone is where the data moves and every coupled edge
+                    must already aim at the new records. Phase 5 points the
+                    pre-screening service at the new model before it ships.
+                    Phase 6 is everything else, on its own schedule.
                   </desc>
 
                   <text
@@ -14978,18 +14984,18 @@
                     The order is the commitment; there are no dates
                   </text>
                   <text class="dg-t-sm" x="20" y="44" font-size="10">
-                    Two clocks: re-points are forced by the rebuild's waves ·
-                    interfaces are what MuleSoft builds
+                    Two clocks: re-points are forced by which records rebuild
+                    first · interfaces are what MuleSoft builds
                   </text>
 
-                  
+                  <!-- the spine -->
                   <path
                     class="dg-arrow"
                     d="M30 108 L1035 108"
                     marker-end="url(#seq-ah)"
                   />
 
-                  
+                  <!-- phase 0 -->
                   <circle class="dg-fill-accent" cx="60" cy="108" r="15" />
                   <text
                     x="60"
@@ -15021,7 +15027,7 @@
                     foundation
                   </text>
 
-                  
+                  <!-- phase 1 -->
                   <circle class="dg-fill-accent" cx="205" cy="108" r="15" />
                   <text
                     x="205"
@@ -15053,7 +15059,7 @@
                     only new design waits
                   </text>
 
-                  
+                  <!-- phase 2 -->
                   <circle class="dg-fill-copper" cx="350" cy="108" r="15" />
                   <text
                     x="350"
@@ -15082,19 +15088,37 @@
                     text-anchor="middle"
                     font-size="9"
                   >
-                    training · sourcing · reporting · documents
+                    four edges, pulled by the records they read
                   </text>
                   <text
                     class="dg-t-sm"
                     x="350"
-                    y="173"
+                    y="176"
                     text-anchor="middle"
-                    font-size="9"
+                    font-size="8.6"
                   >
-                    pulled by the waves
+                    training &#183; reporting &#8212; read placements
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="350"
+                    y="188"
+                    text-anchor="middle"
+                    font-size="8.6"
+                  >
+                    sourcing &#8212; reads the talent pool
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="350"
+                    y="200"
+                    text-anchor="middle"
+                    font-size="8.6"
+                  >
+                    documents &#8212; read work &amp; study history
                   </text>
 
-                  
+                  <!-- phase 3 -->
                   <circle class="dg-fill-copper" cx="510" cy="108" r="17" />
                   <text
                     x="510"
@@ -15126,18 +15150,10 @@
                     first MuleSoft build
                   </text>
 
-                  
-                  <rect
-                    class="dg-box-copper"
-                    x="612"
-                    y="72"
-                    width="176"
-                    height="72"
-                    rx="8"
-                  />
-                  <circle class="dg-fill-copper" cx="700" cy="108" r="17" />
+                  <!-- phase 4 : the switch that moves with the data -->
+                  <circle class="dg-fill-copper" cx="672" cy="108" r="17" />
                   <text
-                    x="700"
+                    x="672"
                     y="114"
                     text-anchor="middle"
                     font-size="12.5"
@@ -15148,18 +15164,8 @@
                   </text>
                   <text
                     class="dg-t-copper"
-                    x="700"
-                    y="62"
-                    text-anchor="middle"
-                    font-size="10"
-                    font-weight="700"
-                  >
-                    &#9650; ITS SWITCH MOVES WITH THE DATA
-                  </text>
-                  <text
-                    class="dg-t-copper"
-                    x="700"
-                    y="163"
+                    x="672"
+                    y="148"
                     text-anchor="middle"
                     font-size="10.5"
                     font-weight="700"
@@ -15168,27 +15174,69 @@
                   </text>
                   <text
                     class="dg-t-sm"
-                    x="700"
-                    y="177"
+                    x="672"
+                    y="162"
                     text-anchor="middle"
                     font-size="9"
                   >
-                    built when capacity allows; only the
+                    heaviest traffic; built second
+                  </text>
+
+                  <!-- the cutover: a milestone on the spine, not a phase -->
+                  <line
+                    class="dg-arrow"
+                    x1="790"
+                    y1="52"
+                    x2="790"
+                    y2="164"
+                    stroke-dasharray="4 3"
+                  />
+                  <polygon
+                    class="dg-fill-copper"
+                    points="790,92 802,108 790,124 778,108"
+                  />
+                  <text
+                    class="dg-t-copper"
+                    x="790"
+                    y="44"
+                    text-anchor="middle"
+                    font-size="10"
+                    font-weight="700"
+                  >
+                    CUTOVER
                   </text>
                   <text
                     class="dg-t-sm"
-                    x="700"
-                    y="189"
+                    x="790"
+                    y="178"
                     text-anchor="middle"
-                    font-size="9"
+                    font-size="8.6"
                   >
-                    switch is tied to the data move
+                    the data moves &#8212; every
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="790"
+                    y="190"
+                    text-anchor="middle"
+                    font-size="8.6"
+                  >
+                    coupled edge already aims
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="790"
+                    y="202"
+                    text-anchor="middle"
+                    font-size="8.6"
+                  >
+                    at the new records
                   </text>
 
-                  
-                  <circle class="dg-fill-accent" cx="860" cy="108" r="15" />
+                  <!-- phase 5 -->
+                  <circle class="dg-fill-accent" cx="890" cy="108" r="15" />
                   <text
-                    x="860"
+                    x="890"
                     y="113"
                     text-anchor="middle"
                     font-size="12"
@@ -15199,7 +15247,7 @@
                   </text>
                   <text
                     class="dg-t"
-                    x="860"
+                    x="890"
                     y="146"
                     text-anchor="middle"
                     font-size="10.5"
@@ -15209,7 +15257,7 @@
                   </text>
                   <text
                     class="dg-t-sm"
-                    x="860"
+                    x="890"
                     y="160"
                     text-anchor="middle"
                     font-size="9"
@@ -15217,10 +15265,10 @@
                     before it ships
                   </text>
 
-                  
-                  <circle class="dg-fill-accent" cx="990" cy="108" r="15" />
+                  <!-- phase 6 -->
+                  <circle class="dg-fill-accent" cx="1005" cy="108" r="15" />
                   <text
-                    x="990"
+                    x="1005"
                     y="113"
                     text-anchor="middle"
                     font-size="12"
@@ -15231,7 +15279,7 @@
                   </text>
                   <text
                     class="dg-t"
-                    x="990"
+                    x="1005"
                     y="146"
                     text-anchor="middle"
                     font-size="10.5"
@@ -15241,7 +15289,7 @@
                   </text>
                   <text
                     class="dg-t-sm"
-                    x="990"
+                    x="1005"
                     y="160"
                     text-anchor="middle"
                     font-size="9"
@@ -15249,27 +15297,27 @@
                     own schedule
                   </text>
 
-                  
+                  <!-- legend -->
                   <rect
                     class="dg-box-accent"
                     x="20"
-                    y="218"
+                    y="272"
                     width="9"
                     height="9"
                     rx="2"
                   />
-                  <text class="dg-t-sm" x="34" y="226" font-size="8.6">
+                  <text class="dg-t-sm" x="34" y="280" font-size="8.6">
                     nothing waits on it
                   </text>
                   <rect
                     class="dg-box-copper"
                     x="180"
-                    y="218"
+                    y="272"
                     width="9"
                     height="9"
                     rx="2"
                   />
-                  <text class="dg-t-sm" x="194" y="226" font-size="8.6">
+                  <text class="dg-t-sm" x="194" y="280" font-size="8.6">
                     touches the retiring model — built first, for reuse and
                     volume
                   </text>
@@ -15288,17 +15336,33 @@
                   </defs>
                 </svg>
                 <figcaption>
-                  The sequence at a glance. Phases 3 and 4 are the first two
-                  interfaces built — the ERP because a second country reuses it,
-                  the job board because it carries the heaviest traffic. Neither
-                  is a precondition of the cutover date. What <em>is</em> tied
-                  to the weekend is narrower: the moment the job board's inbound
-                  feed changes target, because it writes the very records the
-                  data move is moving. If the interface is live by then, that
-                  switch is a setting inside it; if not, it is thrown in
-                  Salesforce instead. Phase 2's four re-points come earlier in
-                  time than either interface, because the rebuild's own waves
-                  pull them forward.
+                  The sequence at a glance.
+                  <strong>The cutover is a milestone, not a phase</strong> — it
+                  is a moment the whole sequence is arranged around, and the
+                  only hard rule is that every coupled edge already aims at the
+                  new records when the data moves. <br /><br />
+                  Phases 3 and 4 are the first two interfaces built — the ERP
+                  because a second country reuses it, the job board because it
+                  carries the heaviest traffic. Neither is a precondition of the
+                  cutover date. What <em>is</em>
+                  tied to the weekend is narrower: the moment the job board's
+                  inbound feed changes target, because it writes the very
+                  records the data move is moving. If the interface is live by
+                  then, that switch is a setting inside it; if not, it is thrown
+                  in Salesforce instead.
+                  <br /><br />
+                  <strong
+                    >Phase 2 comes earlier in time than either interface</strong
+                  >, and what pulls each edge forward is the record it reads:
+                  the training feed and the reporting extract both read
+                  <strong>placements</strong>, the sourcing tool reads the
+                  <strong>talent pool</strong>, and the document generator reads
+                  candidates' <strong>employment and education history</strong>.
+                  Those records are rebuilt in the earlier waves, so those four
+                  re-points fall due before the core moves — regardless of how
+                  small the change is. The reporting extract is the awkward one:
+                  its nine objects straddle both waves, so it re-points twice or
+                  once late.
                 </figcaption>
               </figure>
               <div class="tw">
