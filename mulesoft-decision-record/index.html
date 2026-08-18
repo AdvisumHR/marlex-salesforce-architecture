@@ -3129,6 +3129,28 @@
                       </td>
                     </tr>
                     <tr>
+                      <td>
+                        <strong>Data warehouse client</strong> — stood up after
+                        the census
+                      </td>
+                      <td>
+                        <code>ExternalClientApplication</code><br /><code
+                          >Datawarehouse_Salesforce_Client</code
+                        >
+                      </td>
+                      <td>
+                        A named person's own login<br /><span class="yes"
+                          >System Administrator</span
+                        >
+                      </td>
+                      <td>
+                        Created 3 August 2026, after the census closed. Two
+                        tokens are authorised and neither has been used, so it
+                        is provisioned but not yet running. It needs a service
+                        account before it does
+                      </td>
+                    </tr>
+                    <tr>
                       <td><strong>Security log collector</strong> — Wazuh</td>
                       <td>
                         <code>ExternalClientApplication</code><br /><code
@@ -3154,12 +3176,14 @@
                         >
                       </td>
                       <td>
-                        <span class="no">Sandbox only</span> — no production
-                        traffic yet
+                        <code>valenti@orbio.work</code><br /><strong
+                          >Salesforce API Only System Integrations</strong
+                        >
                       </td>
                       <td>
-                        Client-credentials enabled, so it can hold a service
-                        identity once live
+                        Named in production policy though no traffic has arrived
+                        yet — the identity is the supplier's own account, on the
+                        correct API-only profile
                       </td>
                     </tr>
                     <tr class="grp">
@@ -3562,12 +3586,64 @@
                 most useful hardening job on this page.
               </p>
               <p>
-                <strong>The run-as user is not in the metadata.</strong>
-                <code>clientCredentialsUser</code> is absent from every policy
-                file, so it is assigned by hand in Setup after a deploy. A fresh
-                org gets the app but not its identity — which puts the
-                assignment in the runbook, not the deployment.
+                <strong
+                  >The run-as user <em>is</em> in the metadata, and it is the
+                  best evidence of an inbound identity.</strong
+                >
+                Where a modern app has the client-credentials flow switched on,
+                the policy file names the exact user the call executes as. Five
+                of the seven have it set; the two that do not have the flow
+                switched off, so there is no server-to-server call to attribute.
+                This is a stronger source than traffic: it states the intended
+                identity as configuration, rather than inferring it from who
+                happened to call.
               </p>
+              <p>
+                <strong
+                  >What that evidence shows is a split in discipline.</strong
+                >
+                Two of the five run as a purpose-built API-only account. The
+                other three run as a <em>System Administrator</em> — and one of
+                those is a named person's own login, not a service account at
+                all. An integration inherits every permission of the user it
+                runs as, so a full administrator profile is the widest possible
+                grant, and a named person's login also breaks when that person
+                leaves.
+              </p>
+              <div class="tech">
+                <span class="tech-label">For the developers</span>
+                <p>
+                  Modern apps hold it in
+                  <code>clientCredentialsFlowUser</code> on
+                  <code>ExtlClntAppOauthConfigurablePolicies</code> — the policy
+                  sibling of the app, not the app or its OAuth settings. Legacy
+                  <code>ConnectedApp</code> metadata has no equivalent element:
+                  its <code>oauthConfig</code> carries the consumer key, scopes
+                  and <code>isAdminApproved</code>, so a legacy app's execution
+                  identity is whatever user the caller's token was minted for
+                  and cannot be read from metadata at all.
+                </p>
+                <p>
+                  Retrieve it with an explicit <code>--manifest</code>. The
+                  <code>-m ExtlClntAppOauthConfigurablePolicies</code> shorthand
+                  and a <code>&lt;members&gt;*&lt;/members&gt;</code> wildcard
+                  both report <em>Succeeded</em> and return a manifest with no
+                  policy bodies. It is also not a queryable object — the Tooling
+                  API rejects it as
+                  <code>ExtlClntAppOauthPlcyCnfg is not supported</code>. Use
+                  <code>sf org list metadata</code> to enumerate the names
+                  first, then name each one in the manifest.
+                </p>
+                <p>
+                  To audit usage rather than intent:
+                  <code>OauthToken</code> lists live tokens per app and user,
+                  Setup's <em>Connected Apps OAuth Usage</em> page shows which
+                  apps hold tokens, and <code>LoginHistory</code> filtered by
+                  <code>Application</code> shows the sign-ins. Those tell you
+                  who <em>did</em> authenticate; the policy file tells you who
+                  is <em>supposed</em> to.
+                </p>
+              </div>
               <p>
                 <strong>One limit worth knowing.</strong> The call log records
                 the <em>entity</em> a call touched, not the fields inside it. An
