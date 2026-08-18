@@ -1866,7 +1866,7 @@
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>Humact / Lectio</strong> — training</td>
+                      <td><strong>Humact</strong> — training</td>
                       <td><span class="yes">Yes</span> — two queries read</td>
                       <td>
                         <span class="yes">Yes</span>, early — placements wave
@@ -2996,227 +2996,241 @@
 
             <section>
               <p class="section-eyebrow">How each edge authenticates</p>
-              <h2>Two directions, two identities — and some edges have both</h2>
+              <h2>The identity behind each connection, in both directions</h2>
               <p>
-                Direction decides everything about an integration's identity,
-                and the two cases share nothing.
-              </p>
-              <p>
-                <strong>Inbound</strong> — an outside system calling Salesforce
-                — authenticates against an
-                <code>ExternalClientApplication</code> (the modern replacement
-                for <code>ConnectedApplication</code>) and then
-                <em>runs as a Salesforce user</em>. That user's profile and
-                object permissions are what the call can reach, so an inbound
-                re-point means re-checking a user.
-              </p>
-              <p>
-                <strong>Outbound</strong> — Salesforce calling out —
-                authenticates through a <code>NamedCredential</code>, which
-                holds <em>no Salesforce user at all</em>. What it holds is an
-                endpoint and a principal for the far side. An outbound re-point
-                means changing a URL and a secret.
+                Same edges as the register above, same names, one row each — so
+                a row here can be read against its verdict there. What this
+                table adds is <em>who each connection signs in as</em>, which is
+                what decides whether its activity can be attributed and its
+                access scoped.
               </p>
               <p>
                 <strong
-                  >A bidirectional edge therefore has two separate
-                  identities</strong
-                >, and they are independent: the ERP has a service user for what
-                it sends <em>in</em> and a credential for what Salesforce sends
-                <em>out</em>. Fixing one does nothing for the other. Read from
-                the org and its metadata, 17 August 2026.
+                  >The two directions use different mechanisms and are not
+                  interchangeable.</strong
+                >
+                An <strong>inbound</strong> call — an outside system calling
+                Salesforce — authenticates against a
+                <code>ConnectedApplication</code> or its modern replacement, an
+                <code>ExternalClientApplication</code>, and then runs as a
+                Salesforce user that the app itself nominates. An
+                <strong>outbound</strong> call — Salesforce calling out — goes
+                through a <code>NamedCredential</code>, optionally backed by an
+                <code>ExternalCredential</code> holding the secret, and carries
+                no Salesforce user at all.
+              </p>
+              <p>
+                So a bidirectional edge has
+                <strong>two independent identities</strong>, and fixing one does
+                nothing for the other. Read from the org and its metadata, 18
+                August 2026.
               </p>
 
-              <h3>Inbound — who the call runs as</h3>
               <div class="tw">
                 <table class="reg">
                   <thead>
                     <tr>
                       <th>Edge</th>
-                      <th>Mechanism</th>
-                      <th>Component</th>
-                      <th>Runs as (Salesforce user)</th>
-                      <th>OAuth scopes</th>
+                      <th>Inbound — app, and the user it runs as</th>
+                      <th>Outbound — credential</th>
                       <th>Notes</th>
                     </tr>
                   </thead>
                   <tbody>
                     <tr class="grp">
-                      <td colspan="6">
-                        One service user, three connections — the sharing that
-                        has to be unpicked
+                      <td colspan="4">
+                        Three apps nominate the same service user — a
+                        configuration choice, and a reversible one
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>NET4</strong> — the ERP, inbound half</td>
-                      <td>
-                        <strong>Connected App</strong><br /><span class="no"
-                          >the legacy type</span
-                        >
-                      </td>
+                      <td><strong>NET4</strong> — the ERP</td>
                       <td>
                         <code>MX_Integration_Conn_App</code><br /><span
                           class="no"
-                          >the <code>MX_</code> prefix is the integrator's, not
-                          a typo for <code>MA_</code></span
-                        >
+                          >a legacy <code>ConnectedApplication</code></span
+                        ><br />runs as
+                        <code>erp_integrations@marlex.net</code> —
+                        <strong>API-only profile</strong>
                       </td>
-                      <td rowspan="3">
-                        <code>erp_integrations@marlex.net</code><br /><strong
-                          >Salesforce API Only System Integrations</strong
-                        ><br /><span class="no"
-                          >the correct pattern — no interactive login. One user,
-                          three connections</span
-                        >
-                      </td>
-                      <td><code>Api, Full, RefreshToken</code></td>
                       <td>
-                        Client-credentials enabled. Writes candidate records;
-                        the only one of the three that does
+                        <code>MA_Net4</code><br /><span class="yes"
+                          >legacy shape</span
+                        >
+                        — <code>principalType: NamedUser</code>, no external
+                        credential, and the endpoint is still a placeholder
                       </td>
-                    </tr>
-                    <tr>
-                      <td><strong>Finance write-back</strong></td>
-                      <td>External Client App</td>
-                      <td><code>API_Marlex_Data_Source</code></td>
-                      <td><code>Api, Full, RefreshToken</code></td>
                       <td>
-                        Client-credentials enabled. Writes calculated incentive
-                        and margin figures in
+                        The healthiest inbound identity on the page paired with
+                        the weakest outbound one — two independent pieces of
+                        work
                       </td>
                     </tr>
                     <tr>
                       <td>
-                        <strong>Reporting queries</strong> — the ad-hoc client
+                        <strong>Finance write-back</strong> — incentives and
+                        margins
                       </td>
-                      <td>External Client App</td>
-                      <td>A separate reporting client</td>
-                      <td>—</td>
                       <td>
-                        Reads six of the retiring objects. Distinct from the
-                        nightly extract below, which carries the bulk of the
-                        reporting traffic
+                        <code>API_Marlex_Data_Source</code><br />runs as the
+                        <em>same</em> <code>erp_integrations@marlex.net</code>
                       </td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>
+                        Writes calculated figures in; 176 calls over fourteen
+                        days
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Axxon</strong> → NET4</td>
+                      <td><span class="no">Not built yet</span></td>
+                      <td>
+                        <span class="no">Not built yet</span> — will reuse
+                        Spain's ERP interface
+                      </td>
+                      <td>After the cutover; nothing to authenticate today</td>
                     </tr>
                     <tr class="grp">
-                      <td colspan="6">
-                        Its own user, but a person's profile rather than a
-                        service account
+                      <td colspan="4">
+                        Its own service user — attributable and scopable
                       </td>
                     </tr>
                     <tr>
+                      <td><strong>InfoJobs</strong> — the job board</td>
                       <td>
-                        <strong>The nightly reporting extract</strong> — the
-                        Python job
+                        <strong class="yes">Nothing at all</strong> — a public
+                        <code>Site</code> (subdomain <code>Infojobs</code>),
+                        executing as its
+                        <strong>guest user</strong>
                       </td>
                       <td>
-                        <span class="no">None</span> — Bulk API on a user
-                        session, no app
-                      </td>
-                      <td><span class="no">No app to name</span></td>
-                      <td>
-                        <code>it@marlex.net</code><br /><span class="yes"
-                          >System Administrator — a separate identity from the
-                          three above, corrected 18 August 2026</span
+                        <code>MA_InfoJobs</code> →
+                        <code>https://api.infojobs.net</code><br /><span
+                          class="yes"
+                          >legacy shape</span
                         >
+                        — <code>principalType: NamedUser</code>
                       </td>
-                      <td><span class="no">None</span></td>
                       <td>
-                        ~8.2M records a night across 34 objects. It is
-                        <em>not</em> part of the shared-sign-in problem above,
-                        and scoping it down is its own piece of work
-                      </td>
-                    </tr>
-
-                    <tr class="grp">
-                      <td colspan="6">
-                        Its own service user — separable and scopable
+                        The guest profile's object permissions are the whole of
+                        the inbound access control
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>Document management</strong> — Dolma</td>
-                      <td>External Client App</td>
-                      <td><code>Integration_Dolma</code></td>
+                      <td><strong>Humact</strong> — training</td>
                       <td>
-                        <code>integrations.dolma@marlex.net.prod</code
-                        ><br /><span class="yes"
-                          >System Administrator — should be API-only; a live
-                          least-privilege finding</span
-                        >
+                        <code>Humact_Inbound</code><br />runs as a dedicated
+                        service user supplied by the provider —
+                        <strong>API-only profile</strong>
                       </td>
-                      <td><code>Api, Full, RefreshToken</code></td>
-                      <td>Client-credentials enabled. Clean to attribute</td>
+                      <td>
+                        <code>Humact_API</code> → <code>Humact_API_EC</code
+                        ><br />an <code>X-API-Key</code> header from the
+                        external credential
+                      </td>
+                      <td>
+                        Its run-as user is assigned by hand in Setup after
+                        deploy, not by the deployment
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Dolma</strong> — document management</td>
+                      <td>
+                        <code>Integration_Dolma</code><br />runs as
+                        <code>integrations.dolma@marlex.net.prod</code> —
+                        <span class="yes">System Administrator</span>, where
+                        API-only would do
+                      </td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>
+                        A live least-privilege finding: the profile is far wider
+                        than its work needs
+                      </td>
                     </tr>
                     <tr>
                       <td><strong>Security log collector</strong> — Wazuh</td>
-                      <td>External Client App</td>
-                      <td><code>Wazuh_siem_logs</code></td>
-                      <td>The helpdesk user — System Administrator</td>
                       <td>
-                        <code>Api, RefreshToken</code><br /><span class="no"
-                          >the only app here <em>not</em> granted
-                          <code>Full</code></span
-                        >
+                        <code>Wazuh_siem_logs</code><br />runs as the helpdesk
+                        user —
+                        <span class="yes">System Administrator</span>
                       </td>
+                      <td><span class="no">No outbound path</span></td>
                       <td>
-                        Client-credentials enabled. Reads platform logs only
+                        The only app not granted the <code>Full</code> OAuth
+                        scope — proof that narrowing it is possible
                       </td>
                     </tr>
                     <tr>
+                      <td><strong>Signaturit</strong> — e-signature</td>
                       <td>
-                        <strong>Training platform</strong> — Humact / Lectio,
-                        inbound half
+                        An Apex REST endpoint,
+                        <code>/SG_subscriptionsEvents</code>
                       </td>
                       <td>
-                        <strong>Connected App</strong><br /><span class="no"
-                          >the legacy type</span
-                        >
+                        <code>MA_Signaturit</code> →
+                        <code>MA_Signaturit_EC</code><br />an
+                        <code>Authorization: Bearer</code> header
                       </td>
-                      <td><code>Humact_Inbound</code></td>
                       <td>
-                        A dedicated service user supplied by the provider —
-                        <strong>Salesforce API Only System Integrations</strong>
-                      </td>
-                      <td>—</td>
-                      <td>
-                        Posts certificates to
-                        <code>/Api/Humact/Certificado/*</code>. Its run-as user
-                        is assigned manually after deploy
+                        Current shape on both halves; nothing retiring on either
                       </td>
                     </tr>
-
+                    <tr>
+                      <td><strong>Iberinform</strong> — credit checks</td>
+                      <td><span class="no">No inbound path</span></td>
+                      <td>
+                        <code>MA_Iberinform</code> →
+                        <code>MA_Iberinform_EC</code><br /><code
+                          >X-IBM-CLIENT-ID</code
+                        >
+                        and <code>X-IBM-CLIENT-SECRET</code> headers
+                      </td>
+                      <td>Outbound only, on demand from Apex</td>
+                    </tr>
+                    <tr>
+                      <td><strong>CV parser</strong></td>
+                      <td><span class="no">No inbound path</span></td>
+                      <td>
+                        <code>Anthropic_API</code>, <code>Groq_API</code>,
+                        <code>AWS_Bedrock</code>, each with its own external
+                        credential
+                      </td>
+                      <td>
+                        The Bedrock pair is supplied by the retiring package, so
+                        it leaves with it
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Orbio</strong> — pre-screening</td>
+                      <td>
+                        <code>Orbio</code><br /><span class="no"
+                          >sandbox only — no production traffic</span
+                        >
+                      </td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>
+                        Client-credentials enabled, so it can hold a service
+                        identity once live
+                      </td>
+                    </tr>
                     <tr class="grp">
-                      <td colspan="6">
-                        Runs as a real person — its writes cannot be separated
+                      <td colspan="4">
+                        Runs as a real person — activity cannot be separated
                         from theirs
                       </td>
                     </tr>
                     <tr>
-                      <td><strong>Sourcing</strong> — Taleva</td>
-                      <td>External Client App</td>
-                      <td><code>Taleva</code></td>
-                      <td>A named person's own login</td>
-                      <td><code>Api, Full, RefreshToken</code></td>
+                      <td><strong>Taleva</strong> — sourcing</td>
                       <td>
-                        <strong>Client-credentials disabled</strong> — which is
-                        <em>why</em> it rides a user session. The unattributable
-                        writes have a mechanical cause, not just an operational
-                        one
+                        <code>Taleva</code><br />runs on
+                        <strong>one named person's own login</strong> — always
+                        the same individual
                       </td>
-                    </tr>
-                    <tr>
-                      <td><strong>B2B leads</strong> — Rainmakers</td>
-                      <td>External Client App</td>
-                      <td><code>Rainmakers</code></td>
-                      <td>A named person's own login</td>
+                      <td><span class="no">No outbound path</span></td>
                       <td>
-                        <code>Full, RefreshToken</code><br /><span class="no"
-                          >no <code>Api</code> scope</span
-                        >
-                      </td>
-                      <td>
-                        <strong>Client-credentials disabled.</strong> Pilot; no
-                        traffic
+                        <strong>Client-credentials is disabled</strong> on the
+                        app, so it cannot hold a service identity — that is the
+                        mechanical cause, and enabling it is the fix
                       </td>
                     </tr>
                     <tr>
@@ -3224,195 +3238,173 @@
                         <strong>Sourcing browser extension</strong> — PipeLaunch
                       </td>
                       <td>
-                        <strong>Connected App</strong><br /><span class="no"
-                          >the legacy type</span
+                        <code>Pipelaunch_Chrome_Extension</code><br />runs on
+                        <strong>each recruiter's own login</strong> — as many
+                        identities as users, three of them active in the
+                        measured window
+                      </td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>
+                        Unlike the row above, there is no single user to scope —
+                        it would mean scoping the recruiter profile
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>DocsMadeEasy</strong> — document generation
+                      </td>
+                      <td>
+                        <span class="no">Neither</span> — an installed package
+                        (<code>hic_docmerge</code>) running in-process<br />acts
+                        as whichever of 98 users pressed the button
+                      </td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>
+                        No app and no credential exist to scope; its reads look
+                        like ordinary user activity
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Power BI</strong> — the extract</td>
+                      <td>
+                        <span class="no">No app</span> — Bulk API on a user
+                        session<br />runs as <code>it@marlex.net</code>,
+                        <span class="yes">System Administrator</span>
+                      </td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>
+                        ~8.2M records a night on an administrator profile. A
+                        separate ad-hoc reporting client is a data-team member
+                        querying interactively, not an integration
+                      </td>
+                    </tr>
+                    <tr>
+                      <td><strong>Rainmakers</strong> — B2B lead capture</td>
+                      <td>
+                        <code>Rainmakers</code><br />a named person's login;
+                        client-credentials disabled
+                      </td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>
+                        Pilot, no measured traffic — the identity is configured,
+                        the edge is not running
+                      </td>
+                    </tr>
+                    <tr class="grp">
+                      <td colspan="4">Platform, or nothing to authenticate</td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Single sign-on</strong> — Azure AD / Entra
+                      </td>
+                      <td>SAML federation — identity, not a data connection</td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>10,944 logins over 30 days</td>
+                    </tr>
+                    <tr>
+                      <td><strong>Google Maps</strong> — geocoding</td>
+                      <td><span class="no">No inbound path</span></td>
+                      <td>
+                        Held inside the retiring package's own class, not a
+                        Marlex credential
+                      </td>
+                      <td>
+                        Which is why it cannot be re-pointed: the calling code
+                        goes at uninstall
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Campaign landing page</strong> — WordPress
+                      </td>
+                      <td>
+                        A connected app on the third party's side, calling the
+                        standard API<br /><span class="no"
+                          >credentials held by the page's developer</span
                         >
                       </td>
-                      <td><code>Pipelaunch_Chrome_Extension</code></td>
+                      <td><span class="no">No outbound path</span></td>
                       <td>
-                        Each recruiter running it — three people over the window
+                        The one edge whose calling code, and its credentials,
+                        sit outside Marlex entirely
                       </td>
-                      <td>—</td>
-                      <td>Reads the vacancy being retired</td>
                     </tr>
                     <tr>
-                      <td><strong>Document generator</strong></td>
-                      <td><strong>None</strong> — in-process package</td>
                       <td>
-                        <span class="no">No app, no credential</span> — it runs
-                        inside the org
+                        <strong>Self-service portals</strong> — candidate,
+                        recruiting, staffing
                       </td>
+                      <td>Guest users on the retiring package's own sites</td>
+                      <td><span class="no">No outbound path</span></td>
                       <td>
-                        Each user who presses the button — 98 people over the
-                        window
-                      </td>
-                      <td>—</td>
-                      <td>
-                        Which is why its reads of the retiring records look like
-                        ordinary user activity
+                        Those sites go; the replacement will need an identity of
+                        its own, which is part of the new build
                       </td>
                     </tr>
+                    <tr>
+                      <td><strong>LinkedIn</strong></td>
+                      <td>Held inside the package's bundled connector</td>
+                      <td>Held inside the package's bundled connector</td>
+                      <td>
+                        Both halves leave with the package; what replaces them
+                        depends on the commercial answer first
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Data Cloud</strong> — customer data platform
+                      </td>
+                      <td>
+                        Salesforce's own first-party connector — no connected
+                        app, which is why it is nearly invisible in login data
+                      </td>
+                      <td><span class="no">No outbound path</span></td>
+                      <td>
+                        Attribute it by <code>CONNECTED_APP_ID</code>, never by
+                        user
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        <strong>Package-bundled connectors</strong> — the other
+                        five
+                      </td>
+                      <td colspan="2">
+                        Held inside the package, and not separable from it
+                      </td>
 
-                    <tr class="grp">
-                      <td colspan="6">Authenticates as nothing</td>
-                    </tr>
-                    <tr>
                       <td>
-                        <strong>Job board</strong> — InfoJobs, the application
-                        webhook
-                      </td>
-                      <td>
-                        <strong class="yes">Salesforce Site</strong> — no
-                        authentication at all
-                      </td>
-                      <td>
-                        A public <code>Site</code>, subdomain
-                        <code>Infojobs</code>, Active
-                      </td>
-                      <td>
-                        <strong class="yes">The site's guest user</strong>
-                      </td>
-                      <td><span class="no">None</span></td>
-                      <td>
-                        No app, no credential, no named identity to scope — the
-                        guest profile's object permissions are the whole of its
-                        access control
+                        They go at uninstall; each is a keep-or-drop decision,
+                        not an identity to manage
                       </td>
                     </tr>
                   </tbody>
                 </table>
               </div>
 
-              <h3>Outbound — which credential Salesforce calls with</h3>
               <p>
-                No Salesforce user appears in this table, because a Named
-                Credential does not hold one. Two generations are in place: the
-                current shape delegates its secret to an
-                <code>ExternalCredential</code> resolved through a named
-                principal, so nothing sits in Apex; the older shape carries
-                <code>principalType: NamedUser</code> with the secret inline.
+                <strong
+                  >The shared service user is a configuration choice, not a
+                  platform constraint.</strong
+                >
+                Each app nominates its own run-as user, so three of them
+                pointing at the same one was decided rather than imposed — and
+                it can be undone by giving each its own service account. Until
+                it is, traffic on that user has to be split by connection
+                (<code>CONNECTED_APP_ID</code>) or the ERP and the finance feed
+                read as one meaningless row.
               </p>
-              <div class="tw">
-                <table class="reg">
-                  <thead>
-                    <tr>
-                      <th>Edge</th>
-                      <th>Named Credential</th>
-                      <th>External Credential</th>
-                      <th>How the far side authenticates us</th>
-                      <th>Notes</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr class="grp">
-                      <td colspan="5">
-                        Current shape — secret held outside Apex
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><strong>Credit checks</strong> — Iberinform</td>
-                      <td><code>MA_Iberinform</code></td>
-                      <td><code>MA_Iberinform_EC</code></td>
-                      <td>
-                        <code>X-IBM-CLIENT-ID</code> and
-                        <code>X-IBM-CLIENT-SECRET</code>
-                        headers
-                      </td>
-                      <td>Called on demand from Apex; low volume</td>
-                    </tr>
-                    <tr>
-                      <td><strong>E-signature</strong> — Signaturit</td>
-                      <td><code>MA_Signaturit</code></td>
-                      <td><code>MA_Signaturit_EC</code></td>
-                      <td><code>Authorization: Bearer</code></td>
-                      <td>
-                        Its inbound half is separate: signing events arrive at
-                        <code>/SG_subscriptionsEvents</code>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <strong>Training platform</strong> — Humact / Lectio,
-                        outbound half
-                      </td>
-                      <td><code>Humact_API</code></td>
-                      <td><code>Humact_API_EC</code></td>
-                      <td><code>X-API-Key</code></td>
-                      <td>
-                        The same edge as the inbound row above — two identities,
-                        one supplier
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><strong>CV parsing</strong> — the AI services</td>
-                      <td>
-                        <code>Anthropic_API</code>, <code>Groq_API</code>,
-                        <code>AWS_Bedrock</code>
-                      </td>
-                      <td>
-                        <code>Anthropic_API_EC</code>, <code>Groq_API_EC</code>,
-                        <code>AVTRRT__AWS_v4_Bedrock</code>
-                      </td>
-                      <td>Per-provider API keys</td>
-                      <td>
-                        Three live credentials for the in-house parser. The
-                        Bedrock pair is supplied by the retiring package, so it
-                        goes when the package does
-                      </td>
-                    </tr>
-
-                    <tr class="grp">
-                      <td colspan="5">
-                        Older shape — <code>principalType: NamedUser</code>, no
-                        external credential
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>
-                        <strong>Job board</strong> — InfoJobs, outbound half
-                      </td>
-                      <td>
-                        <code>MA_InfoJobs</code> →
-                        <code>https://api.infojobs.net</code>
-                      </td>
-                      <td><span class="no">None</span></td>
-                      <td>
-                        SOAP with a WS-Security header plus a service-issued
-                        access token
-                      </td>
-                      <td>
-                        Nine documented outbound services. Moving it to an
-                        external credential is the standing recommendation
-                      </td>
-                    </tr>
-                    <tr>
-                      <td><strong>NET4</strong> — the ERP, outbound half</td>
-                      <td>
-                        <code>MA_Net4</code> →
-                        <code>https://net4.example.com/api</code>
-                      </td>
-                      <td><span class="no">None</span></td>
-                      <td>
-                        User, password and token passed in the request headers
-                      </td>
-                      <td>
-                        <strong>Two problems.</strong> This is the generation
-                        behind the password-expiry outage; and the endpoint is
-                        still a <strong>placeholder</strong>, so this credential
-                        cannot carry live traffic until it is repointed
-                      </td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-
               <p>
-                <strong>The edges with an identity on each side</strong> are the
-                ERP, the job board and the training platform. Each appears twice
-                above, once per direction, and the two halves re-point
-                independently — the ERP's inbound service user is healthy while
-                its outbound credential is both legacy and pointed at a
-                placeholder.
+                <strong
+                  >Two different problems look alike in the last group but are
+                  not.</strong
+                >
+                Where an integration signs in as <em>one</em> named person,
+                there is a single login to replace with a service account. Where
+                it signs in as <em>each</em> user who runs it — a browser
+                extension, an in-org package — there is no single identity to
+                scope at all, and the only lever is the profile those people
+                share.
               </p>
               <p>
                 <strong
@@ -3421,8 +3413,7 @@
                 >
                 That is far wider than any needs, and narrowing it is the single
                 most useful hardening job on this page. The security log
-                collector shows it is possible: it runs on
-                <code>Api, RefreshToken</code> alone.
+                collector shows it is possible.
               </p>
               <p>
                 <strong>The run-as user is not in the metadata.</strong>
@@ -3432,17 +3423,21 @@
                 assignment in the runbook, not the deployment.
               </p>
               <p>
-                <strong>Two rules for anyone re-checking this surface.</strong>
-                Attribute traffic by connection (<code>CONNECTED_APP_ID</code>),
-                never by user — otherwise the ERP, the finance write-back and
-                the reporting extract merge into one meaningless row.
+                <strong>The four inbound Apex endpoints</strong>, each an
+                <code>@RestResource</code>: <code>/infojobsHook</code>,
+                <code>/Api/ERP_SF_Integration</code>,
+                <code>/Api/Humact/Certificado/*</code> and
+                <code>/SG_subscriptionsEvents</code>. The Remote Site behind the
+                training platform is named <code>Humact_Lectio</code> — the only
+                place that second name appears anywhere in the org.
               </p>
               <p>
-                And the call log records the <em>entity</em> a call touched, not
-                the fields inside it. An edge writing <code>Contact</code> may
-                still carry a package field on that record, which is exactly how
-                the ERP's own <code>AVTRRT__Gender__c</code> mapping stays
-                invisible. Traffic proves which objects are touched; only
+                <strong>One limit worth knowing.</strong> The call log records
+                the <em>entity</em> a call touched, not the fields inside it. An
+                edge writing <code>Contact</code> may still carry a package
+                field on that record, which is exactly how the ERP's own
+                <code>AVTRRT__Gender__c</code> mapping stays invisible to a
+                traffic census. Traffic proves which objects are touched; only
                 metadata proves which fields are.
               </p>
             </section>
@@ -6581,7 +6576,7 @@
 
               <details class="more">
                 <summary>
-                  Humact / Lectio — training
+                  Humact — training
                   <span class="cnt">— two queries, but an early deadline</span>
                 </summary>
                 <div class="more-body">
@@ -6748,7 +6743,7 @@
                           y="157.5"
                           font-size="9.6"
                         >
-                          SYSTEM · Humact / Lectio — training platform
+                          SYSTEM · Humact — training platform
                         </text>
                         <text
                           class="dg-t-sm"
@@ -7192,7 +7187,7 @@
                           y="157.5"
                           font-size="9.6"
                         >
-                          SYSTEM · Humact / Lectio — training platform
+                          SYSTEM · Humact — training platform
                         </text>
                         <text
                           class="dg-t-sm"
