@@ -14934,8 +14934,9 @@
                 <div>
                   <span class="n">4</span>
                   <span class="l"
-                    >edges re-point early, pulled by the earlier waves — the
-                    rest go with the core</span
+                    >edges re-point ahead of the core, pulled by the records
+                    they read — three on a forced date, the analytics extract by
+                    choice</span
                   >
                 </div>
               </div>
@@ -14961,13 +14962,15 @@
                     confirms designs before building anything new. Phase 2
                     covers four re-points pulled forward because the records
                     they read are rebuilt in the earlier waves, before the core:
-                    the training feed and the reporting extract both read
-                    placements, the sourcing tool reads the talent pool, and the
-                    document generator reads employment and education history.
-                    All four are fixed in Marlex's own configuration and code.
-                    Phase 3 builds the ERP interface, the first thing MuleSoft
-                    builds. Phase 4 builds the job-board interface, second
-                    because it carries the heaviest traffic. The cutover
+                    the training feed reads placements, the sourcing tool reads
+                    the talent pool, and the document generator reads employment
+                    and education history. The reporting extract is the fourth,
+                    but its objects straddle both waves, so it re-points twice
+                    or once late by deliberate choice rather than on a forced
+                    date. All four are fixed in Marlex's own configuration and
+                    code. Phase 3 builds the ERP interface, the first thing
+                    MuleSoft builds. Phase 4 builds the job-board interface,
+                    second because it carries the heaviest traffic. The cutover
                     milestone is where the data moves and every coupled edge
                     must already aim at the new records. Phase 5 points the
                     pre-screening service at the new model before it ships.
@@ -15097,7 +15100,7 @@
                     text-anchor="middle"
                     font-size="8.6"
                   >
-                    training &#183; reporting &#8212; read placements
+                    training &#8212; reads placements
                   </text>
                   <text
                     class="dg-t-sm"
@@ -15116,6 +15119,15 @@
                     font-size="8.6"
                   >
                     documents &#8212; read work &amp; study history
+                  </text>
+                  <text
+                    class="dg-t-sm"
+                    x="350"
+                    y="212"
+                    text-anchor="middle"
+                    font-size="8.6"
+                  >
+                    reporting &#8212; straddles both waves
                   </text>
 
                   <!-- phase 3 -->
@@ -15354,15 +15366,21 @@
                   <strong
                     >Phase 2 comes earlier in time than either interface</strong
                   >, and what pulls each edge forward is the record it reads:
-                  the training feed and the reporting extract both read
-                  <strong>placements</strong>, the sourcing tool reads the
-                  <strong>talent pool</strong>, and the document generator reads
-                  candidates' <strong>employment and education history</strong>.
-                  Those records are rebuilt in the earlier waves, so those four
+                  the training feed reads <strong>placements</strong>, the
+                  sourcing tool reads the <strong>talent pool</strong>, and the
+                  document generator reads candidates'
+                  <strong>employment and education history</strong>. Those
+                  records are rebuilt in the earlier waves, so those three
                   re-points fall due before the core moves — regardless of how
-                  small the change is. The reporting extract is the awkward one:
-                  its nine objects straddle both waves, so it re-points twice or
-                  once late.
+                  small the change is. The training feed is the sharpest case:
+                  two queries, and the earliest deadline in the set.
+                  <br /><br />
+                  The reporting extract is the fourth and the awkward one. Its
+                  nine objects straddle both waves — the interview and the
+                  placement move early, the vacancy and the application with the
+                  core — so it re-points
+                  <strong>twice, or once late</strong>. That is a choice to make
+                  deliberately rather than discover.
                 </figcaption>
               </figure>
               <div class="tw">
@@ -15406,10 +15424,12 @@
                       <td><strong>2</strong></td>
                       <td>The edges the early waves pull forward</td>
                       <td>
-                        Training, sourcing, the analytics extract and the
-                        document generator's saved report queries re-point as
-                        their objects move, in Marlex's own configuration and
-                        code
+                        Training, sourcing and the document generator's saved
+                        report queries re-point as their objects move, in
+                        Marlex's own configuration and code. The analytics
+                        extract belongs here too, but its objects split across
+                        both waves, so it re-points twice or once late — a
+                        choice, not a fixed date
                       </td>
                       <td>
                         Nothing — all four are reads, so a slip degrades a
