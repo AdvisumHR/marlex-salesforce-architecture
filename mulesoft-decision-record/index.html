@@ -1726,14 +1726,16 @@
                     earlier waves.
                   </li>
                   <li>
-                    <strong>The switch</strong> — the setting that decides which
-                    data model a connection reads and writes: the retiring
-                    package objects, or the new native ones. Both exist side by
-                    side during the rebuild, so <em>every</em> coupled edge
-                    needs one, so that its target can be changed at the moment
-                    its records move without redeploying anything. What varies
-                    is where the setting lives — inside a middleware interface,
-                    or in Marlex's own Salesforce code.
+                    <strong>The switch</strong> — a setting in front of a thin
+                    layer of indirection, deciding which data model a connection
+                    resolves to: the retiring package objects, or the new native
+                    ones. Both exist side by side through the rebuild, so any
+                    connection running in that window needs one in order to
+                    change target without being redeployed. Where it lives
+                    follows from timing — in the middleware interface if that is
+                    built before the cutover, in Marlex's own Salesforce code if
+                    not. An interface built <em>after</em> the cutover needs no
+                    switch: only one model is left to point at.
                   </li>
                   <li>
                     <strong>A seam</strong> — a deliberate joint in the design:
@@ -14118,24 +14120,45 @@
                       the fallback is stood down.
                     </p>
                     <p>
-                      <strong>What the switch is, first.</strong> It is the
-                      setting that decides which data model a connection reads
-                      and writes — the old package objects, or the new native
-                      ones. Both models exist side by side during the rebuild,
-                      so every coupled edge needs one: something that can be
-                      flipped at the moment its records move, without
-                      redeploying the integration.
+                      <strong>What the switch is, first.</strong> It is a thin
+                      layer of indirection with a setting in front of it: the
+                      integration asks for "the candidate", and the setting
+                      decides whether that resolves to the retiring package
+                      object or to the new native one. Two models exist side by
+                      side through the rebuild, so the setting is what lets a
+                      connection change which one it uses without being
+                      redeployed. Think of it as a feature flag over a choice of
+                      target — and, once the middleware is involved, over a
+                      choice of which system interface to call.
+                    </p>
+                    <p>
+                      <strong>Who needs one, precisely.</strong> Any edge that
+                      will still be running while both models are live. That is
+                      every coupled edge, and it is <em>especially</em> every
+                      edge routed onto the middleware <em>before</em> the
+                      cutover: routing it does not change which records it
+                      writes, so a connection moved onto the middleware while
+                      the old model is still in use will need to change target
+                      later, and needs the setting to do it with.
                     </p>
                     <p>
                       <strong
-                        >So every coupled edge has a switch, wherever it
-                        lives.</strong
+                        >And where it lives follows from timing, not
+                        preference.</strong
                       >
-                      That is the part worth being plain about, because "switch
-                      holders" reads as if only two edges have one. Twelve edges
-                      are coupled and twelve need a way to change target. What
-                      differs is <em>where</em> that setting sits, and only
-                      that.
+                      Build the middleware interface before the cutover and the
+                      setting lives there. Don't, and it lives on the Salesforce
+                      side, in the code that carries the connection today —
+                      which is where it already is for everything except the two
+                      interfaces being built first. Either is a working answer.
+                    </p>
+                    <p>
+                      <strong>The case that needs no switch at all</strong> is
+                      the edge whose interface is built <em>after</em> the
+                      cutover. By then only the native model exists, so it is
+                      pointed straight at it and there is nothing to flip. That
+                      is the cheapest outcome available, and it is the reason
+                      routing an edge late is not a failure.
                     </p>
                     <p>
                       <strong>A switch has three possible homes</strong>, chosen
