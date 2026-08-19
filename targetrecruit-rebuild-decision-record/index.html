@@ -2184,8 +2184,10 @@
                 <p>
                   The measured uninstall surface — six packages, not one; 1,658
                   references from the org's own components to clear first; and
-                  the dependencies no checker can see, led by 146 reports built
-                  on package objects. The counted list the end-game works down.
+                  the dependencies no checker can see, from 111 declarative
+                  automations the platform's own tooling missed to 146 reports
+                  built on package objects. The counted list the end-game works
+                  down.
                 </p></span
               >
               <span class="pick">Measured surface · worked to zero</span>
@@ -11116,9 +11118,13 @@
             is <strong>bought</strong> from a specialist (Textkernel — the
             engine already inside today's package — or Taleva) or
             <strong>built in-house</strong>. The 3 July call leaned buy; a
-            cost-driven re-evaluation on 16 July has re-opened it. This page
-            still lays out the buy case in full because it is the reference
-            argument — read it alongside the re-evaluation note directly below.
+            cost-driven re-evaluation on 16 July has re-opened it, and the
+            direction has since moved the other way — building in-house is now
+            the more likely answer, though nothing is ratified. This page still
+            lays out the buy case in full because it is the reference argument,
+            and because a decision that reverses should be read against the case
+            it reverses — take it alongside the re-evaluation note directly
+            below.
           </p>
         </div>
 
@@ -12408,10 +12414,10 @@
             <em>opening back up</em>, which is the easy direction — a broader
             grant or a reverted default, minutes rather than a recalculation.
             Access is structure, so the privatisation is
-            <strong>cutover-style, never a runtime switch</strong> — a lesson
-            the plan already carries from the talent-pool analysis on the
-            <a href="#view-cutover">cutover page</a> — but it runs on quiet
-            timing where a fail-back costs the stage, not the programme.
+            <strong>cutover-style, never a runtime switch</strong> — the same
+            rule the <a href="#view-access">access decision</a> already runs on
+            — but it lands on quiet timing where a fail-back costs the stage,
+            not the programme.
           </p>
           <p>
             <strong>In the born-private branch</strong> — HR onboarded at
@@ -16039,10 +16045,11 @@
           <p class="section-eyebrow">The metric as a runbook</p>
           <h2>The coupled-code count becomes two action lists</h2>
           <p>
-            The decoupling metric used to read as a single number — roughly
-            thirty-odd classes still touching the old package. A count doesn't
-            tell anyone what to do at cutover. Split by the two kinds, it
-            becomes a runbook:
+            The decoupling metric used to read as a single number — the count of
+            code still touching the old package, in the low hundreds of
+            components when it was last measured. A count doesn't tell anyone
+            what to do at cutover, and it moves with every release. Split by the
+            two kinds, it becomes a runbook:
           </p>
           <table class="data">
             <caption>
@@ -19191,35 +19198,38 @@
           </div>
           <div class="callout key">
             <span class="lbl"
-              >Status: the inbound surface has now been measured — and the news
-              is good</span
+              >Status: the inbound surface has been measured, then measured
+              again — and the second pass found more</span
             >
             <p>
               The census that used to be the open unknown here has been done
-              properly, from the live platform's own usage records. Those
-              records go back six months, and a sample spanning that window —
-              nearly nine hundred thousand individual calls — was read to find
-              every caller that touches the objects being retired. The result is
-              reassuring and specific:
-              <strong
-                >exactly one outside system writes to the old model — the
-                job-board application feed</strong
-              >.
+              properly, from the live platform's own usage records. A first pass
+              asked a simple question of each connection: does it touch one of
+              the objects being retired? On that test only one outside system
+              wrote to the old model, and the picture looked reassuring.
             </p>
             <p>
-              Several others that run today — the ERP link in both directions,
-              the e-signature service, the company-data lookup — already work
-              against the new model and carry through the core cutover
-              untouched. The recurring bulk load of around a million contacts
-              writes to a standard object, not the retiring one, so it too is
-              unaffected.
+              <strong>That test was too coarse.</strong> A connection can be
+              coupled without naming a retiring object at all — by reading a
+              retiring <em>field</em> on an object that survives, by calling
+              package code, or by carrying the old model inside stored
+              configuration a traffic log never sees. Re-run against all four of
+              those, the count rose sharply: roughly half of the estate's
+              connections need re-pointing, not one. The integration record
+              carries the current list, edge by edge, and is the authority for
+              it.
             </p>
             <p>
-              The training-certificate feed is <em>not</em> in that untouched
-              group. It reads the retiring job and placement objects (<code
-                >AVTRRT__Job__c</code
-              >
-              and <code>AVTRRT__Placement__c</code>), so its re-point is
+              Two corrections matter most for this page. The ERP link is
+              <em>not</em> untouched: its live candidate sync reads a retiring
+              field and sends it onward, so its mapping re-points with the core
+              wave. And the document generator, which the first pass cleared,
+              holds dozens of retiring fields inside saved queries — coupling
+              that lives in configuration, not in traffic.
+            </p>
+            <p>
+              The training-certificate feed is also in the coupled group. It
+              reads the retiring job and placement objects, so its re-point is
               <strong>pulled forward by the placement wave</strong> — the early
               switch-over described above — and has to be done before the core
               weekend, not on it. Nothing about the certificates the training
@@ -19227,23 +19237,14 @@
               do.
             </p>
             <p>
-              Two smaller consumers only <em>read</em> the old model rather than
-              write it. One is a sourcing tool whose query must be re-pointed
-              <strong
-                >as soon as the talent pool moves to the new objects</strong
-              >
-              — earlier than the core weekend — or it returns nothing from that
-              moment on. That is a small, coordinated change with its vendor,
-              not a blocker. The other merely inspects the data model's shape to
-              merge documents and will simply see the new objects once they
-              exist.
-            </p>
-            <p>
-              So the dangerous category above shrinks to a single write-coupled
-              feed; the rest is one read re-point, one feed pulled forward with
-              placements, and a short list of dormant or in-development
-              connections whose owner and status Marlex confirms before the
-              window.
+              The shape of the risk is unchanged even though the count moved.
+              Most coupled edges only <em>read</em> the old model, and a read
+              that re-points late returns nothing rather than corrupting
+              anything. The sourcing tool's query must move
+              <strong>as soon as the talent pool moves</strong>, earlier than
+              the core weekend, or it goes silent from that moment. What stays
+              genuinely dangerous is the small set that <em>writes</em>, led by
+              the job-board application feed — and that set did not grow.
             </p>
           </div>
         </section>
@@ -21011,10 +21012,10 @@
               <span class="seq-title">Uninstall — a separate, later gate</span>
               <p>
                 Not part of go-live morning. Requires zero remaining references
-                to the package (the 632-component map is the checklist) and
-                happens only after the new system has run in production long
-                enough to trust, with package-field data verified-extracted
-                first.
+                to the package — the measured reference map on the removal page
+                is the checklist — and happens only after the new system has run
+                in production long enough to trust, with package-field data
+                verified-extracted first.
               </p>
             </li>
           </ol>
@@ -21799,12 +21800,13 @@
               — a step on someone else's system, on someone else's clock.
             </p>
             <p>
-              Two of these are expected live before go-live, so this is
-              engineered the same way as the rest of the fallback: each such
-              owner agrees in advance who re-points, within what window and on
-              what signal, and holds the reference that says which old object to
-              point back at. The way back that runs on another party's action is
-              the one to nail down before it's needed, not during.
+              Some of these are expected live before go-live — the integration
+              record's edge register is the current list — so this is engineered
+              the same way as the rest of the fallback: each such owner agrees
+              in advance who re-points, within what window and on what signal,
+              and holds the reference that says which old object to point back
+              at. The way back that runs on another party's action is the one to
+              nail down before it's needed, not during.
             </p>
           </div>
         </section>
@@ -25155,8 +25157,8 @@
             system has — every point where it meets an outside system, whether
             Salesforce calls out or the outside system calls in — ERP, job
             board, e-signature, credit check, training certificates, the
-            customer data platform — and adds one of its own: the bought
-            matching-and-parsing engine.
+            customer data platform — and adds one of its own: the
+            matching-and-parsing engine, whether that is bought or built.
           </p>
           <p>
             Do the rebuilt edges route through MuleSoft from day one, or stay
@@ -25665,7 +25667,8 @@
                   <td>
                     Parses CVs into structured profiles and ranks
                     candidate–vacancy matches — the one new edge the rebuild
-                    adds, bought rather than built (worked in full on
+                    adds. Whether it is bought or built in-house is an open
+                    decision, currently leaning in-house (worked in full on
                     <a href="#view-matching-engine">its own page</a>)
                   </td>
                   <td>

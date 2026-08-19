@@ -174,6 +174,25 @@
     color: var(--accent); display: block; margin-bottom: 0.25rem;
   }
   .tech code { font-size: 0.85em; }
+  /* Structured "For the developers" blocks. These carry dense measured detail;
+     as one paragraph they read as a wall of text, so allow a labelled-row
+     layout (dt/dd) and bullets inside the block. */
+  .tech p { margin: 0 0 0.5rem; }
+  .tech p:last-child { margin-bottom: 0; }
+  .tech ul { margin: 0.35rem 0 0.6rem; padding-left: 1.1rem; }
+  .tech ul:last-child { margin-bottom: 0; }
+  .tech li { margin-bottom: 0.3rem; }
+  .tech li:last-child { margin-bottom: 0; }
+  .tech dl { display: grid; grid-template-columns: 10.5rem 1fr; column-gap: 0.9rem;
+    row-gap: 0.45rem; margin: 0.45rem 0 0; }
+  .tech dt { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-weight: 700;
+    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.06em;
+    color: var(--accent); padding-top: 0.12rem; }
+  .tech dd { margin: 0; }
+  @media (max-width: 34rem) {
+    .tech dl { grid-template-columns: 1fr; row-gap: 0.15rem; }
+    .tech dd { margin-bottom: 0.5rem; }
+  }
 
   .questions { display: flex; flex-direction: column; gap: 0.9rem; margin-top: 1.4rem; }
   .q { border: 1px solid var(--line); border-left: 3px solid var(--accent); border-radius: 6px; padding: 1.1rem 1.3rem; background: var(--surface); }
@@ -235,6 +254,31 @@
   figure.diagram svg { display: block; width: 100%; height: auto; overflow: visible; }
   figure.diagram figcaption { margin-top: 0.8rem; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 0.8rem; color: var(--ink-soft); line-height: 1.5; }
+
+  /* ---- click-to-enlarge for diagrams (pure CSS :target lightbox, no JS) ----
+     A diagram opts in by wrapping its <svg> in <a class="dg-zoom" href="#zoom-<id>">
+     and following it with <div class="dg-lightbox" id="zoom-<id>">. Works on the
+     single pages and inside the merged artifact alike. ---- */
+  a.dg-zoom { display: block; cursor: zoom-in; text-decoration: none; border: 0; position: relative; }
+  a.dg-zoom::after { content: "Click to enlarge"; position: absolute; right: 0.5rem; bottom: 0.4rem;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 0.6rem; letter-spacing: 0.06em;
+    text-transform: uppercase; color: var(--ink-soft); background: var(--surface);
+    border: 1px solid var(--line); border-radius: 3px; padding: 0.15rem 0.4rem; opacity: 0.75; }
+  a.dg-zoom:hover::after { opacity: 1; color: var(--accent); border-color: var(--accent); }
+  .dg-lightbox { position: fixed; inset: 0; z-index: 999; display: none;
+    background: color-mix(in srgb, var(--ink) 82%, transparent); padding: 2.5vh 2vw; }
+  .dg-lightbox:target { display: flex; align-items: center; justify-content: center; }
+  .dg-lightbox .dg-lightbox-inner { background: var(--surface); border: 1px solid var(--line);
+    border-radius: 6px; padding: 1.2rem; width: 100%; max-width: 1600px; max-height: 95vh; overflow: auto; }
+  .dg-lightbox svg { display: block; width: 100%; height: auto; overflow: visible; }
+  .dg-lightbox .dg-close { position: absolute; top: 1.6vh; right: 2vw;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 0.72rem; font-weight: 700;
+    letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none;
+    color: var(--ink); background: var(--surface); border: 1px solid var(--line);
+    border-radius: 4px; padding: 0.35rem 0.7rem; }
+  .dg-lightbox .dg-close:hover { color: var(--accent); border-color: var(--accent); }
+  .dg-lightbox .dg-backdrop { position: absolute; inset: 0; z-index: -1; }
+  @media print { a.dg-zoom::after { display: none; } .dg-lightbox { display: none !important; } }
   /* SVG primitives styled by class so they follow the theme */
   .dg-box { fill: var(--surface); stroke: var(--line); stroke-width: 1.5; }
   .dg-box-accent { fill: var(--accent-soft); stroke: var(--accent); stroke-width: 1.5; }
@@ -263,6 +307,10 @@
   @media (max-width: 34rem) { .tmpl-step { grid-template-columns: 1fr; row-gap: 0.15rem; } }
   /* a "selected" marker chip reusing chip styling */
   .decmap { display: flex; flex-direction: column; gap: 0.7rem; margin: 1.6rem 0; }
+  .decgrp { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; text-transform: uppercase;
+    letter-spacing: 0.08em; font-size: 0.66rem; font-weight: 700; color: var(--ink-soft);
+    margin: 1.1rem 0 -0.1rem; padding-bottom: 0.35rem; border-bottom: 1px solid var(--line); }
+  .decmap > .decgrp:first-child { margin-top: 0; }
   a.decrow { display: grid; grid-template-columns: 2.3rem 1fr auto; column-gap: 0.9rem; align-items: center;
     text-decoration: none; color: inherit; background: var(--surface); border: 1px solid var(--line);
     border-left: 3px solid var(--accent); border-radius: 6px; padding: 0.9rem 1.1rem; transition: border-color .12s; }
@@ -275,6 +323,17 @@
     font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--copper);
     text-align: right; max-width: 9rem; line-height: 1.3; }
   @media (max-width: 40rem) { a.decrow { grid-template-columns: 2rem 1fr; } a.decrow .pick { display: none; } }
+  /* Page-type marker. The set holds three kinds of page — a decision (an
+     argument with options and a verdict), evidence (a lookup table backing a
+     decision), and a procedure (steps a person executes). Mixing the three in
+     one undifferentiated list is what the documentation-system split warns
+     against, so each row says which it is. */
+  .ptype { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600; font-size: 0.62rem; letter-spacing: 0.09em; text-transform: uppercase;
+    color: var(--ink-soft); border: 1px solid var(--rule); border-radius: 2px;
+    padding: 0.08rem 0.3rem; margin-left: 0.45rem; vertical-align: 0.12em; white-space: nowrap; }
+  .ptype.evidence { color: var(--copper); border-color: var(--copper); }
+  .ptype.procedure { color: var(--ink-soft); border-style: dashed; }
 
   /* ---- decision-quality: likelihood chips, legend, side-by-side outcome compare ---- */
   /* likelihood chip — one calibrated scale, colour tracks how good/bad the outcome is */
@@ -346,6 +405,25 @@
   table.dtbl tr.dropped td { color: var(--ink-soft); }
   table.dtbl tr.dropped td:first-child { text-decoration: line-through; text-decoration-color: var(--line); }
   table.dtbl tr.review td { background: var(--chip-limited-bg); }
+  /* ---- direction badge (inbound / outbound / both) + cutover-state chip: shared with the integration-surface tables ---- */
+  .dir { display: inline-block; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase;
+    padding: 0.2em 0.55em; border-radius: 4px; white-space: nowrap; vertical-align: middle; }
+  .dir.in { background: var(--chip-limited-bg); color: var(--chip-limited-fg); }
+  .dir.out { background: var(--accent-soft); color: var(--chip-adopted-fg); }
+  .state { display: inline-block; font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.6rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase;
+    padding: 0.2em 0.55em; border-radius: 4px; white-space: nowrap; vertical-align: middle; }
+  .state.preserved { background: var(--chip-adopted-bg); color: var(--chip-adopted-fg); }
+  .state.repoint { background: var(--chip-limited-bg); color: var(--chip-limited-fg); }
+  .state.retires { background: var(--chip-rejected-bg); color: var(--chip-rejected-fg); }
+  .st { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 0.62rem;
+    font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; }
+  .st.confirmed { color: var(--chip-adopted-fg); }
+  .st.toconfirm { color: var(--chip-limited-fg); }
+  .st.na { color: var(--ink-soft); }
+  table.dtbl td a.edge-lk { color: var(--accent); text-decoration: none; font-weight: 700; }
+  table.dtbl td a.edge-lk:hover { text-decoration: underline; }
   table.dtbl tr.tbl-sep td { font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; text-transform: uppercase;
     letter-spacing: 0.06em; font-size: 0.62rem; font-weight: 700; color: var(--ink-soft);
     background: var(--accent-soft); border-bottom: 1px solid var(--line); padding-top: 0.7rem; padding-bottom: 0.4rem; }
@@ -374,6 +452,30 @@
   .callout ul { margin: 0; padding-left: 1.1rem; }
   .callout li { margin: 0.3rem 0; font-size: 0.9rem; }
   .callout p:last-child { margin-bottom: 0; }
+
+  /* ---- progressive disclosure: supporting detail, one click away ----
+     Ported from the MuleSoft integrations set so both records disclose the
+     same way. NEVER wraps an option set, a chosen/rejected pair, a verdict,
+     or a "how this fails back" section — those stay open by doctrine. */
+  details.more { margin: 0.9rem 0 0; border: 1px solid var(--line); border-radius: 6px;
+    background: var(--surface); }
+  details.more > summary { cursor: pointer; list-style: none; padding: 0.65rem 0.95rem;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif; font-size: 0.8rem;
+    font-weight: 700; color: var(--ink-soft); display: flex; align-items: baseline; gap: 0.5rem;
+    border-radius: 6px; }
+  details.more > summary::-webkit-details-marker { display: none; }
+  details.more > summary::before { content: "\25B8"; font-size: 0.72rem; color: var(--accent);
+    transition: transform 0.15s ease; display: inline-block; }
+  details.more[open] > summary::before { transform: rotate(90deg); }
+  details.more > summary:hover { color: var(--ink); }
+  details.more > summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  details.more > summary .cnt { font-weight: 400; color: var(--ink-soft); opacity: 0.85; }
+  details.more > .more-body { padding: 0.2rem 0.95rem 0.95rem; }
+  details.more > .more-body > :first-child { margin-top: 0; }
+  details.more > .more-body > :last-child { margin-bottom: 0; }
+  /* the set is circulated as a document too — print must show everything */
+  @media print { details.more > .more-body { display: block !important; }
+    details.obj-fields > .tbl-scroll { display: block !important; } }
 
   /* ---- merged-artifact shell ---- */
   .artifact-shell { display: grid; grid-template-columns: 17.5rem 1fr; align-items: start; }
@@ -464,8 +566,7 @@
     <strong>Why it is its own record.</strong> This is not part of the ATS
     rebuild's reveal — the rebuild replaces the platform; this onboards a new
     team and refactors access on top of it. It shares one decision with the
-    rebuild (the access model at cutover), which lives on the
-    rebuild record</a > (open it and go to its <em>Security &amp; sharing</em> page) rather than being restated here. Everything else here is specific to HR onboarding. </p> </div> <section> <p class="section-eyebrow">The decision map</p> <h2>The decisions, each on its own page</h2> <p> Read in the order the argument builds. Two pages frame the problem — what HR actually asked for, and the role hierarchy that exists today. Four pages hold the decisions we can make now — the internal/external access design, which logic and integrations apply to internal records, what gets built for HR, and when it lands. The last page is the honest one: what is still open until HR's requirements are in. </p> <div class="decmap"> <a class="decrow" href="#view-the-requirement"> <span class="num">▸</span> <span class="body" ><h3> The requirement <span style="font-weight: 400; font-size: 0.8em; color: var(--ink-soft)" >— the premise</span > </h3> <p> What the internal HR team asked for and why it is confidential by nature — the director-replacing-a-director case that makes an open model unacceptable for internal work. </p></span > <span class="pick">Confidential internal recruitment</span>
+    rebuild (the access model at cutover), which lives on the rebuild record's <a href="../rebuild-strategy/security.html"><em>Security &amp; sharing</em></a> page rather than being restated here. Everything else here is specific to HR onboarding. </p> </div> <section> <p class="section-eyebrow">The decision map</p> <h2>The decisions, each on its own page</h2> <p> Read in the order the argument builds. Two pages frame the problem — what HR actually asked for, and the role hierarchy that exists today. Four pages hold the decisions we can make now — the internal/external access design, which logic and integrations apply to internal records, what gets built for HR, and when it lands. The last page is the honest one: what is still open until HR's requirements are in. </p> <div class="decmap"> <a class="decrow" href="#view-the-requirement"> <span class="num">▸</span> <span class="body" ><h3> The requirement <span style="font-weight: 400; font-size: 0.8em; color: var(--ink-soft)" >— the premise</span > </h3> <p> What the internal HR team asked for and why it is confidential by nature — the director-replacing-a-director case that makes an open model unacceptable for internal work. </p></span > <span class="pick">Confidential internal recruitment</span>
     <a class="decrow" href="#view-role-hierarchy">
       <span class="num">▸</span>
       <span class="body"
@@ -560,8 +661,7 @@
 <footer>
   <p>
     The access decision this shares with the platform rebuild lives on the
-    rebuild record
-    — open it and see its <em>Security &amp; sharing</em> page. Grounded in the
+    rebuild record's <a href="../rebuild-strategy/security.html"><em>Security &amp; sharing</em></a> page. Grounded in the
     July 2026 production-org audit, the live role hierarchy, and the 2026-07-16
     coordination meeting where the requirement was raised.
   </p>
@@ -687,9 +787,7 @@
     Next: the
     <a href="#view-role-hierarchy">role hierarchy that exists today</a>, and why
     it has no place for HR yet. The access model this requirement forces is on
-    the rebuild record's
-    Security
-    page.
+    the rebuild record's <a href="../rebuild-strategy/security.html">Security</a> page.
   </p>
 </footer>
   </div></section>
@@ -822,8 +920,7 @@
     <a href="#view-sharing-design"
       >how internal stays private while external stays open</a
     >. The org-wide default and the cutover posture are on the rebuild record's
-    Security
-    page.
+    <a href="../rebuild-strategy/security.html">Security</a> page.
   </p>
 </footer>
   </div></section>
@@ -1158,7 +1255,8 @@
   <p>
     This is the record-level design; the org-wide default and the cutover
     posture it sits on are the rebuild record's
-    Security</a > decision. Next: <a href="#view-logic-replication">which logic and
+    <a href="../rebuild-strategy/security.html">Security</a> decision. Next:
+    <a href="#view-logic-replication">which logic and
     integrations act on internal records</a> — the behaviour side of the same flag.
   </p>
 </footer>
@@ -1480,7 +1578,7 @@
         field rights plus the app/tabs for the internal team — mirrored from the
         recruiter grant and scoped to internal work, following the same
         persona-permission-set method the
-        access switch</a > uses. Provisions licences and users. </p> </div> <div class="tmpl-step"> <span class="k">HR public group + shares</span> <p> <strong >The HR group and the sharing that grants it all internal records.</strong > The cross-cutting "HR sees everything internal" grant, plus the criteria-based external-population share that leaves external hiring open — both authored as part of this build. </p> </div> <div class="tmpl-step"> <span class="k">Onboarding components</span> <p> <strong >Whatever internal recruitment / onboarding needs that external hiring does not.</strong > Possibly a distinct kind of record, onboarding screens, or form pre-fill from existing systems. This is the least-defined part and depends on HR requirements — parked as an <a href="#view-open-questions">open question, not assumed.
+        <a href="../rebuild-strategy/access.html">access switch</a> uses. Provisions licences and users. </p> </div> <div class="tmpl-step"> <span class="k">HR public group + shares</span> <p> <strong >The HR group and the sharing that grants it all internal records.</strong > The cross-cutting "HR sees everything internal" grant, plus the criteria-based external-population share that leaves external hiring open — both authored as part of this build. </p> </div> <div class="tmpl-step"> <span class="k">Onboarding components</span> <p> <strong >Whatever internal recruitment / onboarding needs that external hiring does not.</strong > Possibly a distinct kind of record, onboarding screens, or form pre-fill from existing systems. This is the least-defined part and depends on HR requirements — parked as an <a href="#view-open-questions">open question</a>, not assumed.
       </p>
     </div>
     <div class="tmpl-step">
@@ -1743,8 +1841,8 @@
   <p>
     The cutover posture this fork sits on, and its rollback behaviour in each
     branch, are on the rebuild record's
-    Security</a > page. Next: <a href="#view-open-questions">what's still open until HR's
-    requirements land.
+    <a href="../rebuild-strategy/security.html">Security</a> page. Next:
+    <a href="#view-open-questions">what's still open until HR's requirements land</a>.
   </p>
 </footer>
   </div></section>
@@ -1882,8 +1980,7 @@
     These resolve as the HR team's requirements come in; this page is the living
     list until then. Back to the <a href="#view-index">overview</a>, or the
     rebuild record's
-    Security
-    decision this composes with.
+    <a href="../rebuild-strategy/security.html">Security</a> decision this composes with.
   </p>
 </footer>
   </div></section>
