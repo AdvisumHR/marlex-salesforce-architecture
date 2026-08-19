@@ -208,6 +208,32 @@
         font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
       }
 
+      /* Page-type marker. This set holds three kinds of page and they reward
+     different reading: an argument (read in order), a look-up register
+     (searched, not read), and a sequence (steps and open items). Saying which
+     is which stops a reader opening the register expecting a narrative. */
+      .ptype {
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+        font-weight: 600;
+        font-size: 0.62rem;
+        letter-spacing: 0.09em;
+        text-transform: uppercase;
+        color: var(--ink-soft);
+        border: 1px solid var(--line);
+        border-radius: 2px;
+        padding: 0.08rem 0.3rem;
+        margin-left: 0.15rem;
+        vertical-align: 0.12em;
+        white-space: nowrap;
+      }
+      .ptype.evidence {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      .ptype.procedure {
+        border-style: dashed;
+      }
+
       .bluf {
         margin-top: 2.5rem;
         padding: 1.5rem 1.75rem;
@@ -1641,19 +1667,28 @@
               <p class="section-eyebrow">How to read this set</p>
               <h2>Three pages after this one</h2>
               <p>
-                <a href="#view-edges"><strong>The edges</strong></a> — one
-                table, one row per integration, saying what happens to each. If
-                you read one page, read that one.
+                They are three different kinds of document, and they reward
+                different reading. Take them in the order that suits the
+                question you arrived with.
               </p>
               <p>
-                <a href="#view-decisions"><strong>The decisions</strong></a> —
-                the six choices the programme made, each with the options
-                weighed and why the winner won.
+                <a href="#view-edges"><strong>The edges</strong></a>
+                <span class="ptype evidence">Look up</span> — one table, one row
+                per integration, saying what happens to each. Written to be
+                searched rather than read end to end. If you read one page, read
+                that one.
               </p>
               <p>
-                <a href="#view-plan"><strong>The plan</strong></a> — the order
-                the work happens in, and every question still open with who owns
-                it.
+                <a href="#view-decisions"><strong>The decisions</strong></a>
+                <span class="ptype">Argument</span> — the six choices the
+                programme made, each with the options weighed and why the winner
+                won. Read in order; each one assumes the last.
+              </p>
+              <p>
+                <a href="#view-plan"><strong>The plan</strong></a>
+                <span class="ptype procedure">Sequence</span> — the order the
+                work happens in, and every question still open with who owns it.
+                This is the page that changes most often.
               </p>
 
               <p class="section-eyebrow" style="margin-top: 2.2rem">
