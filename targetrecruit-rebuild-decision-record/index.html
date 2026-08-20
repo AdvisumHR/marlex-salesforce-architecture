@@ -6823,11 +6823,25 @@
             </li>
             <li>
               <strong
-                >The candidate's child entities wait on the engine.</strong
+                >The work-and-education history is settled: separate
+                objects.</strong
               >
-              Skills and the work-and-education history are separate objects
-              today partly because the current engine's re-indexation wants them
-              that way — their object-versus-field form freezes only when the
+              Decided 19 August 2026, without waiting for the
+              <a href="#view-matching-engine">matching engine</a>. The engine's
+              hold on these records is only that it re-reads them when they
+              change — a running cost, not a constraint on how they are shaped.
+              Every engine can read separate records; the alternative,
+              flattening them into fields on the candidate, is the one shape
+              that would allow only one job and one qualification per person. So
+              the shape that keeps every engine option open is also the one the
+              business needs, and holding it open was buying nothing while the
+              central entity of the system waited.
+            </li>
+            <li>
+              <strong>The skills and categories child still waits.</strong>
+              Unlike work and education history, how skills are held is
+              genuinely entangled with how an engine indexes and ranks them, so
+              that one form settles when the
               <a href="#view-matching-engine">matching engine</a> selection and
               its feed contract land.
             </li>
@@ -11079,17 +11093,18 @@
       <div class="wrap-inner">
         <header class="masthead">
           <p class="eyebrow">Decision 4 · The matching engine</p>
-          <h1>The matching engine — buy or build, open</h1>
+          <h1>The matching engine — gated on one test</h1>
           <p class="subtitle">
             The one capability the rebuild does not reconstruct from the
             package: reading CVs into structured profiles and matching
             candidates to vacancies. It runs as an external service behind a
-            Marlex-owned interface — but whether that service is bought from a
-            specialist or built in-house is under active re-evaluation.
+            Marlex-owned interface. Which service — bought from a specialist or
+            built in-house — is decided by a single written test, and building
+            is the fallback rather than the default.
           </p>
           <p class="dateline">
             Cutover strategy · draft for peer review · 13 July 2026 ·
-            buy-vs-build re-opened 16 July 2026
+            buy-vs-build re-opened 16 July 2026 · selection gated 19 August 2026
           </p>
         </header>
 
@@ -11120,11 +11135,14 @@
             <strong>built in-house</strong>. The 3 July call leaned buy; a
             cost-driven re-evaluation on 16 July has re-opened it, and the
             direction has since moved the other way — building in-house is now
-            the more likely answer, though nothing is ratified. This page still
-            lays out the buy case in full because it is the reference argument,
-            and because a decision that reverses should be read against the case
-            it reverses — take it alongside the re-evaluation note directly
-            below.
+            the more likely answer, though nothing is ratified. Since 19 August
+            2026 that choice is
+            <strong>gated on one written test</strong> rather than left hanging,
+            and building is recorded as the fallback rather than the plan. This
+            page still lays out the buy case in full because it is the reference
+            argument, and because a decision that reverses should be read
+            against the case it reverses — take it alongside the two notes
+            directly below.
           </p>
         </div>
 
@@ -11177,6 +11195,51 @@
             >
             Until then, the engine is carried outside the rebuild effort
             estimate.
+          </p>
+        </div>
+
+        <div
+          class="callout"
+          style="
+            border-left: 4px solid var(--copper);
+            padding: 0.9rem 1.1rem;
+            margin: 1.1rem 0;
+            background: var(--accent-soft);
+            border-radius: 6px;
+          "
+        >
+          <p>
+            <strong>How this now gets decided (settled 19 August 2026).</strong>
+            Three separate records had drifted into saying three different
+            things about this one question — one said the engine was bought and
+            the matter closed, another said it was open and leaning towards
+            building, a third said it was under active re-evaluation. That
+            contradiction was doing real damage: the shape of the candidate's
+            education and employment history was being held frozen while
+            everyone waited, and the engine sat outside the effort estimate. So
+            the contradiction is closed, and the choice is not.
+          </p>
+          <p>
+            <strong
+              >The gate is one question, asked in writing of every candidate
+              engine:</strong
+            >
+            can it read and rank the new system's own candidate records, or does
+            it insist on holding its own copy? An engine that reads Marlex's
+            records is preferred. An engine that can be configured to read them
+            is the second choice. Only if neither is available does the forced
+            duplication of more than a million candidate profiles get weighed
+            against building a simpler matcher in-house — and on that
+            comparison, building wins.
+          </p>
+          <p>
+            <strong>Building is therefore the fallback, not the plan.</strong>
+            The current lean towards building is recorded honestly as a lean. It
+            is not yet a commitment, because committing to it today would close
+            off buying on the strength of an assumption nobody has tested — no
+            one has yet put a real candidate engine in front of that question.
+            The test is cheap and it separates all three options at once, so the
+            programme runs it before choosing rather than after.
           </p>
         </div>
 
@@ -11370,14 +11433,14 @@
                 integrations page). The engine needs a <em>feed</em>: an initial
                 index of ~1.06M profiles plus incremental updates on profile
                 change, built against the new model. Parse results land in
-                Marlex fields, never package fields. Note the model dependency:
-                the candidate's child entities (skills, education, employment
-                history) are separate objects today partly <em>because</em> the
-                current engine's re-indexation wants them that way — their
-                object-vs-field shape in the
-                <a href="#view-data-model">target data model</a> stays open
-                until the engine choice lands, because the feed contract depends
-                on it.
+                Marlex fields, never package fields. On the model dependency:
+                the work-and-education history is settled as separate objects in
+                the <a href="#view-data-model">target data model</a> (19 August
+                2026) and no longer waits on this choice — the engine only
+                re-reads those records when they change, which is a running cost
+                rather than a constraint on their shape. The skills and
+                categories child does still wait, because how skills are held is
+                genuinely entangled with how an engine indexes and ranks them.
               </div>
             </div>
           </details>
