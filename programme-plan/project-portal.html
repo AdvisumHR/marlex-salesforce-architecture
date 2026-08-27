@@ -302,7 +302,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <h2>What it connects to</h2>
 <div class="epic" style="--pc:var(--p-portal)">
           <div class="eh"><div><span class="en">The integration layer</span></div></div>
-          <p>The portal connection is one of the integration lanes — a portal-facing service on the middleware plus a Salesforce-side adapter. The lane builds only the connection; it sits behind the portal shape and the timing decision, because there is no point finishing the pipe before it is known what it feeds and when.</p>
+          <p>The portal connection is one of the integration lanes — a portal-facing service on the middleware plus a Salesforce-side adapter. The lane builds only the connection. It is the one lane that does legitimately wait on a decision, and the reason is worth being precise about: the new portals do not exist yet, so there is no running connection to move onto the layer as it is — the work here is designing something new, and that is what the shape and timing decisions are for. The lanes that carry live traffic today are routed without waiting for any such decision.</p>
         </div>
 <div class="epic" style="--pc:var(--p-portal)">
           <div class="eh"><div><span class="en">Axxon go-live</span></div></div>
