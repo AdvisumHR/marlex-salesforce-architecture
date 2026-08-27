@@ -6898,30 +6898,6 @@
             package plumbing is left behind. There is no "recently used"
             judgement — presence of data is the whole signal.
           </p>
-          <p>
-            <strong
-              >The rule has exactly one recorded exception, and it is
-              deliberate.</strong
-            >
-            Two fields that mark a candidate as
-            <strong>internal rather than external</strong> — one on the
-            candidate, one on the application — are
-            <strong>carried even though both are empty</strong>. The rule would
-            drop them, and in this single case the rule gives the wrong answer:
-            what would be dropped is not stale data but the
-            <em>capability</em> the future confidential internal-recruitment
-            model depends on.
-          </p>
-          <p>
-            Unlike almost anything else here, this information
-            <strong>cannot be reconstructed later</strong> — whether a past
-            process was internal is knowable only at the moment the record is
-            created, so a field added afterwards would have nothing truthful to
-            put in it. Adding it now, to objects that start empty, costs almost
-            nothing. Every migrated record keeps the value "external", which is
-            accurate rather than a placeholder, and
-            <strong>no access behaviour is attached to it at cutover</strong>.
-          </p>
         </div>
 
         <section>
@@ -6938,10 +6914,8 @@
             <div class="stat">
               <span class="n">316</span
               ><span class="l"
-                >fields are rebuilt, of 1,139 non-system fields examined — the
-                other 823 are empty, formulas or plumbing. 314 are carried
-                because they hold data; 2 are carried despite holding none, for
-                the reason below</span
+                >fields carry data and are rebuilt, of 1,139 non-system fields
+                examined — the other 823 are empty, formulas or plumbing</span
               >
             </div>
             <div class="stat">
@@ -6959,11 +6933,7 @@
             note: every native object and field name is
             <strong>English</strong> — including the Marlex custom fields that
             carried Spanish names in the old system, which are anglicised now
-            that their object is rebuilt.
-          </p>
-
-          <p>
-            Anything
+            that their object is rebuilt. Anything
             <strong>newly authored for the rebuild is prefix-free</strong>: no
             <code>MA_</code> prefix on new objects or on any field that is
             renamed, because these components may be promoted to other Marlex
@@ -6989,315 +6959,306 @@
             on a standard Salesforce object and stay there; only a record type
             and fields are added.
           </p>
-          <details class="more">
-            <summary>
-              Every recruitment object, kept or dropped<span class="cnt"
-                >— the full disposition table</span
-              >
-            </summary>
-            <div class="more-body">
-              <div class="tbl-scroll">
-                <table class="dtbl objtbl">
-                  <colgroup>
-                    <col class="c-obj" />
-                    <col class="c-num" />
-                    <col class="c-num" />
-                    <col class="c-nat" />
-                    <col class="c-disp" />
-                  </colgroup>
-                  <thead>
-                    <tr>
-                      <th>Package object</th>
-                      <th class="num">Live rows</th>
-                      <th class="num">Fields kept</th>
-                      <th>Native replacement</th>
-                      <th>How it moves</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td><strong>Contact</strong></td>
-                      <td class="num">1,097,122</td>
-                      <td class="num">52</td>
-                      <td><code>Contact</code></td>
-                      <td>Back-fill in place</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Job_Applicant</strong></td>
-                      <td class="num">1,404,424</td>
-                      <td class="num">67</td>
-                      <td><code>Application__c</code></td>
-                      <td>Migrate + archive</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Employment_History</strong></td>
-                      <td class="num">468,456</td>
-                      <td class="num">6</td>
-                      <td><code>Employment_History__c</code></td>
-                      <td>Migrate</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Educational_History</strong></td>
-                      <td class="num">421,498</td>
-                      <td class="num">9</td>
-                      <td><code>Education_History__c</code></td>
-                      <td>Migrate</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Interview</strong></td>
-                      <td class="num">125,636</td>
-                      <td class="num">20</td>
-                      <td><code>Interview__c</code></td>
-                      <td>Switch first</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Source_To_Candidate</strong></td>
-                      <td class="num">86,405</td>
-                      <td class="num">2</td>
-                      <td><code>Candidate_Source__c</code></td>
-                      <td>Migrate</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Job</strong></td>
-                      <td class="num">57,110</td>
-                      <td class="num">103</td>
-                      <td><code>ATS_Job__c</code></td>
-                      <td>Migrate + archive</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Placement</strong></td>
-                      <td class="num">46,719</td>
-                      <td class="num">48</td>
-                      <td><code>Placement__c</code></td>
-                      <td>Switch first + archive closed</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Candidate_to_Hotbook</strong></td>
-                      <td class="num">5,933</td>
-                      <td class="num">3</td>
-                      <td><code>Talent_Pool_Member__c</code></td>
-                      <td>Migrate</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Hotbook</strong></td>
-                      <td class="num">598</td>
-                      <td class="num">3</td>
-                      <td><code>Talent_Pool__c</code></td>
-                      <td>Switch first</td>
-                    </tr>
-                    <tr>
-                      <td><strong>Source</strong></td>
-                      <td class="num">46</td>
-                      <td class="num">3</td>
-                      <td><code>Source__c</code></td>
-                      <td>Migrate</td>
-                    </tr>
-                    <tr class="tbl-sep">
-                      <td colspan="5">
-                        Rebuilt as a capability — no data to move (empty in
-                        production today)
-                      </td>
-                    </tr>
-                    <tr>
-                      <td>Job_Search</td>
-                      <td class="num">142,738</td>
-                      <td class="num">0</td>
-                      <td><code>native saved search</code></td>
-                      <td>Rebuild capability</td>
-                    </tr>
-                    <tr>
-                      <td>References</td>
-                      <td class="num">0</td>
-                      <td class="num">0</td>
-                      <td><code>Reference__c</code></td>
-                      <td>Rebuild capability</td>
-                    </tr>
-                    <tr>
-                      <td>Scratch_Sheet</td>
-                      <td class="num">0</td>
-                      <td class="num">0</td>
-                      <td><code>DealSheet native</code></td>
-                      <td>Rebuild capability</td>
-                    </tr>
-                    <tr>
-                      <td>Search</td>
-                      <td class="num">59,672</td>
-                      <td class="num">0</td>
-                      <td><code>native saved search</code></td>
-                      <td>Rebuild capability</td>
-                    </tr>
-                    <tr>
-                      <td>Search_Candidate_Approval</td>
-                      <td class="num">386</td>
-                      <td class="num">0</td>
-                      <td><code>native saved search</code></td>
-                      <td>Rebuild capability</td>
-                    </tr>
-                    <tr class="tbl-sep">
-                      <td colspan="5">
-                        Left behind — package configuration, UI settings and
-                        process logs
-                      </td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>ETCObject</td>
-                      <td class="num">145,293</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — process log</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Search_Field_Setting</td>
-                      <td class="num">535</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Competency_Details</td>
-                      <td class="num">105</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Intermediate_Pages</td>
-                      <td class="num">74</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Quick_Review_Candidates</td>
-                      <td class="num">39</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Quick_Review_Settings</td>
-                      <td class="num">27</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Config</td>
-                      <td class="num">26</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — empty</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Quick_Review_Fields</td>
-                      <td class="num">21</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Connector</td>
-                      <td class="num">17</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>HomePageComponents</td>
-                      <td class="num">11</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>AI_Companion</td>
-                      <td class="num">7</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Heat_Map</td>
-                      <td class="num">6</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Search_Additional_Button</td>
-                      <td class="num">4</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Interview_Feedback_Default_Questionnaire</td>
-                      <td class="num">3</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>AddResumeField</td>
-                      <td class="num">2</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>ConfigSettingsHierarchy</td>
-                      <td class="num">1</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Config_Settings</td>
-                      <td class="num">1</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Contact_to_Hotbook</td>
-                      <td class="num">1</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — empty</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Deal_Sheets</td>
-                      <td class="num">1</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>HomePageComponent</td>
-                      <td class="num">1</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Metric</td>
-                      <td class="num">1</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — empty</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Review_Resumes</td>
-                      <td class="num">1</td>
-                      <td class="num">0</td>
-                      <td>—</td>
-                      <td>Drop — config</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </details>
+          <div class="tbl-scroll">
+            <table class="dtbl objtbl">
+              <colgroup>
+                <col class="c-obj" />
+                <col class="c-num" />
+                <col class="c-num" />
+                <col class="c-nat" />
+                <col class="c-disp" />
+              </colgroup>
+              <thead>
+                <tr>
+                  <th>Package object</th>
+                  <th class="num">Live rows</th>
+                  <th class="num">Fields kept</th>
+                  <th>Native replacement</th>
+                  <th>How it moves</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Contact</strong></td>
+                  <td class="num">1,097,122</td>
+                  <td class="num">52</td>
+                  <td><code>Contact</code></td>
+                  <td>Back-fill in place</td>
+                </tr>
+                <tr>
+                  <td><strong>Job_Applicant</strong></td>
+                  <td class="num">1,404,424</td>
+                  <td class="num">67</td>
+                  <td><code>Application__c</code></td>
+                  <td>Migrate + archive</td>
+                </tr>
+                <tr>
+                  <td><strong>Employment_History</strong></td>
+                  <td class="num">468,456</td>
+                  <td class="num">6</td>
+                  <td><code>Employment_History__c</code></td>
+                  <td>Migrate</td>
+                </tr>
+                <tr>
+                  <td><strong>Educational_History</strong></td>
+                  <td class="num">421,498</td>
+                  <td class="num">9</td>
+                  <td><code>Education_History__c</code></td>
+                  <td>Migrate</td>
+                </tr>
+                <tr>
+                  <td><strong>Interview</strong></td>
+                  <td class="num">125,636</td>
+                  <td class="num">20</td>
+                  <td><code>Interview__c</code></td>
+                  <td>Switch first</td>
+                </tr>
+                <tr>
+                  <td><strong>Source_To_Candidate</strong></td>
+                  <td class="num">86,405</td>
+                  <td class="num">2</td>
+                  <td><code>Candidate_Source__c</code></td>
+                  <td>Migrate</td>
+                </tr>
+                <tr>
+                  <td><strong>Job</strong></td>
+                  <td class="num">57,110</td>
+                  <td class="num">103</td>
+                  <td><code>ATS_Job__c</code></td>
+                  <td>Migrate + archive</td>
+                </tr>
+                <tr>
+                  <td><strong>Placement</strong></td>
+                  <td class="num">46,719</td>
+                  <td class="num">48</td>
+                  <td><code>Placement__c</code></td>
+                  <td>Switch first + archive closed</td>
+                </tr>
+                <tr>
+                  <td><strong>Candidate_to_Hotbook</strong></td>
+                  <td class="num">5,933</td>
+                  <td class="num">3</td>
+                  <td><code>Talent_Pool_Member__c</code></td>
+                  <td>Migrate</td>
+                </tr>
+                <tr>
+                  <td><strong>Hotbook</strong></td>
+                  <td class="num">598</td>
+                  <td class="num">3</td>
+                  <td><code>Talent_Pool__c</code></td>
+                  <td>Switch first</td>
+                </tr>
+                <tr>
+                  <td><strong>Source</strong></td>
+                  <td class="num">46</td>
+                  <td class="num">3</td>
+                  <td><code>Source__c</code></td>
+                  <td>Migrate</td>
+                </tr>
+                <tr class="tbl-sep">
+                  <td colspan="5">
+                    Rebuilt as a capability — no data to move (empty in
+                    production today)
+                  </td>
+                </tr>
+                <tr>
+                  <td>Job_Search</td>
+                  <td class="num">142,738</td>
+                  <td class="num">0</td>
+                  <td><code>native saved search</code></td>
+                  <td>Rebuild capability</td>
+                </tr>
+                <tr>
+                  <td>References</td>
+                  <td class="num">0</td>
+                  <td class="num">0</td>
+                  <td><code>Reference__c</code></td>
+                  <td>Rebuild capability</td>
+                </tr>
+                <tr>
+                  <td>Scratch_Sheet</td>
+                  <td class="num">0</td>
+                  <td class="num">0</td>
+                  <td><code>DealSheet native</code></td>
+                  <td>Rebuild capability</td>
+                </tr>
+                <tr>
+                  <td>Search</td>
+                  <td class="num">59,672</td>
+                  <td class="num">0</td>
+                  <td><code>native saved search</code></td>
+                  <td>Rebuild capability</td>
+                </tr>
+                <tr>
+                  <td>Search_Candidate_Approval</td>
+                  <td class="num">386</td>
+                  <td class="num">0</td>
+                  <td><code>native saved search</code></td>
+                  <td>Rebuild capability</td>
+                </tr>
+                <tr class="tbl-sep">
+                  <td colspan="5">
+                    Left behind — package configuration, UI settings and process
+                    logs
+                  </td>
+                </tr>
+                <tr class="dropped">
+                  <td>ETCObject</td>
+                  <td class="num">145,293</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — process log</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Search_Field_Setting</td>
+                  <td class="num">535</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Competency_Details</td>
+                  <td class="num">105</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Intermediate_Pages</td>
+                  <td class="num">74</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Quick_Review_Candidates</td>
+                  <td class="num">39</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Quick_Review_Settings</td>
+                  <td class="num">27</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Config</td>
+                  <td class="num">26</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — empty</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Quick_Review_Fields</td>
+                  <td class="num">21</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Connector</td>
+                  <td class="num">17</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>HomePageComponents</td>
+                  <td class="num">11</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>AI_Companion</td>
+                  <td class="num">7</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Heat_Map</td>
+                  <td class="num">6</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Search_Additional_Button</td>
+                  <td class="num">4</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Interview_Feedback_Default_Questionnaire</td>
+                  <td class="num">3</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>AddResumeField</td>
+                  <td class="num">2</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>ConfigSettingsHierarchy</td>
+                  <td class="num">1</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Config_Settings</td>
+                  <td class="num">1</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Contact_to_Hotbook</td>
+                  <td class="num">1</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — empty</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Deal_Sheets</td>
+                  <td class="num">1</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>HomePageComponent</td>
+                  <td class="num">1</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Metric</td>
+                  <td class="num">1</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — empty</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Review_Resumes</td>
+                  <td class="num">1</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — config</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <p class="tbl-note">
             Row counts are live as of 14 July 2026. The biggest object left
             behind — an email-parsing transaction log with 145,293 rows — holds
@@ -7349,11 +7310,7 @@
           <p>
             For each rebuilt object, the fields that hold data and move across.
             <strong>Every native field name is English</strong> — the new model
-            uses one language throughout.
-          </p>
-
-          <p>
-            Fields fall into three origins:
+            uses one language throughout. Fields fall into three origins:
             <span class="origin-rename">renamed</span> package fields
             (anglicised and de-prefixed from the vendor's names),
             <span class="origin-english">Anglicised</span> Marlex fields (custom
@@ -7371,13 +7328,10 @@
             <p class="callout-h">How each field was decided</p>
             <ul>
               <li>
-                <strong>Kept</strong> — the field holds real data (with the two
-                deliberate exceptions noted at the top of this page, which are
-                kept for a requirement rather than for their contents). Its
-                measured fill rate is shown in the table beside it; anything
-                above zero that isn't a formula or a piece of plumbing is kept,
-                however low, because low-but-real data is still someone's
-                record.
+                <strong>Kept</strong> — the field holds real data. Its measured
+                fill rate is shown in the table beside it; anything above zero
+                that isn't a formula or a piece of plumbing is kept, however
+                low, because low-but-real data is still someone's record.
               </li>
               <li>
                 <strong>Dropped</strong> — one of three things is true: the
@@ -7408,7 +7362,7 @@
               <strong
                 >Contact — the candidate (standard record, back-filled)</strong
               >
-              <span class="cnt">51 fields kept · 90 dropped</span>
+              <span class="cnt">52 fields kept · 89 dropped</span>
             </summary>
             <div class="tbl-scroll">
               <table class="dtbl compact">
@@ -7561,7 +7515,7 @@
                   </tr>
                   <tr>
                     <td>AVTRRT__Internal_Candidate__c</td>
-                    <td class="num">0%</td>
+                    <td class="num">0.0%</td>
                     <td><code>Internal_Candidate__c</code></td>
                     <td><span class="origin-rename">renamed</span></td>
                   </tr>
@@ -7740,7 +7694,7 @@
           <details class="obj-fields">
             <summary>
               <strong>Application</strong>
-              <span class="cnt">66 fields kept · 146 dropped</span>
+              <span class="cnt">67 fields kept · 145 dropped</span>
             </summary>
             <div class="tbl-scroll">
               <table class="dtbl compact">
@@ -7857,7 +7811,7 @@
                   </tr>
                   <tr>
                     <td>Employee_Type__c</td>
-                    <td class="num">0%</td>
+                    <td class="num">0.0%</td>
                     <td><code>Employee_Type__c</code></td>
                     <td><span class="origin-carry">carried</span></td>
                   </tr>
@@ -9535,181 +9489,172 @@
             record type with zero live rows is a piece of unused configuration
             and is not recreated.
           </p>
-          <details class="more">
-            <summary>
-              Record types, object by object<span class="cnt"
-                >— the full table, 24 rows</span
-              >
-            </summary>
-            <div class="more-body">
-              <div class="tbl-scroll">
-                <table class="dtbl">
-                  <thead>
-                    <tr>
-                      <th>Object · record type</th>
-                      <th class="num">Live rows</th>
-                      <th>Disposition</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>Contact [Candidate]</td>
-                      <td class="num">1,063,596</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Contact [Contact]</td>
-                      <td class="num">33,524</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job [Interim]</td>
-                      <td class="num">49,516</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job [Paul]</td>
-                      <td class="num">4,462</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job [Professionals]</td>
-                      <td class="num">1,971</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job [Permanent]</td>
-                      <td class="num">1,102</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job [Oferta Generica People]</td>
-                      <td class="num">49</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job [Oferta Generica Paul]</td>
-                      <td class="num">11</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>
-                        Job
-                        [Convert/Corporate/HighQualified/PropuestaActiva/Staffing/Template]
-                      </td>
-                      <td class="num">0</td>
-                      <td>DROP (0 rows)</td>
-                    </tr>
-                    <tr>
-                      <td>Job_Applicant [Propuesta Activa]</td>
-                      <td class="num">711,054</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job_Applicant [Peticion Interim]</td>
-                      <td class="num">525,948</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job_Applicant [Proceso Manager]</td>
-                      <td class="num">80,204</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job_Applicant [Skilled Professionals]</td>
-                      <td class="num">49,064</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job_Applicant [Proceso Permanent]</td>
-                      <td class="num">36,019</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job_Applicant [Proceso Professional]</td>
-                      <td class="num">1,390</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Job_Applicant [Staffing]</td>
-                      <td class="num">765</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr class="review">
-                      <td>Job_Applicant [Generica]</td>
-                      <td class="num">2</td>
-                      <td>REVIEW (2 rows)</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Job_Applicant [Corporate]</td>
-                      <td class="num">0</td>
-                      <td>DROP (0 rows)</td>
-                    </tr>
-                    <tr>
-                      <td>Placement [Peticion Interim]</td>
-                      <td class="num">37,567</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Placement [Fijo Discontinuo]</td>
-                      <td class="num">7,016</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Placement [Proceso Manager]</td>
-                      <td class="num">752</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Placement [Proceso Permanent]</td>
-                      <td class="num">519</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Placement [Skilled Professionals]</td>
-                      <td class="num">448</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Placement [Proceso Professional]</td>
-                      <td class="num">417</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Placement [Corporate/Staffing]</td>
-                      <td class="num">0</td>
-                      <td>DROP (0 rows)</td>
-                    </tr>
-                    <tr>
-                      <td>Interview [Staffing Interview]</td>
-                      <td class="num">125,636</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr class="dropped">
-                      <td>Interview [Corporate Interview]</td>
-                      <td class="num">0</td>
-                      <td>DROP (0 rows)</td>
-                    </tr>
-                    <tr>
-                      <td>Hotbook [Candidate]</td>
-                      <td class="num">483</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr>
-                      <td>Hotbook [Job]</td>
-                      <td class="num">113</td>
-                      <td>MIGRATE</td>
-                    </tr>
-                    <tr class="review">
-                      <td>Hotbook [Contact]</td>
-                      <td class="num">1</td>
-                      <td>REVIEW (1 row)</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </details>
+          <div class="tbl-scroll">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Object · record type</th>
+                  <th class="num">Live rows</th>
+                  <th>Disposition</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Contact [Candidate]</td>
+                  <td class="num">1,063,596</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Contact [Contact]</td>
+                  <td class="num">33,524</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job [Interim]</td>
+                  <td class="num">49,516</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job [Paul]</td>
+                  <td class="num">4,462</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job [Professionals]</td>
+                  <td class="num">1,971</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job [Permanent]</td>
+                  <td class="num">1,102</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job [Oferta Generica People]</td>
+                  <td class="num">49</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job [Oferta Generica Paul]</td>
+                  <td class="num">11</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr class="dropped">
+                  <td>
+                    Job
+                    [Convert/Corporate/HighQualified/PropuestaActiva/Staffing/Template]
+                  </td>
+                  <td class="num">0</td>
+                  <td>DROP (0 rows)</td>
+                </tr>
+                <tr>
+                  <td>Job_Applicant [Propuesta Activa]</td>
+                  <td class="num">711,054</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job_Applicant [Peticion Interim]</td>
+                  <td class="num">525,948</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job_Applicant [Proceso Manager]</td>
+                  <td class="num">80,204</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job_Applicant [Skilled Professionals]</td>
+                  <td class="num">49,064</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job_Applicant [Proceso Permanent]</td>
+                  <td class="num">36,019</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job_Applicant [Proceso Professional]</td>
+                  <td class="num">1,390</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Job_Applicant [Staffing]</td>
+                  <td class="num">765</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr class="review">
+                  <td>Job_Applicant [Generica]</td>
+                  <td class="num">2</td>
+                  <td>REVIEW (2 rows)</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Job_Applicant [Corporate]</td>
+                  <td class="num">0</td>
+                  <td>DROP (0 rows)</td>
+                </tr>
+                <tr>
+                  <td>Placement [Peticion Interim]</td>
+                  <td class="num">37,567</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Placement [Fijo Discontinuo]</td>
+                  <td class="num">7,016</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Placement [Proceso Manager]</td>
+                  <td class="num">752</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Placement [Proceso Permanent]</td>
+                  <td class="num">519</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Placement [Skilled Professionals]</td>
+                  <td class="num">448</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Placement [Proceso Professional]</td>
+                  <td class="num">417</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Placement [Corporate/Staffing]</td>
+                  <td class="num">0</td>
+                  <td>DROP (0 rows)</td>
+                </tr>
+                <tr>
+                  <td>Interview [Staffing Interview]</td>
+                  <td class="num">125,636</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Interview [Corporate Interview]</td>
+                  <td class="num">0</td>
+                  <td>DROP (0 rows)</td>
+                </tr>
+                <tr>
+                  <td>Hotbook [Candidate]</td>
+                  <td class="num">483</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr>
+                  <td>Hotbook [Job]</td>
+                  <td class="num">113</td>
+                  <td>MIGRATE</td>
+                </tr>
+                <tr class="review">
+                  <td>Hotbook [Contact]</td>
+                  <td class="num">1</td>
+                  <td>REVIEW (1 row)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
           <p class="tbl-note">
             One record type dominates each object: the interim job process
             (49,516 of 57,110 jobs), the active-proposal and interim-request
@@ -9784,17 +9729,10 @@
             are the places where "the data is present" isn't the whole answer.
           </p>
           <div class="callout warn">
-            <p class="callout-h">Four confirmations before the model freezes</p>
+            <p class="callout-h">
+              Three confirmations before the model freezes
+            </p>
             <ul>
-              <li>
-                <strong
-                  >Saved searches — keep the data, or just the feature?</strong
-                >
-                The old system holds roughly 59,000 personal saved searches. The
-                plan is to rebuild the search capability but not carry the old
-                saved-search records, which are mostly stale. Needs a yes from
-                the product owner before we drop them.
-              </li>
               <li>
                 <strong>Two rare record types.</strong> One application type
                 ("Genérica", 2 records) and one talent-pool type ("Contact", 1
@@ -9824,7 +9762,20 @@
             </ul>
           </div>
           <p>
-            Beyond these four, a small number of candidate fields are populated
+            <strong>Settled on 2026-07-30 — saved searches.</strong> The old
+            system holds roughly 59,000 personal saved searches, and the product
+            owner confirmed they are not carried across. The search capability
+            is rebuilt natively, and every search record drops one-to-one: the
+            saved searches themselves, the approval records beneath them, and
+            the job-alert searches. This holds even where the old data looks
+            well populated — the stored search criteria are filled on every
+            record, but they describe searches against a data model that no
+            longer exists after the rebuild, so carrying them would preserve the
+            text of a question that can no longer be asked. The job lookup
+            pointing at a saved search drops with them.
+          </p>
+          <p>
+            Beyond these three, a small number of candidate fields are populated
             on well under one percent of records; they migrate by the "presence
             of data" rule, but the product owner may choose to drop the
             near-empty ones. That is a low-stakes tidy-up, not a blocker. The
@@ -21584,13 +21535,6 @@
                     seasonally populated?
                   </td>
                   <td>Confirms the scope reduction.</td>
-                </tr>
-                <tr>
-                  <td>
-                    Saved searches (59K): migrate, or rebuild-empty and let
-                    users recreate?
-                  </td>
-                  <td>Adds/removes a 59K-row object from scope.</td>
                 </tr>
                 <tr>
                   <td>Seasonal-placement trough dates?</td>
