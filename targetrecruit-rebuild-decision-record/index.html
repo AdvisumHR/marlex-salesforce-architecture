@@ -15204,7 +15204,8 @@
             reason required to escalate to code.
           </p>
           <p class="dateline">
-            Build standard · draft for peer review · 28 July 2026
+            Build standard · draft for peer review · 28 July 2026 · rule on
+            where a business rule lives added 27 August 2026
           </p>
         </header>
 
@@ -15236,6 +15237,18 @@
             possible, but only for a surface that is genuinely not a record
             page, justified case by case, and composed from the same modular
             components.
+          </p>
+          <p>
+            <strong>And a second rule, settled later.</strong> Once pages are
+            assembled rather than coded, the page builder makes it easy to hang
+            a business rule on a component — show this button only when the
+            record is approved. That is now ruled out as the <em>only</em> place
+            a rule lives. Anything protecting the integrity of a process is
+            written onto the record, where it holds for a person, an integration
+            and a data load alike; the screen keeps the work of presenting it.
+            Reading the current system found a meaningful number of places where
+            a button that moves work forward is gated only by a condition on a
+            screen — so this is a correction, not a precaution.
           </p>
           <p>
             <strong>The decisive fact.</strong> AI-assisted development has made
@@ -15821,6 +15834,92 @@
         </section>
 
         <section>
+          <p class="section-eyebrow">Where a rule lives</p>
+          <h2>The page presents the rule; it does not hold it</h2>
+          <p>
+            The standard above settles how a record page is built. It leaves a
+            second question open. Once a page is assembled from the platform's
+            own building blocks,
+            <em>may a business rule live inside it?</em> The page builder makes
+            that easy: each component can be given a condition deciding whether
+            it appears. The answer is no. A rule written onto a screen governs
+            only the people who arrive through that screen.
+          </p>
+          <p>
+            Reading the current system shows how far that has already gone.
+            Across the record pages carry a large number of these conditions.
+            Most are ordinary housekeeping: they hide a field or a section that
+            is not relevant yet, which is exactly what a screen is for. A
+            meaningful minority are different. They decide whether a
+            <em>button</em> appears — and the button is how work moves forward.
+          </p>
+          <p>
+            The clearest case is an offer. Sending it for signature, accepting
+            it, making it current, marking it expired: each of those is a
+            button, and each button is shown or hidden by a condition on the
+            offer's state and its approval. The offer does carry rules of its
+            own, so this is not an unguarded record. But read what those rules
+            guard. They freeze the price and the margin <em>after</em> an offer
+            is approved, and they require a bank account before it becomes
+            current. Not one of them stops an unapproved offer being sent for
+            signature. That protection exists only as a hidden button.
+          </p>
+          <p>
+            That was a reasonable way to build when the screen was the only way
+            in. It no longer is. Applications already arrive from the careers
+            landing pages and the job boards over a direct connection; the
+            payroll and staffing systems exchange records through the
+            integration layer; and the data migration itself writes millions of
+            records without a screen ever opening. None of those are subject to
+            a condition that exists only on a page. Nor is anything else that
+            arrives without a browser — a category that is growing, not
+            shrinking.
+          </p>
+          <p>
+            <strong>So placement is decided by what kind of rule it is.</strong>
+            Anything protecting the integrity of a process — what must be filled
+            in, which state may follow which, what needs approval before it
+            moves, what may no longer change once closed — is written onto the
+            record, where it applies to a person, an integration and a data load
+            alike. Anything the business calculates and others rely on is
+            derived on the record too. A system reading the data then gets a
+            dependable answer, instead of one that only exists once a screen has
+            rendered. What genuinely belongs on the screen stays there: showing
+            the right fields at the right moment, hiding what is irrelevant,
+            guiding someone through the work. A screen may repeat a rule to make
+            the experience better — catching a problem before save is kinder
+            than catching it after. What it may not do is be the only place the
+            rule exists.
+          </p>
+          <p>
+            This does not reopen the decision above: assembling pages from the
+            platform's building blocks remains the right way to build them. The
+            change is narrower, and it is the pairing that makes both rules
+            coherent — the page presents the rule, it no longer holds it.
+          </p>
+          <div class="tech">
+            <span class="tech-label">For the developers</span>
+            Integrity constraints go in a validation rule, a before-save flow,
+            or Apex on the object — <code>addError()</code> on the record, not a
+            thrown exception from a controller. Derived state goes in a formula,
+            a roll-up, or a before-save flow, never a getter in a component's
+            JavaScript. What may not be the sole control:
+            <code>&lt;behavior&gt;Required&lt;/behavior&gt;</code> on a layout,
+            a <code>&lt;visibilityRule&gt;</code> on a FlexiPage or Dynamic
+            Forms field section, <code>reportValidity()</code> or a hand-rolled
+            check in a Lightning web component, and screen-flow navigation that
+            gates the next screen. The test to apply to any new constraint:
+            would it still hold for a <code>composite/sobjects</code> POST, a
+            Bulk API v2 job, an <code>sf data upsert</code>, and the data
+            migration's own load? If the answer is no for any of them, it is in
+            the wrong layer. Note the two genuine costs: validation rules fire
+            on save rather than on keystroke, and they also apply to the data
+            migration — so the load must either satisfy them or run under a
+            documented, time-limited exception.
+          </div>
+        </section>
+
+        <section>
           <p class="section-eyebrow">What this means for what exists</p>
           <h2>Applying the standard to the prototype</h2>
           <p>
@@ -15852,6 +15951,19 @@
               <strong>Styling consolidates into one shared module</strong>
               extending the platform's design system, retiring the per-component
               hard-coded CSS.
+            </li>
+            <li>
+              <strong
+                >Rules carried across are recorded, not silently
+                re-created.</strong
+              >
+              As each capability is rebuilt, any protection it inherits that
+              lives only on a screen is written down as work still to do. It is
+              not treated as a defect: nobody has yet costed what moving four
+              hundred of them involves, and the teams re-pointing components
+              were told to carry them. Recording them is what makes that cost
+              visible — and what stops the new model quietly inheriting the same
+              gap.
             </li>
           </ul>
           <p>
@@ -15885,6 +15997,27 @@
               workspace (and any sibling) earns its full-screen exception is
               decided case by case against the matrix, by its owner and the
               review gate — not grandfathered in by default.
+            </li>
+            <li>
+              <strong>How much the carried-across rules cost to move.</strong>
+              About seven hundred of the screen-level conditions sit on records
+              that outlive the old product and must be re-pointed to the new
+              model, so somebody will handle every one of them. What is not yet
+              known is how many collapse into a single shared rule per record
+              and how many need moving one at a time — the difference between
+              work that rides along with each rebuilt capability at little extra
+              cost and work that needs its own place in the plan. Owned by
+              programme architecture; that figure is what turns this from a
+              principle into a schedule.
+            </li>
+            <li>
+              <strong
+                >How the historical data move satisfies the new rules.</strong
+              >
+              Rules written onto records apply to the load as well as to people,
+              which is correct but has to be planned: either the migrated data
+              satisfies them or the load runs under a documented, time-limited
+              exception. Owned by programme architecture with the build team.
             </li>
             <li>
               <strong>The test baseline for existing code.</strong> Accepting
