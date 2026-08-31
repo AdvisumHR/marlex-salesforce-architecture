@@ -11876,30 +11876,17 @@
           </p>
           <p>
             <strong>The one condition that changes this.</strong> Carrying the
-            open model forward is the right default
-            <em>only while nothing confidential lives in the system</em>. The
-            moment the internal HR team is onboarded — running internal
-            recruitment for backfills and internal moves, where a process can be
-            "replace this director" and must not be visible to the person being
-            replaced — an open model is a live confidentiality breach, not a
-            deferrable nicety. So
-            <strong
-              >HR onboarding and privatisation are inseparable: wherever HR
-              lands, private lands with it.</strong
-            >
-          </p>
-          <p>
-            That makes this a conditional fork keyed to a single business
-            decision — does HR onboard <em>at</em> cutover, or
-            <em>after</em> it? If after (recommended), day one stays open and
-            privatisation runs as its own later stage. If at cutover, the model
-            is <strong>born private on day one</strong> — the "born private"
-            option below flips from rejected to chosen. In both branches the HR
-            model is built on the
-            <strong
-              >new custom objects and components, never on the legacy
-              package</strong
-            >.
+            open model forward is right only while nothing confidential lives in
+            the system. The moment the internal HR team is onboarded — running
+            internal recruitment where a process can be "replace this director"
+            and must not be visible to the person being replaced — an open model
+            is a live confidentiality breach. So the sequencing turns on one
+            business decision: does HR onboard <em>at</em> cutover, or
+            <em>after</em> it? After (recommended) keeps day one open and
+            privatisation as its own later stage; at cutover, the model is
+            <strong>born private on day one</strong> and the option below flips
+            from rejected to chosen. Either way the HR model is built on the new
+            objects, never on the legacy package.
           </p>
         </div>
 
@@ -12141,8 +12128,7 @@
                 calendar is empty of other risk, not on cutover morning.
               </p>
               <p>
-                One correction the audit forces on this plan, worth stating
-                before the stage is scoped:
+                One correction the audit forces on this plan:
                 <strong
                   >the existing management structure has no country level in
                   it</strong
@@ -12678,57 +12664,33 @@
 
         <div class="bluf">
           <p>
-            <strong>Read this if</strong> you need to know why a given user can
-            or cannot open a given record, or you are about to tighten one of
-            these objects. The
-            <a href="#view-security">decision page</a> explains
-            <em>when</em> the model is tightened; this page is the line-by-line
-            <em>what is there now</em>.
-          </p>
-          <p>
-            <strong>The finding in one line:</strong> there is almost no
-            record-access model to reproduce.
+            <strong
+              >There is almost no record-access model to reproduce.</strong
+            >
             <strong>Eleven of the thirteen</strong> recruitment objects being
             rebuilt are open to every internal user with no sharing
             configuration whatsoever — the platform's sharing tables for them
             are <strong>empty</strong>. Reproducing today's behaviour needs
             <strong>one setting per object plus at most one rule</strong>, not a
-            sharing architecture. The effort belongs to the later tightening
-            stage, not to cutover.
+            sharing architecture.
           </p>
           <p>
-            <strong
-              >Two projects, not one — and this page belongs to the
-              first.</strong
-            >
-            The rebuild's job on record access is
-            <strong>to replicate what exists today onto the new objects</strong
-            >. Nothing more. Making the model private is a
-            <strong>separate, later project</strong> with its own scope, timing,
-            rehearsal and rollback — it is not a phase of the rebuild and does
-            not share its plan. That separation is deliberate: the rebuild is
-            already the largest change the business will absorb, and the current
-            model is so open that replicating it carries almost no risk, while
-            tightening it carries a great deal.
+            <strong>The rebuild replicates; it does not tighten.</strong> Making
+            the model private is a separate, later project with its own scope,
+            rehearsal and rollback. Replicating an open model carries almost no
+            risk; tightening it carries a great deal, and the rebuild is already
+            the largest change the business will absorb. Where the audit turned
+            up something that project will need, it is marked as an input handed
+            to it, never as work this one takes on.
           </p>
           <p>
-            So everything below describes <strong>what to replicate</strong>.
-            Where the audit turned up something the future privatisation project
-            will need to know, it is marked as an
-            <strong>input handed to that project</strong> — never as work this
-            one takes on.
-          </p>
-          <p>
-            <strong
-              >Why this is a separate page from the permissions audit.</strong
-            >
-            Two different questions get confused constantly.
+            <strong>Records, not objects.</strong>
             <em>Which objects and fields</em> a person can reach is decided by
             their profile and permission sets — that is the
             <a href="#view-access">access page</a>. <em>Which records</em> of
-            those objects they can reach is decided by the mechanisms below. A
-            person needs <strong>both</strong>, and this page contains a
-            measured case that proves it.
+            those objects they reach is decided by the mechanisms below. A
+            person needs both, and the marketing-user case below measures what
+            happens when only one is open.
           </p>
         </div>
 
@@ -12945,13 +12907,10 @@
           </div>
           <div class="callout">
             <p>
-              <strong
-                >A trap worth recording, because it looks like a defect and is
-                not.</strong
-              >
-              The rule's stored definition tests the visibility field against
-              the value <code>Público</code>, while the value actually stored on
-              every record is <code>Public</code> — and the field offers only
+              <strong>The rule looks broken and is not.</strong> The rule's
+              stored definition tests the visibility field against the value
+              <code>Público</code>, while the value actually stored on every
+              record is <code>Public</code> — and the field offers only
               <code>Public</code> and <code>Private</code>. That reads like a
               rule matching nothing.
             </p>
@@ -14078,12 +14037,9 @@
             <strong>What this decides.</strong> How each user's
             <em>permissions</em> — which objects and fields they can open, which
             app and tabs they see — move from the old package to the new build
-            without changing what any of them is allowed to do. This is a
-            distinct problem from who can see which <em>records</em>: that is
-            the sharing question, carried forward unchanged at cutover and
-            covered on the <a href="#view-security">Security</a> page. Here the
-            question is object, field and app access, and it is genuinely close
-            to a swap.
+            without changing what any of them is allowed to do. Who sees which
+            <em>records</em> is the sharing question, on the
+            <a href="#view-security">Security</a> page.
           </p>
           <p>
             <strong>What we chose.</strong> Reproduce today's access on the new
@@ -14112,8 +14068,7 @@
             is the same toggle in reverse. Users keep the exact access level
             they have now — measured as
             <em>what each person can actually open and edit</em>, not as a count
-            of the grants they hold, which is a distinction that turned out to
-            matter and is drawn out below.
+            of the grants they hold — a distinction that turned out to matter.
           </p>
           <p>
             The reason it is nearly a swap and not a redesign is a fact the
@@ -14407,11 +14362,10 @@
             <p>
               Where a tool is reachable only by holding one specific grant, that
               grant can be the control, and the code records which grant it is
-              relying on. This is not a loophole invented here — it is a pattern
-              already in use and already documented in the code, by the team
-              that wrote it, for exactly the case it fits. Keeping it as a named
-              exception with a stated dependency is what stops it becoming an
-              excuse everywhere else.
+              relying on. The pattern is already in use and documented in the
+              code, by the team that wrote it. Keeping it as a named exception
+              with a stated dependency is what stops it becoming an excuse
+              everywhere else.
             </p>
           </div>
 
@@ -15479,13 +15433,6 @@
             platform directly, record by record, and reports what the platform
             says.
           </p>
-
-          <p>
-            The split matters for trust. The cheap half is cheap because the
-            rule is genuinely trivial; the expensive half stays expensive
-            because the rule is genuinely hard, and paying for it is the only
-            honest option.
-          </p>
         </section>
 
         <section>
@@ -15721,17 +15668,15 @@
           </p>
 
           <p>
-            Both together give the finding, and it is still striking. Across the
-            objects in scope, a large share of the fields a user is permitted to
-            read appear on no screen at all &mdash; on the main person record,
-            under half of more than three hundred fields are on any page,
-            classic or Lightning. That is not a defect to fix before the
-            rebuild; it is the shape of a system carrying years of accumulated
-            fields, and it is useful in two ways. It sets a realistic target
-            &mdash; the rebuild has to reproduce the fields people actually see,
-            which is a far smaller set than the fields they may technically
-            read. And it says the field-level parity check on its own would have
-            been reassuring about a surface nobody looks at.
+            Across the objects in scope, a large share of the fields a user is
+            permitted to read appear on no screen at all &mdash; on the main
+            person record, under half of more than three hundred fields are on
+            any page, classic or Lightning. That is the shape of a system
+            carrying years of accumulated fields, not a defect to fix first, and
+            it sets the real target: the rebuild reproduces the fields people
+            <em>see</em>, a far smaller set than the fields they may read. A
+            field-level check alone would have been reassuring about a surface
+            nobody looks at.
           </p>
 
           <p>
