@@ -1744,6 +1744,18 @@
     <a class="navlink" data-view="access" href="#view-access"
       ><span class="n">6</span><span>Access & app switch</span></a
     >
+    <a
+      class="navlink nonum"
+      data-view="access-parity-method"
+      href="#view-access-parity-method"
+      >· Proving access parity</a
+    >
+    <a
+      class="navlink nonum"
+      data-view="access-parity-sweep"
+      href="#view-access-parity-sweep"
+      >· Parity sweep result</a
+    >
     <a class="navlink" data-view="build-standard" href="#view-build-standard"
       ><span class="n">7</span><span>Declarative vs code</span></a
     >
@@ -15187,6 +15199,942 @@
             production-org audit and live access-model queries.
           </p>
         </footer>
+      </div>
+    </section>
+    <section class="page-view" id="view-access-parity-method">
+      <div class="wrap-inner">
+        <header class="masthead">
+          <p class="eyebrow">Security · method</p>
+          <h1>Proving nobody gains or loses access</h1>
+          <p class="subtitle">
+            The rebuild replaces the objects people work in. This is the check
+            that says, for every active user, that their access after the switch
+            is the same as before &mdash; the same objects, the same fields, the
+            same records &mdash; and the reason the check is affordable to run
+            at all.
+          </p>
+          <p class="dateline">
+            Method &middot; read-only against production &middot; living page
+          </p>
+        </header>
+
+        <div class="bluf">
+          <p>
+            <strong>Read this if</strong> you need to know how the parity claim
+            is established, or you are about to run the check yourself. For what
+            it found, read the
+            <a href="#view-access-parity-sweep">sweep result</a>.
+          </p>
+          <p>
+            <strong>In one line:</strong> access is not granted per person, it
+            is granted through a handful of channels &mdash; so the population
+            collapses into a small number of groups whose members are, by the
+            platform's own rules, indistinguishable, and the check runs once per
+            group instead of once per person.
+          </p>
+        </div>
+
+        <section>
+          <h2>The problem with checking every user</h2>
+
+          <p>
+            There are 539 active users and seventeen objects in the rebuild's
+            blast radius. Asking the platform, for each user and each object,
+            what they can reach is over nine thousand questions on the rights
+            side and as many again on the records side. Each one takes a few
+            seconds. Run naively, the check takes most of a day, and it has to
+            be run twice &mdash; once before the switch and once after &mdash;
+            on every object that moves.
+          </p>
+
+          <p>
+            That cost is not inherent. It comes from treating each user as a
+            separate case, when the platform does not. Salesforce grants access
+            through a fixed set of channels: a profile, some permission sets, a
+            role, some groups, a team. Two users who sit on exactly the same
+            channels cannot have different access &mdash; not as a matter of
+            probability, but as a matter of how the product computes the answer.
+            Checking both is checking the same thing twice.
+          </p>
+
+          <p>
+            So the check groups users by their
+            <strong>access signature</strong> and runs once per group. The
+            entire method rests on that signature being complete: if it omits a
+            channel that really does differentiate two people, they get merged,
+            only one is tested, and the check reports a parity it never
+            established. Everything below is about earning the right to make
+            that reduction.
+          </p>
+        </section>
+
+        <section>
+          <h2>Two questions, two different kinds of answer</h2>
+
+          <p>
+            "Does this user have the same access" is really two questions, and
+            they are answered by different means because the underlying rules
+            differ in difficulty.
+          </p>
+
+          <p>
+            <strong>Rights</strong> &mdash; which objects, fields, record types,
+            tabs, apps and Apex classes a user can reach &mdash; are a plain
+            union. A user holds a right if their profile grants it or any of
+            their permission sets does. There is no deny, no precedence, no
+            ordering. (Muting permission sets would subtract, and this org has
+            none.) A rule that simple can be computed exactly from the
+            configuration itself, so it is: the check reads the retrieved
+            metadata and resolves the union offline, at no query cost.
+          </p>
+
+          <p>
+            <strong>Record visibility</strong> &mdash; which individual rows a
+            user can open &mdash; is not simple. It is the combined effect of
+            the org-wide default, the management hierarchy, sharing rules,
+            manual shares, teams, parent-child inheritance and the two override
+            permissions, resolved by Salesforce's own sharing engine.
+            Reimplementing that in a script would be a guess wearing the costume
+            of a measurement. So the check does not reimplement it: it asks the
+            platform directly, record by record, and reports what the platform
+            says.
+          </p>
+
+          <p>
+            The split matters for trust. The cheap half is cheap because the
+            rule is genuinely trivial; the expensive half stays expensive
+            because the rule is genuinely hard, and paying for it is the only
+            honest option.
+          </p>
+        </section>
+
+        <section>
+          <h2>What the signature has to contain</h2>
+
+          <p>
+            The signature is only trustworthy if every live mechanism is either
+            in it or demonstrably inert. Each mechanism the platform offers was
+            therefore probed against production rather than assumed. Several
+            turned out to be switched off, and recording <em>that</em> is part
+            of the evidence &mdash; an absent mechanism is a finding, not an
+            omission.
+          </p>
+
+          <table>
+            <thead>
+              <tr>
+                <th>Mechanism</th>
+                <th>State</th>
+                <th>In the signature</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Profile and permission sets</td>
+                <td>The primary channel</td>
+                <td>Yes &mdash; the whole of it</td>
+              </tr>
+              <tr>
+                <td>Permission set groups</td>
+                <td>Present but unassigned</td>
+                <td>No &mdash; inert</td>
+              </tr>
+              <tr>
+                <td>Muting permission sets</td>
+                <td>None exist</td>
+                <td>No &mdash; nothing is ever subtracted</td>
+              </tr>
+              <tr>
+                <td>Assignments with an expiry date</td>
+                <td>None exist</td>
+                <td>No &mdash; a signature does not decay between runs</td>
+              </tr>
+              <tr>
+                <td>View-all and modify-all overrides</td>
+                <td>Held by a small population</td>
+                <td>Yes &mdash; read as an override</td>
+              </tr>
+              <tr>
+                <td>Record types, tabs, apps, Apex, layouts</td>
+                <td>Live</td>
+                <td>Carried by the same channel as rights</td>
+              </tr>
+              <tr>
+                <td>Org-wide defaults</td>
+                <td>Open on most objects</td>
+                <td>Decides which regime an object is in</td>
+              </tr>
+              <tr>
+                <td>Management hierarchy</td>
+                <td>Roll-up switched on</td>
+                <td>Yes, on the two objects where it can bite</td>
+              </tr>
+              <tr>
+                <td>Sharing rules</td>
+                <td>Three, all measured</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Manual shares</td>
+                <td>Present on the private object</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Apex managed sharing</td>
+                <td>No custom sharing reasons at all</td>
+                <td>No &mdash; inert</td>
+              </tr>
+              <tr>
+                <td>Account and opportunity teams</td>
+                <td>The heaviest mechanism in the org</td>
+                <td>Yes</td>
+              </tr>
+              <tr>
+                <td>Territory management</td>
+                <td>Not enabled</td>
+                <td>No &mdash; inert</td>
+              </tr>
+              <tr>
+                <td>Queues</td>
+                <td>A handful, narrow</td>
+                <td>Yes, via group membership</td>
+              </tr>
+              <tr>
+                <td>Public groups</td>
+                <td>Live, and nested</td>
+                <td>Yes &mdash; see below</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <p>
+            Two of these were missing from the first draft of the signature, and
+            both would have produced a false pass.
+          </p>
+
+          <h3>Groups contain groups</h3>
+
+          <p>
+            Reading group membership the obvious way &mdash; who is listed
+            directly in each group &mdash; understates it badly here, because
+            most membership rows point at another group rather than at a person.
+            The great majority of users who belong to any group reach at least
+            one of them only through nesting. A signature built on direct
+            membership would merge users who genuinely differ. The check
+            resolves membership transitively, following group-inside-group to a
+            fixed point, and guards against a cycle.
+          </p>
+
+          <h3>
+            Teams are the biggest mechanism, and were not in the first draft
+          </h3>
+
+          <p>
+            Account and opportunity teams carry more grants than every other
+            mechanism combined. They are not part of the ATS objects being
+            rebuilt, which is why they were initially out of view &mdash; but
+            one of the account sharing rules grants contact access as a side
+            effect, and contacts <em>are</em> in the rebuild. Leaving teams out
+            would have left contact parity untested. They are in the signature,
+            and accounts and opportunities are in the sweep.
+          </p>
+        </section>
+
+        <section>
+          <h2>Why position in the hierarchy turned out not to matter</h2>
+
+          <p>
+            The obvious way to encode the management hierarchy is to key the
+            signature on the user's role. Doing that fragments the population
+            badly, roughly tripling the number of groups, and each extra group
+            costs another probe.
+          </p>
+
+          <p>
+            It also turns out to be unnecessary here, for a reason specific to
+            how this org is configured. Every role sits underneath a single
+            root, and the one sharing rule that targets the hierarchy grants to
+            that root <em>and everyone below it</em>. It therefore reaches every
+            user who has a role at all, and reaches them identically. What
+            separates one user from another is not where they sit in the tree
+            but whether they are in the tree, so the signature carries that
+            single fact instead of the role itself. No share anywhere in the
+            scope is directed at an individual role.
+          </p>
+
+          <p>
+            This is a measured shortcut, not a general truth, and it expires the
+            moment someone writes a sharing rule aimed at a role below the root.
+            The check detects that condition and warns rather than silently
+            continuing to use the cheaper key.
+          </p>
+        </section>
+
+        <section>
+          <h2>Open objects: test the claim, do not repeat it</h2>
+
+          <p>
+            Most of the objects in scope are open &mdash; the org-wide default
+            already lets every internal user see every record, and no
+            ownership-based mechanism can take that away. On such an object the
+            answer to "how much can this user see" is "all of it" for everybody,
+            and asking one hundred and fifty times produces one hundred and
+            fifty identical answers.
+          </p>
+
+          <p>
+            The check does not skip these objects, and it does not pretend to
+            have probed them exhaustively either. It states the claim &mdash;
+            every internal user reaches every record &mdash; and then tries to
+            break it, probing a spread of groups chosen precisely because they
+            are the most likely counter-examples: the largest group, the
+            smallest, users with no role at all, guest identities, integration
+            accounts with almost no grants. If every one of them sees
+            everything, the claim stands for that object. If any sees less, the
+            claim is false, and the check escalates that object to full
+            group-by-group probing automatically rather than reporting a pass.
+          </p>
+
+          <p>
+            Objects where users genuinely do differ &mdash; the private talent
+            pool, and accounts and opportunities with their teams and hierarchy
+            rule &mdash; get every group probed. No falsification shortcut is
+            applied there.
+          </p>
+        </section>
+
+        <section>
+          <h2>Permission is not the same as visible</h2>
+
+          <p>
+            Field security decides whether a user <em>may</em> read a field. The
+            page layout decides whether they will ever <em>see</em> it. Those
+            are different questions, and only the first is a permission. A
+            rebuild can reproduce field security perfectly and still ship a
+            screen that lost a field, because nothing in the permission model
+            notices that the field is no longer on the page. Users notice
+            immediately.
+          </p>
+
+          <p>
+            So the check captures a third surface: for every layout on every
+            object in scope, which fields appear, in what order, in which
+            section, and which are read-only on the page itself regardless of
+            permission. Re-run after cutover and diff. A field readable before
+            and after, but present on a layout before and absent after, is a
+            regression the other two halves cannot see.
+          </p>
+
+          <p>
+            Measuring this changed what we know about the current system. Across
+            the objects in scope, the great majority of fields a user is
+            permitted to read are on no layout at all &mdash; on the main person
+            record, under a hundred of more than three hundred and fifty fields
+            appear on any page. That is not a defect to fix before the rebuild;
+            it is the shape of a system carrying years of accumulated fields,
+            and it is useful in two ways. It sets a realistic target &mdash; the
+            rebuild has to reproduce the fields people actually see, which is a
+            far smaller set than the fields they may technically read. And it
+            says the field-level parity check on its own would have been
+            reassuring about a surface nobody looks at.
+          </p>
+
+          <div class="tech">
+            <span class="tech-label">For the developers</span>
+            <dl>
+              <dt>
+                Resolving a layout's retrievable name &mdash; two independent
+                traps
+              </dt>
+              <dd>
+                Both fail with the same unhelpful <code>cannot be found</code>,
+                which reads like a missing component rather than a naming
+                problem. First, the metadata list URL-encodes characters that
+                are legal in a label: <code>Hotbook/Candidates</code> arrives as
+                <code>Hotbook%2FCandidates</code> and must be decoded. Second, a
+                managed layout carries its namespace
+                <strong>twice</strong> &mdash; once on the object and once on
+                the label, as
+                <code>AVTRRT__Hotbook__c-AVTRRT__Hotbook Layout</code> &mdash;
+                while the list reports only the first. Prefixing the object
+                alone is not enough. With both applied, coverage went from 18 of
+                45 in-scope layouts to 46 of 46.
+              </dd>
+
+              <dt>Ambiguous names are reported, never guessed</dt>
+              <dd>
+                <code>Contact-Contact Layout</code> exists twice on this org,
+                once unmanaged and once installed by <code>AVTRRT</code>. The
+                name alone does not identify a component. The check attempts
+                both candidate forms and records the ambiguity rather than
+                silently picking one and halving the answer.
+              </dd>
+
+              <dt>What is captured</dt>
+              <dd>
+                <code>sweep_layouts.py</code> writes one row per field
+                placement: object, layout, field, position, section, and the
+                item's <code>behavior</code> (<code>Edit</code>,
+                <code>Readonly</code>, <code>Required</code>). Note the platform
+                spells it <code>Readonly</code>, not
+                <code>ReadOnly</code> &mdash; matching the wrong case silently
+                reports zero page-level read-only fields.
+              </dd>
+
+              <dt>Not yet covered</dt>
+              <dd>
+                Lightning record pages (<code>FlexiPage</code>) are the surface
+                most users actually see on modern objects, and they are not
+                diffed here &mdash; only classic layouts are. Layout
+                <em>assignment</em> per profile is read from the grant surface;
+                the layout <em>body</em> comes from this sweep. Joining the two
+                per cluster is the remaining step.
+              </dd>
+            </dl>
+          </div>
+        </section>
+
+        <section>
+          <h2>How the check is used at cutover</h2>
+
+          <p>
+            The check produces a baseline, not a verdict. Run it against the old
+            objects before the switch and it records what each group can reach.
+            Run it against the new objects afterwards and compare: the same
+            proportion visible, reached by an equivalent mechanism, means access
+            was reproduced. Less is a regression. More is an over-grant, which
+            is the failure people forget to look for and the more dangerous of
+            the two.
+          </p>
+
+          <p>
+            Both halves must be read together. A user can be reached by a
+            sharing rule and still see nothing because their profile lacks
+            object access; a user can hold every field permission and still see
+            no rows. Rights and records answer different questions, and a parity
+            claim needs both.
+          </p>
+
+          <div class="tech">
+            <span class="tech-label">For the developers</span>
+            <dl>
+              <dt>Safety</dt>
+              <dd>
+                Every script resolves the org Id before its first query and
+                exits on mismatch, so a repointed alias cannot redirect the run.
+                Nothing is ever written: the sweep is <code>SELECT</code> plus
+                one metadata <code>retrieve</code>.
+              </dd>
+
+              <dt>Population extraction</dt>
+              <dd>
+                <code>fetch_population.py</code> pulls users, assignments, group
+                membership, groups, teams, record types and roles in eight bulk
+                queries. Team membership is aggregated in SOQL with
+                <code>GROUP BY</code>, not listed &mdash;
+                <code>AccountTeamMember</code> alone exceeds the 50,000-row
+                ceiling and a raw select silently truncates. Any result
+                returning <code>done=false</code> is flagged and made fatal
+                downstream.
+              </dd>
+
+              <dt>A Profile is a projection, not a document</dt>
+              <dd>
+                The trap that cost the most time. Retrieving
+                <code>Profile</code> on its own returns <em>only</em>
+                <code>&lt;userPermissions&gt;</code> &mdash; no
+                <code>objectPermissions</code>, no
+                <code>fieldPermissions</code>, no layouts. Reading that as
+                "grants nothing" is a false clean result. The manifest must name
+                every component type whose grants you intend to read:
+                <code>CustomObject</code>, <code>Layout</code>,
+                <code>CustomTab</code>, <code>ApexClass</code>,
+                <code>CustomApplication</code>, <code>CustomField</code>. Second
+                trap: <code>CustomObject</code> with a wildcard does
+                <strong>not</strong> include managed-package objects, so the
+                <code>AVTRRT__</code> objects must be listed by name or their
+                grants come back absent. Same for managed permission sets.
+                Standard profiles resolve by fullName (<code>Admin</code>,
+                <code>Standard</code>, <code>MarketingProfile</code>), not by
+                label. <code>sweep_rights.py</code> refuses to run on a retrieve
+                carrying no <code>fieldPermissions</code>.
+              </dd>
+
+              <dt>Formula fields</dt>
+              <dd>
+                Profiles serialise <code>editable=true</code> on formula fields;
+                the platform never grants edit on one. Honouring the XML
+                literally overstates editable counts by roughly sixteen fields
+                per object and manufactures a parity difference that does not
+                exist. The check reads
+                <code>FieldDefinition.IsCalculated</code> and lets the platform
+                win.
+              </dd>
+
+              <dt>Cross-check</dt>
+              <dd>
+                The offline rights resolver was validated against
+                <code>scripts/permissions-audit/effective_access.py</code>,
+                which asks the org directly, on representatives of four
+                different profiles. All four matched exactly on create, read,
+                edit, delete, both overrides, and readable and editable field
+                counts.
+              </dd>
+
+              <dt>Record probing</dt>
+              <dd>
+                <code>UserRecordAccess</code>, batched 200 Ids per call, sampled
+                <code>ORDER BY Id</code> &mdash; deliberately not
+                <code>LastModifiedDate</code>, which the data-migration analysis
+                found unreliable on this org.
+              </dd>
+
+              <dt>Known limitation</dt>
+              <dd>
+                Sampling is fixed-size per object, which is sound while everyone
+                sees everything but stops representing the population once
+                access varies row by row &mdash; whoever privatises the model
+                must widen and stratify the sample, or they will confirm a
+                parity they never tested.
+              </dd>
+
+              <dt>A misleading error worth knowing</dt>
+              <dd>
+                A wildcard <code>Layout</code> retrieve emits
+                <em
+                  >"You do not have the proper permissions to access Layout"</em
+                >
+                while succeeding and returning most of them. It is not a
+                permission problem &mdash; the same run listed 383 layouts and
+                retrieved 261, as a System Administrator holding
+                <code>CustomizeApplication</code> and
+                <code>ModifyAllData</code>. Read literally, that message leads
+                you to record a limitation that does not exist. Two real causes
+                sit behind the missing components: the wildcard omits
+                managed-package layouts (122 of the 126 absent ones carry a
+                namespace), and three layout <em>names</em> are ambiguous
+                because the org holds duplicates &mdash;
+                <code>Contact-Contact Layout</code> exists twice, once unmanaged
+                and once installed by <code>AVTRRT</code>. Name them explicitly
+                and they retrieve fine.
+              </dd>
+            </dl>
+          </div>
+        </section>
+      </div>
+    </section>
+    <section class="page-view" id="view-access-parity-sweep">
+      <div class="wrap-inner">
+        <header class="masthead">
+          <p class="eyebrow">Security &middot; record</p>
+          <h1>What the parity check found</h1>
+          <p class="subtitle">
+            A snapshot of the access held by every active user across the
+            objects the rebuild touches, taken read-only against production.
+            This is the before-picture the post-cutover run is compared against.
+            For how the check works, read the
+            <a href="#view-access-parity-method">method</a>.
+          </p>
+          <p class="dateline">
+            Measured live &middot; production org &middot; read-only &middot;
+            2026-08-30
+          </p>
+        </header>
+
+        <div class="bluf">
+          <p>
+            <strong>Population.</strong> 539 active users, 15 objects, collapsed
+            into 154 distinct rights groups. Record visibility is grouped per
+            object, at most 247 groups on any one of them &mdash; 1038 probes in
+            total against the platform's own verdict.
+          </p>
+          <p>
+            <strong>Escalated.</strong> Reference, Deal sheet &mdash; they hold
+            no records at all, so no probe there can evidence anything. Every
+            group was probed rather than sampled.
+          </p>
+        </div>
+
+        <section>
+          <h2>Object and field rights, by object</h2>
+          <p>
+            Each object below is described by how many genuinely different
+            access shapes exist across the whole population &mdash; a shape
+            being one combination of create, read, edit, delete and the two
+            override permissions. A small number means access is uniform; a
+            large number means it is genuinely differentiated and the rebuild
+            has more to reproduce.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Object</th>
+                <th>Distinct access shapes</th>
+                <th>Users with no read at all</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Account</td>
+                <td>8</td>
+                <td>9</td>
+              </tr>
+              <tr>
+                <td>Candidate to talent pool</td>
+                <td>5</td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>Contact</td>
+                <td>9</td>
+                <td>9</td>
+              </tr>
+              <tr>
+                <td>Deal sheet</td>
+                <td>5</td>
+                <td>11</td>
+              </tr>
+              <tr>
+                <td>Educational history</td>
+                <td>5</td>
+                <td>14</td>
+              </tr>
+              <tr>
+                <td>Employment history</td>
+                <td>5</td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>Interview</td>
+                <td>6</td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>Job applicant</td>
+                <td>6</td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>Opportunity</td>
+                <td>7</td>
+                <td>10</td>
+              </tr>
+              <tr>
+                <td>Placement</td>
+                <td>6</td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>Proceso</td>
+                <td>8</td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>Reference</td>
+                <td>6</td>
+                <td>8</td>
+              </tr>
+              <tr>
+                <td>Source</td>
+                <td>5</td>
+                <td>11</td>
+              </tr>
+              <tr>
+                <td>Source to candidate</td>
+                <td>5</td>
+                <td>11</td>
+              </tr>
+              <tr>
+                <td>Talent pool (private)</td>
+                <td>6</td>
+                <td>11</td>
+              </tr>
+            </tbody>
+          </table>
+        </section>
+
+        <section>
+          <h2>Record visibility, by object</h2>
+          <p>
+            Open objects were tested by falsification: a spread of the groups
+            most likely to be exceptions was probed, and the claim that every
+            internal user reaches every record stands only if none of them saw
+            less. Restricted objects had every group probed.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Object</th>
+                <th>Regime</th>
+                <th>Groups probed</th>
+                <th>Records sampled</th>
+                <th>Lowest seen, licensed users</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Account</td>
+                <td>restricted &mdash; every group</td>
+                <td>247</td>
+                <td>200</td>
+                <td>0.0%</td>
+              </tr>
+              <tr>
+                <td>Candidate to talent pool</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Contact</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Deal sheet</td>
+                <td>open &mdash; <strong>no records to test</strong></td>
+                <td>154</td>
+                <td>0</td>
+                <td>not testable</td>
+              </tr>
+              <tr>
+                <td>Educational history</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Employment history</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Interview</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Job applicant</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Opportunity</td>
+                <td>restricted &mdash; every group</td>
+                <td>222</td>
+                <td>200</td>
+                <td>0.0%</td>
+              </tr>
+              <tr>
+                <td>Placement</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Proceso</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Reference</td>
+                <td>open &mdash; <strong>no records to test</strong></td>
+                <td>154</td>
+                <td>0</td>
+                <td>not testable</td>
+              </tr>
+              <tr>
+                <td>Source</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>49</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Source to candidate</td>
+                <td>open &mdash; falsified</td>
+                <td>8</td>
+                <td>200</td>
+                <td>100.0%</td>
+              </tr>
+              <tr>
+                <td>Talent pool (private)</td>
+                <td>restricted &mdash; every group</td>
+                <td>181</td>
+                <td>200</td>
+                <td>0.0%</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Licensed users who see less than the whole sample</h3>
+          <p>
+            These are the only genuine differentiations in the current model
+            &mdash; the access the rebuild must reproduce exactly, and the first
+            rows to re-check after the switch. Every one of them is a single
+            user, and in each case the cause is the same: the user holds no read
+            permission on that object at all. Sharing grants nothing without
+            object access, so these are rights findings surfacing in the record
+            measurement, not sharing findings.
+          </p>
+          <table>
+            <thead>
+              <tr>
+                <th>Object</th>
+                <th>Users represented</th>
+                <th>Readable</th>
+                <th>Of sample</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Talent pool (private)</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Talent pool (private)</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Talent pool (private)</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Talent pool (private)</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Talent pool (private)</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Account</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Account</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Account</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Opportunity</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Opportunity</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Opportunity</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+              <tr>
+                <td>Opportunity</td>
+                <td>1</td>
+                <td>0</td>
+                <td>200</td>
+              </tr>
+            </tbody>
+          </table>
+          <h3>Non-human identities</h3>
+          <p>
+            77 group(s) of guest, integration and platform identities were
+            probed and returned no visibility, which is the correct answer:
+            every object's external org-wide default is Private, and the
+            platform's own integration user holds no licence. They are measured
+            rather than excluded, so that a guest identity which
+            <em>could</em> read would be visible as the anomaly it would be.
+            None could.
+          </p>
+        </section>
+
+        <section>
+          <h2>Objects that could not be tested</h2>
+          <p>
+            Reference, Deal sheet hold no records at all in production. A
+            visibility probe against an empty table returns nothing for
+            everybody, which says nothing about access &mdash; so these are
+            reported as untestable rather than as a total access failure. Their
+            <em>rights</em> are measured normally in the table above; only the
+            record half is unanswerable. If the rebuild is expected to carry
+            these objects, whether they are dead weight is a scope question
+            worth asking before building them.
+          </p>
+        </section>
+
+        <section>
+          <h2>How to compare against this after the switch</h2>
+          <p>
+            Re-run the same check against the new objects and compare group for
+            group. Equal visibility by an equivalent mechanism means access was
+            reproduced. Less is a regression. More is an over-grant &mdash; the
+            failure that is easier to miss and worse to ship.
+          </p>
+          <div class="tech">
+            <span class="tech-label">For the developers</span>
+            <dl>
+              <dt>Reproducing this run</dt>
+              <dd>
+                <code>fetch_population.py</code> &rarr;
+                <code>build_clusters.py</code> &rarr;
+                <code>sweep_rights.py</code> and <code>sweep_records.py</code>,
+                all under <code>scripts/parity-sweep/</code>. Read-only; each
+                verifies the org Id first.
+              </dd>
+              <dt>Artefacts behind this page</dt>
+              <dd>
+                <code>clusters.csv</code> (group membership),
+                <code>rights_by_cluster.csv</code> (resolved rights),
+                <code>record_visibility_2026-08-30.csv</code> (platform
+                verdicts). The page is generated from these; it holds no
+                hand-typed numbers.
+              </dd>
+              <dt>Sampling</dt>
+              <dd>
+                Fixed-size per object, ordered by Id. Sound while access is
+                uniform; widen and stratify by owner before trusting it on a
+                privatised model.
+              </dd>
+            </dl>
+          </div>
+        </section>
       </div>
     </section>
     <section class="page-view" id="view-build-standard">
