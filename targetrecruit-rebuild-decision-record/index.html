@@ -1748,19 +1748,13 @@
       class="navlink nonum"
       data-view="access-permission-sets"
       href="#view-access-permission-sets"
-      >access-permission-sets</a
+      >· The replacement permission sets</a
     >
     <a
       class="navlink nonum"
-      data-view="access-parity-method"
-      href="#view-access-parity-method"
+      data-view="access-parity"
+      href="#view-access-parity"
       >· Proving access parity</a
-    >
-    <a
-      class="navlink nonum"
-      data-view="access-parity-sweep"
-      href="#view-access-parity-sweep"
-      >· Parity sweep result</a
     >
     <a class="navlink" data-view="build-standard" href="#view-build-standard"
       ><span class="n">7</span><span>Declarative vs code</span></a
@@ -15386,29 +15380,30 @@
         </section>
       </div>
     </section>
-    <section class="page-view" id="view-access-parity-method">
+    <section class="page-view" id="view-access-parity">
       <div class="wrap-inner">
         <header class="masthead">
-          <p class="eyebrow">Security · method</p>
+          <p class="eyebrow">Security · method &amp; result</p>
           <h1>Proving nobody gains or loses access</h1>
           <p class="subtitle">
             The rebuild replaces the objects people work in. This is the check
             that says, for every active user, that their access after the switch
             is the same as before &mdash; the same objects, the same fields, the
             same records &mdash; and the reason the check is affordable to run
-            at all.
+            at all. The measured result of the first run follows the method, as
+            a dated record.
           </p>
           <p class="dateline">
-            Method &middot; read-only against production &middot; living page
+            Method &middot; living page &nbsp;|&nbsp; Result &middot; dated
+            record, measured 2026-08-30 &middot; read-only against production
           </p>
         </header>
 
         <div class="bluf">
           <p>
             <strong>Read this if</strong> you need to know how the parity claim
-            is established, or you are about to run the check yourself. For what
-            it found, read the
-            <a href="#view-access-parity-sweep">sweep result</a>.
+            is established, or you are about to run the check yourself. What it
+            found is below, under <a href="#the-result">the measured result</a>.
           </p>
           <p>
             <strong>In one line:</strong> access is not granted per person, it
@@ -15969,27 +15964,22 @@
             </dl>
           </div>
         </section>
-      </div>
-    </section>
-    <section class="page-view" id="view-access-parity-sweep">
-      <div class="wrap-inner">
-        <header class="masthead">
-          <p class="eyebrow">Security &middot; record</p>
-          <h1>What the parity check found</h1>
-          <p class="subtitle">
-            A snapshot of the access held by every active user across the
-            objects the rebuild touches, taken read-only against production.
-            This is the before-picture the post-cutover run is compared against.
-            For how the check works, read the
-            <a href="#view-access-parity-method">method</a>.
-          </p>
-          <p class="dateline">
-            Measured live &middot; production org &middot; read-only &middot;
-            2026-08-30
-          </p>
-        </header>
 
-        <div class="bluf">
+        <section id="the-result">
+          <p class="section-eyebrow">The result &middot; a dated record</p>
+          <h2>What the first run found</h2>
+          <p>
+            Everything above is the method, and it is a living page &mdash; it
+            is corrected as the check improves. Everything below is a
+            <strong>dated record of one run</strong>, measured against
+            production on 30 August 2026, and it is never revised: if a later
+            run disagrees, it gets its own dated record and the method above is
+            what changes.
+          </p>
+        </section>
+
+        <div class="callout key">
+          <span class="lbl">The measured result &middot; 2026-08-30</span>
           <p>
             <strong>Population.</strong> 539 active users, 15 objects, collapsed
             into 154 distinct rights groups. Record visibility is grouped per
