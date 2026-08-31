@@ -1746,6 +1746,12 @@
     >
     <a
       class="navlink nonum"
+      data-view="access-permission-sets"
+      href="#view-access-permission-sets"
+      >access-permission-sets</a
+    >
+    <a
+      class="navlink nonum"
       data-view="access-parity-method"
       href="#view-access-parity-method"
       >· Proving access parity</a
@@ -2082,6 +2088,21 @@
                 </p></span
               >
               <span class="pick">Reproduce access · switch as sets</span>
+            </a>
+            <a class="decrow" href="#view-access-permission-sets">
+              <span class="num">▸</span>
+              <span class="body"
+                ><h3>
+                  The sets that reproduce each cluster
+                  <span class="ptype evidence">Evidence for 6</span>
+                </h3>
+                <p>
+                  Which objects carry access worth reproducing, how every active
+                  user groups by the access they hold, and the permission set
+                  that reproduces each group on the new model.
+                </p></span
+              >
+              <span class="pick">Mirrored, not designed</span>
             </a>
             <a class="decrow" href="#view-build-standard">
               <span class="num">7</span>
@@ -6957,7 +6978,7 @@
               >
             </div>
             <div class="stat">
-              <span class="n">22</span
+              <span class="n">24</span
               ><span class="l"
                 >package configuration and process-log objects left behind
                 entirely — they die with the package</span
@@ -7035,14 +7056,14 @@
                   <td class="num">468,456</td>
                   <td class="num">6</td>
                   <td><code>Employment_History__c</code></td>
-                  <td>Migrate</td>
+                  <td>Switch first — pending a test</td>
                 </tr>
                 <tr>
                   <td><strong>Educational_History</strong></td>
                   <td class="num">421,498</td>
                   <td class="num">9</td>
                   <td><code>Education_History__c</code></td>
-                  <td>Migrate</td>
+                  <td>Switch first — pending a test</td>
                 </tr>
                 <tr>
                   <td><strong>Interview</strong></td>
@@ -7104,20 +7125,6 @@
                   <td class="num">142,738</td>
                   <td class="num">0</td>
                   <td><code>native saved search</code></td>
-                  <td>Rebuild capability</td>
-                </tr>
-                <tr>
-                  <td>References</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td><code>Reference__c</code></td>
-                  <td>Rebuild capability</td>
-                </tr>
-                <tr>
-                  <td>Scratch_Sheet</td>
-                  <td class="num">0</td>
-                  <td class="num">0</td>
-                  <td><code>DealSheet native</code></td>
                   <td>Rebuild capability</td>
                 </tr>
                 <tr>
@@ -7294,9 +7301,35 @@
                   <td>—</td>
                   <td>Drop — config</td>
                 </tr>
+                <tr class="dropped">
+                  <td>References</td>
+                  <td class="num">0</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — capability unused</td>
+                </tr>
+                <tr class="dropped">
+                  <td>Scratch_Sheet</td>
+                  <td class="num">0</td>
+                  <td class="num">0</td>
+                  <td>—</td>
+                  <td>Drop — capability unused</td>
+                </tr>
               </tbody>
             </table>
           </div>
+          <p class="tbl-note">
+            <strong
+              >One consequence of dropping an unused capability, so it is not
+              discovered late:</strong
+            >
+            the deal sheet is still referenced by several hundred field
+            placements across the classic layouts and the Lightning record pages
+            of the objects that survive. Retiring the object leaves those page
+            sections pointing at nothing, so clearing them is part of the
+            removal — a screen tidy-up rather than a blocker, but real work that
+            belongs on the list.
+          </p>
           <p class="tbl-note">
             Row counts are live as of 14 July 2026. The biggest object left
             behind — an email-parsing transaction log with 145,293 rows — holds
@@ -7326,6 +7359,17 @@
                 the pattern on smaller objects first.
               </li>
               <li>
+                <strong>Switch first &mdash; pending a test</strong> &mdash; the
+                same early move, but not yet settled. The employment and
+                education history move this way <em>if</em> a test confirms it:
+                their content is redundant with the parsed-CV text held on the
+                contact, so cutting them early should cost nothing &mdash; but
+                the package's search engine is closed to inspection, so it is
+                proven by emptying both tables in a full copy of production and
+                checking that search and matching still behave. If they degrade,
+                both objects fall back to the core cutover.
+              </li>
+              <li>
                 <strong>Archive</strong> — records for closed, finished work are
                 moved to low-cost storage rather than into the live model, so
                 the new system isn't sized around history it never edits. For
@@ -7337,6 +7381,24 @@
                 <strong>Rebuild capability</strong> — the object is built fresh
                 because the business needs the feature, but there is no data to
                 move (it is empty in production today).
+              </li>
+              <li>
+                <strong>Drop — capability unused</strong> — the object holds no
+                records <em>and</em> nothing live depends on it, so the
+                capability is not rebuilt at all. This is a stricter test than
+                "empty": an empty object still earns a rebuild if a feature or a
+                process references it. Two objects were checked against that
+                test on 31 August 2026 and failed it — candidate references,
+                which nothing references and which appears on no Lightning
+                record page, and the deal sheet. The deal sheet is the
+                instructive one: twenty-two components do reference it, which
+                looks like a live dependency until each is read. The three
+                lookups that drive its rate logic hold no rows, so every helper
+                returns before doing any work; two of its three triggers are
+                inactive, and the active one fires on the empty object itself.
+                The configuration flags that would enable it are switched on and
+                gate nothing. It is a packaged capability Marlex never put into
+                use, not a feature waiting for data.
               </li>
             </ul>
           </div>
@@ -14161,390 +14223,42 @@
         </section>
 
         <section>
-          <p class="section-eyebrow">The objects in scope</p>
-          <h2>Fifteen objects, not a package's worth</h2>
+          <p class="section-eyebrow">The shape of the answer</p>
+          <h2>Four groups, mirrored rather than designed</h2>
           <p>
-            The access that has to move is the access to the objects the rebuild
-            replaces. The package ships hundreds of objects, but almost all of
-            them are internal configuration no user ever opens; the ones that
-            carry real user access — and therefore real access to reproduce —
-            are the fifteen the data model rebuilds:
+            Fifteen objects carry the access that has to move — the ones the
+            data model rebuilds. Everything else the package installs is
+            configuration no business user opens, and it is dropped with the
+            package rather than reproduced.
           </p>
-          <div class="tbl-scroll">
-            <table class="dtbl compact">
-              <thead>
-                <tr>
-                  <th>Old object (what users reach today)</th>
-                  <th>Becomes</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Candidate contact</td>
-                  <td>Standard contact, re-typed</td>
-                </tr>
-                <tr>
-                  <td>Application</td>
-                  <td>Application</td>
-                </tr>
-                <tr>
-                  <td>Job</td>
-                  <td>Job</td>
-                </tr>
-                <tr>
-                  <td>Placement</td>
-                  <td>Placement</td>
-                </tr>
-                <tr>
-                  <td>Interview</td>
-                  <td>Interview</td>
-                </tr>
-                <tr>
-                  <td>Job search</td>
-                  <td>Job search</td>
-                </tr>
-                <tr>
-                  <td>Employment history</td>
-                  <td>Employment history</td>
-                </tr>
-                <tr>
-                  <td>Education history</td>
-                  <td>Education history</td>
-                </tr>
-                <tr>
-                  <td>Candidate source · source</td>
-                  <td>Candidate source · source</td>
-                </tr>
-                <tr>
-                  <td>Talent pool · pool membership</td>
-                  <td>Talent pool · pool membership</td>
-                </tr>
-                <tr>
-                  <td>References · deal sheet · saved search</td>
-                  <td>Rebuilt natively (capability, not data)</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="tbl-note">
-            Everything else the package installs is configuration objects —
-            search settings, home-page components, connectors, quick-review
-            setup — that no business user opens and no permission has to be
-            rebuilt for. They are dropped with the package, not reproduced.
-          </p>
-        </section>
-
-        <section>
-          <p class="section-eyebrow">The clusters</p>
-          <h2>Four business groups, plus administrators and machines</h2>
           <p>
-            Grouping every active user by the access they effectively hold —
-            profile and permission set combined — collapses the whole population
-            into a short list. There are not dozens of personas to reproduce;
-            there are four business groups doing recruitment work, the
-            administrators, and the non-human accounts that don't cross over as
-            people.
+            Grouping all 539 active users by the access they effectively hold
+            collapses the population into a short list: four business groups
+            doing recruitment work, the administrators, and the machine accounts
+            that do not switch as people. Each group is reproduced by one
+            permission set on the new objects, with a few narrow add-on sets
+            that cut across them.
           </p>
-          <div class="tbl-scroll">
-            <table class="dtbl">
-              <thead>
-                <tr>
-                  <th>Cluster</th>
-                  <th class="num">Users</th>
-                  <th>What they can do on the recruitment objects today</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>Recruiter</strong> — the core population</td>
-                  <td class="num">~385</td>
-                  <td>
-                    Create-read-edit-delete on twelve of the objects, but
-                    create-read-edit only — <em>no delete</em> — on jobs and the
-                    talent pool; read on candidate contacts; the recruitment
-                    tabs and both package apps visible. No see-all anywhere.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Team leader</strong></td>
-                  <td class="num">~40</td>
-                  <td>
-                    The recruiter's full create-read-edit-delete on all objects,
-                    plus a
-                    <em>narrow</em> see-all / edit-all on exactly two objects —
-                    jobs and one talent-pool object — not a broad widening
-                    across the model.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Director</strong></td>
-                  <td class="num">~22</td>
-                  <td>
-                    Full create-read-edit-delete across all objects, no see-all.
-                    This is the only group with literally uniform full rights —
-                    including delete on jobs and the talent pool, which the
-                    recruiter lacks.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Back-office / support</strong></td>
-                  <td class="num">~23</td>
-                  <td>
-                    Full rights with see-all and edit-all across almost every
-                    recruitment object (jobs are the one exception —
-                    create-read-edit and see-all, but no delete or edit-all) — a
-                    cross-desk operational role.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Administrator</strong></td>
-                  <td class="num">~29</td>
-                  <td>
-                    Modify-all-data across everything — reproduced by the
-                    standard administrator profile, not by a rebuilt permission
-                    set.
-                  </td>
-                </tr>
-                <tr>
-                  <td class="dropped">
-                    <strong>Integration &amp; portal accounts</strong>
-                  </td>
-                  <td class="num">~30</td>
-                  <td>
-                    Machine and site accounts (data feeds, the marketing and
-                    analytics connectors, the anonymous job-board door). These
-                    don't switch as
-                    <em>people</em> — they are re-pointed with the integrations,
-                    covered on the
-                    <a href="#view-integrations">Integrations</a> and
-                    <a href="#view-security">Security</a> pages.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
           <p>
-            The shape of the answer follows directly, with one discipline that
-            keeps it honest:
+            The discipline that keeps this honest is that the replacement sets
+            are
             <strong
-              >build the replacement sets by mirroring what each source actually
-              grants, not by hand-designing a persona.</strong
-            >
-            For every profile and permission set that grants anything on an
-            object, tab, page or field being replaced, we mint one mirror
-            permission set that reproduces the same grants on the new objects —
-            then collapse the mirrors that turn out identical.
+              >mirrored from what each source actually grants, not hand-designed
+              as a persona</strong
+            >. For every profile and permission set granting anything on
+            something being replaced, one mirror set reproduces the same grants
+            on the new objects; identical mirrors are then collapsed. So a
+            difference like the recruiter's missing delete, or a leader whose
+            see-all covers two objects rather than the whole model, is copied
+            faithfully instead of rounded off to "everyone gets full rights".
           </p>
           <p>
-            Because most of the low-count system and integration profiles carry
-            the same full-rights signature, the mirrors fold down to a small
-            handful — effectively the four business groups above — but the
-            folding is <em>discovered</em> from the live grants rather than
-            asserted, so a difference like the recruiter's missing delete, or a
-            leader's see-all being two objects and not the whole model, is
-            copied faithfully instead of being rounded off to "everyone gets
-            full rights".
+            The object list, the per-group breakdown and the set-by-set mapping
+            are on
+            <a href="#view-access-permission-sets"
+              >the sets that reproduce each cluster</a
+            >.
           </p>
-          <p>
-            Administrators keep the standard administrator profile; the machine
-            accounts are re-pointed with the integrations.
-          </p>
-        </section>
-
-        <section>
-          <p class="section-eyebrow">The proposal</p>
-          <h2>Replacement permission sets that reproduce each cluster</h2>
-          <p>
-            Every grant is rebuilt as a permission set on the new objects —
-            never back into a profile. This keeps the profile minimal and makes
-            the switch a matter of assigning and un-assigning sets, which is
-            fast, reversible, and easy to prove. The base cluster grants become
-            the role sets below.
-          </p>
-          <p>
-            But the base clusters are not the whole story: on top of them sit a
-            set of
-            <strong>narrow, cross-cutting add-on permission sets</strong> — one
-            gives almost every user a field filter on candidatures, others let
-            sub-groups create talent pools or edit specific placement fields.
-            These are already permission sets today, they cut across the
-            clusters rather than belonging to one, and each has to be
-            <strong>mirrored one-for-one onto the new objects and fields</strong
-            >. They are part of the scope, not a footnote.
-          </p>
-          <div class="tbl-scroll">
-            <table class="dtbl">
-              <thead>
-                <tr>
-                  <th>New permission set</th>
-                  <th>Reproduces</th>
-                  <th>Grants on the new objects</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><strong>ATS Recruiter</strong></td>
-                  <td>
-                    The recruiter grant (today split: object rights in the
-                    profile, tabs in the package set)
-                  </td>
-                  <td>
-                    Full create-read-edit-delete on the fifteen new objects,
-                    read on contacts, the new tabs. This is the base every
-                    recruiter gets.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>ATS Team Leader</strong></td>
-                  <td>The leader's wider reach</td>
-                  <td>
-                    The recruiter base plus see-all / edit-all on jobs and the
-                    talent pool.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>ATS Back-office</strong></td>
-                  <td>The support grant</td>
-                  <td>
-                    Full rights with see-all / edit-all across the recruitment
-                    objects.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>ATS App access</strong></td>
-                  <td>The visibility of the new recruitment app</td>
-                  <td>
-                    Visibility of the new recruitment app and its tabs — held
-                    separately so app access and object access can be flipped
-                    independently at cutover.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>TR Legacy app access</strong></td>
-                  <td>
-                    The visibility of the two old package apps, moved off the
-                    profile
-                  </td>
-                  <td>
-                    Visibility of the two package apps and their tabs. Assigned
-                    to everyone before cutover (a change no user feels),
-                    un-assigned at go-live, and re-assignable in seconds if
-                    go-live is reversed — this is what makes rollback a toggle
-                    instead of a profile edit.
-                  </td>
-                </tr>
-                <tr>
-                  <td><strong>Add-on sets</strong> (one-for-one mirrors)</td>
-                  <td>
-                    The cross-cutting permission sets that already exist today
-                    and grant something on an in-scope object or field
-                  </td>
-                  <td>
-                    A mirror of each existing add-on set, reproducing its grant
-                    on the new objects/fields: the near-universal candidature
-                    field filter (carried by almost every recruiter today), the
-                    talent-pool creation right, the placement-field edit sets,
-                    and the like. Same assignees, same grant, new objects. Not
-                    new roles — narrow top-ups that sit on top of the role sets.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          <p class="tbl-note">
-            The add-on row is a category, not one set: it stands for each
-            existing cross-cutting permission set that touches an in-scope
-            object or field. The mirror method finds them mechanically — any set
-            granting something we're replacing is a <em>candidate</em> for a
-            mirror — so none is missed, however small its assignment count. The
-            largest, a candidature field filter, is assigned to nearly the whole
-            recruitment population, so it is not optional.
-          </p>
-          <p class="tbl-note">
-            Being found is not the same as being rebuilt, though: a candidate
-            earns its mirror only if it actually widens what its holders can do,
-            measured per holder. That test, and what it removed, is set out
-            under
-            <a href="#grants-that-add-nothing">grants that add nothing</a>
-            below.
-          </p>
-          <p>
-            <strong
-              >What lives where today, and where it should live after.</strong
-            >
-            The grants that matter sit in three places today, and each moves on
-            its own timing — the one rule is that
-            <strong
-              >nothing that has to reverse quickly is left in a profile</strong
-            >:
-          </p>
-          <div class="tmpl">
-            <div class="tmpl-step">
-              <span class="k">App visibility<br />— move before cutover</span>
-              <p>
-                <strong>Today: in the profile.</strong> The recruitment profile
-                makes both package apps visible.
-                <strong>Before cutover</strong> that visibility is lifted out of
-                the profile into the <em>TR Legacy app access</em> set and
-                re-granted to the same users — a net-zero change no one feels.
-                This is the one preparatory move the rollback depends on: once
-                app visibility is a set, turning the legacy app off (and back
-                on) is an assignment, not a profile edit in the go-live window.
-              </p>
-            </div>
-            <div class="tmpl-step">
-              <span class="k">Tabs</span>
-              <p>
-                <strong>Today: in the package permission set.</strong> The
-                recruitment permission set makes the package tabs visible.
-                <strong>After:</strong> the new tabs live in the ATS App access
-                set; the legacy tabs travel with the TR Legacy app access set,
-                so they turn off with the legacy app.
-              </p>
-            </div>
-            <div class="tmpl-step">
-              <span class="k">Object rights<br />— refactor after cutover</span>
-              <p>
-                <strong>Today: in the profile.</strong> The recruitment profiles
-                grant create-read-edit-delete on the fifteen package objects
-                directly. <strong>At cutover this is left untouched</strong> — a
-                user still holding rights on the <em>old</em> objects is
-                harmless while those objects are being retired, and the
-                new-object access comes entirely from the ATS role sets. Moving
-                the old object rights out of the profile into a set is real
-                hygiene, but it is <strong>post-cutover cleanup</strong>, kept
-                out of the go-live window because it changes nothing about
-                go-live safety.
-              </p>
-            </div>
-            <div class="tmpl-step">
-              <span class="k">Field access</span>
-              <p>
-                <strong
-                  >Today: mostly profile, some in dedicated field sets.</strong
-                >
-                A few narrow permission sets already gate specific fields
-                (placement fields, filters). <strong>After:</strong> field
-                visibility on the new objects is set on the role sets, and the
-                existing narrow field sets are reproduced one-for-one on the new
-                fields where they still apply.
-              </p>
-            </div>
-          </div>
-          <div class="callout key">
-            <span class="lbl">Why permission sets and not profiles</span>
-            <p>
-              Putting the access that has to move in sets, not profiles, is what
-              makes the cutover a switch rather than a migration. A set can be
-              assigned to the whole cluster ahead of time while it points at
-              empty, dormant objects, and un-assigned in seconds if go-live is
-              reversed — and, crucially, the legacy app can be turned back on by
-              re-assigning a set rather than re-editing a live profile under
-              time pressure. It also moves the org toward minimal profiles, so a
-              second country or brand later inherits a clean base instead of a
-              profile stuffed with a decade of grants.
-            </p>
-          </div>
         </section>
 
         <section id="grants-that-add-nothing">
@@ -15201,6 +14915,475 @@
             production-org audit and live access-model queries.
           </p>
         </footer>
+        <section>
+          <p class="section-eyebrow">The shape of the answer</p>
+          <h2>Four groups, mirrored rather than designed</h2>
+          <p>
+            Fifteen objects carry the access that has to move — the ones the
+            data model rebuilds. Everything else the package installs is
+            configuration no business user opens, and it is dropped with the
+            package rather than reproduced.
+          </p>
+          <p>
+            Grouping all 539 active users by the access they effectively hold
+            collapses the population into a short list: four business groups
+            doing recruitment work, the administrators, and the machine accounts
+            that do not switch as people. Each group is reproduced by one
+            permission set on the new objects, with a few narrow add-on sets
+            that cut across them.
+          </p>
+          <p>
+            The discipline that keeps this honest is that the replacement sets
+            are
+            <strong
+              >mirrored from what each source actually grants, not hand-designed
+              as a persona</strong
+            >. For every profile and permission set granting anything on
+            something being replaced, one mirror set reproduces the same grants
+            on the new objects; identical mirrors are then collapsed. So a
+            difference like the recruiter's missing delete, or a leader whose
+            see-all covers two objects rather than the whole model, is copied
+            faithfully instead of rounded off to "everyone gets full rights".
+          </p>
+          <p>
+            The object list, the per-group breakdown and the set-by-set mapping
+            are on
+            <a href="#view-access-permission-sets"
+              >the sets that reproduce each cluster</a
+            >.
+          </p>
+        </section>
+      </div>
+    </section>
+    <section class="page-view" id="view-access-permission-sets">
+      <div class="wrap-inner">
+        <header class="masthead">
+          <p class="eyebrow">Access · reference</p>
+          <h1>The sets that reproduce each cluster</h1>
+          <p class="subtitle">
+            The working detail behind the access decision: which objects carry
+            access that has to move, how every active user groups by the access
+            they hold, and the permission set that reproduces each group on the
+            new model. This is the inventory, not the argument — the decision is
+            on the
+            <a href="#view-access">Access &amp; app switch</a> page.
+          </p>
+          <p class="dateline">
+            Measured live · production org · read-only · population re-measured
+            30 August 2026
+          </p>
+        </header>
+
+        <div class="bluf">
+          <p>
+            <strong>Read this if</strong> you need to know which permission set
+            a particular user should end up holding, or which objects a grant
+            has to be rebuilt on. It answers those object by object and group by
+            group.
+          </p>
+          <p>
+            <strong>The shape in one line.</strong> Fifteen objects carry access
+            worth reproducing. All 539 active users collapse into four business
+            groups plus administrators and machine accounts, and each group is
+            reproduced by one permission set on the new objects, with a handful
+            of narrow add-on sets that cut across them.
+          </p>
+          <p>
+            <strong>How the sets were derived.</strong> Not by designing a
+            persona, but by mirroring what each profile and permission set
+            actually grants today, then collapsing the mirrors that turn out
+            identical. That way a small difference — a recruiter without delete
+            on two objects, a leader whose see-all covers two objects and not
+            the model — is copied rather than rounded off.
+          </p>
+        </div>
+
+        <section>
+          <p class="section-eyebrow">The objects in scope</p>
+          <h2>Fifteen objects, not a package's worth</h2>
+          <p>
+            The access that has to move is the access to the objects the rebuild
+            replaces. The package ships hundreds of objects, but almost all of
+            them are internal configuration no user ever opens; the ones that
+            carry real user access — and therefore real access to reproduce —
+            are the fifteen the data model rebuilds:
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl compact">
+              <thead>
+                <tr>
+                  <th>Old object (what users reach today)</th>
+                  <th>Becomes</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Candidate contact</td>
+                  <td>Standard contact, re-typed</td>
+                </tr>
+                <tr>
+                  <td>Application</td>
+                  <td>Application</td>
+                </tr>
+                <tr>
+                  <td>Job</td>
+                  <td>Job</td>
+                </tr>
+                <tr>
+                  <td>Placement</td>
+                  <td>Placement</td>
+                </tr>
+                <tr>
+                  <td>Interview</td>
+                  <td>Interview</td>
+                </tr>
+                <tr>
+                  <td>Job search</td>
+                  <td>Job search</td>
+                </tr>
+                <tr>
+                  <td>Employment history</td>
+                  <td>Employment history</td>
+                </tr>
+                <tr>
+                  <td>Education history</td>
+                  <td>Education history</td>
+                </tr>
+                <tr>
+                  <td>Candidate source · source</td>
+                  <td>Candidate source · source</td>
+                </tr>
+                <tr>
+                  <td>Talent pool · pool membership</td>
+                  <td>Talent pool · pool membership</td>
+                </tr>
+                <tr>
+                  <td>References · deal sheet · saved search</td>
+                  <td>Rebuilt natively (capability, not data)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tbl-note">
+            Everything else the package installs is configuration objects —
+            search settings, home-page components, connectors, quick-review
+            setup — that no business user opens and no permission has to be
+            rebuilt for. They are dropped with the package, not reproduced.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">The clusters</p>
+          <h2>Four business groups, plus administrators and machines</h2>
+          <p>
+            Grouping every active user by the access they effectively hold —
+            profile and permission set combined — collapses the whole population
+            into a short list. There are not dozens of personas to reproduce;
+            there are four business groups doing recruitment work, the
+            administrators, and the non-human accounts that don't cross over as
+            people.
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>Cluster</th>
+                  <th class="num">Users</th>
+                  <th>What they can do on the recruitment objects today</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Recruiter</strong> — the core population</td>
+                  <td class="num">~385</td>
+                  <td>
+                    Create-read-edit-delete on twelve of the objects, but
+                    create-read-edit only — <em>no delete</em> — on jobs and the
+                    talent pool; read on candidate contacts; the recruitment
+                    tabs and both package apps visible. No see-all anywhere.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Team leader</strong></td>
+                  <td class="num">~40</td>
+                  <td>
+                    The recruiter's full create-read-edit-delete on all objects,
+                    plus a
+                    <em>narrow</em> see-all / edit-all on exactly two objects —
+                    jobs and one talent-pool object — not a broad widening
+                    across the model.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Director</strong></td>
+                  <td class="num">~22</td>
+                  <td>
+                    Full create-read-edit-delete across all objects, no see-all.
+                    This is the only group with literally uniform full rights —
+                    including delete on jobs and the talent pool, which the
+                    recruiter lacks.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Back-office / support</strong></td>
+                  <td class="num">~23</td>
+                  <td>
+                    Full rights with see-all and edit-all across almost every
+                    recruitment object (jobs are the one exception —
+                    create-read-edit and see-all, but no delete or edit-all) — a
+                    cross-desk operational role.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Administrator</strong></td>
+                  <td class="num">~29</td>
+                  <td>
+                    Modify-all-data across everything — reproduced by the
+                    standard administrator profile, not by a rebuilt permission
+                    set.
+                  </td>
+                </tr>
+                <tr>
+                  <td class="dropped">
+                    <strong>Integration &amp; portal accounts</strong>
+                  </td>
+                  <td class="num">~30</td>
+                  <td>
+                    Machine and site accounts (data feeds, the marketing and
+                    analytics connectors, the anonymous job-board door). These
+                    don't switch as
+                    <em>people</em> — they are re-pointed with the integrations,
+                    covered on the
+                    <a href="#view-integrations">Integrations</a> and
+                    <a href="#view-security">Security</a> pages.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            The shape of the answer follows directly, with one discipline that
+            keeps it honest:
+            <strong
+              >build the replacement sets by mirroring what each source actually
+              grants, not by hand-designing a persona.</strong
+            >
+            For every profile and permission set that grants anything on an
+            object, tab, page or field being replaced, we mint one mirror
+            permission set that reproduces the same grants on the new objects —
+            then collapse the mirrors that turn out identical.
+          </p>
+          <p>
+            Because most of the low-count system and integration profiles carry
+            the same full-rights signature, the mirrors fold down to a small
+            handful — effectively the four business groups above — but the
+            folding is <em>discovered</em> from the live grants rather than
+            asserted, so a difference like the recruiter's missing delete, or a
+            leader's see-all being two objects and not the whole model, is
+            copied faithfully instead of being rounded off to "everyone gets
+            full rights".
+          </p>
+          <p>
+            Administrators keep the standard administrator profile; the machine
+            accounts are re-pointed with the integrations.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">The proposal</p>
+          <h2>Replacement permission sets that reproduce each cluster</h2>
+          <p>
+            Every grant is rebuilt as a permission set on the new objects —
+            never back into a profile. This keeps the profile minimal and makes
+            the switch a matter of assigning and un-assigning sets, which is
+            fast, reversible, and easy to prove. The base cluster grants become
+            the role sets below.
+          </p>
+          <p>
+            But the base clusters are not the whole story: on top of them sit a
+            set of
+            <strong>narrow, cross-cutting add-on permission sets</strong> — one
+            gives almost every user a field filter on candidatures, others let
+            sub-groups create talent pools or edit specific placement fields.
+            These are already permission sets today, they cut across the
+            clusters rather than belonging to one, and each has to be
+            <strong>mirrored one-for-one onto the new objects and fields</strong
+            >. They are part of the scope, not a footnote.
+          </p>
+          <div class="tbl-scroll">
+            <table class="dtbl">
+              <thead>
+                <tr>
+                  <th>New permission set</th>
+                  <th>Reproduces</th>
+                  <th>Grants on the new objects</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>ATS Recruiter</strong></td>
+                  <td>
+                    The recruiter grant (today split: object rights in the
+                    profile, tabs in the package set)
+                  </td>
+                  <td>
+                    Full create-read-edit-delete on the fifteen new objects,
+                    read on contacts, the new tabs. This is the base every
+                    recruiter gets.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>ATS Team Leader</strong></td>
+                  <td>The leader's wider reach</td>
+                  <td>
+                    The recruiter base plus see-all / edit-all on jobs and the
+                    talent pool.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>ATS Back-office</strong></td>
+                  <td>The support grant</td>
+                  <td>
+                    Full rights with see-all / edit-all across the recruitment
+                    objects.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>ATS App access</strong></td>
+                  <td>The visibility of the new recruitment app</td>
+                  <td>
+                    Visibility of the new recruitment app and its tabs — held
+                    separately so app access and object access can be flipped
+                    independently at cutover.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>TR Legacy app access</strong></td>
+                  <td>
+                    The visibility of the two old package apps, moved off the
+                    profile
+                  </td>
+                  <td>
+                    Visibility of the two package apps and their tabs. Assigned
+                    to everyone before cutover (a change no user feels),
+                    un-assigned at go-live, and re-assignable in seconds if
+                    go-live is reversed — this is what makes rollback a toggle
+                    instead of a profile edit.
+                  </td>
+                </tr>
+                <tr>
+                  <td><strong>Add-on sets</strong> (one-for-one mirrors)</td>
+                  <td>
+                    The cross-cutting permission sets that already exist today
+                    and grant something on an in-scope object or field
+                  </td>
+                  <td>
+                    A mirror of each existing add-on set, reproducing its grant
+                    on the new objects/fields: the near-universal candidature
+                    field filter (carried by almost every recruiter today), the
+                    talent-pool creation right, the placement-field edit sets,
+                    and the like. Same assignees, same grant, new objects. Not
+                    new roles — narrow top-ups that sit on top of the role sets.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p class="tbl-note">
+            The add-on row is a category, not one set: it stands for each
+            existing cross-cutting permission set that touches an in-scope
+            object or field. The mirror method finds them mechanically — any set
+            granting something we're replacing is a <em>candidate</em> for a
+            mirror — so none is missed, however small its assignment count. The
+            largest, a candidature field filter, is assigned to nearly the whole
+            recruitment population, so it is not optional.
+          </p>
+          <p class="tbl-note">
+            Being found is not the same as being rebuilt, though: a candidate
+            earns its mirror only if it actually widens what its holders can do,
+            measured per holder. That test, and what it removed, is set out
+            under
+            <a href="#view-access">grants that add nothing</a> on the decision
+            page.
+          </p>
+          <p>
+            <strong
+              >What lives where today, and where it should live after.</strong
+            >
+            The grants that matter sit in three places today, and each moves on
+            its own timing — the one rule is that
+            <strong
+              >nothing that has to reverse quickly is left in a profile</strong
+            >:
+          </p>
+          <div class="tmpl">
+            <div class="tmpl-step">
+              <span class="k">App visibility<br />— move before cutover</span>
+              <p>
+                <strong>Today: in the profile.</strong> The recruitment profile
+                makes both package apps visible.
+                <strong>Before cutover</strong> that visibility is lifted out of
+                the profile into the <em>TR Legacy app access</em> set and
+                re-granted to the same users — a net-zero change no one feels.
+                This is the one preparatory move the rollback depends on: once
+                app visibility is a set, turning the legacy app off (and back
+                on) is an assignment, not a profile edit in the go-live window.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k">Tabs</span>
+              <p>
+                <strong>Today: in the package permission set.</strong> The
+                recruitment permission set makes the package tabs visible.
+                <strong>After:</strong> the new tabs live in the ATS App access
+                set; the legacy tabs travel with the TR Legacy app access set,
+                so they turn off with the legacy app.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k">Object rights<br />— refactor after cutover</span>
+              <p>
+                <strong>Today: in the profile.</strong> The recruitment profiles
+                grant create-read-edit-delete on the fifteen package objects
+                directly. <strong>At cutover this is left untouched</strong> — a
+                user still holding rights on the <em>old</em> objects is
+                harmless while those objects are being retired, and the
+                new-object access comes entirely from the ATS role sets. Moving
+                the old object rights out of the profile into a set is real
+                hygiene, but it is <strong>post-cutover cleanup</strong>, kept
+                out of the go-live window because it changes nothing about
+                go-live safety.
+              </p>
+            </div>
+            <div class="tmpl-step">
+              <span class="k">Field access</span>
+              <p>
+                <strong
+                  >Today: mostly profile, some in dedicated field sets.</strong
+                >
+                A few narrow permission sets already gate specific fields
+                (placement fields, filters). <strong>After:</strong> field
+                visibility on the new objects is set on the role sets, and the
+                existing narrow field sets are reproduced one-for-one on the new
+                fields where they still apply.
+              </p>
+            </div>
+          </div>
+          <div class="callout key">
+            <span class="lbl">Why permission sets and not profiles</span>
+            <p>
+              Putting the access that has to move in sets, not profiles, is what
+              makes the cutover a switch rather than a migration. A set can be
+              assigned to the whole cluster ahead of time while it points at
+              empty, dormant objects, and un-assigned in seconds if go-live is
+              reversed — and, crucially, the legacy app can be turned back on by
+              re-assigning a set rather than re-editing a live profile under
+              time pressure. It also moves the org toward minimal profiles, so a
+              second country or brand later inherits a clean base instead of a
+              profile stuffed with a decade of grants.
+            </p>
+          </div>
+        </section>
       </div>
     </section>
     <section class="page-view" id="view-access-parity-method">
