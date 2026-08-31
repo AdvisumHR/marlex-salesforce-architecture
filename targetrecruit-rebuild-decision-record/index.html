@@ -1900,6 +1900,21 @@
           </p>
           <div class="decmap">
             <p class="decgrp">Framing the work</p>
+            <a class="decrow" href="#view-technical-roadmap">
+              <span class="num">&#9656;</span>
+              <span class="body"
+                ><h3>
+                  The technical roadmap
+                  <span class="ptype evidence">Sequence</span>
+                </h3>
+                <p>
+                  Every decision below, stitched into the order the work
+                  actually runs &mdash; what has to be true before each step can
+                  start.
+                </p></span
+              >
+              <span class="pick">The order, not the schedule</span>
+            </a>
             <a class="decrow" href="#view-why-rebuild">
               <span class="num">▸</span>
               <span class="body"
@@ -2097,6 +2112,21 @@
                 </p></span
               >
               <span class="pick">Mirrored, not designed</span>
+            </a>
+            <a class="decrow" href="#view-access-parity">
+              <span class="num">&#9656;</span>
+              <span class="body"
+                ><h3>
+                  Proving nobody gains or loses access
+                  <span class="ptype evidence">Evidence for 5 &amp; 6</span>
+                </h3>
+                <p>
+                  How access is checked for every user without asking the
+                  platform a question per person, and what the first measured
+                  run found.
+                </p></span
+              >
+              <span class="pick">Method, and one dated result</span>
             </a>
             <a class="decrow" href="#view-build-standard">
               <span class="num">7</span>
@@ -3247,8 +3277,9 @@
               <div class="ap-cell ap-r">
                 <span class="ap-n">Nov 2027</span
                 ><span class="ap-l"
-                  >TargetRecruit support ends — the date the build, data move
-                  and go-live must beat; the tail is not bound by it.</span
+                  >TargetRecruit contract renewal — the date the build, data
+                  move and go-live aim to beat; it is a renegotiation point, not
+                  a switch-off, and the tail is not bound by it.</span
                 >
               </div>
               <div class="ap-cell">
@@ -3569,9 +3600,10 @@
                       possible).
                     </li>
                     <li>
-                      Buy and integrate the
-                      <b>matching &amp; CV-parsing engine</b> — decided early
-                      because it shapes the candidate model (see
+                      Select and integrate the
+                      <b>matching &amp; CV-parsing engine</b> — settled early
+                      because it shapes the candidate model, though whether it
+                      is bought or built is still open (see
                       <a href="#view-matching-engine">The matching engine</a>).
                     </li>
                     <li>
@@ -4661,6 +4693,69 @@
             buy-a-product decision would have produced a different — and in its
             own way harder — strategy. This one is the strategy for a rebuild.
           </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Rollback for this choice</p>
+          <h2>How this decision fails back</h2>
+          <p>
+            This is the one decision in the set with no cheap technical
+            reversal, and saying so plainly is more useful than pretending
+            otherwise. There is no switch that un-rebuilds a platform. What
+            exists instead is
+            <strong>a commercial fallback and a series of gates</strong>: the
+            November 2027 point is a renewal, not a switch-off, so the licence
+            can be held and paid for longer if the rebuild is not ready. That
+            buys time; it does not reverse the direction.
+          </p>
+          <p>
+            The direction itself fails back only before the build has run far
+            enough to be worth more than a fresh start. If the rebuild proves
+            unviable early &mdash; the matching capability cannot be reproduced
+            or bought to an acceptable standard is the realistic case &mdash;
+            the fallback is to hold the licence and re-open the buy options,
+            having spent the analysis and the foundation work rather than the
+            whole build. That is why the capability with the most doubt attached
+            to it is deliberately settled early rather than late.
+          </p>
+          <p>
+            Past that point the honest answer is that this decision is carried,
+            not reversed, and every later decision in the set is shaped to keep
+            the reversible parts reversible: the cutover, the data move and the
+            access switch each fail back on their own terms, which is what makes
+            committing to the premise safe even though the premise itself does
+            not.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Residual risk &amp; open items</p>
+          <h2>What we still carry</h2>
+          <ul>
+            <li>
+              <strong>The runway date could still move.</strong> November 2027
+              is a contractual renewal point, and renewal terms are a commercial
+              negotiation that has not happened yet. The date anchors the whole
+              plan, so a change to it &mdash; in either direction &mdash;
+              changes the schedule every other page is judged against. Marlex IT
+              owns confirming it.
+            </li>
+            <li>
+              <strong>The build estimate is still being worked.</strong> This
+              page deliberately does not argue the rebuild is cheaper, because
+              that number does not exist yet. If it lands far enough above
+              expectation, it does not overturn the ownership argument, but it
+              does change what "minimum to disconnect" has to mean.
+            </li>
+            <li>
+              <strong>The platform dependency is kept, by choice.</strong>
+              Ending the vertical-package dependency does not end the dependency
+              on Salesforce itself. That is a deliberate trade &mdash; a
+              different risk class, not the same one renamed &mdash; but it is a
+              dependency the programme still carries and should not be described
+              as removed.
+            </li>
+          </ul>
         </section>
 
         <footer>
@@ -6446,7 +6541,7 @@
               Keep the old model's concepts one-for-one — a record there is a
               record here, so migration and validation stay simple — but decide
               every structural property deliberately: rebuild only the fields
-              that carry data (on the candidate, only 51 of 141 do), choose each
+              that carry data (on the candidate, only 52 of 141 do), choose each
               relationship type on its merits, and name everything in Marlex's
               own vocabulary. The mapping stays auditable; the mistakes don't
               come along.
@@ -6825,7 +6920,7 @@
           <h2>What we still carry</h2>
           <ul>
             <li>
-              <strong>The keep-list confirmations.</strong> The 51-field migrate
+              <strong>The keep-list confirmations.</strong> The 52-field migrate
               set includes fields no code reads but people may rely on — the
               product owner's confirmation of those, and of the fields presumed
               to be system defaults, is due before the first rehearsal.
@@ -9772,11 +9867,14 @@
             re-pointed and even restructured without locking the record it
             points to. The rigid parent-child form (which deletes children with
             their parent and serialises writes) is reserved for the 3 places it
-            genuinely fits.
+            genuinely fits. These are the rigid links the <em>new</em> model
+            chooses; the package being replaced has its own, and unpicking those
+            is data-move work rather than design.
           </p>
           <div class="callout">
             <p class="callout-h">
-              The three rigid parent-child links — and why each earns it
+              The three rigid parent-child links in the new model — and why each
+              earns it
             </p>
             <ul>
               <li>
@@ -10370,6 +10468,38 @@
               and no disambiguation is needed at all.
             </p>
           </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Rollback for this choice</p>
+          <h2>How this decision fails back</h2>
+          <p>
+            A naming rule fails back more cheaply than almost anything else on
+            the programme, and deliberately so:
+            <strong>the marker only ever rides the new component</strong>, so
+            the live legacy one is never renamed. Nothing about rollback depends
+            on a name being right &mdash; reversing a cutover is un-assigning a
+            permission set and re-pointing a configuration switch, and it would
+            work identically if every new component were named badly.
+          </p>
+          <p>
+            Getting a name wrong therefore costs a rename, not a rollback.
+            Before cutover a rename is a deployment on an ordinary day. After
+            cutover it is still routine, with one caveat: an API name is
+            referenced by whatever calls it, so renaming a class or object late
+            means updating its callers in the same change &mdash; a bounded,
+            reviewable edit, not a reversal. The transient
+            <code>2.0</code> label is looser still: it is a label, changed in
+            setup with no deployment at all, and it is meant to be dropped once
+            the old artifact retires.
+          </p>
+          <p>
+            The one thing that would <em>not</em> fail back cheaply is renaming
+            a live legacy component &mdash; which is exactly what both decisions
+            here forbid. Touching the old name turns a configuration-only
+            rollback into a deployment, which is why the rule is written the way
+            it is.
+          </p>
         </section>
 
         <section>
@@ -11962,6 +12092,54 @@
             on
             <a href="#view-record-access">the record-access evidence page</a>.
           </p>
+          <p>
+            That leaves one object with a real choice to make. Because the
+            pool's private default is cancelled by its own rule, the rebuild can
+            reproduce today's behaviour either way &mdash; and the two ways cost
+            differently.
+          </p>
+          <div class="dq">
+            <div class="dq-col chosen">
+              <span class="tag">Recommended</span>
+              <h3>Open the talent pool, defer its privacy</h3>
+              <p>
+                Set the pool to read/write and carry the visibility field across
+                as ordinary data without wiring it to access. This reproduces
+                observed behaviour <strong>exactly</strong> — all pools visible
+                and editable to all internal users — with one fewer mechanism
+                and no rule to recalculate. Per-pool privacy is then designed
+                properly in the tightening stage, alongside the country key,
+                rather than inherited by accident.
+              </p>
+              <p>
+                <strong>What it gives up:</strong> a latent capability. Today,
+                setting a pool to private would hide it. Nobody does —
+                <strong>zero of 640</strong> — so the capability is unexercised,
+                and rebuilding it unused means carrying a rule nobody relies on.
+              </p>
+            </div>
+            <div class="dq-col rejected">
+              <span class="tag">If privacy is confirmed as a live need</span>
+              <h3>Carry the private default plus its rule</h3>
+              <p>
+                Keep the pair as it stands: private by default, one
+                content-based rule reopening the public ones. Still only two
+                mechanisms, and defensible
+                <strong
+                  >if the product owner confirms per-pool privacy is a real
+                  requirement</strong
+                >
+                rather than a dormant setting.
+              </p>
+              <p>
+                <strong>The cost:</strong> a rule that must recalculate whenever
+                a pool's visibility changes, to reproduce behaviour identical to
+                having no rule at all. Either way the verification below proves
+                the choice, so this is a reversible decision — not one to
+                agonise over.
+              </p>
+            </div>
+          </div>
         </section>
 
         <section>
@@ -12325,12 +12503,9 @@
             decision closes, not a live contender, so it isn't compared here.
             The live fork is between the two sequencings that both leave the
             target reachable: privacy built in at cutover, or the current model
-            carried forward and tightened afterwards. Which one wins is
-            <strong>conditional on the HR-onboarding timing</strong> —
-            carry-forward is the default, but a decision to onboard HR at
-            cutover flips the answer to born-private. The comparison below is
-            the default case (privacy has no forcing deadline); read the
-            "chosen" column as chosen <em>unless</em> HR is pulled into cutover.
+            carried forward and tightened afterwards. The comparison below is
+            the default case; read the "chosen" column as chosen
+            <em>unless</em> HR is pulled into cutover.
           </p>
           <details class="more">
             <summary>
@@ -13678,6 +13853,13 @@
             Reproducing today's record access on the native objects requires
             this and nothing more:
           </p>
+          <p>
+            The one choice this leaves open &mdash; whether the talent pool is
+            rebuilt open, or keeps its private default and the rule that reopens
+            it &mdash; is argued on
+            <a href="#view-security">the sharing decision</a>. The measurement
+            behind it is above: zero of 640 pools are private.
+          </p>
           <div class="tbl-scroll">
             <table class="dtbl">
               <thead>
@@ -13725,48 +13907,6 @@
             <strong>do not recreate the office-named groups</strong> — most of
             the existing ones are already unused shells.
           </p>
-          <div class="dq">
-            <div class="dq-col chosen">
-              <span class="tag">Recommended</span>
-              <h3>Open the talent pool, defer its privacy</h3>
-              <p>
-                Set the pool to read/write and carry the visibility field across
-                as ordinary data without wiring it to access. This reproduces
-                observed behaviour <strong>exactly</strong> — all pools visible
-                and editable to all internal users — with one fewer mechanism
-                and no rule to recalculate. Per-pool privacy is then designed
-                properly in the tightening stage, alongside the country key,
-                rather than inherited by accident.
-              </p>
-              <p>
-                <strong>What it gives up:</strong> a latent capability. Today,
-                setting a pool to private would hide it. Nobody does —
-                <strong>zero of 640</strong> — so the capability is unexercised,
-                and rebuilding it unused means carrying a rule nobody relies on.
-              </p>
-            </div>
-            <div class="dq-col rejected">
-              <span class="tag">If privacy is confirmed as a live need</span>
-              <h3>Carry the private default plus its rule</h3>
-              <p>
-                Keep the pair as it stands: private by default, one
-                content-based rule reopening the public ones. Still only two
-                mechanisms, and defensible
-                <strong
-                  >if the product owner confirms per-pool privacy is a real
-                  requirement</strong
-                >
-                rather than a dormant setting.
-              </p>
-              <p>
-                <strong>The cost:</strong> a rule that must recalculate whenever
-                a pool's visibility changes, to reproduce behaviour identical to
-                having no rule at all. Either way the verification below proves
-                the choice, so this is a reversible decision — not one to
-                agonise over.
-              </p>
-            </div>
-          </div>
           <p>
             One thing genuinely does need fixing at cutover, and it is not
             sharing: <strong>ownership</strong>. Records must arrive owned by
@@ -14210,21 +14350,39 @@
           </p>
         </section>
 
-        <section id="grants-that-add-nothing">
+        <section>
           <p class="section-eyebrow">What "the same access" actually means</p>
-          <h2>Two things a faithful copy has to get right</h2>
+          <h2>Copy what a person can do, not the paperwork that grants it</h2>
           <p>
             Reproducing access sounds like copying a list. Measuring the live
             platform user by user showed it is not, because two different things
             can both be called "the same access" and they do not agree with each
-            other. One is the set of grants a person holds. The other is what
-            that person can actually open and edit. Where the two diverge,
-            copying the first faithfully reproduces paperwork; copying the
-            second reproduces the job. Both rules below choose the second, and
-            each was settled by measurement rather than preference.
+            other:
           </p>
+          <ul>
+            <li>
+              <strong>The grants a person holds</strong> &mdash; the profiles
+              and permission sets attached to them.
+            </li>
+            <li>
+              <strong>What that person can actually open and edit</strong>
+              &mdash; what those grants deliver once the platform has resolved
+              them all.
+            </li>
+          </ul>
+          <p>
+            Where the two diverge, copying the first faithfully reproduces
+            paperwork; copying the second reproduces the job. Two decisions
+            follow, and both choose the second. Each was settled by measurement
+            rather than preference.
+          </p>
+        </section>
 
-          <h3>Grants that add nothing are not rebuilt</h3>
+        <section id="grants-that-add-nothing">
+          <p class="section-eyebrow">
+            What "the same access" actually means &middot; 1 of 2
+          </p>
+          <h2>Grants that add nothing are not rebuilt</h2>
           <p>
             The mirror method above finds every grant that touches something
             being replaced. Testing what those grants deliver produced an
@@ -14284,8 +14442,13 @@
               the whole model.
             </p>
           </div>
+        </section>
 
-          <h3>Field security in the new code, decided by who is acting</h3>
+        <section>
+          <p class="section-eyebrow">
+            What "the same access" actually means &middot; 2 of 2
+          </p>
+          <h2>Field security in the new code, decided by who is acting</h2>
           <p>
             The second divergence is invisible in any permission table. The
             platform runs code with field and object checks switched off unless
@@ -14863,44 +15026,6 @@
             production-org audit and live access-model queries.
           </p>
         </footer>
-        <section>
-          <p class="section-eyebrow">The shape of the answer</p>
-          <h2>Four groups, mirrored rather than designed</h2>
-          <p>
-            Fifteen objects carry the access that has to move — the ones the
-            data model rebuilds. Everything else the package installs is
-            configuration no business user opens, and it is dropped with the
-            package rather than reproduced.
-          </p>
-          <p>
-            Grouping all 539 active users by the access they effectively hold
-            collapses the population into a short list: four business groups
-            doing recruitment work, the administrators, and the machine accounts
-            that do not switch as people. Each group is reproduced by one
-            permission set on the new objects, with a few narrow add-on sets
-            that cut across them.
-          </p>
-          <p>
-            The discipline that keeps this honest is that the replacement sets
-            are
-            <strong
-              >mirrored from what each source actually grants, not hand-designed
-              as a persona</strong
-            >. For every profile and permission set granting anything on
-            something being replaced, one mirror set reproduces the same grants
-            on the new objects; identical mirrors are then collapsed. So a
-            difference like the recruiter's missing delete, or a leader whose
-            see-all covers two objects rather than the whole model, is copied
-            faithfully instead of rounded off to "everyone gets full rights".
-          </p>
-          <p>
-            The object list, the per-group breakdown and the set-by-set mapping
-            are on
-            <a href="#view-access-permission-sets"
-              >the sets that reproduce each cluster</a
-            >.
-          </p>
-        </section>
       </div>
     </section>
     <section class="page-view" id="view-access-permission-sets">
@@ -14954,7 +15079,8 @@
             replaces. The package ships hundreds of objects, but almost all of
             them are internal configuration no user ever opens; the ones that
             carry real user access — and therefore real access to reproduce —
-            are the fifteen the data model rebuilds:
+            are the fifteen the data model rebuilds. Three rows below bundle two
+            or three closely-tied objects, so eleven rows cover the fifteen:
           </p>
           <div class="tbl-scroll">
             <table class="dtbl compact">
@@ -15372,13 +15498,16 @@
           <h2>The problem with checking every user</h2>
 
           <p>
-            There are 539 active users and seventeen objects in the rebuild's
-            blast radius. Asking the platform, for each user and each object,
-            what they can reach is over nine thousand questions on the rights
-            side and as many again on the records side. Each one takes a few
-            seconds. Run naively, the check takes most of a day, and it has to
-            be run twice &mdash; once before the switch and once after &mdash;
-            on every object that moves.
+            There are 539 active users and fifteen objects in the rebuild's
+            blast radius &mdash; the objects the rebuild replaces, plus the
+            commercial objects the same people reach alongside them, which a
+            parity check has to cover even though they are not being rebuilt.
+            Asking the platform, for each user and each object, what they can
+            reach is over eight thousand questions on the rights side and as
+            many again on the records side. Each one takes a few seconds. Run
+            naively, the check takes most of a day, and it has to be run twice
+            &mdash; once before the switch and once after &mdash; on every
+            object that moves.
           </p>
 
           <p>
@@ -15862,11 +15991,10 @@
               <dt>Cross-check</dt>
               <dd>
                 The offline rights resolver was validated against
-                <code>scripts/permissions-audit/effective_access.py</code>,
-                which asks the org directly, on representatives of four
-                different profiles. All four matched exactly on create, read,
-                edit, delete, both overrides, and readable and editable field
-                counts.
+                <code>effective_access.py</code>, which asks the org directly,
+                on representatives of four different profiles. All four matched
+                exactly on create, read, edit, delete, both overrides, and
+                readable and editable field counts.
               </dd>
 
               <dt>Record probing</dt>
@@ -17077,7 +17205,7 @@
           <p>
             The standard is forward-looking, but the audit findings are already
             on the table, and pretending otherwise would repeat the
-            silent-default mistake in the other direction. Three remediations
+            silent-default mistake in the other direction. Four remediations
             follow, in order of leverage:
           </p>
           <ul>
@@ -17374,10 +17502,10 @@
           <h2>The coupled-code count becomes two action lists</h2>
           <p>
             The decoupling metric used to read as a single number — the count of
-            code still touching the old package, in the low hundreds of
-            components when it was last measured. A count doesn't tell anyone
-            what to do at cutover, and it moves with every release. Split by the
-            two kinds, it becomes a runbook:
+            code still touching the old package, measured at 632 components in
+            the July 2026 scan. A count doesn't tell anyone what to do at
+            cutover, and it moves with every release. Split by the two kinds, it
+            becomes a runbook:
           </p>
           <table class="data">
             <caption>
@@ -17618,6 +17746,40 @@
               still faces an outside vendor.
             </p>
           </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Rollback for this choice</p>
+          <h2>How this decision fails back</h2>
+          <p>
+            This decision fails back
+            <strong>per entity, not per programme</strong>, which is the whole
+            point of confining the old-package reads to one class each. If a
+            repository turns out to have leaked &mdash; a caller reaching past
+            it to the package object directly &mdash; the cost is that this
+            entity's cutover degrades from a one-line re-point to a scoped
+            rewrite of the callers that bypassed it. That is bounded work on a
+            known list, found by searching for package references outside the
+            repository classes, and it does not touch any other entity.
+          </p>
+          <p>
+            Mis-tagging fails back the other way and more cheaply still. Code
+            written as a disposable bridge that turns out to survive gets
+            promoted &mdash; it is tidied into a repository when the cutover
+            reaches it. Code built as a surviving repository that turns out to
+            be throwaway is simply deleted with the rest of the bridge, having
+            cost a little ceremony and nothing else. The expensive direction is
+            the first one, so the discipline that matters is keeping the reads
+            inside the class, not classifying every component perfectly in
+            advance.
+          </p>
+          <p>
+            Nothing here is reversed at cutover, because nothing here is
+            switched on at cutover: the seam is how the new code reads the old
+            data <em>while both run</em>. When the package goes, the
+            repositories either lose their old-model branch or are deleted
+            outright &mdash; which is the runbook above, not a rollback.
+          </p>
         </section>
 
         <section>
@@ -21479,7 +21641,7 @@
             <p>
               Move each record only when it's next touched. It never fully
               converges, which means the package can never be removed — blowing
-              straight through the November-2027 support deadline and the
+              straight through the November-2027 contract renewal and the
               uninstall gate.
             </p>
           </div>
@@ -22430,7 +22592,8 @@
             inactive period — never left to drift.
           </p>
           <h3>
-            The relationship restructure — five children, and it comes first
+            The relationship restructure — five children in today's model, and
+            it comes first
           </h3>
           <p>
             Records tied to a core package record by a tight relationship that
@@ -23422,8 +23585,8 @@
                 days the plan becomes fix-forward, the old system is retired as
                 a target, and its removal goes back on a schedule. A fallback
                 without an end date quietly becomes the reason removal never
-                happens — right as the support deadline arrives. What must be
-                true on that removal date is written down too — the uninstall
+                happens — right as the renewal point arrives. What must be true
+                on that removal date is written down too — the uninstall
                 go-criteria on
                 <a href="#view-operations">Operating the new system</a>.
               </p>
@@ -27038,148 +27201,79 @@
           </div>
           <details class="more">
             <summary>
-              Why each edge lands where it does<span class="cnt"
-                >— the reasoning and the platform route, all ten</span
+              Which edges the layer routes, and which stay direct<span
+                class="cnt"
+                >&mdash; the routing rule applied, all ten</span
               >
             </summary>
             <div class="more-body">
               <p>
-                <strong>ERP (NET4).</strong>
-                <strong>Preserved, not rebuilt</strong> — already behind a
-                Marlex-owned, vendor-free client. The finance traffic is clean,
-                but the
+                This is the transport half of the rule, edge by edge.
+                <strong>Why</strong>
+                each edge is coupled &mdash; which retiring object or field it
+                touches, and what that forces at cutover &mdash; is held in the
+                edge register of the
                 <strong
-                  >live candidate sync reads a retiring TargetRecruit
-                  field</strong
-                >
-                and sends it to the ERP, so its field mapping re-points with the
-                cutover. Because that coupling is a <em>candidate</em> field
-                (<code>AVTRRT__Gender__c</code>), the ERP re-points
-                <strong>with the core wave</strong> and not with any of the
-                earlier ones — candidates are core, so nothing pulls this edge
-                forward. Two caveats found by the audit: that mapping lives in
-                configuration rather than in code, and two generations of the
-                client exist side by side with the older one carrying the live
-                traffic — which is canonical is on the confirm list (see the
-                <em>measured integration surface</em> page of the
-                <strong
-                  >MuleSoft — the Integration Layer · Decision Record</strong
-                >). <em>Platform route:</em> First interface built — it is
-                coupled to the retiring data and we want the layer to hold its
-                switch; multi-country ERP traffic is the reuse case that also
-                earns the hop. Not a precondition of the cutover: if it slips,
-                the switch stays in Salesforce
+                  >MuleSoft &mdash; the Integration Layer &middot; Decision
+                  Record</strong
+                >, which is the maintained source for those verdicts.
               </p>
+              <ul>
+                <li>
+                  <strong>ERP (NET4)</strong> &mdash;
+                  <strong>first interface built.</strong> It is coupled to
+                  retiring data and we want the layer to hold its switch;
+                  multi-country ERP traffic is the reuse case that also earns
+                  the hop. Not a precondition of the cutover &mdash; if it
+                  slips, the switch stays in Salesforce.
+                </li>
+                <li>
+                  <strong>Job board (InfoJobs)</strong> &mdash;
+                  <strong>second interface built,</strong> as the heaviest
+                  writer of the retiring records.
+                </li>
+                <li>
+                  <strong>Pre-screening</strong> &mdash;
+                  <strong>routed before it ships.</strong> Pointing a
+                  not-yet-live connection at retiring records would be paying
+                  twice.
+                </li>
+                <li>
+                  <strong>Document generation</strong> &mdash; direct. Routed
+                  only if a second consumer or an orchestration need appears.
+                </li>
+                <li>
+                  <strong>Analytics extract</strong> &mdash; direct; unlikely
+                  ever to earn the hop.
+                </li>
+                <li>
+                  <strong>Credit check</strong> &mdash; direct inbound, low
+                  volume, single purpose.
+                </li>
+                <li>
+                  <strong>Platform-native connector</strong> &mdash;
+                  <strong>never routed.</strong> The connector is itself the
+                  seam.
+                </li>
+                <li>
+                  <strong>Matching engine</strong> &mdash; proposed to stay
+                  direct permanently: latency-sensitive and called in-process.
+                </li>
+                <li>
+                  <strong>Payroll feed</strong> &mdash; direct for now; routed
+                  later only if a second country reuses it.
+                </li>
+                <li>
+                  <strong>The long tail</strong> &mdash; case by case, by the
+                  same rule. Most never justify a hop; the pre-screening service
+                  above is the exception.
+                </li>
+              </ul>
               <p>
-                <strong>Job board (InfoJobs).</strong> Outbound publishing
-                behind a switchable service that can move ahead of cutover;
-                inbound entry re-pointed
-                <strong>with the core, in lockstep</strong> — it lands
-                applications against vacancies, both of which are core objects,
-                so there is no earlier wave for it to join (see
-                <a href="#view-security">the guest door</a>).
-                <em>Platform route:</em> Second interface built — the heaviest
-                writer of the retiring records, so we want the layer to hold its
-                switch; its legacy protocol mediation and any second job board
-                argue for it too. Same caveat: the date does not wait for it
-              </p>
-              <p>
-                <strong>E-signature (Signaturit).</strong> It touches no
-                retiring data — it writes native objects, so it crosses the
-                cutover untouched and simply keeps its direct connection.
-                <em>Platform route:</em> Only if a second consumer or
-                orchestration need appears; explicitly open, revisited per the
-                rule, not by default
-              </p>
-              <p>
-                <strong>Credit check (Iberinform).</strong> A request-response
-                lookup that stores nothing, so there is no retiring data to
-                re-point and it crosses untouched.
-                <em>Platform route:</em> Unlikely to ever earn the hop; stays
-                direct behind its port
-              </p>
-              <p>
-                <strong>Training certificates (Humact / Lectio).</strong> Kept
-                on its existing inbound endpoint; its rigid data attachment to
-                the old model is restructured beforehand, and that attachment
-                holds no records today, so the change is to the shape only (see
-                <a href="#view-data-migration">Data migration</a>).
-                <strong
-                  >Its re-point is pulled forward by the placement wave</strong
-                >, not the core cutover: it reads
-                <code>AVTRRT__Job__c</code> and
-                <code>AVTRRT__Placement__c</code>, so it moves when placements
-                do. <em>Platform route:</em> No — direct inbound, low volume,
-                single purpose
-              </p>
-              <p>
-                <strong>Customer data platform (Data Cloud).</strong> Its data
-                streams re-point to the new objects at cutover — a
-                standard-connector reconfiguration, not code.
-                <em>Platform route:</em> Never — the platform-native connector
-                <em>is</em> the seam here, so no port applies; a middleware hop
-                would add cost and remove nothing
-              </p>
-              <p>
-                <strong>Analytics extract (Power BI).</strong>
-                <strong>Straddles both waves.</strong> It reads nine coupled
-                objects, and they do not move together: interviews and
-                placements go in the early waves, vacancies and applications
-                with the core. So it is the one edge that cannot re-point at a
-                single moment. Whether it re-points <em>twice</em>, once per
-                wave, or <em>once, late</em>, with early-wave figures stale in
-                the reporting database in the meantime, is an
-                <strong>open choice</strong> for the dashboards' owner.
-                <em>Platform route:</em> Open — either routed case by case (a
-                scheduled bulk read with a single consumer, so a hop earns
-                little today) or rebuilt natively; both remain open
-              </p>
-              <p>
-                <strong>Matching &amp; CV-parsing engine.</strong>
-                <strong>New, and already coupled</strong> — feed and query
-                behind a Marlex-owned port with a direct adapter first;
-                parsing-and-matching parity is a written go/no-go criterion.
-                Staying direct is an argument about latency, not about data: the
-                native reader is live and writes seven retiring fields on the
-                candidate, queries the retiring vacancy and creates application
-                records, so it re-points
-                <strong>with the core wave</strong> like any coupled edge. The
-                job-board CV path meanwhile still runs on the old package's
-                parser, so retiring that one is part of the job-board cutover,
-                not a switch already thrown. <em>Platform route:</em> Proposed
-                to stay direct permanently — it is a latency-sensitive, in-flow
-                call with no shared contract to place behind MuleSoft; behind
-                the port that remains a configuration choice if it ever changes
-              </p>
-              <p>
-                <strong>Geocoding (Google Maps).</strong>
-                <strong>Rebuilt, not re-pointed</strong> — the only edge that
-                depends on package <em>code</em> rather than package fields: it
-                calls a class inside the package, which stops existing at
-                uninstall, and it writes five retiring fields. So the logic has
-                to be rebuilt natively before the package goes, and that work
-                was not in the original re-point scope.
-                <em>Platform route:</em> Direct for now; route later if a second
-                country reuses it
-              </p>
-              <p>
-                <strong>The long tail (connected apps).</strong> Audited wave by
-                wave: each consumer confirmed live, re-pointed only where its
-                objects moved, retired where dead. Several are coupled, and they
-                do <strong>not</strong> move together — the document generator
-                re-points early, with the wave that rebuilds employment history
-                and education history — its reports keep stored queries naming
-                those records, so they return nothing the moment the records
-                change over; the sourcing connector re-points early too, but
-                with the talent-pool wave, because the talent pool is what it
-                reads; the browser extension and the campaign landing page
-                re-point with the core; the pre-screening service re-points
-                before it ever ships, since pointing a not-yet-live connection
-                at retiring records would be paying twice. Per-edge verdicts are
-                held in the edge register, not here.
-                <em>Platform route:</em> Case by case, by the same rule — most
-                never justify a hop. The exception is the pre-screening service,
-                which is one of the three edges whose switch the layer holds
+                Three edges therefore have their switch held in the middleware;
+                the rest keep a Marlex-owned port and a direct connection, and
+                can be routed later without touching the business logic behind
+                them.
               </p>
             </div>
           </details>
