@@ -2047,10 +2047,11 @@
                   package — CV parsing and candidate–vacancy matching, run as an
                   external service behind a Marlex-owned interface, with
                   everyday search built natively beside it. Whether that service
-                  is bought or built in-house is under active re-evaluation.
+                  is bought or built in-house is not settled; on cost grounds
+                  the direction is to build it.
                 </p></span
               >
-              <span class="pick">Buy vs. build — open</span>
+              <span class="pick">Leaning in-house, not ratified</span>
             </a>
             <a class="decrow" href="#view-security">
               <span class="num">5</span>
@@ -3385,7 +3386,9 @@
                       — the requirements gate. Product owners set the
                       <em>minimum to disconnect</em> (see
                       <a href="#view-scope">What's in scope</a>); matching and
-                      CV parsing are expected to be bought.
+                      CV parsing are the one capability whose buy-versus-build
+                      is still open, with the direction currently towards
+                      building in-house.
                     </li>
                     <li>
                       Open the <b>component register</b> that pairs every
@@ -3600,10 +3603,11 @@
                       possible).
                     </li>
                     <li>
-                      Select and integrate the
-                      <b>matching &amp; CV-parsing engine</b> — settled early
-                      because it shapes the candidate model, though whether it
-                      is bought or built is still open (see
+                      Settle the <b>matching &amp; CV-parsing engine</b> —
+                      early, because it shapes the candidate model. The
+                      direction is to build it in-house, on cost grounds, but
+                      that is not ratified and is gated on a quality test
+                      against real Spanish CVs (see
                       <a href="#view-matching-engine">The matching engine</a>).
                     </li>
                     <li>
@@ -4194,9 +4198,10 @@
                 </div>
                 <div class="ap-how">
                   <b>Bounded by →</b> a dedicated matching engine behind a
-                  Marlex-owned interface — bought or built in-house, that choice
-                  still open — tested on real Spanish CVs before the design
-                  freeze, with parity a written go/no-go criterion.
+                  Marlex-owned interface — the direction is an in-house build on
+                  cost grounds, not yet ratified — tested on real Spanish CVs
+                  before the design freeze, with parity a written go/no-go
+                  criterion.
                 </div>
               </div>
               <div class="ap-risk">
@@ -4281,9 +4286,11 @@
                   Which matching engine — and does it force its own objects
                 </h3>
                 <p>
-                  A service reading Marlex's objects is clean; a package that
-                  forces a two-way sync may tip the call toward a bounded build.
-                  Gates the candidate child-entity shape.
+                  The direction is a bounded in-house build, on cost: the quoted
+                  licence was out of proportion to a search mix where most
+                  searches need no semantic ranking. Not ratified &mdash; it
+                  turns on a quality test against real Spanish CVs. Gates the
+                  candidate child-entity shape.
                 </p>
                 <span class="ap-owner">Marlex + Nuvolar · decide early</span>
               </div>
@@ -4516,13 +4523,16 @@
               that comparison depends on estimates still being worked, and it is
               not the deciding factor. It is argued as the option that
               <em>ends</em> the vendor-dependency risk rather than resetting it.
-              Where a genuinely specialised capability is better bought than
-              built — the candidate-matching and CV-parsing engine is the known
-              example — it is bought as an external service behind a
-              Marlex-owned interface, not re-adopted as a platform; that call is
-              worked in full on
-              <a href="#view-matching-engine">its own page</a>. Rebuilding the
-              platform and buying a hard component are not in tension.
+              Rebuilding the platform does not mean building every component:
+              where a genuinely specialised capability is better bought than
+              built, it is bought as an external service behind a Marlex-owned
+              interface, not re-adopted as a platform. The candidate-matching
+              and CV-parsing engine is the case where that question is live
+              &mdash; and on cost the current direction is to build it rather
+              than buy it. That call is worked in full on
+              <a href="#view-matching-engine">its own page</a>; either way it
+              sits behind an interface Marlex owns, which is what keeps it out
+              of tension with the argument here.
             </p>
           </div>
         </section>
@@ -11480,7 +11490,9 @@
               <span class="option-name"
                 >Buy a specialist engine as an external service, behind a
                 Marlex-owned interface</span
-              ><span class="chip adopted">Leaning — under review</span>
+              ><span class="chip limited"
+                >The fallback &mdash; not the current direction</span
+              >
             </div>
             <p>
               Contract one of the engines whose entire business is parsing and
@@ -11499,6 +11511,14 @@
               <em>bounded</em>: the engine answers questions through a door
               Marlex owns, so a disappointing engine is swapped behind the
               interface, not migrated off.
+            </p>
+            <p>
+              <strong>Why this is the fallback rather than the plan:</strong>
+              the quoted licence is out of proportion to how much of the search
+              mix actually needs it. That is a price objection, not a quality
+              one &mdash; the case above still holds, and this option returns
+              the moment an in-house matcher fails its quality test or the
+              commercial terms move.
             </p>
           </div>
           <div class="option">
@@ -11524,28 +11544,40 @@
             <div class="option-head">
               <span class="option-name"
                 >Build matching and parsing as Marlex-owned code</span
-              ><span class="chip rejected">Rejected — with one exception</span>
+              ><span class="chip adopted"
+                >Current direction &mdash; not yet ratified</span
+              >
             </div>
             <p>
-              Re-create the engine natively, the way the rest of the system is
-              being rebuilt. As the <em>default</em> it fails three ways at
-              once: there is no specification to build from (the engine is
-              proprietary and unreadable); semantic ranking at this volume is
-              the wrong job for the platform's native tools; and even a heroic
-              success would have spent the programme's scarcest resource — time
-              before November 2027 — building an unproven engine for a
-              capability that is not what differentiates Marlex.
+              Build the ranking natively &mdash; vector embeddings plus a
+              cheaper AI model, fed directly from the new objects &mdash; the
+              way the rest of the system is being rebuilt. What moved this from
+              rejected to likely is
+              <strong>price against actual use</strong>: a specialist licence
+              was quoted at a level out of proportion to a search mix where
+              roughly six searches in ten need no semantic ranking at all.
+              Paying full engine price for the minority case is what stopped
+              making sense.
             </p>
             <p>
-              This was the option whose infeasibility once put the whole rebuild
-              direction in question; taking it off the table as the default is
-              what settled that question.
+              The reasons it was rejected in July have not vanished, and they
+              are what keeps this unratified. There is no specification to build
+              from, because the engine being replaced is proprietary and
+              unreadable, so the target is a quality bar rather than a copy.
+              Ranking quality is genuinely hard, and a weak matcher is worse
+              than an honest keyword search. And the time it consumes is the
+              programme's scarcest resource. The judgement that changed is not
+              that these went away &mdash; it is that a <em>bounded</em> matcher
+              for the semantic minority is a smaller problem than a full
+              commercial engine solves, and small enough to be worth its own
+              risk.
             </p>
             <p>
-              <strong>The one exception</strong>, worked below: an engine that
-              can only index its own objects would force a permanent two-way
-              sync onto the highest-volume objects in the org — at which point a
-              bounded self-built matcher may be the lesser evil.
+              This is also the option whose apparent infeasibility once put the
+              whole rebuild direction in question. It is back on the table on
+              cost grounds, not because that difficulty was disproved &mdash;
+              which is exactly why it is gated on a measured quality test
+              against real Spanish CVs before anyone commits.
             </p>
           </div>
           <div class="option">
@@ -11733,56 +11765,8 @@
           <div class="dq">
             <div class="dq-col chosen">
               <h4>
-                Buy the engine <span class="tag">Leaning — under review</span>
-              </h4>
-              <p class="head-note">
-                A specialist engine — contracted directly or licensed as a
-                module — behind a Marlex-owned interface, with native simple
-                search beside it.
-              </p>
-              <ul class="dq-outcomes">
-                <li>
-                  <span
-                    >Parsing and matching arrive at proven specialist quality —
-                    the vendors' whole business — rather than at first-attempt
-                    quality.</span
-                  >
-                  <span class="lk good">almost certain</span>
-                </li>
-                <li>
-                  <span
-                    >The feed and re-index pipeline lands on schedule as
-                    ordinary, well-understood integration build.</span
-                  >
-                  <span class="lk good">probably</span>
-                </li>
-                <li>
-                  <span
-                    >Engine selection or commercial negotiation drags, and the
-                    design decisions waiting on it — the candidate child
-                    entities, the feed contract — stall with it.</span
-                  >
-                  <span class="lk mid">possibly</span>
-                </li>
-              </ul>
-              <div class="dq-foot">
-                <p>
-                  <span class="lbl">Upside, and how big</span> The single
-                  hardest capability in the system comes off the build's
-                  critical path and arrives proven — and the feasibility
-                  question that once hung over the whole rebuild direction is
-                  closed.
-                </p>
-                <p>
-                  <span class="lbl">Worst case</span> A slow selection squeezes
-                  dependent design work — bounded by deciding the engine early,
-                  which is why it leads the open items below.
-                </p>
-              </div>
-            </div>
-            <div class="dq-col rejected">
-              <h4>
-                Build it in-house <span class="tag">Re-opened 16 Jul</span>
+                Build it in-house
+                <span class="tag">Current direction &mdash; not ratified</span>
               </h4>
               <p class="head-note">
                 Two different builds hide under this label. Re-creating parsing
@@ -11833,13 +11817,63 @@
                 </p>
               </div>
             </div>
+            <div class="dq-col rejected">
+              <h4>Buy the engine <span class="tag">The fallback</span></h4>
+              <p class="head-note">
+                A specialist engine — contracted directly or licensed as a
+                module — behind a Marlex-owned interface, with native simple
+                search beside it.
+              </p>
+              <ul class="dq-outcomes">
+                <li>
+                  <span
+                    >Parsing and matching arrive at proven specialist quality —
+                    the vendors' whole business — rather than at first-attempt
+                    quality.</span
+                  >
+                  <span class="lk good">almost certain</span>
+                </li>
+                <li>
+                  <span
+                    >The feed and re-index pipeline lands on schedule as
+                    ordinary, well-understood integration build.</span
+                  >
+                  <span class="lk good">probably</span>
+                </li>
+                <li>
+                  <span
+                    >Engine selection or commercial negotiation drags, and the
+                    design decisions waiting on it — the candidate child
+                    entities, the feed contract — stall with it.</span
+                  >
+                  <span class="lk mid">possibly</span>
+                </li>
+              </ul>
+              <div class="dq-foot">
+                <p>
+                  <span class="lbl">Upside, and how big</span> The single
+                  hardest capability in the system comes off the build's
+                  critical path and arrives proven — and the feasibility
+                  question that once hung over the whole rebuild direction is
+                  closed.
+                </p>
+                <p>
+                  <span class="lbl">Worst case</span> A slow selection squeezes
+                  dependent design work — bounded by deciding the engine early,
+                  which is why it leads the open items below.
+                </p>
+              </div>
+            </div>
           </div>
           <div class="dq-verdict">
             <p>
-              <strong>The buy case (the leaning, now under review).</strong> The
-              ownership argument that decides the rebuild does not extend here,
-              because the engine holds nothing hostage: it answers through a
-              door Marlex owns and can be swapped behind it, where the old
+              <strong
+                >The buy case (no longer the direction, still the
+                fallback).</strong
+              >
+              The ownership argument that decides the rebuild does not extend
+              here, because the engine holds nothing hostage: it answers through
+              a door Marlex owns and can be swapped behind it, where the old
               package owned the data model and the exit path both. On this
               reading, buying spends none of the scarcest resource — time before
               November 2027 — on a component the market already does better, and
@@ -11853,11 +11887,21 @@
               service scoped to Marlex's actual search mix at a fraction of the
               quoted cost — that the original verdict did not weigh. The buy
               case above still holds on <em>time and certainty</em>; the
-              in-house case now competes on <em>cost and fit</em>. The
-              tie-breakers are the two risks in the re-evaluation note
-              (unproven-at-scale, cross-team dependency) against the cost gap —
-              decided once the minimum requirement is defined and parity is
-              tested on real Spanish CVs.
+              in-house case now competes on <em>cost and fit</em> &mdash; and on
+              cost the gap was large enough that the direction has moved to
+              building.
+            </p>
+            <p>
+              <strong>Where it stands.</strong> Building in-house is the current
+              direction, and it is <strong>not ratified</strong>. It rests on a
+              price objection rather than on any proof that the hard part got
+              easier: nobody has yet shown a self-built matcher ranking real
+              Spanish CVs at an acceptable standard. Three things would return
+              the answer to buying &mdash; the quality test failing, the
+              commercial terms moving, or an engine that must index its own
+              objects turning the integration into a permanent two-way sync.
+              Until the test runs, the honest statement is that Marlex expects
+              to build and has not committed to it.
             </p>
           </div>
         </section>
