@@ -1983,7 +1983,17 @@
               >
               <span class="pick">Familiar before live</span>
             </a>
-            <p class="decgrp">What the new system is · 1&ndash;8</p>
+          </div>
+        </section>
+
+        <section>
+          <h2>What the new system is</h2>
+          <p>
+            Decisions 1&ndash;8 settle the shape of the thing being built
+            &mdash; the objects, what they are called, who can see them, and
+            whether a rule is built with clicks or with code.
+          </p>
+          <div class="decmap">
             <a class="decrow" href="#view-data-model">
               <span class="num">1</span>
               <span class="body"
@@ -2156,7 +2166,17 @@
               >
               <span class="pick">Insulate the touch, not every read</span>
             </a>
-            <p class="decgrp">How the old one leaves · 9&ndash;17</p>
+          </div>
+        </section>
+
+        <section>
+          <h2>How the old one leaves</h2>
+          <p>
+            Decisions 9&ndash;17 cover the crossing itself &mdash; how the build
+            is deployed, how the data moves, what happens if it fails, and what
+            has to be true before the old package can be removed.
+          </p>
+          <div class="decmap">
             <a class="decrow" href="#view-rebuild-approach">
               <span class="num">9</span>
               <span class="body"
@@ -2277,7 +2297,18 @@
               >
               <span class="pick">Drill activation &amp; rollback</span>
             </a>
-            <p class="decgrp">Running it · 18&ndash;21</p>
+          </div>
+        </section>
+
+        <section>
+          <h2>Running it</h2>
+          <p>
+            Decisions 18&ndash;21 are about life after the switch &mdash;
+            keeping the business shipping while the rebuild runs, watching the
+            new system, meeting the outside world, and where the records that do
+            not board it live.
+          </p>
+          <div class="decmap">
             <a class="decrow" href="#view-delivering-while-rebuilding">
               <span class="num">18</span>
               <span class="body"
@@ -3369,49 +3400,63 @@
                     decision that sizes everything after it — what is rebuilt,
                     what is bought, and what is dropped.
                   </p>
-                  <ul class="ap-steps">
-                    <li>
-                      Stand up Marlex-owned
-                      <b>repositories and a deploy pipeline</b>, branch
-                      protection, and the governance review gate — a repeatable
-                      way to push to production is a hard precondition for
-                      progressive deployment.
-                    </li>
-                    <li>
-                      Build the
-                      <b
-                        >functional inventory and buy-versus-build
-                        classification</b
+                  <details class="more">
+                    <summary>
+                      The 4 steps in this stage<span class="cnt"
+                        >&mdash; 194 words</span
                       >
-                      — the requirements gate. Product owners set the
-                      <em>minimum to disconnect</em> (see
-                      <a href="#view-scope">What's in scope</a>); matching and
-                      CV parsing are the one capability whose buy-versus-build
-                      is still open, with the direction currently towards
-                      building in-house.
-                    </li>
-                    <li>
-                      Open the <b>component register</b> that pairs every
-                      package-coupled component with its native replacement, its
-                      activation instructions, and the behaviour to test — the
-                      real unit the rebuild is tracked by.
-                    </li>
-                    <li>
-                      Settle the <b>design decisions</b> the build needs:
-                      naming, ownership boundaries, the config-driven routing
-                      pattern, build standards. No group-wide standard is
-                      pre-locked. Part of this is a
-                      <b>census of which automations need a routing switch</b> —
-                      where an object keeps its identity but its delegated logic
-                      is rebuilt, one entry point must route between legacy and
-                      canonical logic by configuration (Apex triggers and
-                      handlers, Platform Event subscribers, queueables and batch
-                      jobs, outbound listeners that deployment alone can't
-                      toggle), as against the components a native
-                      activate/deactivate already covers (see
-                      <a href="#view-rebuild-approach">Rebuild approach</a>).
-                    </li>
-                  </ul>
+                    </summary>
+                    <div class="more-body">
+                      <ul class="ap-steps">
+                        <li>
+                          Stand up Marlex-owned
+                          <b>repositories and a deploy pipeline</b>, branch
+                          protection, and the governance review gate — a
+                          repeatable way to push to production is a hard
+                          precondition for progressive deployment.
+                        </li>
+                        <li>
+                          Build the
+                          <b
+                            >functional inventory and buy-versus-build
+                            classification</b
+                          >
+                          — the requirements gate. Product owners set the
+                          <em>minimum to disconnect</em> (see
+                          <a href="#view-scope">What's in scope</a>); matching
+                          and CV parsing are the one capability whose
+                          buy-versus-build is still open, with the direction
+                          currently towards building in-house.
+                        </li>
+                        <li>
+                          Open the <b>component register</b> that pairs every
+                          package-coupled component with its native replacement,
+                          its activation instructions, and the behaviour to test
+                          — the real unit the rebuild is tracked by.
+                        </li>
+                        <li>
+                          Settle the <b>design decisions</b> the build needs:
+                          naming, ownership boundaries, the config-driven
+                          routing pattern, build standards. No group-wide
+                          standard is pre-locked. Part of this is a
+                          <b
+                            >census of which automations need a routing
+                            switch</b
+                          >
+                          — where an object keeps its identity but its delegated
+                          logic is rebuilt, one entry point must route between
+                          legacy and canonical logic by configuration (Apex
+                          triggers and handlers, Platform Event subscribers,
+                          queueables and batch jobs, outbound listeners that
+                          deployment alone can't toggle), as against the
+                          components a native activate/deactivate already covers
+                          (see
+                          <a href="#view-rebuild-approach">Rebuild approach</a
+                          >).
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
                   <div class="ap-dep">
                     <b>Blocks →</b> the build cannot start on an unscoped,
                     unfrozen target. The minimum-to-disconnect line is the
@@ -3439,48 +3484,58 @@
                     it runs where the org knowledge already lives (Marlex IT /
                     Telefónica).
                   </p>
-                  <ul class="ap-steps">
-                    <li>
-                      Deprecate the <b>Lead object</b> logic and remove
-                      <b>retired metadata</b> the inventory flags, once a
-                      dependency scan confirms nothing live still needs them.
-                    </li>
-                    <li>
-                      Fix the <b>security findings</b> and structural technical
-                      debt surfaced by the inventory.
-                    </li>
-                    <li>
-                      Convert the surviving
-                      <b>Workflow Rules and Process Builders to Flow</b> — only
-                      the automation that survives the rebuild, since logic
-                      rebuilt natively is not converted first.
-                    </li>
-                    <li>
-                      <b
-                        >Free the storage the data move needs — and free it
-                        before the pre-load, not just before the switch.</b
+                  <details class="more">
+                    <summary>
+                      The 4 steps in this stage<span class="cnt"
+                        >&mdash; 193 words</span
                       >
-                      The record store is three-quarters full, and pre-loading
-                      the new objects holds the old records and their new copies
-                      at once
-                      <em>for the whole dormant window</em>, not just cutover
-                      weekend — a peak that, left unmanaged, runs to about
-                      nine-tenths of the limit for weeks. Delete the
-                      <b
-                        >~195,000 candidates who declined data-protection
-                        consent</b
-                      >
-                      (no business value, counted on the live system) and
-                      confirm the never-active tail is held back from the move,
-                      bringing the peak comfortably clear. Because the
-                      recruitment records have almost no parent-child
-                      enforcement, this is a
-                      <b>manual object-by-object sweep</b>, not one cascade —
-                      done here so the pre-load inherits headroom rather than a
-                      storage problem (see
-                      <a href="#view-archive">The archive</a>).
-                    </li>
-                  </ul>
+                    </summary>
+                    <div class="more-body">
+                      <ul class="ap-steps">
+                        <li>
+                          Deprecate the <b>Lead object</b> logic and remove
+                          <b>retired metadata</b> the inventory flags, once a
+                          dependency scan confirms nothing live still needs
+                          them.
+                        </li>
+                        <li>
+                          Fix the <b>security findings</b> and structural
+                          technical debt surfaced by the inventory.
+                        </li>
+                        <li>
+                          Convert the surviving
+                          <b>Workflow Rules and Process Builders to Flow</b> —
+                          only the automation that survives the rebuild, since
+                          logic rebuilt natively is not converted first.
+                        </li>
+                        <li>
+                          <b
+                            >Free the storage the data move needs — and free it
+                            before the pre-load, not just before the switch.</b
+                          >
+                          The record store is three-quarters full, and
+                          pre-loading the new objects holds the old records and
+                          their new copies at once
+                          <em>for the whole dormant window</em>, not just
+                          cutover weekend — a peak that, left unmanaged, runs to
+                          about nine-tenths of the limit for weeks. Delete the
+                          <b
+                            >~195,000 candidates who declined data-protection
+                            consent</b
+                          >
+                          (no business value, counted on the live system) and
+                          confirm the never-active tail is held back from the
+                          move, bringing the peak comfortably clear. Because the
+                          recruitment records have almost no parent-child
+                          enforcement, this is a
+                          <b>manual object-by-object sweep</b>, not one cascade
+                          — done here so the pre-load inherits headroom rather
+                          than a storage problem (see
+                          <a href="#view-archive">The archive</a>).
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
                   <div class="ap-dep">
                     <b>Runs against →</b> the November 2027 window. Deliberately
                     foundational, not parallel to the build — folding it into
@@ -3508,39 +3563,50 @@
                     the real schema everything else is built against, not a
                     wrapper over a vendor.
                   </p>
-                  <ul class="ap-steps">
-                    <li>
-                      Design the model
-                      <b
-                        >from how the system is actually used, not by copying
-                        the old shape</b
-                      >: same concepts one-for-one so the data move stays
-                      provable, but only the fields that hold data rebuilt — on
-                      the candidate, 51 of 141 package fields carry data; 74 are
-                      empty or defaults.
-                    </li>
-                    <li>
-                      Keep the standard objects the package extended as
-                      <b>standard objects</b> — the candidate stays a Contact
-                      with a new record type, preserving a decade of files,
-                      activities, sharing and history for 1.06M records (see
-                      <a href="#view-candidate-model"
-                        >Keep the standard objects standard</a
-                      >).
-                    </li>
-                    <li>
-                      Design for the measured volumes: the busiest job carries
-                      13,151 applications, so relationships are ordinary lookups
-                      rather than the rigid form that locks a busy parent;
-                      counters compute off the save path; every record carries a
-                      key so a failed load re-runs without duplicates.
-                    </li>
-                    <li>
-                      Stand up the <b>shared read-only bridge</b> to old data,
-                      the test-data generator and the switch framework — the
-                      foundation all new work is built against.
-                    </li>
-                  </ul>
+                  <details class="more">
+                    <summary>
+                      The 4 steps in this stage<span class="cnt"
+                        >&mdash; 159 words</span
+                      >
+                    </summary>
+                    <div class="more-body">
+                      <ul class="ap-steps">
+                        <li>
+                          Design the model
+                          <b
+                            >from how the system is actually used, not by
+                            copying the old shape</b
+                          >: same concepts one-for-one so the data move stays
+                          provable, but only the fields that hold data rebuilt —
+                          on the candidate, 51 of 141 package fields carry data;
+                          74 are empty or defaults.
+                        </li>
+                        <li>
+                          Keep the standard objects the package extended as
+                          <b>standard objects</b> — the candidate stays a
+                          Contact with a new record type, preserving a decade of
+                          files, activities, sharing and history for 1.06M
+                          records (see
+                          <a href="#view-candidate-model"
+                            >Keep the standard objects standard</a
+                          >).
+                        </li>
+                        <li>
+                          Design for the measured volumes: the busiest job
+                          carries 13,151 applications, so relationships are
+                          ordinary lookups rather than the rigid form that locks
+                          a busy parent; counters compute off the save path;
+                          every record carries a key so a failed load re-runs
+                          without duplicates.
+                        </li>
+                        <li>
+                          Stand up the <b>shared read-only bridge</b> to old
+                          data, the test-data generator and the switch framework
+                          — the foundation all new work is built against.
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
                   <div class="ap-dep">
                     <b>Hard prerequisite →</b> the foundation must exist before
                     the bulk of delivery, or new work reaches for the old
@@ -3580,42 +3646,52 @@
                     is the owners' keep/drop call on the
                     <a href="#view-scope">Scope</a> page.
                   </p>
-                  <ul class="ap-steps">
-                    <li>
-                      Build capability by capability across CRM, back office and
-                      recruitment — each a self-contained unit,
-                      <b>built to standard as it goes</b>.
-                    </li>
-                    <li>
-                      Build every component
-                      <b>configuration-first and portable</b>: business
-                      variation is a configuration record, never hardcoded — so
-                      a proven component can later become a Marlex-standard,
-                      group-shared building block reused in the Axxon org and
-                      the country rollouts by parameterising it, not rebuilding
-                      it.
-                    </li>
-                    <li>
-                      <b>Deploy each piece switched off as it's finished</b>,
-                      timed to how fast it changes: rarely-touched components
-                      early (proving deployment cheaply), actively-changing ones
-                      last (so a switched-off copy waits as short a time as
-                      possible).
-                    </li>
-                    <li>
-                      Settle the <b>matching &amp; CV-parsing engine</b> —
-                      early, because it shapes the candidate model. The
-                      direction is to build it in-house, on cost grounds, but
-                      that is not ratified and is gated on a quality test
-                      against real Spanish CVs (see
-                      <a href="#view-matching-engine">The matching engine</a>).
-                    </li>
-                    <li>
-                      Build <b>Marlex-owned monitoring</b> into the rebuild,
-                      because today's visibility belongs to the package and
-                      leaves with it.
-                    </li>
-                  </ul>
+                  <details class="more">
+                    <summary>
+                      The 5 steps in this stage<span class="cnt"
+                        >&mdash; 162 words</span
+                      >
+                    </summary>
+                    <div class="more-body">
+                      <ul class="ap-steps">
+                        <li>
+                          Build capability by capability across CRM, back office
+                          and recruitment — each a self-contained unit,
+                          <b>built to standard as it goes</b>.
+                        </li>
+                        <li>
+                          Build every component
+                          <b>configuration-first and portable</b>: business
+                          variation is a configuration record, never hardcoded —
+                          so a proven component can later become a
+                          Marlex-standard, group-shared building block reused in
+                          the Axxon org and the country rollouts by
+                          parameterising it, not rebuilding it.
+                        </li>
+                        <li>
+                          <b>Deploy each piece switched off as it's finished</b
+                          >, timed to how fast it changes: rarely-touched
+                          components early (proving deployment cheaply),
+                          actively-changing ones last (so a switched-off copy
+                          waits as short a time as possible).
+                        </li>
+                        <li>
+                          Settle the <b>matching &amp; CV-parsing engine</b> —
+                          early, because it shapes the candidate model. The
+                          direction is to build it in-house, on cost grounds,
+                          but that is not ratified and is gated on a quality
+                          test against real Spanish CVs (see
+                          <a href="#view-matching-engine">The matching engine</a
+                          >).
+                        </li>
+                        <li>
+                          Build <b>Marlex-owned monitoring</b> into the rebuild,
+                          because today's visibility belongs to the package and
+                          leaves with it.
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
                   <div class="ap-dep">
                     <b>Standing risk →</b> a fix made to a live component but
                     not carried into its switched-off copy silently regresses at
@@ -3693,42 +3769,51 @@
                     instead: that switching on lands cleanly, and that switching
                     back works cleanly — both timed.
                   </p>
-                  <ul class="ap-steps">
-                    <li>
-                      Refresh a <b>full-copy sandbox from production</b> (it
-                      comes up holding the switched-off build, real data and
-                      configuration), then practise the
-                      <b>pre-load, the delta and the activation</b> end to end —
-                      the measured pre-load time and the far smaller
-                      delta-window time are the headline outputs.
-                    </li>
-                    <li>
-                      Practise the <b>switch-off and rollback</b> — the timed
-                      flip back to the old system — turning the way back from a
-                      claim into an exercised procedure. Run at least twice,
-                      each from a clean starting point.
-                    </li>
-                    <li>
-                      Run a cheap experiment early to learn how the unreadable
-                      package behaves — it gates the first slice, the candidate
-                      re-typing and the rollback replay (see
-                      <a href="#view-rehearsal">Rehearsal</a>).
-                    </li>
-                    <li>
-                      Prove sharing-dependent features
-                      <b
-                        >as each affected persona, not as one privileged
-                        account</b
+                  <details class="more">
+                    <summary>
+                      The 4 steps in this stage<span class="cnt"
+                        >&mdash; 167 words</span
                       >
-                      — anything whose outcome turns on sharing, org-wide
-                      defaults, role, profile or permission set can pass a
-                      single-user test and still be wrong for the role that
-                      needs it (see
-                      <a href="#view-testing">Testing behaviour parity</a>).
-                      Features whose behaviour doesn't vary by user are proven
-                      once, as one user.
-                    </li>
-                  </ul>
+                    </summary>
+                    <div class="more-body">
+                      <ul class="ap-steps">
+                        <li>
+                          Refresh a <b>full-copy sandbox from production</b> (it
+                          comes up holding the switched-off build, real data and
+                          configuration), then practise the
+                          <b>pre-load, the delta and the activation</b> end to
+                          end — the measured pre-load time and the far smaller
+                          delta-window time are the headline outputs.
+                        </li>
+                        <li>
+                          Practise the <b>switch-off and rollback</b> — the
+                          timed flip back to the old system — turning the way
+                          back from a claim into an exercised procedure. Run at
+                          least twice, each from a clean starting point.
+                        </li>
+                        <li>
+                          Run a cheap experiment early to learn how the
+                          unreadable package behaves — it gates the first slice,
+                          the candidate re-typing and the rollback replay (see
+                          <a href="#view-rehearsal">Rehearsal</a>).
+                        </li>
+                        <li>
+                          Prove sharing-dependent features
+                          <b
+                            >as each affected persona, not as one privileged
+                            account</b
+                          >
+                          — anything whose outcome turns on sharing, org-wide
+                          defaults, role, profile or permission set can pass a
+                          single-user test and still be wrong for the role that
+                          needs it (see
+                          <a href="#view-testing">Testing behaviour parity</a>).
+                          Features whose behaviour doesn't vary by user are
+                          proven once, as one user.
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
                   <div class="ap-dep">
                     <b>Gates the switch →</b> the cutover cannot honestly be
                     committed until a full-copy run produces a measured load
@@ -3960,31 +4045,42 @@
                     evidenced change — boring by design, because everything
                     dangerous was retired beforehand.
                   </p>
-                  <ul class="ap-steps">
-                    <li>
-                      <b>Nothing references it</b> (the platform dependency
-                      check is the backstop under the rebuilt-component list),
-                      <b>nothing still writes to it</b> (the scheduled check
-                      shows zero writes for the agreed period), and
-                      <b>nothing is lost</b> (package-field data verified
-                      extracted and checksummed).
-                    </li>
-                    <li>
-                      The new system has <b>earned it</b> (hypercare closed,
-                      error rates at norms) and the
-                      <b>fallback has expired</b> — removing the package and
-                      retiring the fallback are the same decision, taken once,
-                      in writing.
-                    </li>
-                    <li>
-                      <b>The user teardown runs on the same gate</b>: reclaim
-                      the TargetRecruit user licenses and strip users'
-                      permissions on the old <code>AVTRRT__</code> objects.
-                      These are kept in place at cutover so the fallback stays
-                      usable, and removed only once the fallback is retired (see
-                      <a href="#view-operations">Operating the new system</a>).
-                    </li>
-                  </ul>
+                  <details class="more">
+                    <summary>
+                      The 3 steps in this stage<span class="cnt"
+                        >&mdash; 121 words</span
+                      >
+                    </summary>
+                    <div class="more-body">
+                      <ul class="ap-steps">
+                        <li>
+                          <b>Nothing references it</b> (the platform dependency
+                          check is the backstop under the rebuilt-component
+                          list), <b>nothing still writes to it</b> (the
+                          scheduled check shows zero writes for the agreed
+                          period), and <b>nothing is lost</b> (package-field
+                          data verified extracted and checksummed).
+                        </li>
+                        <li>
+                          The new system has <b>earned it</b> (hypercare closed,
+                          error rates at norms) and the
+                          <b>fallback has expired</b> — removing the package and
+                          retiring the fallback are the same decision, taken
+                          once, in writing.
+                        </li>
+                        <li>
+                          <b>The user teardown runs on the same gate</b>:
+                          reclaim the TargetRecruit user licenses and strip
+                          users' permissions on the old
+                          <code>AVTRRT__</code> objects. These are kept in place
+                          at cutover so the fallback stays usable, and removed
+                          only once the fallback is retired (see
+                          <a href="#view-operations">Operating the new system</a
+                          >).
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
                 </div>
               </div>
 
@@ -4005,31 +4101,44 @@
                     normal pace — each as its own stage with its own rehearsal
                     and rollback, never crammed into go-live.
                   </p>
-                  <ul class="ap-steps">
-                    <li>
-                      Build the <b>dropped and evolutive features</b> the owners
-                      deferred, on the now-native platform.
-                    </li>
-                    <li>
-                      Run the <b>privatisation stage</b>: private defaults, a
-                      country key, one sharing rule per object — the deliberate
-                      post-cutover tightening, on quiet timing with its own
-                      rollback (see
-                      <a href="#view-security">Security &amp; sharing</a>).
-                    </li>
-                    <li>
-                      Execute the <b>archive and retention sweep</b> against the
-                      cold store — the 461K never-active candidates and terminal
-                      placements that never boarded the live system, recallable
-                      by key (see <a href="#view-archive">The archive</a>).
-                    </li>
-                    <li>
-                      Classify every finished component
-                      <b>group-shared / Marlex-standard / country-specific</b> —
-                      the standard defined on proven components, the catalogue
-                      other brands reuse.
-                    </li>
-                  </ul>
+                  <details class="more">
+                    <summary>
+                      The 4 steps in this stage<span class="cnt"
+                        >&mdash; 97 words</span
+                      >
+                    </summary>
+                    <div class="more-body">
+                      <ul class="ap-steps">
+                        <li>
+                          Build the <b>dropped and evolutive features</b> the
+                          owners deferred, on the now-native platform.
+                        </li>
+                        <li>
+                          Run the <b>privatisation stage</b>: private defaults,
+                          a country key, one sharing rule per object — the
+                          deliberate post-cutover tightening, on quiet timing
+                          with its own rollback (see
+                          <a href="#view-security">Security &amp; sharing</a>).
+                        </li>
+                        <li>
+                          Execute the <b>archive and retention sweep</b> against
+                          the cold store — the 461K never-active candidates and
+                          terminal placements that never boarded the live
+                          system, recallable by key (see
+                          <a href="#view-archive">The archive</a>).
+                        </li>
+                        <li>
+                          Classify every finished component
+                          <b
+                            >group-shared / Marlex-standard /
+                            country-specific</b
+                          >
+                          — the standard defined on proven components, the
+                          catalogue other brands reuse.
+                        </li>
+                      </ul>
+                    </div>
+                  </details>
                 </div>
               </div>
             </div>
