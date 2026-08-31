@@ -14081,10 +14081,10 @@
           </p>
           <div class="stat-row">
             <div class="stat">
-              <span class="n">521</span
+              <span class="n">539</span
               ><span class="l"
-                >active users in total; the recruitment population is about 465
-                of them across four business groups</span
+                >active users in total; the recruitment population is 485 of
+                them across four business groups</span
               >
             </div>
             <div class="stat">
@@ -15141,15 +15141,17 @@
             </li>
             <li>
               <strong>The long tail of low-count grants.</strong> Beyond the
-              four clusters, a scattering of single-user profiles and specialist
-              sets grant rights on the in-scope objects (most are integration,
-              analytics or portal accounts). The mirror method catches all of
-              them by construction — anything granting a replaced object gets a
-              mirror — but each single-user profile still needs a decision: fold
-              it into a cluster mirror if its signature matches, or give it its
-              own small mirror if it is genuinely distinct. The check is
-              confirming every active user maps to at least one mirror before
-              cutover, so none is left without a switch path.
+              four clusters, the measured sweep resolves the population into 154
+              distinct rights groups, 111 of them holding a single user —
+              specialist profiles and sets that grant rights on the in-scope
+              objects (most are integration, analytics or portal accounts). The
+              mirror method catches all of them by construction — anything
+              granting a replaced object gets a mirror — but each single-user
+              profile still needs a decision: fold it into a cluster mirror if
+              its signature matches, or give it its own small mirror if it is
+              genuinely distinct. The check is confirming every active user maps
+              to at least one mirror before cutover, so none is left without a
+              switch path.
             </li>
             <li>
               <strong>Administrator access is assumed standard.</strong> The
@@ -15526,17 +15528,59 @@
           </p>
 
           <p>
-            Measuring this changed what we know about the current system. Across
-            the objects in scope, the great majority of fields a user is
-            permitted to read are on no layout at all &mdash; on the main person
-            record, under a hundred of more than three hundred and fifty fields
-            appear on any page. That is not a defect to fix before the rebuild;
-            it is the shape of a system carrying years of accumulated fields,
-            and it is useful in two ways. It sets a realistic target &mdash; the
-            rebuild has to reproduce the fields people actually see, which is a
-            far smaller set than the fields they may technically read. And it
-            says the field-level parity check on its own would have been
-            reassuring about a surface nobody looks at.
+            <strong
+              >There are two kinds of screen, and only reading both gives the
+              right answer.</strong
+            >
+            The classic page layout is one; the Lightning record page &mdash;
+            what the platform actually renders on a modern object &mdash; is the
+            other. They are not two views of the same thing. Measured on this
+            org, each holds fields the other does not: on the job record alone,
+            seventy-nine fields appear on the Lightning page and not on any
+            classic layout, and seventy-six the other way round. Reading only
+            classic layouts therefore overstates how much is hidden; reading
+            only Lightning pages understates it.
+          </p>
+
+          <p>
+            Both together give the finding, and it is still striking. Across the
+            objects in scope, a large share of the fields a user is permitted to
+            read appear on no screen at all &mdash; on the main person record,
+            under half of more than three hundred fields are on any page,
+            classic or Lightning. That is not a defect to fix before the
+            rebuild; it is the shape of a system carrying years of accumulated
+            fields, and it is useful in two ways. It sets a realistic target
+            &mdash; the rebuild has to reproduce the fields people actually see,
+            which is a far smaller set than the fields they may technically
+            read. And it says the field-level parity check on its own would have
+            been reassuring about a surface nobody looks at.
+          </p>
+
+          <p>
+            <strong
+              >The Lightning page also carries something no permission can
+              express.</strong
+            >
+            A field or a component sitting on it can be present, and permitted,
+            and still hidden by a condition attached to the page itself.
+            Measured here, close to a thousand items across the org are behind
+            such a condition. Most are ordinary housekeeping &mdash; hide a
+            section that is not relevant yet, which is exactly what a screen is
+            for.
+          </p>
+
+          <p>
+            A minority are not. Around a hundred conditions test the reader's
+            <em>profile by name</em>, which makes the screen a person sees
+            depend on a grant this same check already measures on the rights
+            side &mdash; so the two surfaces are coupled, and reading them apart
+            would miss it. And a dozen conditions gate a component that
+            <em>launches a business process</em>. That is precisely the shape
+            the <a href="#view-build-standard">build standard</a> prohibits: a
+            rule that protects a process must live on the record, where it holds
+            for a person, an integration and a data load alike. Counting them is
+            how the cost of moving them becomes a number instead of an
+            assertion.
           </p>
 
           <div class="tech">
@@ -15581,14 +15625,35 @@
                 reports zero page-level read-only fields.
               </dd>
 
+              <dt>Lightning pages &mdash; easier to name, harder to read</dt>
+              <dd>
+                <code>FlexiPage</code> needs neither name repair: the metadata
+                list already reports the retrievable name with its namespace
+                (<code>AVTRRT__Job_Record_Page</code>). All 109 resolved by
+                their listed name. The name repair is kept behind a guard
+                anyway, so an org that does encode them is handled rather than
+                silently under-retrieved. Every page is retrieved, not just the
+                in-scope ones, because a page's <code>sobjectType</code> lives
+                inside the file and not in the listing &mdash; filtering by name
+                beforehand would be a guess. The parser walks
+                <code>flexiPageRegions</code> &rarr; <code>itemInstances</code>,
+                emitting a row per <code>fieldInstance</code> (with its
+                <code>uiBehavior</code>) and per <code>componentInstance</code>,
+                each carrying its region, its order and its
+                <code>visibilityRule</code> flattened to one readable condition.
+                The rule is kept as text on purpose: what the diff needs is
+                whether a condition exists and what it keys off, not a
+                reimplementation of the platform's rule engine.
+              </dd>
+
               <dt>Not yet covered</dt>
               <dd>
-                Lightning record pages (<code>FlexiPage</code>) are the surface
-                most users actually see on modern objects, and they are not
-                diffed here &mdash; only classic layouts are. Layout
-                <em>assignment</em> per profile is read from the grant surface;
-                the layout <em>body</em> comes from this sweep. Joining the two
-                per cluster is the remaining step.
+                Page <em>assignment</em> per profile and record type is read
+                from the grant surface; the page <em>body</em> comes from this
+                sweep. Joining the two per cluster &mdash; which cluster lands
+                on which page &mdash; is the remaining step, and it is what
+                would turn "these fields exist on some page" into "this group
+                sees these fields".
               </dd>
             </dl>
           </div>
@@ -16812,12 +16877,15 @@
             only the people who arrive through that screen.
           </p>
           <p>
-            Reading the current system shows how far that has already gone.
-            Across the record pages carry a large number of these conditions.
-            Most are ordinary housekeeping: they hide a field or a section that
-            is not relevant yet, which is exactly what a screen is for. A
-            meaningful minority are different. They decide whether a
-            <em>button</em> appears — and the button is how work moves forward.
+            Reading the current system shows how far that has already gone. The
+            record pages carry about eleven hundred of these conditions. Most
+            are ordinary housekeeping: roughly six hundred and eighty hide a
+            field and two hundred and fifty hide a component or a section, which
+            is exactly what a screen is for. A meaningful minority are
+            different. About a hundred and fifty decide whether a
+            <em>button</em>
+            appears on a condition of state, approval or signature — and the
+            button is how work moves forward.
           </p>
           <p>
             The clearest case is an offer. Sending it for signature, accepting
@@ -16925,11 +16993,11 @@
               >
               As each capability is rebuilt, any protection it inherits that
               lives only on a screen is written down as work still to do. It is
-              not treated as a defect: nobody has yet costed what moving four
-              hundred of them involves, and the teams re-pointing components
-              were told to carry them. Recording them is what makes that cost
-              visible — and what stops the new model quietly inheriting the same
-              gap.
+              not treated as a defect: nobody has yet costed what moving the
+              hundred and fifty gating conditions involves, and the teams
+              re-pointing components were told to carry them. Recording them is
+              what makes that cost visible — and what stops the new model
+              quietly inheriting the same gap.
             </li>
           </ul>
           <p>
@@ -16966,15 +17034,15 @@
             </li>
             <li>
               <strong>How much the carried-across rules cost to move.</strong>
-              About seven hundred of the screen-level conditions sit on records
-              that outlive the old product and must be re-pointed to the new
-              model, so somebody will handle every one of them. What is not yet
-              known is how many collapse into a single shared rule per record
-              and how many need moving one at a time — the difference between
-              work that rides along with each rebuilt capability at little extra
-              cost and work that needs its own place in the plan. Owned by
-              programme architecture; that figure is what turns this from a
-              principle into a schedule.
+              The field- and section-hiding conditions — about nine hundred of
+              them — sit on records that outlive the old product and must be
+              re-pointed to the new model, so somebody will handle every one of
+              them. What is not yet known is how many collapse into a single
+              shared rule per record and how many need moving one at a time —
+              the difference between work that rides along with each rebuilt
+              capability at little extra cost and work that needs its own place
+              in the plan. Owned by programme architecture; that figure is what
+              turns this from a principle into a schedule.
             </li>
             <li>
               <strong
@@ -17530,7 +17598,7 @@
             Second,
             <strong>the package lives on Marlex's standard objects</strong>, not
             only its own — the candidate <em>is</em> the standard Contact,
-            carrying 177 package fields and roughly 35 separate package
+            carrying 141 package fields and roughly 35 separate package
             elements. There is no clean seam to cut a shared object into pieces.
           </p>
           <p>
@@ -20284,8 +20352,8 @@
               dependency, not a switch we control. Finding these callers takes
               the platform's own API and connected-app usage records, because
               nothing in the build itself reveals them. That census has now been
-              done (see below); the one caller it surfaced is coordinated with
-              its owner ahead of the window.
+              done, and re-done on a wider test (see below); each caller it
+              surfaced is coordinated with its owner ahead of the window.
             </p>
           </div>
           <p>
@@ -20595,11 +20663,11 @@
             <li>
               <strong>Open:</strong> the rehearsal confirms that migrating the
               ~9,400 live placements on the early switch-over is clean at
-              volume. The external-caller list has now been measured — one
-              caller writes the old model and re-points, one read-only tool
-              needs its query re-pointed; what remains is for Marlex to confirm
-              the owner and status of a few dormant connections before the
-              window.
+              volume. The external-caller list has now been measured on the
+              wider test: roughly half of the estate's connections need
+              re-pointing, not the one the first pass found. What remains is for
+              Marlex to confirm the owner and status of a few dormant
+              connections before the window.
             </li>
             <li>
               <strong
