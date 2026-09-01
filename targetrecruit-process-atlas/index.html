@@ -42,8 +42,28 @@ font-variant-numeric:tabular-nums;padding-left:8px}
 .keys span{display:flex;align-items:center;gap:6px}
 .keys i{width:9px;height:9px;border-radius:2px;display:block}
 .keys i.a{background:var(--per)} .keys i.b{background:var(--red)}
-.note{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--red);
-border-radius:9px;padding:16px 18px;margin-top:13px}
+.note{background:transparent;border:0;border-radius:0;padding:0;margin:0}
+.reviewnote{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--red);
+border-radius:10px;padding:17px 19px;margin:0 0 14px}
+.reviewnote p{margin:0 0 9px} .reviewnote p:last-child{margin:0}
+.reviewnote ol{margin:6px 0 11px;padding-left:20px}
+.reviewnote li{margin-bottom:5px}
+.reviewnote .fine{font-size:13px;color:var(--mut);border-top:1px solid var(--line);
+padding-top:11px}
+details.ctx{border-top:1px solid var(--line);padding:0}
+details.ctx summary{cursor:pointer;list-style:none;padding:13px 2px;font-size:13px;
+font-weight:600;color:var(--mut);display:flex;align-items:center;gap:9px}
+details.ctx summary::-webkit-details-marker{display:none}
+details.ctx summary::before{content:"+";font-weight:700;color:var(--per);width:13px;
+display:inline-block;text-align:center}
+details.ctx[open] summary::before{content:"2"}
+details.ctx summary:hover{color:var(--fg)}
+details.ctx > div{padding:0 2px 18px 22px;max-width:80ch}
+details.ctx p{margin:0 0 10px;font-size:14px} details.ctx p:last-child{margin:0}
+dl.defs{margin:0}
+dl.defs dt{font-weight:700;font-size:13.5px;margin:0 0 3px}
+dl.defs dt:not(:first-child){margin-top:15px}
+dl.defs dd{margin:0;font-size:14px;color:var(--mut)}
 .note p{margin:0 0 10px;text-align:justify;hyphens:auto;-webkit-hyphens:auto} .note p:last-child{margin:0}
 code{font:12.5px ui-monospace,SFMono-Regular,Menlo,monospace}
 footer{margin-top:44px;padding-top:16px;border-top:1px solid var(--line);color:var(--mut);
@@ -457,54 +477,56 @@ the rebuild has to replace to keep it running.</p>
 </div>
 
 <div class="reviewnote">
-  <p><b>Draft, for review.</b> Every map on these pages was drafted by an AI agent from the
-  org's metadata and has not yet been checked by anyone with the functional context to judge it.
-  Treat it as a starting point, not a record.</p>
-
-  <p><b>What decided which processes appear here.</b> A process is on this list because it reads
-  or writes TargetRecruit data &mdash; the package's objects, its fields on standard objects like
-  Contact, its record types, or its configuration. That is the inclusion test, and it is
-  deliberately about <em>coupling</em>, not about quality: nothing here is listed because it works
-  badly.</p>
-
-  <p><b>Why coupling is the test.</b> The rebuild replaces the package's data model with a native
-  one, so a process running on objects that are going away has to be rebuilt whatever else is
-  decided about it. Coupling says <em>which</em> processes are in play; it does not say what the
-  rebuilt version should look like.</p>
-
-  <p><b>This is the starting point for that second question, not a substitute for it.</b> The
-  product owners want each process reviewed before it is rebuilt, so that improvements are built
-  in rather than the model swapped underneath an unchanged process. That review needs an accurate
-  picture of how things work today &mdash; which is what these drafts are for. Correcting them is
-  the fastest route to the target-state discussion, because it replaces a blank page with
-  something concrete to argue with.</p>
-
-  <p><b>Two questions, and they are the whole ask:</b></p>
+  <p><b>Draft &mdash; two questions, and nothing else is asked.</b></p>
   <ol>
-    <li>Is a process missing &mdash; something that touches TargetRecruit data and is not drawn
-    here?</li>
-    <li>Is a process here described wrongly &mdash; wrong steps, wrong order, or a step that does
-    not happen that way?</li>
+    <li>Is a process <b>missing</b> &mdash; something that touches TargetRecruit data and is not
+    drawn here?</li>
+    <li>Is a process here <b>described wrongly</b> &mdash; wrong steps, wrong order, or a step
+    that does not happen that way?</li>
   </ol>
-
-  <p><b>What the drafts cannot tell you.</b> Metadata proves what runs and in what order. It
-  cannot prove why a step exists, which role really owns it, or which branches matter in practice.
-  Those are the gaps worth filling.</p>
+  <p class="fine">Every map was drafted by an AI agent from the org's metadata and has not been
+  checked by anyone with the functional context to judge it. Metadata proves what runs and in
+  what order; it cannot prove why a step exists or who really owns it.</p>
 </div>
 
-<h2>How a component reaches a process</h2>
-<div class="note">
-  <p><b>Reached through a feature.</b> The component is linked to a business feature in the
-  inventory &mdash; the Apex, Flows and Lightning components most people picture.</p>
-  <p><b>Reached through an object.</b> The component carries no feature identifier at all and is
-  found only because it references one of the process's vendor objects. Roughly two thirds of the
-  total, and invisible to any feature-based estimate.</p>
-  <p><b>Outside every process.</b> 44 components mention a vendor
-  field but belong to no process, and the reason is recorded for each one: about half sit on
-  Marlex's own objects &mdash; invoice movements, incidents, accounts &mdash; and only borrow a
-  vendor field; the rest are email templates and pages that are not in the repository at all.
-  They are counted separately and never dropped, but they are explained rather than pending.</p>
-</div>
+<details class="ctx">
+  <summary>Why these nine processes, and not others</summary>
+  <div>
+    <p>A process is on this list because it is <b>coupled</b> to TargetRecruit &mdash; it reads or
+    writes the package's objects, its fields on standard objects like Contact, its record types,
+    or its configuration. Coupling is the inclusion test, and it is deliberately not a judgement
+    about quality: nothing is here because it works badly.</p>
+    <p>The rebuild replaces the package's data model with a native one, so a process running on
+    objects that are going away has to be rebuilt whatever else is decided about it. Coupling says
+    <em>which</em> processes are in play; it does not say what the rebuilt version should look
+    like.</p>
+    <p>The product owners want each process reviewed before it is rebuilt, so improvements are
+    built in rather than the model swapped underneath an unchanged process. These drafts are the
+    starting point for that conversation, not a substitute for it &mdash; correcting them is
+    faster than starting from a blank page.</p>
+  </div>
+</details>
+
+<details class="ctx">
+  <summary>How a component reaches a process</summary>
+  <div>
+    <dl class="defs">
+      <dt>Through a feature</dt>
+      <dd>The component is linked to a business feature in the inventory &mdash; the Apex, Flows
+      and Lightning components most people picture.</dd>
+
+      <dt>Through an object</dt>
+      <dd>The component carries no feature identifier at all, and is found only because it
+      references one of the process's vendor objects. About two thirds of the total, and invisible
+      to any feature-based estimate.</dd>
+
+      <dt>Not yet reachable</dt>
+      <dd>44 components name a vendor field without naming the object
+      that owns it, so no process can claim them without opening each file. Counted separately,
+      never dropped.</dd>
+    </dl>
+  </div>
+</details>
 
 <h2>The processes</h2>
 <p class="lede">Bars show how each process's components are reached &mdash; through a feature, or
@@ -587,14 +609,15 @@ only through an object. <b>The totals overlap; do not add them.</b></p>
   <span><i class="b"></i>reached only through the objects</span>
 </div>
 
-<h2>How to read the totals</h2>
-<div class="note">
+<details class="ctx">
+  <summary>How to read the totals</summary>
+  <div class="note">
   <p><b>Do not add the process totals together.</b> They sum to
   1776, but the real surface is
   <b>546</b> distinct components. Processes share anchor objects, so the
   same report or page layout is legitimately claimed by several of them &mdash; counted once
   here, counted repeatedly if summed.</p>
-  <p><b>Most of the surface has no feature.</b> Across the eight processes it ranges from about
+  <p><b>Most of the surface has no feature.</b> Across the nine processes it ranges from about
   half on the recruitment spine to nine in ten on the commercial and billing processes. Reports,
   layouts, page assignments, permission sets and path assistants reference the vendor objects
   directly and carry no feature identifier, so no feature-based estimate can see them. They are
@@ -606,13 +629,15 @@ only through an object. <b>The totals overlap; do not add them.</b></p>
   component is still work.</p>
 </div>
 
-<h2>What is not on these pages</h2>
-<div class="note">
+<details class="ctx">
+  <summary>What is not on these pages</summary>
+  <div class="note">
   <p>The business context is drawn from metadata: what runs, in what order, fired by what.
   Metadata cannot supply the business <em>why</em>, the real owner role, or which branches
   matter. Every page carries its own open questions, and all of them need the Product Owner
   before any of this is treated as settled.</p>
-</div>
+  </div>
+</details>
 
 <footer>AS-IS draft built from repository metadata and the functional inventory.
 Component counts exclude test classes.</footer>
