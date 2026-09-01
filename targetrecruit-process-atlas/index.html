@@ -535,7 +535,7 @@ font-size:13px;padding:6px 8px;border-radius:6px;border-left:2px solid transpare
   <p class="brand-sub">Marlex Salesforce programme &middot; processes running on TargetRecruit</p>
   <a data-view="index" href="#view-index">All processes</a>
   <p class="grp">Commercial - winning the work</p>
-  <a data-view="commercial-to-vacancy" href="#view-commercial-to-vacancy"><span>Commercial to vacancy</span><span class="n">18</span></a>
+  <a data-view="commercial-to-vacancy" href="#view-commercial-to-vacancy"><span>Commercial to vacancy</span><span class="n">17</span></a>
   <p class="grp">Recruitment - finding and matching candidates</p>
   <a data-view="candidate-sourcing-and-screening" href="#view-candidate-sourcing-and-screening"><span>Candidate sourcing &amp; screening</span><span class="n">34</span></a>
   <a data-view="talent-pool" href="#view-talent-pool"><span>Talent pool</span><span class="n">14</span></a>
@@ -558,10 +558,10 @@ running.</p>
 <div class="kpis">
   <div class="kpi"><b>9</b><span>Processes</span></div>
   <div class="kpi"><b>93</b><span>Features in scope</span></div>
-  <div class="kpi hot"><b>633</b><span>Components to rebuild<br><span class="kpinote">322 on the nine processes + 237 shared + 74 outside</span></span></div>
+  <div class="kpi hot"><b>632</b><span>Components to rebuild<br><span class="kpinote">321 on the nine processes + 237 shared + 74 outside</span></span></div>
   <div class="kpi"><b>9 of 10</b><span>Complex steps with a technical map<br><span class="kpinote">the tenth is one scheduled job
   repeating on a single object, too simple to draw</span></span></div>
-  <div class="kpi hot"><b>74</b><span>Outside every process<br><span class="kpinote">not part of the 633</span></span></div>
+  <div class="kpi hot"><b>74</b><span>Outside every process<br><span class="kpinote">included in the 632, tied to no process</span></span></div>
 </div>
 
 <div class="reviewnote">
@@ -597,7 +597,7 @@ running.</p>
     <p>A component is on a process page only when it can be tied to that process and no other.
     Two things sit outside them, and both are listed in full rather than counted.</p>
     <dl class="defs">
-      <dt>On a process page &mdash; 339 across the nine</dt>
+      <dt>On a process page &mdash; 338 across the nine</dt>
       <dd>Tied to the process through one of its business features, or through an object only
       that process anchors on. These are the ones the rebuild can plan per process.</dd>
 
@@ -624,8 +624,8 @@ only through an object. <b>The totals overlap; do not add them.</b></p>
           <em>How client demand becomes an open vacancy</em></span>
         <span class="pnum">4<i>features</i></span>
         <span class="pnum">4<i>steps</i></span>
-        <span class="pbar"><b style="width:14%"></b><b class="o"
-          style="width:2%"></b><em>18</em></span>
+        <span class="pbar"><b style="width:13%"></b><b class="o"
+          style="width:2%"></b><em>17</em></span>
       </a><h3 class="grouphead">Recruitment - finding and matching candidates</h3><p class="groupnote">Three of these produce or hold candidates; the fourth is the only place a candidate and a vacancy meet. Sourcing creates the candidate record, the talent pool parks it between vacancies, the job board brings candidates in from outside, and candidate-to-offer matches one to a vacancy and carries it to an offer.</p>
       <a class="prow" href="#view-candidate-sourcing-and-screening">
         <span class="pname">Candidate sourcing &amp; screening
@@ -716,23 +716,21 @@ to be looked at; the reason each one could not be placed is given beside it.</p>
 <details class="ctx">
   <summary>How to read the totals</summary>
   <div class="note">
-  <p><b>Do not add the process totals together.</b> They sum to
-  339, but there are only <b>633</b> distinct
-  components. The difference is not an error: a page layout or validation rule on a vacancy
-  belongs to every process that touches a vacancy, and each of those processes genuinely needs it
-  rebuilt. 305 of the 633
-  components belong to a single process; the rest are shared, and that is where the gap between
-  the two totals comes from.</p>
-  <p><b>Most of the surface has no feature.</b> Across the nine processes it ranges from about
-  two thirds on the recruitment spine to nine in ten on the commercial and billing processes. Reports,
-  layouts, page assignments, permission sets and path assistants reference the vendor objects
-  directly and carry no feature identifier, so no feature-based estimate can see them. They are
-  still rebuild work.</p>
-  <p><b>74 components are not yet reachable, and sit outside the
-  633.</b> They reference a
-  TargetRecruit <em>field</em> without naming an owning object, so they cannot be assigned to a
-  process without opening each file. They are listed rather than dropped &mdash; an unattributed
-  component is still work.</p>
+  <p><b>Do not add the process totals together.</b> The nine sum to
+  338, but only <b>321</b> distinct
+  components sit on them: 304 belong to exactly one
+  process and the rest to more than one. Add the 237 shared components and
+  the 74 that belong to no process, and the whole rebuild surface is
+  632.</p>
+  <p><b>Nearly half the rebuild surface carries no feature identifier.</b> The
+  237 shared components and the 74 outside every
+  process are almost all reports, layouts, path assistants and permission sets. No feature-based
+  estimate can see any of them, and they are still rebuild work.</p>
+  <p><b>74 components belong to no process.</b> Most are <b>not in
+  the repository at all</b> &mdash; email templates and other declarative artefacts that were
+  never retrieved, so they cannot be assessed until someone pulls them. The rest either sit on
+  Marlex's own objects and only borrow a package field, or on a package object no process claims.
+  Listed rather than dropped.</p>
 </div>
 
 <details class="ctx">
@@ -755,29 +753,25 @@ Component counts exclude test classes and test-data flows.</footer>
 <div class="kpis">
   <div class="kpi"><b>4</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>3 of 4</b><span>Features that must be rebuilt</span></div>
-  <div class="kpi hot"><b>18</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>3</b><span>Found by object, not feature</span></div>
+  <div class="kpi hot"><b>17</b><span>Components to rebuild</span></div>
+<div class="kpi"><b>3</b><span>Found by object, not feature</span></div>
   <div class="kpi hot"><b>4</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 18 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 17 components are tied to this process: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. None of them appears on another page. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
   <div class="track">
-    <i class="a" style="width:83%"
+    <i class="a" style="width:82%"
        title="on the diagram"></i><i class="b"
        style="width:0%"
        title="in the process, not drawn"></i><i class="c"
-       style="width:16%"
+       style="width:17%"
        title="attributed by object"></i>
   </div>
   <div class="keys">
-    <span><i class="a"></i>15 on the 4 steps below</span>
+    <span><i class="a"></i>14 on the 4 steps below</span>
     
     <span><i class="c"></i>3 carried by objects, in no feature</span>
   </div>
@@ -799,7 +793,7 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
         <span class="stitle">Track commercial visits
           </span>
         <span class="kind">Person</span>
-        <span class="count"><i style="width:8%"></i><b>1</b></span>
+        <span class="count"><i style="width:9%"></i><b>1</b></span>
       </summary>
       <div class="body">
         
@@ -818,7 +812,7 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
         <span class="stitle">Convert opportunity to vacancy
           </span>
         <span class="kind">Person</span>
-        <span class="count"><i style="width:8%"></i><b>1</b></span>
+        <span class="count"><i style="width:9%"></i><b>1</b></span>
       </summary>
       <div class="body">
         
@@ -837,7 +831,7 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
         <span class="stitle">Assign the client contact &amp; site
           </span>
         <span class="kind">Automation</span>
-        <span class="count"><i style="width:8%"></i><b>1</b></span>
+        <span class="count"><i style="width:9%"></i><b>1</b></span>
       </summary>
       <div class="body">
         
@@ -856,16 +850,16 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
         <span class="stitle">Run the weekly client feedback loop
           </span>
         <span class="kind">Automation</span>
-        <span class="count"><i style="width:100%"></i><b>12</b></span>
+        <span class="count"><i style="width:100%"></i><b>11</b></span>
       </summary>
       <div class="body">
         
         
-        <div class="chips"><span class="chip t-Flow">Flow <b>6</b></span><span class="chip t-ApexClass">Apex class <b>4</b></span><span class="chip t-LightningComponentBundle">LWC <b>2</b></span></div>
+        <div class="chips"><span class="chip t-Flow">Flow <b>6</b></span><span class="chip t-ApexClass">Apex class <b>3</b></span><span class="chip t-LightningComponentBundle">LWC <b>2</b></span></div>
         <div class="objs"><span class="lbl">TargetRecruit objects</span><span class="obj">AVTRRT__Interview__c</span><span class="obj">AVTRRT__Job__c</span><span class="obj">AVTRRT__Placement__c</span><span class="obj">AVTRRT__Scratch_Sheet__c</span></div>
         <div class="grid2">
           <div><h4>Features</h4><table><tr><td class="muted">FEAT-006</td><td>Weekly client feedback loop</td><td><span class="pill disp">Rebuild</span></td></tr></table></div>
-          <div><h4>Components to rebuild</h4><table class="comp"><tr><td><code>MA_ACCBatchFSWeeklyUpdate</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_ACCBatchFSWeeklyUpdateInvoker</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-006 · no vendor reference</td></tr><tr><td><code>MA_ACCBatchFSWeeklyUpdateTEST</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_AccountEnvioFeedbackSemanalControler</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_Activar_FeedbackSemanal_Sede</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_Proceso_RequiereFS_Sede</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_SCH_FeedbackSemanal_Domingo</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_SCH_FeedbackSemanal_DomingoBATCH_APEX</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006 · no vendor reference</td></tr><tr><td><code>MA_SEDE_Enviar_FeedbackSemanal_Paul</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_SEDE_Enviar_FeedbackSemanal_People</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>ma_lwc_AccountEnvioFeedbackSemanalPaul</code></td><td><span class="pill t-LightningComponentBundle">LWC</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>ma_lwc_AccountEnvioFeedbackSemanalPeople</code></td><td><span class="pill t-LightningComponentBundle">LWC</span></td><td class="muted">FEAT-006</td></tr></table></div>
+          <div><h4>Components to rebuild</h4><table class="comp"><tr><td><code>MA_ACCBatchFSWeeklyUpdate</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_ACCBatchFSWeeklyUpdateInvoker</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-006 · no vendor reference</td></tr><tr><td><code>MA_AccountEnvioFeedbackSemanalControler</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_Activar_FeedbackSemanal_Sede</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_Proceso_RequiereFS_Sede</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_SCH_FeedbackSemanal_Domingo</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_SCH_FeedbackSemanal_DomingoBATCH_APEX</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006 · no vendor reference</td></tr><tr><td><code>MA_SEDE_Enviar_FeedbackSemanal_Paul</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>MA_SEDE_Enviar_FeedbackSemanal_People</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>ma_lwc_AccountEnvioFeedbackSemanalPaul</code></td><td><span class="pill t-LightningComponentBundle">LWC</span></td><td class="muted">FEAT-006</td></tr><tr><td><code>ma_lwc_AccountEnvioFeedbackSemanalPeople</code></td><td><span class="pill t-LightningComponentBundle">LWC</span></td><td class="muted">FEAT-006</td></tr></table></div>
         </div>
       </div>
     </details>
@@ -873,12 +867,10 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 
 
 <h2>What has to be rebuilt, by component type</h2>
-<div class="bars"><div class="tbar"><span>Flow</span><i style="width:100%"></i><b>8</b></div><div class="tbar"><span>Apex class</span><i style="width:50%"></i><b>4</b></div><div class="tbar"><span>LWC</span><i style="width:25%"></i><b>2</b></div><div class="tbar"><span>WebLink</span><i style="width:12%"></i><b>1</b></div></div>
+<div class="bars"><div class="tbar"><span>Flow</span><i style="width:100%"></i><b>8</b></div><div class="tbar"><span>Apex class</span><i style="width:37%"></i><b>3</b></div><div class="tbar"><span>LWC</span><i style="width:25%"></i><b>2</b></div><div class="tbar"><span>WebLink</span><i style="width:12%"></i><b>1</b></div></div>
 
 <h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">3 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
+<p class="lede">3 components reference this process's TargetRecruit objects but carry no feature identifier, so no feature-based count can see them. They sit on objects only this process uses; anything on a shared object is on the index instead.</p>
 <div class="bars"><div class="tbar"><span>Layout</span><i class="o" style="width:100%"></i><b>2</b></div><div class="tbar"><span>FlexiPage</span><i class="o" style="width:50%"></i><b>1</b></div></div>
 <details class="ctx"><summary>List all 3 of them</summary><div><table class="comp"><tr><td><code>TR_DealSheet_Template_Default</code></td><td><span class="pill t-FlexiPage">FlexiPage</span></td></tr><tr><td><code>TR Deal Sheet Default</code></td><td><span class="pill t-Layout">Layout</span></td></tr><tr><td><code>TR Deal Sheet Template Default</code></td><td><span class="pill t-Layout">Layout</span></td></tr></table></div></details>
 
@@ -888,12 +880,8 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 3 of this process's 4 features
   therefore have to be re-designed on native objects; the remaining 1 is portable as it stands.</p>
-  <p><b>A feature count is not a scope count.</b> 15 components reach
-  this process through a feature. Another 3 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 16%
-  of this process's rebuild surface invisible to the inventory.</p>
-  <p><b>Almost nothing here is code.</b> Nine in ten of the components this process needs reach it through the vendor objects - reports, layouts, page assignments - rather than through business logic. A feature-based estimate would put this process at close to nothing, and would be badly wrong.</p>
+  <p><b>A feature count is not a scope count.</b> 14 components reach this process through a feature. Another 3 &mdash; reports, layouts, page assignments, permission sets &mdash; reach it only through the objects, and appear in no feature-based total anywhere.</p>
+  <p><b>Small, and almost all logic.</b> Fifteen of its eighteen components are Flows, Apex and Lightning components; only three arrive through the objects. It is the smallest process in the atlas that still carries real business logic.</p>
   <p><b>This is the seam with the commercial side.</b> Opportunities and client visits are standard Salesforce; the vacancy they create is a vendor object. The rebuild moves that boundary, so it is worth confirming which side each field belongs on.</p>
 </div>
 
@@ -916,15 +904,11 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   <div class="kpi"><b>16</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>15 of 16</b><span>Features that must be rebuilt</span></div>
   <div class="kpi hot"><b>34</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>0</b><span>Found by object, not feature</span></div>
+
   <div class="kpi hot"><b>3</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 34 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 34 components are tied to this process: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. 1 of them also appear on another page, so the nine totals still overlap slightly &mdash; do not add them. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
@@ -1130,12 +1114,8 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 <h2>What has to be rebuilt, by component type</h2>
 <div class="bars"><div class="tbar"><span>Flow</span><i style="width:100%"></i><b>14</b></div><div class="tbar"><span>Apex class</span><i style="width:71%"></i><b>10</b></div><div class="tbar"><span>Field</span><i style="width:42%"></i><b>6</b></div><div class="tbar"><span>LWC</span><i style="width:14%"></i><b>2</b></div><div class="tbar"><span>Apex trigger</span><i style="width:14%"></i><b>2</b></div></div>
 
-<h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">0 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
-<div class="bars"></div>
-
+<h2>Reports, layouts and page assignments</h2>
+<p class="lede">Every report, layout and path assistant on this process's objects is shared with other processes, so all of it is on the shared surface listed on the index rather than here.</p>
 
 <h2>Vendor data model this process runs on</h2>
 <div class="objs"><span class="obj big">AVTRRT__Job_Applicant__c</span><span class="obj big">AVTRRT__Job__c</span><span class="obj big">AVTRRT__References__c</span></div>
@@ -1143,11 +1123,7 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 15 of this process's 16 features
   therefore have to be re-designed on native objects; the remaining 1 keeps its logic and only changes what it points at.</p>
-  <p><b>A feature count is not a scope count.</b> 34 components reach
-  this process through a feature. Another 0 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 0%
-  of this process's rebuild surface invisible to the inventory.</p>
+
   <p><b>Consent is a legal deadline, not a field.</b> Consent renewal runs on its own schedule and expires whether or not anyone acts. Rebuilding the field without rebuilding the clock leaves a compliance gap that nothing will report.</p>
   <p><b>Screening decides before a human looks.</b> Killer questions auto-reject candidates. Whatever the native rebuild does here changes who gets seen at all, so the rule needs confirming rather than porting.</p>
 </div>
@@ -1172,15 +1148,11 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   <div class="kpi"><b>2</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>2 of 2</b><span>Features that must be rebuilt</span></div>
   <div class="kpi hot"><b>14</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>7</b><span>Found by object, not feature</span></div>
+<div class="kpi"><b>7</b><span>Found by object, not feature</span></div>
   <div class="kpi hot"><b>5</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 14 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 14 components are tied to this process: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. None of them appears on another page. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
@@ -1254,9 +1226,7 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 <div class="bars"><div class="tbar"><span>Flow</span><i style="width:100%"></i><b>4</b></div><div class="tbar"><span>Apex class</span><i style="width:25%"></i><b>1</b></div><div class="tbar"><span>Visualforce</span><i style="width:25%"></i><b>1</b></div><div class="tbar"><span>LWC</span><i style="width:25%"></i><b>1</b></div></div>
 
 <h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">7 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
+<p class="lede">7 components reference this process's TargetRecruit objects but carry no feature identifier, so no feature-based count can see them. They sit on objects only this process uses; anything on a shared object is on the index instead.</p>
 <div class="bars"><div class="tbar"><span>FlexiPage</span><i class="o" style="width:100%"></i><b>2</b></div><div class="tbar"><span>ValidationRule</span><i class="o" style="width:100%"></i><b>2</b></div><div class="tbar"><span>Field</span><i class="o" style="width:50%"></i><b>1</b></div><div class="tbar"><span>Layout</span><i class="o" style="width:50%"></i><b>1</b></div><div class="tbar"><span>PermissionSet</span><i class="o" style="width:50%"></i><b>1</b></div></div>
 <details class="ctx"><summary>List all 7 of them</summary><div><table class="comp"><tr><td><code>MA_LastComment</code></td><td><span class="pill t-CustomField">Field</span></td></tr><tr><td><code>Candidate_to_Hotbook_Record_Page</code></td><td><span class="pill t-FlexiPage">FlexiPage</span></td></tr><tr><td><code>TR_Hotbook_Default</code></td><td><span class="pill t-FlexiPage">FlexiPage</span></td></tr><tr><td><code>TR Hotbooks Default</code></td><td><span class="pill t-Layout">Layout</span></td></tr><tr><td><code>MX_Crear_TalentPool</code></td><td><span class="pill t-PermissionSet">PermissionSet</span></td></tr><tr><td><code>AVTRRT__Hotbook__c.MA_TalentPool_privada_cambiar_owner</code></td><td><span class="pill t-ValidationRule">ValidationRule</span></td></tr><tr><td><code>AVTRRT__Hotbook__c.MA_TalentPool_publica_perfil_Marlex</code></td><td><span class="pill t-ValidationRule">ValidationRule</span></td></tr></table></div></details>
 
@@ -1266,11 +1236,7 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 2 of this process's 2 features
   therefore have to be re-designed on native objects.</p>
-  <p><b>A feature count is not a scope count.</b> 7 components reach
-  this process through a feature. Another 7 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 50%
-  of this process's rebuild surface invisible to the inventory.</p>
+  <p><b>A feature count is not a scope count.</b> 7 components reach this process through a feature. Another 7 &mdash; reports, layouts, page assignments, permission sets &mdash; reach it only through the objects, and appear in no feature-based total anywhere.</p>
   <p><b>The pool is two vendor objects and very little logic.</b> The pool and its membership records carry almost no behaviour of their own. The work in a rebuild is the membership screen and the per-office limit rule, not the data structure - which makes it the smallest process in the atlas by component count.</p>
 </div>
 
@@ -1293,15 +1259,11 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   <div class="kpi"><b>4</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>4 of 4</b><span>Features that must be rebuilt</span></div>
   <div class="kpi hot"><b>32</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>0</b><span>Found by object, not feature</span></div>
+
   <div class="kpi hot"><b>4</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 32 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 32 components are tied to this process: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. 2 of them also appear on another page, so the nine totals still overlap slightly &mdash; do not add them. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
@@ -1412,12 +1374,8 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 <h2>What has to be rebuilt, by component type</h2>
 <div class="bars"><div class="tbar"><span>Apex class</span><i style="width:100%"></i><b>20</b></div><div class="tbar"><span>Flow</span><i style="width:35%"></i><b>7</b></div><div class="tbar"><span>LWC</span><i style="width:20%"></i><b>4</b></div><div class="tbar"><span>Apex trigger</span><i style="width:5%"></i><b>1</b></div><div class="tbar"><span>Field</span><i style="width:5%"></i><b>1</b></div></div>
 
-<h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">0 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
-<div class="bars"></div>
-
+<h2>Reports, layouts and page assignments</h2>
+<p class="lede">Every report, layout and path assistant on this process's objects is shared with other processes, so all of it is on the shared surface listed on the index rather than here.</p>
 
 <h2>Vendor data model this process runs on</h2>
 <div class="objs"><span class="obj big">AVTRRT__Job_Applicant__c</span><span class="obj big">AVTRRT__Job__c</span><span class="obj big">AVTRRT__Placement__c</span><span class="obj big">AVTRRT__Scratch_Sheet__c</span></div>
@@ -1425,13 +1383,9 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 4 of this process's 4 features
   therefore have to be re-designed on native objects.</p>
-  <p><b>A feature count is not a scope count.</b> 32 components reach
-  this process through a feature. Another 0 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 0%
-  of this process's rebuild surface invisible to the inventory.</p>
+
   <p><b>The inbound edge is the risk, not the posting.</b> Applications arrive from outside Salesforce and create candidate records without a person present. A rebuild has to keep that endpoint working across the switch, or applications are lost in silence while nothing appears to be broken.</p>
-  <p><b>Most of this process is not code.</b> The overwhelming majority of what has to be rebuilt here reaches the process through the vendor objects - reports, layouts and page assignments - not through the integration logic everyone thinks of first.</p>
+  <p><b>This process is almost entirely custom code.</b> Twenty Apex classes, seven Flows and four Lightning components, and not one report or layout of its own - everything on its objects is shared with other processes. There is no declarative tail here to rebuild quietly; it is all logic.</p>
 </div>
 
 <h2>Open questions for the Product Owner</h2>
@@ -1454,15 +1408,11 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   <div class="kpi"><b>34</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>33 of 34</b><span>Features that must be rebuilt</span></div>
   <div class="kpi hot"><b>104</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>0</b><span>Found by object, not feature</span></div>
+
   <div class="kpi hot"><b>11</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 104 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 104 components are tied to this process: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. 2 of them also appear on another page, so the nine totals still overlap slightly &mdash; do not add them. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
@@ -1651,12 +1601,8 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 <h2>What has to be rebuilt, by component type</h2>
 <div class="bars"><div class="tbar"><span>Flow</span><i style="width:100%"></i><b>55</b></div><div class="tbar"><span>Apex class</span><i style="width:38%"></i><b>21</b></div><div class="tbar"><span>LWC</span><i style="width:21%"></i><b>12</b></div><div class="tbar"><span>Visualforce</span><i style="width:12%"></i><b>7</b></div><div class="tbar"><span>Field</span><i style="width:5%"></i><b>3</b></div><div class="tbar"><span>Apex trigger</span><i style="width:5%"></i><b>3</b></div><div class="tbar"><span>Custom metadata</span><i style="width:5%"></i><b>3</b></div><div class="tbar"><span>WebLink</span><i style="width:1%"></i><b>1</b></div></div>
 
-<h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">0 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
-<div class="bars"></div>
-
+<h2>Reports, layouts and page assignments</h2>
+<p class="lede">Every report, layout and path assistant on this process's objects is shared with other processes, so all of it is on the shared surface listed on the index rather than here.</p>
 
 <h2>Vendor data model this process runs on</h2>
 <div class="objs"><span class="obj big">AVTRRT__Candidate_to_Hotbook__c</span><span class="obj big">AVTRRT__Educational_History__c</span><span class="obj big">AVTRRT__Employment_History__c</span><span class="obj big">AVTRRT__Hotbook__c</span><span class="obj big">AVTRRT__Interview__c</span><span class="obj big">AVTRRT__Job_Applicant__c</span><span class="obj big">AVTRRT__Job__c</span><span class="obj big">AVTRRT__Placement__c</span><span class="obj big">AVTRRT__Scratch_Sheet__c</span><span class="obj big">AVTRRT__Search_Candidate_Approval__c</span><span class="obj big">AVTRRT__Search__c</span></div>
@@ -1664,11 +1610,7 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 33 of this process's 34 features
   therefore have to be re-designed on native objects; the remaining 1 is portable as it stands.</p>
-  <p><b>A feature count is not a scope count.</b> 104 components reach
-  this process through a feature. Another 0 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 0%
-  of this process's rebuild surface invisible to the inventory.</p>
+
   <p><b>Two things a component count does not show.</b> The interview sync is mapped field-by-field in <code>InterviewCandidate__mdt</code>, and the rejection logic is driven by <code>AVTRRT__Config_Settings__c</code>. Both are configuration rather than code, and configuration is the easiest scope to miss in an estimate.</p>
   <p><b>Five entry points, one business act.</b> Adding a candidate to a vacancy is implemented five separate times - two screen Flows, two Lightning components and a Visualforce page. Each is a surface the rebuild has to replace or deliberately consolidate.</p>
 </div>
@@ -1693,15 +1635,11 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   <div class="kpi"><b>16</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>16 of 16</b><span>Features that must be rebuilt</span></div>
   <div class="kpi hot"><b>58</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>0</b><span>Found by object, not feature</span></div>
+
   <div class="kpi hot"><b>4</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 58 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 58 components are tied to this process: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. 15 of them also appear on another page, so the nine totals still overlap slightly &mdash; do not add them. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
@@ -1907,12 +1845,8 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 <h2>What has to be rebuilt, by component type</h2>
 <div class="bars"><div class="tbar"><span>Apex class</span><i style="width:100%"></i><b>36</b></div><div class="tbar"><span>Flow</span><i style="width:41%"></i><b>15</b></div><div class="tbar"><span>Apex trigger</span><i style="width:11%"></i><b>4</b></div><div class="tbar"><span>Object</span><i style="width:5%"></i><b>2</b></div><div class="tbar"><span>Field</span><i style="width:2%"></i><b>1</b></div></div>
 
-<h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">0 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
-<div class="bars"></div>
-
+<h2>Reports, layouts and page assignments</h2>
+<p class="lede">Every report, layout and path assistant on this process's objects is shared with other processes, so all of it is on the shared surface listed on the index rather than here.</p>
 
 <h2>Vendor data model this process runs on</h2>
 <div class="objs"><span class="obj big">AVTRRT__Job_Applicant__c</span><span class="obj big">AVTRRT__Job__c</span><span class="obj big">AVTRRT__Placement__c</span><span class="obj big">AVTRRT__Scratch_Sheet__c</span></div>
@@ -1920,13 +1854,9 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 16 of this process's 16 features
   therefore have to be re-designed on native objects.</p>
-  <p><b>A feature count is not a scope count.</b> 58 components reach
-  this process through a feature. Another 0 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 0%
-  of this process's rebuild surface invisible to the inventory.</p>
+
   <p><b>One step is already portable.</b> The placement conversion runs behind the anti-corruption layer, a wrapper that keeps vendor names out of Marlex code: its logic is vendor-free and only the object it writes to is coupled. It is the template for the rest.</p>
-  <p><b>The contract types are the real weight.</b> Fixed-discontinuous and interim placements each carry their own activation, reactivation and finalisation cycle. They are counted here in full but not drawn, because each is a process in itself.</p>
+  <p><b>The contract types are the real weight.</b> Fixed-discontinuous and interim placements each carry their own activation, reactivation and finalisation cycle, drawn here as single steps though either could be opened up as a process in its own right.</p>
 </div>
 
 <h2>Open questions for the Product Owner</h2>
@@ -1949,15 +1879,11 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   <div class="kpi"><b>5</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>4 of 5</b><span>Features that must be rebuilt</span></div>
   <div class="kpi hot"><b>22</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>0</b><span>Found by object, not feature</span></div>
+
   <div class="kpi hot"><b>3</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 22 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 22 components are tied to this process: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. None of them appears on another page. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
@@ -2068,12 +1994,8 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 <h2>What has to be rebuilt, by component type</h2>
 <div class="bars"><div class="tbar"><span>Apex class</span><i style="width:100%"></i><b>12</b></div><div class="tbar"><span>Field</span><i style="width:33%"></i><b>4</b></div><div class="tbar"><span>LWC</span><i style="width:25%"></i><b>3</b></div><div class="tbar"><span>Apex trigger</span><i style="width:16%"></i><b>2</b></div><div class="tbar"><span>Flow</span><i style="width:8%"></i><b>1</b></div></div>
 
-<h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">0 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
-<div class="bars"></div>
-
+<h2>Reports, layouts and page assignments</h2>
+<p class="lede">Every report, layout and path assistant on this process's objects is shared with other processes, so all of it is on the shared surface listed on the index rather than here.</p>
 
 <h2>Vendor data model this process runs on</h2>
 <div class="objs"><span class="obj big">AVTRRT__Job_Applicant__c</span><span class="obj big">AVTRRT__Job__c</span><span class="obj big">AVTRRT__Placement__c</span></div>
@@ -2081,11 +2003,7 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 4 of this process's 5 features
   therefore have to be re-designed on native objects; the remaining 1 is portable as it stands.</p>
-  <p><b>A feature count is not a scope count.</b> 22 components reach
-  this process through a feature. Another 0 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 0%
-  of this process's rebuild surface invisible to the inventory.</p>
+
   <p><b>Compliance failure is a legal exposure.</b> Identity checks and safety training are regulatory obligations for a staffing company, not internal preferences. A gap introduced by the rebuild surfaces as a liability rather than a bug report.</p>
   <p><b>Training enrolment reaches outside Salesforce.</b> Course enrolment and certificates involve an external training provider, so this process cannot be rebuilt purely inside the platform.</p>
 </div>
@@ -2110,15 +2028,11 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   <div class="kpi"><b>5</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>5 of 5</b><span>Features that must be rebuilt</span></div>
   <div class="kpi hot"><b>25</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>0</b><span>Found by object, not feature</span></div>
+
   <div class="kpi hot"><b>3</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 25 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 25 components are tied to this process: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. 3 of them also appear on another page, so the nine totals still overlap slightly &mdash; do not add them. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
@@ -2229,12 +2143,8 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 <h2>What has to be rebuilt, by component type</h2>
 <div class="bars"><div class="tbar"><span>Field</span><i style="width:100%"></i><b>14</b></div><div class="tbar"><span>Apex class</span><i style="width:35%"></i><b>5</b></div><div class="tbar"><span>Flow</span><i style="width:28%"></i><b>4</b></div><div class="tbar"><span>Apex trigger</span><i style="width:14%"></i><b>2</b></div></div>
 
-<h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">0 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
-<div class="bars"></div>
-
+<h2>Reports, layouts and page assignments</h2>
+<p class="lede">Every report, layout and path assistant on this process's objects is shared with other processes, so all of it is on the shared surface listed on the index rather than here.</p>
 
 <h2>Vendor data model this process runs on</h2>
 <div class="objs"><span class="obj big">AVTRRT__Job_Applicant__c</span><span class="obj big">AVTRRT__Job__c</span><span class="obj big">AVTRRT__Placement__c</span></div>
@@ -2242,11 +2152,7 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 5 of this process's 5 features
   therefore have to be re-designed on native objects.</p>
-  <p><b>A feature count is not a scope count.</b> 25 components reach
-  this process through a feature. Another 0 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 0%
-  of this process's rebuild surface invisible to the inventory.</p>
+
   <p><b>This is where money is decided.</b> Invoice movements are what the client is actually billed for. An error here is a billing error, not a reporting one, so this process needs the most careful reconciliation of any in the atlas.</p>
   <p><b>There is a manual path as well as an automatic one.</b> Movements can be created by hand and corrected with credit notes, which suggests the automation does not cover every case. How often that happens is not something metadata can show - worth confirming.</p>
 </div>
@@ -2271,15 +2177,11 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   <div class="kpi"><b>7</b><span>Features in scope</span></div>
   <div class="kpi hot"><b>7 of 7</b><span>Features that must be rebuilt</span></div>
   <div class="kpi hot"><b>32</b><span>Components to rebuild</span></div>
-  <div class="kpi"><b>0</b><span>Found by object, not feature</span></div>
+
   <div class="kpi hot"><b>9</b><span>TargetRecruit objects</span></div>
 </div>
 
-<p class="lede">Most of these 32 components are shared with other
-processes. A page layout or validation rule on a vacancy belongs to every process that touches a
-vacancy, so it is counted on each of their pages &mdash; correctly, because each of them needs it
-rebuilt. <b>Do not add the process totals together.</b> Across all
-9 processes there are 633 distinct components to rebuild.</p>
+<p class="lede">These 32 components are tied to this group: anything sitting on an object several processes share was lifted out to the shared surface listed on the index. 11 of them also appear on another page, so the nine totals still overlap slightly &mdash; do not add them. Across the whole atlas there are 632 distinct components to rebuild.</p>
 
 <div class="scopebar">
   <span class="lbl">Rebuild surface</span>
@@ -2447,12 +2349,8 @@ rebuilt. <b>Do not add the process totals together.</b> Across all
 <h2>What has to be rebuilt, by component type</h2>
 <div class="bars"><div class="tbar"><span>Apex class</span><i style="width:100%"></i><b>10</b></div><div class="tbar"><span>Flow</span><i style="width:90%"></i><b>9</b></div><div class="tbar"><span>Visualforce</span><i style="width:50%"></i><b>5</b></div><div class="tbar"><span>LWC</span><i style="width:50%"></i><b>5</b></div><div class="tbar"><span>Custom metadata</span><i style="width:20%"></i><b>2</b></div><div class="tbar"><span>Object</span><i style="width:10%"></i><b>1</b></div></div>
 
-<h2>Carried by the objects, belonging to no feature</h2>
-<p class="lede">0 components reference this process's TargetRecruit objects but
-carry no feature ID, so no feature-based count can see them. Every page layout, path assistant
-and report on a vendor object still has to be rebuilt.</p>
-<div class="bars"></div>
-
+<h2>Reports, layouts and page assignments</h2>
+<p class="lede">Every report, layout and path assistant on this group's objects is shared with other processes, so all of it is on the shared surface listed on the index rather than here.</p>
 
 <h2>Vendor data model this process runs on</h2>
 <div class="objs"><span class="obj big">AVTRRT__Candidate_to_Hotbook__c</span><span class="obj big">AVTRRT__Educational_History__c</span><span class="obj big">AVTRRT__Employment_History__c</span><span class="obj big">AVTRRT__Hotbook__c</span><span class="obj big">AVTRRT__Interview__c</span><span class="obj big">AVTRRT__Job_Applicant__c</span><span class="obj big">AVTRRT__Job__c</span><span class="obj big">AVTRRT__Placement__c</span><span class="obj big">AVTRRT__Search__c</span></div>
@@ -2460,11 +2358,7 @@ and report on a vendor object still has to be rebuilt.</p>
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 7 of this process's 7 features
   therefore have to be re-designed on native objects.</p>
-  <p><b>A feature count is not a scope count.</b> 32 components reach
-  this process through a feature. Another 0 &mdash; reports, layouts,
-  page assignments, permission sets &mdash; reach it only through the objects, and appear in no
-  feature-based total anywhere. That is 0%
-  of this process's rebuild surface invisible to the inventory.</p>
+
   <p><b>This is not a business process.</b> It is the cross-cutting machinery the other eight lean on, drawn here so the components it carries are counted once and visibly. Read it as an inventory of shared parts, not as a journey a person takes.</p>
   <p><b>The anti-corruption layer is the pattern to copy.</b> It is a wrapper that keeps vendor names out of Marlex code, so the logic behind it survives the rebuild untouched. Where it already exists, the rebuild is a change of destination rather than a rewrite.</p>
   <p><b>Rules live in configuration.</b> Some behaviour is held in custom metadata rather than code. It has to be carried across deliberately - it will not appear in any count of classes or flows.</p>
