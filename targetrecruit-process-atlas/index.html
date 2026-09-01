@@ -56,7 +56,7 @@ font-weight:600;color:var(--mut);display:flex;align-items:center;gap:9px}
 details.ctx summary::-webkit-details-marker{display:none}
 details.ctx summary::before{content:"+";font-weight:700;color:var(--per);width:13px;
 display:inline-block;text-align:center}
-details.ctx[open] summary::before{content:"2"}
+details.ctx[open] summary::before{content:"\2212"}
 details.ctx summary:hover{color:var(--fg)}
 details.ctx > div{padding:0 2px 18px 22px;max-width:80ch}
 details.ctx p{margin:0 0 10px;font-size:14px} details.ctx p:last-child{margin:0}
@@ -510,20 +510,25 @@ the rebuild has to replace to keep it running.</p>
 <details class="ctx">
   <summary>How a component reaches a process</summary>
   <div>
+    <p>The rebuild has to replace everything that touches TargetRecruit. Each item was found
+    in one of three ways, and the second one is the reason this page exists at all.</p>
     <dl class="defs">
       <dt>Through a feature</dt>
-      <dd>The component is linked to a business feature in the inventory &mdash; the Apex, Flows
-      and Lightning components most people picture.</dd>
+      <dd>Someone had already written down that this Apex class, Flow or Lightning component
+      belongs to a named business feature. This is what most people picture when they think of
+      the work.</dd>
 
       <dt>Through an object</dt>
-      <dd>The component carries no feature identifier at all, and is found only because it
-      references one of the process's vendor objects. About two thirds of the total, and invisible
-      to any feature-based estimate.</dd>
+      <dd>The reports, page layouts, fields, email templates and path assistants built on top of
+      the package. Nobody ever recorded which feature they belong to, so they appear on no feature
+      list &mdash; they were found by asking which components touch this process's TargetRecruit
+      objects. About two thirds of the total, and an estimate built from features alone misses
+      every one of them.</dd>
 
       <dt>Not yet reachable</dt>
-      <dd>44 components name a vendor field without naming the object
-      that owns it, so no process can claim them without opening each file. Counted separately,
-      never dropped.</dd>
+      <dd>44 components mention a TargetRecruit field but never name
+      the object that owns it, so no process can claim them without opening each file. Counted
+      separately, never dropped.</dd>
     </dl>
   </div>
 </details>
