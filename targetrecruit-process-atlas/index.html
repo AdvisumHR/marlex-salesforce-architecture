@@ -60,7 +60,8 @@ display:inline-block;text-align:center}
 details.ctx[open] summary::before{content:"\2212"}
 details.ctx summary:hover{color:var(--fg)}
 details.ctx > div{padding:0 2px 18px 22px;max-width:80ch}
-details.ctx p{margin:0 0 10px;font-size:14px} details.ctx p:last-child{margin:0}
+details.ctx p{margin:0 0 10px;font-size:14px}
+details.ctx .fine{border-top:1px solid var(--line);padding-top:12px;margin-top:14px;color:var(--mut)} details.ctx p:last-child{margin:0}
 dl.defs{margin:0}
 dl.defs dt{font-weight:700;font-size:13.5px;margin:0 0 3px}
 dl.defs dt:not(:first-child){margin-top:15px}
@@ -524,7 +525,7 @@ running.</p>
   <div class="kpi hot"><b>558</b><span>Components to rebuild</span></div>
   <div class="kpi"><b>8 of 9</b><span>Complex steps with a technical map<br><span class="kpinote">the ninth is a single
   configuration record, too simple to draw</span></span></div>
-  <div class="kpi hot"><b>43</b><span>Outside every process</span></div>
+  <div class="kpi hot"><b>43</b><span>Outside every process<br><span class="kpinote">not part of the 558</span></span></div>
 </div>
 
 <div class="reviewnote">
@@ -559,31 +560,29 @@ running.</p>
 </details>
 
 <details class="ctx">
-  <summary>How a component reaches a process</summary>
+  <summary>How each component was found, and what falls outside</summary>
   <div>
-    <p>The rebuild has to replace everything that touches TargetRecruit. Each item was found
-    in one of three ways, and the second one is the reason this page exists at all.</p>
+    <p>558 components sit inside one or more of the nine processes. They
+    were found in two different ways, and the second is the reason this page exists.</p>
     <dl class="defs">
-      <dt>Through a feature</dt>
-      <dd>Someone had already written down that this Apex class, Flow or Lightning component
-      belongs to a named business feature. This is what most people picture when they think of
-      the work.</dd>
+      <dt>Found through a feature &mdash; 310</dt>
+      <dd>Someone had already recorded that this Apex class, Flow or Lightning component belongs
+      to a named business feature. This is what most people picture when they think of the
+      work.</dd>
 
-      <dt>Through an object</dt>
+      <dt>Found through an object &mdash; 248</dt>
       <dd>The reports, page layouts, fields, email templates and path assistants built on top of
       the package. Nobody ever recorded which feature they belong to, so they appear on no feature
-      list &mdash; they were found by asking which components touch this process's TargetRecruit
-      objects. 248 of the 558 components in the
-      atlas reach it only this way, and an estimate built from features alone misses every one of
-      them.</dd>
-
-      <dt>Not yet reachable</dt>
-      <dd>43 components mention a TargetRecruit field but belong to
-      no process, for three different reasons: most sit on Marlex's own objects &mdash; invoice
-      movements, incidents, accounts &mdash; and only borrow a package field; some are not in the
-      repository at all; and a handful sit on a package object that no process claims, which may
-      itself be worth a look. Counted separately, never dropped.</dd>
+      list; they were found by asking which components touch each process's TargetRecruit
+      objects. An estimate built from features alone misses every one of them.</dd>
     </dl>
+
+    <p class="fine">Separately, <b>43 components sit outside every
+    process</b> and are <em>not</em> part of the 558. They mention a
+    TargetRecruit field but could not be placed, for three reasons: most sit on Marlex's own
+    objects &mdash; invoice movements, incidents, accounts &mdash; and only borrow a package
+    field; some are not in the repository at all; and a handful sit on a package object that no
+    process claims, which may itself be worth a look. Counted separately, never dropped.</p>
   </div>
 </details>
 
