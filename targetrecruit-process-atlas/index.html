@@ -205,6 +205,12 @@ table{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-
 td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}
 code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
 .muted{color:var(--mut);font-size:12px;white-space:nowrap}
+.conf.keep{background:rgba(79,122,58,.13);color:#3f6330;
+  border-color:rgba(79,122,58,.24)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .conf.keep{
+  background:rgba(126,180,98,.15);color:#8fc16e;border-color:rgba(126,180,98,.28)}}
+:root[data-theme=dark] .conf.keep{background:rgba(126,180,98,.15);color:#8fc16e;
+  border-color:rgba(126,180,98,.28)}
 .conf{font-size:10px;padding:1px 5px;border-radius:4px;margin-left:5px;
   background:rgba(176,124,0,.13);color:#8a6100;border:1px solid rgba(176,124,0,.22);
   white-space:nowrap;cursor:help}
@@ -354,6 +360,12 @@ table{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-
 td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}
 code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
 .muted{color:var(--mut);font-size:12px;white-space:nowrap}
+.conf.keep{background:rgba(79,122,58,.13);color:#3f6330;
+  border-color:rgba(79,122,58,.24)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .conf.keep{
+  background:rgba(126,180,98,.15);color:#8fc16e;border-color:rgba(126,180,98,.28)}}
+:root[data-theme=dark] .conf.keep{background:rgba(126,180,98,.15);color:#8fc16e;
+  border-color:rgba(126,180,98,.28)}
 .conf{font-size:10px;padding:1px 5px;border-radius:4px;margin-left:5px;
   background:rgba(176,124,0,.13);color:#8a6100;border:1px solid rgba(176,124,0,.22);
   white-space:nowrap;cursor:help}
@@ -503,6 +515,12 @@ table{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-
 td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}
 code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
 .muted{color:var(--mut);font-size:12px;white-space:nowrap}
+.conf.keep{background:rgba(79,122,58,.13);color:#3f6330;
+  border-color:rgba(79,122,58,.24)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]) .conf.keep{
+  background:rgba(126,180,98,.15);color:#8fc16e;border-color:rgba(126,180,98,.28)}}
+:root[data-theme=dark] .conf.keep{background:rgba(126,180,98,.15);color:#8fc16e;
+  border-color:rgba(126,180,98,.28)}
 .conf{font-size:10px;padding:1px 5px;border-radius:4px;margin-left:5px;
   background:rgba(176,124,0,.13);color:#8a6100;border:1px solid rgba(176,124,0,.22);
   white-space:nowrap;cursor:help}
@@ -896,7 +914,7 @@ Component counts exclude test classes and test-data flows.</footer>
         
         <div class="grid2">
           <div><h4>Features</h4><table><tr><td class="muted">FEAT-163</td><td>Opportunity-to-Job conversion (TR-native)</td><td><span class="pill disp">Rebuild</span></td></tr></table></div>
-          <div><h4>Components to rebuild</h4><table class="comp"><tr><td><code>Opportunity.AVTRRT__Opportunity_to_Job</code></td><td><span class="pill t-WebLink">WebLink</span></td><td class="muted">FEAT-163 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr></table></div>
+          <div><h4>Components to rebuild</h4><table class="comp"><tr><td><code>Opportunity.AVTRRT__Opportunity_to_Job</code></td><td><span class="pill t-WebLink">WebLink</span></td><td class="muted">FEAT-163</td></tr></table></div>
         </div>
       </div>
     </details>
@@ -915,7 +933,7 @@ Component counts exclude test classes and test-data flows.</footer>
         
         <div class="grid2">
           <div><h4>Features</h4><table><tr><td class="muted">FEAT-162</td><td>Contact-to-site relationship assignment</td><td><span class="pill disp">Keep</span></td></tr></table></div>
-          <div><h4>Components to rebuild</h4><table class="comp"><tr><td><code>MA_Asignar_contacto_a_Sede</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-162</td></tr></table></div>
+          <div><h4>Components &mdash; 0 to rebuild</h4><table class="comp"><tr><td><code>MA_Asignar_contacto_a_Sede</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-162 <span class="conf keep">kept, not rebuilt</span></td></tr></table></div>
         </div>
       </div>
     </details>
@@ -956,7 +974,7 @@ Component counts exclude test classes and test-data flows.</footer>
   rebuild in its current form. 3 of this process's 4 features
   therefore have to be re-designed on native objects; the remaining 1 is portable as it stands.</p>
   <p><b>A feature count is not a scope count.</b> 14 components reach this process through a feature. Another 3 &mdash; reports, layouts, page assignments, permission sets &mdash; reach it only through the objects, and appear in no feature-based total anywhere.</p>
-  <p><b>How firm is this?</b> 9 of 14 components on this page were linked to their feature by reading the source. The other 5 were inferred, and are marked where they appear. 4 of them were reached by following the call graph, which can confirm the inventory but never contradict it. An inferred link can put a real component under the wrong step; it does not remove it from the rebuild.</p>
+  <p><b>How firm is this?</b> 10 of 14 components on this page were linked to their feature by reading the source. The other 4 were inferred, and are marked where they appear. 4 of them were reached by following the call graph, which can confirm the inventory but never contradict it. An inferred link can put a real component under the wrong step; it does not remove it from the rebuild.</p>
   <p><b>Small, and almost all logic.</b> Fifteen of its eighteen components are Flows, Apex and Lightning components; only three arrive through the objects. It is the smallest process in the atlas that still carries real business logic.</p>
   <p><b>This is the seam with the commercial side.</b> Opportunities and client visits are standard Salesforce; the vacancy they create is a vendor object. The rebuild moves that boundary, so it is worth confirming which side each field belongs on.</p>
 </div>
@@ -1611,7 +1629,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <div class="objs"><span class="lbl">TargetRecruit objects</span><span class="obj">AVTRRT__Job_Applicant__c</span><span class="obj">AVTRRT__Job__c</span><span class="obj">AVTRRT__Placement__c</span><span class="obj">AVTRRT__Scratch_Sheet__c</span></div>
         <div class="grid2">
           <div><h4>Features</h4><table><tr><td class="muted">FEAT-024</td><td>Job stage automation by RecordType</td><td><span class="pill disp">Rebuild</span></td></tr><tr><td class="muted">FEAT-145</td><td>Job Applicant record-type alignment with Job</td><td><span class="pill disp">Rebuild</span></td></tr><tr><td class="muted">FEAT-146</td><td>Job closure &amp; close-date automation</td><td><span class="pill disp">Rebuild</span></td></tr><tr><td class="muted">FEAT-025</td><td>Job deadline calculation</td><td><span class="pill disp">Rebuild</span></td></tr><tr><td class="muted">FEAT-142</td><td>Job deadline extension approval</td><td><span class="pill disp">Rebuild</span></td></tr><tr><td class="muted">FEAT-097</td><td>Job milestone tracking &amp; warranty-applicant clone</td><td><span class="pill disp">Rebuild</span></td></tr><tr><td class="muted">FEAT-026</td><td>Hiring manager email engine</td><td><span class="pill disp">Rebuild</span></td></tr></table></div>
-          <div><h4>Components to rebuild</h4><table class="comp"><tr><td><code>MA_JobMethods</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-097</td></tr><tr><td><code>TRUL_stateToJobState</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-097 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr><tr><td><code>TR_JobTriggerHandler</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-024</td></tr><tr><td><code>updateJobStageEmailController</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-024</td></tr><tr><td><code>MA_JobTrigger</code></td><td><span class="pill t-ApexTrigger">Apex trigger</span></td><td class="muted">FEAT-097 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr><tr><td><code>MA_Job_Milestone_Tracking</code></td><td><span class="pill t-CustomMetadata">Custom metadata</span></td><td class="muted">FEAT-097</td></tr><tr><td><code>Job_Address_Automation</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-024 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr><tr><td><code>Job_Applicant_Fix_the_Record_Type_for_Site_Guest_Users_TR</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-145</td></tr><tr><td><code>MA_Job_Rellenar_fecha_cierre</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-146</td></tr><tr><td><code>TR_Approve_Reject_Job_Extension</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-142</td></tr><tr><td><code>TR_Close_Job</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-146</td></tr><tr><td><code>TR_Extension_Approval_Flow</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-142</td></tr><tr><td><code>TR_Job_Deadline_Extension_Screen_Flow</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-142</td></tr><tr><td><code>TR_Move_Job_to_Seleccion</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-024 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr><tr><td><code>Update_Job_Record_Type_to_Applicant</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-145</td></tr><tr><td><code>updateJobStageEmail</code></td><td><span class="pill t-LightningComponentBundle">LWC</span></td><td class="muted">FEAT-026</td></tr><tr><td><code>Task.AVTRRT__Send_Email_With_Attachment</code></td><td><span class="pill t-WebLink">WebLink</span></td><td class="muted">FEAT-026 <span class="conf" title="The inventory scored this link low.">link uncertain</span></td></tr></table></div>
+          <div><h4>Components to rebuild</h4><table class="comp"><tr><td><code>MA_JobMethods</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-097</td></tr><tr><td><code>TRUL_stateToJobState</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-097 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr><tr><td><code>TR_JobTriggerHandler</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-024</td></tr><tr><td><code>updateJobStageEmailController</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-024</td></tr><tr><td><code>MA_JobTrigger</code></td><td><span class="pill t-ApexTrigger">Apex trigger</span></td><td class="muted">FEAT-097 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr><tr><td><code>MA_Job_Milestone_Tracking</code></td><td><span class="pill t-CustomMetadata">Custom metadata</span></td><td class="muted">FEAT-097</td></tr><tr><td><code>Job_Address_Automation</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-024 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr><tr><td><code>Job_Applicant_Fix_the_Record_Type_for_Site_Guest_Users_TR</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-145</td></tr><tr><td><code>MA_Job_Rellenar_fecha_cierre</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-146</td></tr><tr><td><code>TR_Approve_Reject_Job_Extension</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-142</td></tr><tr><td><code>TR_Close_Job</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-146</td></tr><tr><td><code>TR_Extension_Approval_Flow</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-142</td></tr><tr><td><code>TR_Job_Deadline_Extension_Screen_Flow</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-142</td></tr><tr><td><code>TR_Move_Job_to_Seleccion</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-024 <span class="conf" title="This link was inferred, not read from the source.">link inferred</span></td></tr><tr><td><code>Update_Job_Record_Type_to_Applicant</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-145</td></tr><tr><td><code>updateJobStageEmail</code></td><td><span class="pill t-LightningComponentBundle">LWC</span></td><td class="muted">FEAT-026</td></tr><tr><td><code>Task.AVTRRT__Send_Email_With_Attachment</code></td><td><span class="pill t-WebLink">WebLink</span></td><td class="muted">FEAT-026</td></tr></table></div>
         </div>
       </div>
     </details>
@@ -1690,7 +1708,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
   rebuild in its current form. 33 of this process's 34 features
   therefore have to be re-designed on native objects; the remaining 1 is portable as it stands.</p>
 
-  <p><b>How firm is this?</b> 77 of 104 components on this page were linked to their feature by reading the source. The other 27 were inferred, and are marked where they appear. An inferred link can put a real component under the wrong step; it does not remove it from the rebuild.</p>
+  <p><b>How firm is this?</b> 78 of 104 components on this page were linked to their feature by reading the source. The other 26 were inferred, and are marked where they appear. An inferred link can put a real component under the wrong step; it does not remove it from the rebuild.</p>
   <p><b>Two things a component count does not show.</b> The interview sync is mapped field-by-field in <code>InterviewCandidate__mdt</code>, and the rejection logic is driven by <code>AVTRRT__Config_Settings__c</code>. Both are configuration rather than code, and configuration is the easiest scope to miss in an estimate.</p>
   <p><b>Five entry points, one business act.</b> Adding a candidate to a vacancy is implemented five separate times - two screen Flows, two Lightning components and a Visualforce page. Each is a surface the rebuild has to replace or deliberately consolidate.</p>
 </div>
@@ -2065,7 +2083,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         
         <div class="grid2">
           <div><h4>Features</h4><table><tr><td class="muted">FEAT-154</td><td>Candidate file audit trail</td><td><span class="pill disp">Keep</span></td></tr></table></div>
-          <div><h4>Components to rebuild</h4><table class="comp"><tr><td><code>MA_FileAuditService</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-154</td></tr><tr><td><code>TRG_ContentDocument</code></td><td><span class="pill t-ApexTrigger">Apex trigger</span></td><td class="muted">FEAT-154 · no vendor reference <span class="conf" title="Reached by following the call graph from a coupled component, which can confirm the inventory but never contradict it.">inferred from the call graph</span></td></tr><tr><td><code>TRG_ContentDocumentLink</code></td><td><span class="pill t-ApexTrigger">Apex trigger</span></td><td class="muted">FEAT-154 · no vendor reference <span class="conf" title="Reached by following the call graph from a coupled component, which can confirm the inventory but never contradict it.">inferred from the call graph</span></td></tr></table></div>
+          <div><h4>Components &mdash; 0 to rebuild</h4><table class="comp"><tr><td><code>MA_FileAuditService</code></td><td><span class="pill t-ApexClass">Apex class</span></td><td class="muted">FEAT-154 <span class="conf keep">kept, not rebuilt</span></td></tr><tr><td><code>TRG_ContentDocument</code></td><td><span class="pill t-ApexTrigger">Apex trigger</span></td><td class="muted">FEAT-154 · no vendor reference <span class="conf" title="Reached by following the call graph from a coupled component, which can confirm the inventory but never contradict it.">inferred from the call graph</span> <span class="conf keep">kept, not rebuilt</span></td></tr><tr><td><code>TRG_ContentDocumentLink</code></td><td><span class="pill t-ApexTrigger">Apex trigger</span></td><td class="muted">FEAT-154 · no vendor reference <span class="conf" title="Reached by following the call graph from a coupled component, which can confirm the inventory but never contradict it.">inferred from the call graph</span> <span class="conf keep">kept, not rebuilt</span></td></tr></table></div>
         </div>
       </div>
     </details>
