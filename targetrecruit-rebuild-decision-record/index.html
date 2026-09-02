@@ -10889,7 +10889,9 @@
             suffix (<code>V2</code>/<code>_2</code>) and never a functional
             prefix (<code>ATS_</code>). Where the legacy name already stands
             apart (<code>MA_</code>, <code>AVTRRT__</code>), there is no
-            collision and the new component simply takes the clean name.
+            collision and the new component simply takes the clean name. One
+            narrow exception applies to a component that must exist in more than
+            one form at once &mdash; worked through below.
           </p>
           <p>
             <strong
@@ -11163,12 +11165,10 @@
               router row), <em>not</em> in the API name.
             </p>
             <p>
-              <strong>One exception, settled 2 September 2026.</strong> A
-              component that must exist in more than one working form at once —
-              because the objects it reads cut over in different waves —
-              <em>may</em> carry a version marker. That is a coexisting major
-              version with a deprecation period, not decoration; the marker goes
-              when the superseded form is retired. Worked through below.
+              <strong>The one exception</strong> (a component whose objects cut
+              over in different waves) is a coexisting major version with a
+              deprecation period, not decoration; the marker goes when the
+              superseded form retires.
             </p>
           </div>
           <details class="more">
@@ -12249,13 +12249,15 @@
             The one capability the rebuild does not reconstruct from the
             package: reading CVs into structured profiles and matching
             candidates to vacancies. It runs as an external service behind a
-            Marlex-owned interface. Which service — bought from a specialist or
-            built in-house — is decided by a single written test, and building
-            is the fallback rather than the default.
+            Marlex-owned interface. Which service — built in-house or bought
+            from a specialist — is settled by a single written test. Since 31
+            August 2026 the direction is to build, with buying kept as the named
+            fallback.
           </p>
           <p class="dateline">
             Cutover strategy · draft for peer review · 13 July 2026 ·
             buy-vs-build re-opened 16 July 2026 · selection gated 19 August 2026
+            · direction inverted to build 31 August 2026
           </p>
         </header>
 
@@ -12288,12 +12290,15 @@
             direction has since moved the other way — building in-house is now
             the more likely answer, though nothing is ratified. Since 19 August
             2026 that choice is
-            <strong>gated on one written test</strong> rather than left hanging,
-            and building is recorded as the fallback rather than the plan. This
-            page still lays out the buy case in full because it is the reference
-            argument, and because a decision that reverses should be read
-            against the case it reverses — take it alongside the two notes
-            directly below.
+            <strong>gated on one written test</strong> rather than left hanging.
+            On 31 August 2026 the licence quotation inverted the default:
+            <strong
+              >building became the direction and buying the named
+              fallback</strong
+            >, though nothing is ratified. This page still lays out the buy case
+            in full because it is the reference argument, and because a decision
+            that reverses should be read against the case it reverses — take it
+            alongside the two notes directly below.
           </p>
         </div>
 
@@ -12384,13 +12389,15 @@
             comparison, building wins.
           </p>
           <p>
-            <strong>Building is therefore the fallback, not the plan.</strong>
-            The current lean towards building is recorded honestly as a lean. It
-            is not yet a commitment, because committing to it today would close
-            off buying on the strength of an assumption nobody has tested — no
-            one has yet put a real candidate engine in front of that question.
-            The test is cheap and it separates all three options at once, so the
-            programme runs it before choosing rather than after.
+            <strong
+              >Building is the direction, and it is still not a
+              commitment.</strong
+            >
+            Recorded as the direction since 31 August 2026, but not ratified:
+            committing today would close the question on an assumption nobody
+            has tested — no one has yet put a real candidate engine in front of
+            it. The test is cheap and it separates all three options at once, so
+            the programme runs it before choosing rather than after.
           </p>
         </div>
 
@@ -12565,10 +12572,12 @@
 
         <section>
           <p class="section-eyebrow">The deciding axis</p>
-          <h2>Own the platform; rent the engine</h2>
+          <h2>
+            Own the platform; the engine is a different kind of dependency
+          </h2>
           <p>
             The rebuild is argued on <em>ownership</em> — so buying a component
-            needs squaring with that, and the square is this:
+            would need squaring with that, and the square is this:
             <strong>the two dependencies are not the same shape</strong>. The
             package Marlex is leaving owned the things that must never be rented
             again — the data model the operation runs on, and the exit path away
@@ -12620,14 +12629,18 @@
         </section>
 
         <section>
-          <p class="section-eyebrow">The shape that decides "buy" is safe</p>
+          <p class="section-eyebrow">
+            The shape that would decide whether buying is safe
+          </p>
           <h2>An engine that forces its own objects changes the answer</h2>
           <p>
-            "Buy" is the right call — but <em>how</em> the bought engine plugs
-            in is not a detail, it is the thing that decides whether buying
-            stays consistent with a rebuild whose whole point is decoupling.
-            There are two shapes a bought engine can take, and they are not
-            equally good:
+            Buying is now the fallback rather than the direction (see the
+            verdict below), but the test below still governs it: <em>how</em> a
+            bought engine plugs in is not a detail, it is the thing that decides
+            whether buying stays consistent with a rebuild whose whole point is
+            decoupling. It is also part of why the direction moved — an engine
+            of the second shape makes buying markedly worse. There are two
+            shapes, and they are not equally good:
           </p>
           <div class="tmpl">
             <div class="tmpl-step">
@@ -19595,7 +19608,7 @@
               <span class="k">Needs old data during coexistence</span>
               <p>
                 <strong
-                  >Read it through the one shared seam — not a per-component
+                  >Read the old objects directly — no per-component
                   layer.</strong
                 >
                 A native component that needs data still living on the old
@@ -19623,7 +19636,7 @@
           </div>
           <div class="callout key">
             <span class="lbl"
-              >Why one shared seam, and why it has to exist early</span
+              >Why the native foundation has to exist early</span
             >
             <p>
               The decisive test is not "does it touch old data" — it is "does
@@ -19634,8 +19647,7 @@
             <p>
               So direct reads plus a feature switch do the job for a fraction of
               a full layer — and it is the choice a mid-level and junior team
-              can hold. The one hard dependency: that shared seam (and the
-              native foundation behind it) must be
+              can hold. The one hard dependency: that native foundation must be
               <strong>stood up early, before the bulk of new delivery</strong>.
             </p>
             <p>
@@ -21514,8 +21526,8 @@
                 The one thing to plan for is that placements reference the
                 candidate and job, which stay in TargetRecruit until the core
                 cutover — so the early switch-off re-points those references and
-                keeps a read seam to the still live core until it too goes
-                native. This is bounded work, not a blocker.
+                keeps reading the still live core until it too goes native. This
+                is bounded work, not a blocker.
               </p>
               <p class="caveat">
                 Either way, seasonal placements that pause and restart never
@@ -26747,7 +26759,7 @@
           <p>
             <strong>What we chose.</strong> Two rules, working together.
             <strong>New work is built native from day one</strong> — on the new
-            model, reading old data through the shared seam, never extending the
+            model, reading old data directly where it must, never extending the
             package — so it advances the rebuild instead of enlarging it. And
             <strong
               >changes to already-rebuilt old components are tracked</strong
@@ -26811,14 +26823,13 @@
                   >Built native from day one, never on the package.</strong
                 >
                 A new feature is written on the new model and reads any data
-                still living on old objects through the one shared seam — it
-                does not add fresh automation, fields or logic onto the
-                package's objects. A feature born native needs no twin, because
-                there is no old counterpart to keep in step: it simply
-                <em>is</em> the rebuild progressing. This is what keeps the
-                disconnection scope shrinking rather than growing (the scope
-                boundary it protects is on
-                <a href="#view-scope">What's in scope</a>).
+                still living on old objects directly — it does not add fresh
+                automation, fields or logic onto the package's objects. A
+                feature born native needs no twin, because there is no old
+                counterpart to keep in step: it simply <em>is</em> the rebuild
+                progressing. This is what keeps the disconnection scope
+                shrinking rather than growing (the scope boundary it protects is
+                on <a href="#view-scope">What's in scope</a>).
               </p>
             </div>
             <div class="tmpl-step">
@@ -26915,9 +26926,9 @@
                     >
                   </td>
                   <td>
-                    Built native, reads old data through the shared seam. Still
-                    no per-feature twin; at cutover the seam re-points and the
-                    feature is unchanged.
+                    Built native, reading the old objects directly where it
+                    must. Still no per-feature twin; at cutover those reads are
+                    re-pointed and the feature is otherwise unchanged.
                   </td>
                 </tr>
                 <tr>
@@ -26933,6 +26944,90 @@
               </tbody>
             </table>
           </div>
+          <details class="more">
+            <summary>
+              Worked example &mdash; three tickets through the buckets<span
+                class="cnt"
+                >&mdash; including the one that is genuinely hard</span
+              >
+            </summary>
+            <div class="more-body">
+              <p>
+                Three tickets arriving in the same week, and where each lands:
+              </p>
+              <div class="tablewrap">
+                <table class="data">
+                  <thead>
+                    <tr>
+                      <th>Ticket</th>
+                      <th>Bucket</th>
+                      <th>What is built</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>
+                        A new office-productivity dashboard over placement
+                        figures
+                      </td>
+                      <td>1</td>
+                      <td>
+                        Built on <code>Placement__c</code>. Nothing to twin; it
+                        is the rebuild advancing.
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>
+                        Contract automation that reaches the ERP link and the
+                        placement and candidate records &mdash; the live case as
+                        of July 2026
+                      </td>
+                      <td>2</td>
+                      <td>
+                        Built native, reading <code>AVTRRT__Job__c</code> and
+                        the candidate directly until those objects cut over.
+                        Re-pointed at the core cutover, and the feature itself
+                        does not change.
+                      </td>
+                    </tr>
+                    <tr class="review">
+                      <td>
+                        An urgent fix to a placement validation that was rebuilt
+                        three months ago
+                      </td>
+                      <td>3</td>
+                      <td>
+                        Applied to the live component <em>and</em> to its
+                        switched-off twin in the same change &mdash; or the gap
+                        is logged, dated and owned. This is the bucket that
+                        decays.
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>
+                <strong>The third is the one that goes wrong.</strong> The first
+                two are decisions taken once, at intake, by someone with the
+                ticket in front of them. The third is a promise about a
+                <em>second</em> piece of work, made under the pressure of an
+                urgent fix &mdash; and the twin is invisible to the person
+                fixing the live component. That is why it is the only bucket
+                with a register behind it, and why the nightly test run against
+                the switched-off build exists: to surface the miss within a day
+                rather than on cutover morning.
+              </p>
+              <p>
+                <strong>The tempting fourth answer is the wrong one.</strong>
+                Contract automation could be finished on the old objects &mdash;
+                it is quicker this week. It would also add one more component to
+                disconnect, at the cheapest moment it will ever be to redirect.
+                Bucket 2 exists precisely so that &ldquo;it needs old
+                data&rdquo; does not become a reason to build on the old model.
+              </p>
+            </div>
+          </details>
+
           <p>
             The classification is deliberately coarse — three buckets a
             mid-level or junior developer can apply without an architect in the
