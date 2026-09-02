@@ -932,8 +932,8 @@ Component counts exclude test classes and test-data flows.</footer>
         <div class="chips"><span class="chip t-Flow">Flow <b>1</b></span></div>
         
         <div class="grid2">
-          <div><h4>Features</h4><table><tr><td class="muted">FEAT-162</td><td>Contact-to-site relationship assignment</td><td><span class="pill disp">Keep</span></td></tr></table></div>
-          <div><h4>Components &mdash; 0 to rebuild</h4><table class="comp"><tr><td><code>MA_Asignar_contacto_a_Sede</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-162 <span class="conf keep">kept, not rebuilt</span></td></tr></table></div>
+          <div><h4>Features</h4><table><tr><td class="muted">FEAT-162</td><td>Contact-to-site relationship assignment</td><td><span class="pill disp">Keep, re-point</span></td></tr></table></div>
+          <div><h4>Components &mdash; 0 to rebuild</h4><table class="comp"><tr><td><code>MA_Asignar_contacto_a_Sede</code></td><td><span class="pill t-Flow">Flow</span></td><td class="muted">FEAT-162 <span class="conf keep">kept, re-pointed</span></td></tr></table></div>
         </div>
       </div>
     </details>
@@ -972,7 +972,7 @@ Component counts exclude test classes and test-data flows.</footer>
 <div class="note">
   <p>Every object above belongs to the TargetRecruit managed package and none survives the
   rebuild in its current form. 3 of this process's 4 features
-  therefore have to be re-designed on native objects; the remaining 1 is portable as it stands.</p>
+  therefore have to be re-designed on native objects; the remaining 1 keeps its logic and only changes what it points at.</p>
   <p><b>A feature count is not a scope count.</b> 14 components reach this process through a feature. Another 3 &mdash; reports, layouts, page assignments, permission sets &mdash; reach it only through the objects, and appear in no feature-based total anywhere.</p>
   <p><b>How firm is this?</b> 10 of 14 components on this page were linked to their feature by reading the source. The other 4 were inferred, and are marked where they appear. 4 of them were reached by following the call graph, which can confirm the inventory but never contradict it. An inferred link can put a real component under the wrong step; it does not remove it from the rebuild.</p>
   <p><b>Small, and almost all logic.</b> Fifteen of its eighteen components are Flows, Apex and Lightning components; only three arrive through the objects. It is the smallest process in the atlas that still carries real business logic.</p>
