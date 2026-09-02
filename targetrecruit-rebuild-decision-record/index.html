@@ -1696,6 +1696,12 @@
     <a class="navlink nonum" data-view="index" href="#view-index">Overview</a>
     <a
       class="navlink nonum"
+      data-view="standing-summary"
+      href="#view-standing-summary"
+      >Where it stands</a
+    >
+    <a
+      class="navlink nonum"
       data-view="technical-roadmap"
       href="#view-technical-roadmap"
       >Technical roadmap</a
@@ -1900,6 +1906,21 @@
           </p>
           <div class="decmap">
             <p class="decgrp">Framing the work</p>
+            <a class="decrow" href="#view-standing-summary">
+              <span class="num">&#9656;</span>
+              <span class="body"
+                ><h3>
+                  Where the rebuild stands
+                  <span class="ptype evidence">Standing summary</span>
+                </h3>
+                <p>
+                  What is settled, what is not, who owns each open item and what
+                  it blocks &mdash; assembled from these pages and the
+                  programme&rsquo;s governance registers, not re-argued.
+                </p></span
+              >
+              <span class="pick">Read this first</span>
+            </a>
             <a class="decrow" href="#view-technical-roadmap">
               <span class="num">&#9656;</span>
               <span class="body"
@@ -2461,6 +2482,689 @@
             and external research on the closest documented package-replacement
             programmes. Figures are counted from the org, not estimated, and are
             approximate only where shown as a range.
+          </p>
+        </footer>
+      </div>
+    </section>
+    <section class="page-view" id="view-standing-summary">
+      <div class="wrap-inner">
+        <header class="masthead">
+          <p class="eyebrow">The map · Where the rebuild stands</p>
+          <h1>Where the rebuild stands</h1>
+          <p class="subtitle">
+            The decision record answers why each choice was made. This page
+            answers what comes first: what is settled, what is not, and what the
+            unsettled things block.
+          </p>
+          <p class="dateline">
+            Standing summary · assembled from the decision set and the
+            governance registers · 1 September 2026
+          </p>
+        </header>
+
+        <div class="bluf">
+          <p>
+            <strong>What is being done, and why.</strong> Marlex runs its
+            recruitment operation on TargetRecruit, a packaged
+            applicant-tracking product whose vendor was acquired in mid-2025 and
+            whose contractual runway ends in November 2027. Rather than move to
+            another commercial product &mdash; which resets the same vendor
+            dependency &mdash; Marlex is rebuilding the parts it uses as its own
+            native system in the same live org, deployed switched off with the
+            data pre-loaded, so the cutover is a rehearsed sequence &mdash;
+            freeze the old system, move the data, cut over &mdash; with
+            TargetRecruit held intact beneath it.
+          </p>
+          <p>
+            <strong>Where it stands.</strong> Twenty-one decisions are argued to
+            a verdict and internally coherent. Almost none is approved: two
+            carry a formal accepted state, the rest are recorded direction. The
+            build has not started, and the decision that sizes the programme is
+            still open &mdash; how much of TargetRecruit must be rebuilt before
+            Marlex can retire it.
+          </p>
+        </div>
+
+        <section>
+          <p class="section-eyebrow">What is settled</p>
+          <h2>The twenty-one decisions, and what each landed on</h2>
+          <p>
+            Each was argued to a conclusion, and the rest of the design assumes
+            that conclusion. None has been formally approved by the governance
+            forum.
+          </p>
+
+          <h3>What the new system is</h3>
+          <ul>
+            <li>
+              <strong>Data model</strong> &mdash; only fields holding real data
+              are rebuilt; ordinary lookups, not the rigid form that locks a
+              busy job.
+            </li>
+            <li>
+              <strong>Naming</strong> &mdash; English names, no owner prefix;
+              the legacy label is never touched.
+            </li>
+            <li>
+              <strong>Standard objects</strong> &mdash; the candidate stays a
+              Contact, re-typed in place, not moved or recreated.
+            </li>
+            <li>
+              <strong>Matching engine</strong> &mdash; external service, built
+              in-house. <em>Not approved.</em>
+            </li>
+            <li>
+              <strong>Security</strong> &mdash; visibility unchanged on the day
+              of cutover; narrowing it by country is a later stage.
+            </li>
+            <li>
+              <strong>Access</strong> &mdash; what each user can read, create
+              and edit is reproduced as permission sets and swapped at cutover.
+            </li>
+            <li>
+              <strong>Declarative versus code</strong> &mdash; record pages
+              assembled in the page builder; code where the logic is dense.
+            </li>
+            <li>
+              <strong>Reading the old system</strong> &mdash; existing
+              components are left alone and new work replaces them; a new
+              component needing old data reads it directly and is re-pointed at
+              cutover.
+            </li>
+          </ul>
+
+          <h3>How the old one leaves</h3>
+          <ul>
+            <li>
+              <strong>Rebuild approach</strong> &mdash; build beside, never edit
+              the live one. Logic switches on by setting; screens and access are
+              changed by an administrator at cutover.
+            </li>
+            <li>
+              <strong>Deployment</strong> &mdash; each piece ships switched off,
+              months early.
+            </li>
+            <li>
+              <strong>Cutover</strong> &mdash; candidate, job and application
+              cut over in one window; independent capabilities go earlier. Two
+              copies kept in step was ruled out.
+            </li>
+            <li>
+              <strong>The freeze</strong> &mdash; all four write sources
+              stopped, timed after the nightly candidate job.
+            </li>
+            <li>
+              <strong>Data migration</strong> &mdash; bulk pre-loaded weeks
+              early, only the delta moves on the day.
+            </li>
+            <li>
+              <strong>Rollback</strong> &mdash; the old system left intact and
+              frozen, with written criteria and a dated expiry.
+            </li>
+            <li>
+              <strong>Removing the package</strong> &mdash; references cleared
+              first, then a gated uninstall &mdash; the one irreversible step.
+            </li>
+            <li>
+              <strong>Testing parity</strong> &mdash; the old behaviour is
+              observed and written down, then used as the criteria.
+            </li>
+            <li>
+              <strong>Rehearsal</strong> &mdash; cutover and rollback both
+              drilled on a full copy until timed.
+            </li>
+          </ul>
+
+          <h3>Running it</h3>
+          <ul>
+            <li>
+              <strong>Delivering while rebuilding</strong> &mdash; no freeze;
+              new work native, changes carried into the switched-off twin.
+            </li>
+            <li>
+              <strong>Operations</strong> &mdash; Marlex-owned logging, alerts
+              and dashboards, since the monitoring in use now leaves with the
+              package.
+            </li>
+            <li>
+              <strong>Integrations</strong> &mdash; every connection behind an
+              interface Marlex owns; routing through MuleSoft never blocks
+              cutover.
+            </li>
+            <li>
+              <strong>The archive</strong> &mdash; records not copied across are
+              kept retrievable in a separate store.
+            </li>
+          </ul>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">What is not settled</p>
+          <h2>The open items, who owns them, and what they block</h2>
+          <p>
+            The thirty decision pages record 115 items as still carried; most
+            are residual risks the design bounds. These nine are decisions
+            somebody must take, each blocking work that cannot honestly start
+            without it.
+          </p>
+
+          <div class="questions">
+            <div class="q">
+              <div class="q-head">
+                How much must be rebuilt before TargetRecruit can be retired
+              </div>
+              <p>
+                Which capabilities are rebuilt and which are dropped.
+                <strong>Owner:</strong> the applicant-tracking product owner.
+                <strong>Blocks:</strong> the build, the estimate, the
+                uninstall-blocker list. <strong>If it stays open:</strong> the
+                build starts against an unbounded target and scope is set by
+                whatever gets built first.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Draw the line at what a
+                    recruiter touches in a normal week, plus anything that
+                    writes to the ERP or the job board. Everything else defaults
+                    to dropped and rebuilt later unless a product owner argues
+                    it back in &mdash; the burden of proof sits on keeping a
+                    capability, not on dropping it, because the audit already
+                    found package capabilities holding no production data at
+                    all.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                Whether the internal HR team onboards at cutover
+              </div>
+              <p>
+                HR's confidential cases cannot sit in an open model, so this
+                decides whether visibility is locked down on day one or narrowed
+                later.
+                <strong>Owner:</strong> the Marlex People lead; named, no date.
+                <strong>Blocks:</strong> the sharing design and the cutover
+                plan. <strong>If it stays open:</strong> a late answer forces
+                that narrowing into the cutover window it was deliberately kept
+                out of.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Onboard after cutover, not
+                    at it. Doing it at cutover forces the tightening of record
+                    visibility into the one window the whole strategy works to
+                    keep small. Internal HR is a new capability with no existing
+                    users or data, so waiting takes nothing away from anyone.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                Whether the matching engine is built in-house
+              </div>
+              <p>
+                Reversed on 31 August 2026: filed as a technology choice when it
+                was a programme one, and the licence price made building
+                cheaper. Recorded, not approved, gated on an undated quality
+                test against real Spanish CVs.
+                <strong>Owner:</strong> the applicant-tracking product owner
+                with Nuvolar architecture. <strong>Blocks:</strong> the
+                candidate's skills model and the feed indexing 1.06 million
+                profiles. <strong>If it stays open:</strong> the candidate model
+                cannot freeze.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Endorse building in-house,
+                    but do not treat it as decided until the parsing-quality
+                    test on real Spanish CVs has a named owner and a date,
+                    scheduled before the candidate model freezes. The cost
+                    argument is sound; the untested premise is parse quality in
+                    Spanish, and that is cheap to settle early.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                Whether the linked core cuts over in one go or by domain
+              </div>
+              <p>
+                The record argues that the three linked objects cut over
+                together in one window, with independent capabilities cut over
+                earlier. Whether the business accepts that shape is still open.
+                <strong>Owner:</strong> programme governance.
+                <strong>Blocks:</strong> the rehearsal design and the committed
+                freeze length. <strong>If it stays open:</strong> the cutover
+                date rests on an untested assumption.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> One window. The coupling
+                    analysis already shows candidate, job and application cannot
+                    be separated, and staging them would mean either two copies
+                    kept in step &mdash; ruled out on measured volumes &mdash;
+                    or a half-crossed state with no clean way back.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                Whether never-active candidates are archived instead of moved
+              </div>
+              <p>
+                Roughly 461,000 candidates have never been active; archiving
+                rather than moving them sets the data migration volume and the
+                storage headroom.
+                <strong>Owner:</strong> the business with legal, due before the
+                first rehearsal. <strong>Blocks:</strong> copying the data
+                across early, which is only safe once the never-active
+                candidates have been removed.
+                <strong>If it stays open:</strong> the record store sits near
+                its limit for the whole time both copies are held, not just at
+                cutover.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Archive them. They have
+                    never been active, they are the difference between a
+                    comfortable storage peak and one near the limit for the
+                    whole time both copies are held, and the archive already
+                    guarantees any single record can be retrieved. What is
+                    needed is legal sign-off on the retention period, not an
+                    engineering decision.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                Full-copy sandbox availability and refresh cadence
+              </div>
+              <p>
+                The rehearsal needs a full copy of production, and this
+                dependency sets the floor under the cutover date.
+                <strong>Owner:</strong> Marlex IT. <strong>Blocks:</strong> the
+                rehearsal, and any honest cutover commitment.
+                <strong>If it stays open:</strong> the cutover is committed on
+                an unmeasured load time and an unproven rollback.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Ask for one full copy
+                    refreshed no later than eight weeks before the target
+                    cutover, and a second refresh immediately before it &mdash;
+                    two, because the first rehearsal will find things and the
+                    second has to run clean.
+                    <em
+                      >The interval is a proposal, not a verified constraint: it
+                      depends on the licence tier, which is for Marlex IT to
+                      confirm.</em
+                    >
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                Narrowing record visibility after cutover needs an owner and a
+                date
+              </div>
+              <p>
+                Carrying sharing forward is only safe if the tightening happens;
+                the same applies to the object permissions left on profiles at
+                cutover.
+                <strong>Owner:</strong> none recorded.
+                <strong>Blocks:</strong> nothing before cutover &mdash; which is
+                the risk. <strong>If it stays open:</strong> "later" becomes
+                "never", and the org keeps an open model it was only meant to
+                pass through.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Make it a named stage with
+                    its own rehearsal and its own rollback, exactly as the
+                    security decision argues, and fix its date now as a set
+                    number of weeks after close support ends &mdash; written
+                    into the cutover plan rather than left as
+                    &ldquo;later&rdquo;. It should sit with whoever owns the
+                    sharing model on the Marlex side.
+                    <em>The owner is inferred here and needs confirming.</em>
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                Rollback criteria and the dated fallback expiry
+              </div>
+              <p>
+                Two commitments need governance sign-off rather than a delivery
+                call: the written criteria that trigger a rollback, with a named
+                owner, and the date the fallback expires.
+                <strong>Owner:</strong> programme governance.
+                <strong>Blocks:</strong> the uninstall gate, which is the same
+                decision. <strong>If it stays open:</strong> the way back is a
+                claim rather than a procedure, and nobody can say when the old
+                system may go.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Keep the criteria few and
+                    measurable: an error rate above the agreed norm for a set
+                    number of hours, any data-integrity failure on the core
+                    objects, or an inability to process a placement end to end.
+                    Tie the expiry to close support ending plus a fixed margin,
+                    and make retiring the fallback and removing the package the
+                    same decision, taken once, in writing. The thresholds
+                    themselves are the business&rsquo;s to set.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                How a component that cuts over in two waves is named and
+                versioned
+              </div>
+              <p>
+                Placements, interviews and the talent pool cut over before the
+                shared core, but a component in one of those waves usually also
+                reads the candidate and the job, which stay in the old system
+                until the core cutover &mdash; so it crosses twice. Left
+                unstated, that invites a second and third named version of the
+                same class or flow, which is the versioned naming the record
+                already rejects. The direction recorded on 2 September 2026,
+                after review with the architecture practice: each form is built
+                as its own component and the earlier one keeps running until the
+                later is proven, so reverting is a switch rather than a
+                redeployment under pressure. Both forms exist at once and cannot
+                share a name, so the later one carries a version marker &mdash;
+                naming yields to rollback here. Reports are the exception,
+                because the platform will not re-point a report at another
+                object.
+                <strong>Owner:</strong> Nuvolar architecture, for confirmation
+                with Marlex IT. <strong>Blocks:</strong> nothing yet, but it
+                shapes every component built for the early waves.
+                <strong>If it stays open:</strong>
+                each team invents its own answer and the versioned names arrive
+                by default.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Replicate rather than edit:
+                    a component per wave, with a version marker on the later
+                    one, accepting the untidy name because a rollback that is a
+                    switch beats one that is a redeployment. And treat the
+                    switch as only half the rollback &mdash; write a
+                    reconciliation per replaced object and rehearse it, because
+                    records written through the newer form leave the older
+                    objects out of date. A live bridge keeping both models in
+                    step was refused: it is an extra component carrying business
+                    logic and it makes two sources of truth in one environment.
+                  </p>
+                </div>
+              </details>
+            </div>
+
+            <div class="q">
+              <div class="q-head">
+                Formal approval of the decision record itself
+              </div>
+              <p>
+                Nineteen of the twenty-one decisions are recorded direction
+                awaiting the governance forum; two carry a formal accepted
+                state: the rule for where business logic is allowed to start,
+                and the naming convention for new components.
+                <strong>Owner:</strong> the Centre of Excellence.
+                <strong>Blocks:</strong> nothing, which is why it drifts.
+                <strong>If it stays open:</strong> the build proceeds on
+                unapproved direction and any decision can be reopened late, at
+                full cost.
+              </p>
+              <details class="more">
+                <summary>Recommendation</summary>
+                <div class="more-body">
+                  <p>
+                    <strong>Recommendation.</strong> Take all twenty-one to the
+                    governance forum in a single session, as one ratification of
+                    the record, rather than decision by decision &mdash; they
+                    are coupled, and approving the cutover shape without the
+                    rollback commitment or the data-migration approach settles
+                    nothing. Name the three still genuinely unresolved as
+                    explicitly not ratified in that session.
+                  </p>
+                </div>
+              </details>
+            </div>
+          </div>
+
+          <div class="callout">
+            <span class="lbl">Open items with no owner recorded anywhere</span>
+            <p>
+              Three carry no owner in either the decision pages or the decision
+              lists: the <strong>archive retention schedule</strong>, the stage
+              that <strong>narrows record visibility after cutover</strong>, and
+              the <strong>alerting thresholds</strong> that feed the rollback
+              criteria. Two further decisions &mdash; the data model design
+              rules and keeping the candidate on the standard Contact &mdash;
+              carry no owner on their register rows, though both are argued in
+              full in the set.
+            </p>
+          </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">The evidence</p>
+          <h2>What is measured, and what has gone stale</h2>
+          <p>
+            Eight claims rest on measurement against production, not estimates.
+            Their dates matter, because the org changes underneath them.
+          </p>
+          <div class="tablewrap">
+            <table class="data">
+              <caption>
+                Measured claims, by the date they were taken
+              </caption>
+              <thead>
+                <tr>
+                  <th>What was measured</th>
+                  <th>Measured on</th>
+                  <th>State</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Access parity across the user population</td>
+                  <td>30 August 2026</td>
+                  <td class="verdict-live">Current</td>
+                </tr>
+                <tr>
+                  <td>The permission sets that reproduce each user cluster</td>
+                  <td>30 August 2026</td>
+                  <td class="verdict-live">Current</td>
+                </tr>
+                <tr>
+                  <td>Every mechanism granting record access</td>
+                  <td>11 August 2026</td>
+                  <td class="verdict-live">Current</td>
+                </tr>
+                <tr>
+                  <td>The uninstall dependency surface</td>
+                  <td>17 July 2026</td>
+                  <td class="verdict-mid">Older than 30 days</td>
+                </tr>
+                <tr>
+                  <td>
+                    The object, field and record-type inventory being replaced
+                  </td>
+                  <td>14 July 2026</td>
+                  <td class="verdict-mid">Older than 30 days</td>
+                </tr>
+                <tr>
+                  <td>
+                    Production write volumes behind the cutover and freeze
+                    design
+                  </td>
+                  <td>12 July 2026</td>
+                  <td class="verdict-mid">Older than 30 days</td>
+                </tr>
+                <tr>
+                  <td>Record counts behind the data migration design</td>
+                  <td>12 July 2026</td>
+                  <td class="verdict-mid">Older than 30 days</td>
+                </tr>
+                <tr>
+                  <td>The coupled-component surface behind the scope rule</td>
+                  <td>July 2026 audit</td>
+                  <td class="verdict-mid">Older than 30 days</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p>
+            Five of the eight are older than thirty days as of 1 September 2026.
+            The freeze length, pre-load duration and storage peak all derive
+            from the July figures; the rehearsal is what re-measures them. Until
+            it runs, those three numbers are the oldest evidence carrying the
+            most weight.
+          </p>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Reconciliation</p>
+          <h2>Where the record disagrees with itself</h2>
+          <p>
+            Reading the decision pages against the programme&rsquo;s two
+            decision lists turned up four disagreements.
+          </p>
+          <details class="more">
+            <summary>
+              The five disagreements<span class="cnt"
+                >&mdash; what each one is</span
+              >
+            </summary>
+            <div class="more-body">
+              <ul>
+                <li>
+                  <strong
+                    >The naming rule is called settled on its page and is not
+                    approved in the register.</strong
+                  >
+                  The convention for new native components does carry a formal
+                  accepted state, but the wider doctrine it sits inside &mdash;
+                  which originally mandated the opposite, a compulsory owner
+                  prefix &mdash; is still proposed, its naming clause marked
+                  superseded rather than re-decided.
+                </li>
+                <li>
+                  <strong
+                    >The matching engine reversed after most of the set was
+                    written.</strong
+                  >
+                  Buying was formalised, then deprecated on 31 August 2026 on
+                  two grounds: wrong register, and a licence cost that inverted
+                  the default. The pages describe the reversal correctly, but it
+                  was recorded on 31 August 2026, the day before this summary
+                  was assembled, and is not approved &mdash; so the most
+                  consequential open decision is also the newest.
+                </li>
+                <li>
+                  <strong
+                    >The record still prescribes a read layer the programme no
+                    longer uses.</strong
+                  >
+                  The coexistence decision, and the architecture guidelines that
+                  implement it, tell the build to confine every read of the old
+                  system into one dedicated class per business object,
+                  re-pointed at cutover. Marlex confirmed on 2 September 2026
+                  that this pattern is not applied: a translation layer is kept
+                  only where there is a real external boundary &mdash; the
+                  integration edges, and only until those move to the
+                  integration platform. That is the option the coexistence
+                  decision evaluated and rejected, so the reversal cannot be
+                  absorbed by editing the page: it needs its own record,
+                  superseding the old one with a forward pointer, the way the
+                  matching-engine reversal was handled. Until that record
+                  exists, the decision page and the guidelines describe a
+                  different approach from the one now agreed.
+                </li>
+                <li>
+                  <strong
+                    >&ldquo;Cutover&rdquo; means two different moments.</strong
+                  >
+                  Most of the record uses it for the go-live window, after which
+                  TargetRecruit is kept intact and frozen as the fallback until
+                  a dated expiry. The naming rule uses it for the later moment
+                  when the old screens are actually deleted, and calls that
+                  &ldquo;the one-way door&rdquo;. Both cannot hold: deleting the
+                  old list views and reports on go-live morning would leave the
+                  fallback with no screens to fall back to. Which moment the
+                  rename belongs to needs stating.
+                </li>
+                <li>
+                  <strong
+                    >The same decision number is used twice, in eight
+                    cases.</strong
+                  >
+                  Decisions are filed in two separate lists, one for technology
+                  choices and one for programme choices. Eight numbers appear in
+                  both, so quoting a decision by number alone can fetch the
+                  wrong decision.
+                </li>
+              </ul>
+            </div>
+          </details>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Where to look</p>
+          <h2>Which page answers which question</h2>
+          <p>
+            Every page in the decision record is in the navigation at the top of
+            this page, named by the question it answers. The premise is on
+            <a href="#view-why-rebuild">Why rebuild</a>, its boundary on
+            <a href="#view-scope">What&rsquo;s in scope</a>, and the running
+            order on the
+            <a href="#view-technical-roadmap">technical roadmap</a>.
+          </p>
+        </section>
+
+        <footer>
+          <p>
+            Assembled from the decision set and the programme's governance
+            registers on 1 September 2026. It states where the work stands and
+            re-argues nothing: where this page and a decision page differ, the
+            decision page is the record.
           </p>
         </footer>
       </div>
@@ -3600,9 +4304,9 @@
                           without duplicates.
                         </li>
                         <li>
-                          Stand up the <b>shared read-only bridge</b> to old
-                          data, the test-data generator and the switch framework
-                          — the foundation all new work is built against.
+                          Stand up the test-data generator and the switch
+                          framework — the foundation all new work is built
+                          against.
                         </li>
                       </ul>
                     </div>
@@ -3726,11 +4430,10 @@
                       <span class="ap-lab">New work</span>
                       <h4>Built native from day one</h4>
                       <p>
-                        Written on the new model, reading old data only through
-                        the shared bridge — never extending the package. A
-                        feature built native needs no copy: it <em>is</em> the
-                        rebuild advancing, so the work still to disconnect
-                        shrinks.
+                        Written on the new model, reading old data directly
+                        where it must — never extending the package. A feature
+                        built native needs no copy: it <em>is</em> the rebuild
+                        advancing, so the work still to disconnect shrinks.
                       </p>
                     </div>
                     <div class="ap-rulecard ap-b">
@@ -10203,11 +10906,10 @@
             <strong
               >Why a descriptive name, not a version suffix or a prefix.</strong
             >
-            A version suffix (<code>V2</code>/<code>_2</code>) is a documented
-            Salesforce anti-pattern: it becomes permanent noise once the old one
-            is gone, pushes the next iteration to <code>V3</code>, and says
-            nothing about what the component does — you version in source
-            control, not in the name.
+            A version suffix is permanent noise once the old component is gone
+            and says nothing about what this one does &mdash; the exception
+            below is the narrow case where two of your own forms are live at
+            once.
           </p>
           <p>
             A functional prefix (<code>ATS_</code>) only tells the truth if it
@@ -10460,7 +11162,148 @@
               active / deprecated — is recorded in the component catalogue (the
               router row), <em>not</em> in the API name.
             </p>
+            <p>
+              <strong>One exception, settled 2 September 2026.</strong> A
+              component that must exist in more than one working form at once —
+              because the objects it reads cut over in different waves —
+              <em>may</em> carry a version marker. That is a coexisting major
+              version with a deprecation period, not decoration; the marker goes
+              when the superseded form is retired. Worked through below.
+            </p>
           </div>
+          <details class="more">
+            <summary>
+              Worked example &mdash; a Flow whose objects cut over in different
+              waves<span class="cnt"
+                >&mdash; the case the rule has to survive</span
+              >
+            </summary>
+            <div class="more-body">
+              <p>
+                The Flow <code>MA_Placement_Interim_ReActivado</code> reads the
+                placement, the job and the job application. The placement moves
+                in an early wave; the other two stay in TargetRecruit until the
+                core crosses, so the Flow needs a form per stage:
+              </p>
+              <div class="tablewrap">
+                <table class="data">
+                  <caption>
+                    One Flow, three states
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>Stage</th>
+                      <th>Reads</th>
+                      <th>Component</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>Today</td>
+                      <td>
+                        <code>AVTRRT__Placement__c</code>,
+                        <code>AVTRRT__Job__c</code>,
+                        <code>AVTRRT__Job_Applicant__c</code>
+                      </td>
+                      <td>
+                        <code>MA_Placement_Interim_ReActivado</code> &mdash; the
+                        fallback
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>After the placement wave</td>
+                      <td>
+                        <code>Placement__c</code>, but still
+                        <code>AVTRRT__Job__c</code> and
+                        <code>AVTRRT__Job_Applicant__c</code>
+                      </td>
+                      <td>a new Flow, its own name</td>
+                    </tr>
+                    <tr>
+                      <td>After the core cutover</td>
+                      <td>
+                        <code>Placement__c</code>, <code>ATS_Job__c</code>,
+                        <code>Application__c</code>
+                      </td>
+                      <td>a further Flow, carrying a version marker</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+              <p>
+                <strong
+                  >Why not edit the second form when the core crosses?</strong
+                >
+                By then people are using it, so a failed cutover would mean
+                redeploying the version that worked an hour ago &mdash; the
+                slowest way back at the worst moment. Building beside keeps the
+                way back a switch.
+              </p>
+              <p>
+                <strong>Hence the marker.</strong> Both forms are live at once
+                and cannot share an API name, and no clean name is left for the
+                third. Naming yields to rollback.
+              </p>
+              <p>
+                Reports are the exception: one cannot be re-pointed, so a report
+                spanning both waves is rebuilt in each.
+              </p>
+              <p>
+                <strong>Which rung each case lands on</strong> &mdash; the last
+                resort should be rare.
+              </p>
+              <div class="tablewrap">
+                <table class="data">
+                  <caption>
+                    The hierarchy applied
+                  </caption>
+                  <thead>
+                    <tr>
+                      <th>Legacy component</th>
+                      <th>New name</th>
+                      <th>Rung that settled it</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><code>MA_Placement_Interim_ReActivado</code></td>
+                      <td><code>PlacementInterimReactivation</code></td>
+                      <td>
+                        1 &mdash; <code>MA_</code> leaves the clean name free
+                      </td>
+                    </tr>
+                    <tr>
+                      <td>an <code>AVTRRT__</code> trigger handler</td>
+                      <td><code>PlacementService</code></td>
+                      <td>1 &mdash; the package namespace frees it</td>
+                    </tr>
+                    <tr>
+                      <td><code>PlacementController</code> (no prefix)</td>
+                      <td><code>PlacementAssignmentController</code></td>
+                      <td>2 &mdash; named for what it actually does</td>
+                    </tr>
+                    <tr>
+                      <td><code>InterviewService</code> (no prefix)</td>
+                      <td><code>InterviewSchedulingService</code></td>
+                      <td>2 &mdash; a more precise responsibility</td>
+                    </tr>
+                    <tr class="review">
+                      <td>
+                        <code>PlacementInterimReactivation</code> (the wave-one
+                        form, still live)
+                      </td>
+                      <td><code>PlacementInterimReactivation_v2</code></td>
+                      <td>
+                        4 &mdash; rungs 2 and 3 fail: same logic, same object;
+                        only what it <em>reads</em> differs. Marker removed when
+                        wave one retires
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </details>
           <details class="more">
             <summary>
               For the developers<span class="cnt"
@@ -10625,6 +11468,17 @@
           <p class="section-eyebrow">Residual &amp; open items</p>
           <h2>What is still to confirm</h2>
           <ul>
+            <li>
+              <strong>Components that live in more than one wave.</strong> Where
+              a component reads objects that cut over in different waves it
+              needs a working form per wave, each built beside the last so a
+              rollback stays a switch. Both forms are live at once and cannot
+              share an API name, so the later one carries a version marker
+              &mdash; naming yields to rollback. The switch is not the whole
+              rollback: records written through the newer form leave the older
+              objects out of date, so a reconciliation per replaced object is
+              written and rehearsed alongside it. Worked through above.
+            </li>
             <li>
               <strong>Governance ratification.</strong> Both decisions are
               recorded direction pending confirmation by the Centre of
@@ -17499,15 +18353,26 @@
 
         <div class="bluf">
           <p>
-            <strong>What this decides.</strong> New code that touches the old
-            package (its <code>AVTRRT__</code> objects) during coexistence
-            splits into <strong>two kinds, treated differently</strong>. Code
-            whose only job is to keep the old package alive until switch-off is
-            written directly, kept cheap, and <em>deleted</em> at cutover. Code
-            that will keep running afterwards — against the new native objects —
-            has all of its old-package reads and writes penned into one small
-            class per business entity, so at cutover that one class is
-            re-pointed and the business logic never moves.
+            <strong>What this does not touch.</strong> Nothing that exists
+            today. The components already built on the old package are left
+            exactly as they are until the thing that replaces them is ready, and
+            a replacement is a new component built beside the old one &mdash;
+            never a refactor of it. This page is only about code being
+            <em>written new</em> during the months both systems run, and only
+            about the part of it that has to read old data because the new
+            objects are not populated yet.
+          </p>
+          <p>
+            <strong>What this decides.</strong> That newly written code, where
+            it touches the old package (its <code>AVTRRT__</code> objects)
+            during coexistence, splits into
+            <strong>two kinds, treated differently</strong>. Code whose only job
+            is to keep the old package alive until switch-off is written
+            directly, kept cheap, and <em>deleted</em> at cutover. Code that
+            will keep running afterwards — against the new native objects — has
+            all of its old-package reads and writes penned into one small class
+            per business entity, so at cutover that one class is re-pointed and
+            the business logic never moves.
           </p>
           <p>
             <strong>Why it changed.</strong> The rebuild once planned for two
@@ -17526,6 +18391,39 @@
             stops. If those queries are scattered through the business logic,
             cutover becomes a rewrite. The rule buys confinement and refuses to
             pay for abstraction the single model doesn't need.
+          </p>
+        </div>
+
+        <div class="callout warn">
+          <span class="lbl"
+            >Superseded on 2 September 2026 — read this first</span
+          >
+          <p>
+            <strong
+              >The rule this page argues for is no longer the one the build
+              follows.</strong
+            >
+            Marlex confirmed that the dedicated class per business object
+            &mdash; the confinement half of the decision below &mdash; is not
+            applied. New code reads the old system directly, and those reads are
+            re-pointed in place at cutover. A translation layer survives only at
+            a connection to an outside system, and only until that connection
+            moves to the integration platform.
+          </p>
+          <p>
+            What settled it was how the build actually took shape. The
+            confinement class was never adopted in practice, and the prototype
+            classes written for the earlier two-vendor design date from 28 May
+            2026 &mdash; before the programme chose a single native build, and
+            so before the reasoning below applied.
+          </p>
+          <p>
+            <strong>The other half of this decision stands.</strong> Throwaway
+            bridge code is still written directly, kept cheap, and deleted at
+            cutover. And the reasoning below &mdash; that with one native model
+            a translation layer maps a record to a copy of itself &mdash; is
+            what the successor decision inherits. The page is kept because that
+            argument is still the ground the current rule stands on.
           </p>
         </div>
 
@@ -17569,6 +18467,14 @@
         <section>
           <p class="section-eyebrow">The two kinds</p>
           <h2>Disposable bridges, and surviving logic</h2>
+          <p class="rule-note">
+            <strong>Historical from here on.</strong> The confinement class
+            described in this section was the 28 July 2026 verdict and is not
+            current practice &mdash; see the note above. What survives is the
+            split by lifespan itself, and the treatment of throwaway bridges.
+            Read the rest as the argument that produced the current rule, not as
+            an instruction.
+          </p>
           <p>
             <strong>Disposable bridges — deleted at cutover.</strong> Single-use
             code that only exists to keep the old package fed while both systems
@@ -17750,9 +18656,11 @@
           <div class="option">
             <div class="option-head">
               <span class="option-name"
-                >Two kinds — throwaway bridges deleted, surviving logic confined
-                to per-entity repositories and re-pointed</span
-              ><span class="chip adopted">Chosen</span>
+                >Two kinds &mdash; throwaway bridges deleted, surviving logic
+                confined to per-entity repositories and re-pointed</span
+              ><span class="chip reframed"
+                >Chosen 2026-07-28, superseded 2026-09-02</span
+              >
             </div>
             <p>
               Match the treatment to the code's lifespan. Throwaway code stays
@@ -17769,6 +18677,42 @@
               correctly, and a bridge mistaken for surviving logic (or the
               reverse) is coupling debt — a discipline cost, not a structural
               one.
+            </p>
+          </div>
+          <div class="option">
+            <div class="option-head">
+              <span class="option-name"
+                >Two kinds &mdash; throwaway bridges deleted, surviving logic
+                reading the old system directly and re-pointed in place</span
+              ><span class="chip adopted">Chosen 2026-09-02</span>
+            </div>
+            <p>
+              The same split by lifespan, without the confinement class.
+              Throwaway code is unchanged: written directly, deleted at cutover.
+              Surviving logic also queries the old objects directly, and at
+              cutover those queries are re-pointed where they sit &mdash; an
+              ordinary change to Marlex&rsquo;s own new code, not a change to
+              anything live in the old system.
+            </p>
+            <p>
+              The argument that carried it is that confinement was ceremony one
+              level down. On code that has to be edited at cutover in any case,
+              gathering the queries into one file saves finding them; it does
+              not save rewriting logic, because the logic above them was never
+              going to move. Set against that, the rule was not adopted in
+              practice &mdash; and a standard that documents something other
+              than the real approach is worth correcting, because it invites
+              divergent readings.
+            </p>
+            <p>
+              The cost is accepted openly: the old-system queries are now spread
+              through new code, so the cutover re-point depends on a reliable
+              inventory of where they are rather than on one file, and review is
+              the only guard against such a read leaking into logic that must
+              survive the switch. The translation layer is kept where the
+              boundary is genuinely external &mdash; the integration edges
+              &mdash; and retires there too once the edge moves to the
+              integration platform.
             </p>
           </div>
         </section>
@@ -18655,13 +19599,13 @@
                   layer.</strong
                 >
                 A native component that needs data still living on the old
-                objects goes through a <em>single</em> Marlex-owned read seam —
-                the only thing allowed to touch the old objects while both
-                systems run. At cutover that one seam re-points from the old
-                model to the new, and everything above it is unchanged. Giving
-                each such component its own port/adapter/DTO stack would
-                multiply the machinery and still all have to be rebuilt at
-                cutover — the sync-in-miniature the whole rebuild avoids.
+                objects reads those objects <em>directly</em>. At cutover those
+                reads are re-pointed from the old model to the new, in place, as
+                an ordinary change to Marlex's own new code &mdash; nothing live
+                in the old system is touched. Giving each such component its own
+                port/adapter/DTO stack would multiply the machinery and still
+                all have to be rebuilt at cutover — the sync-in-miniature the
+                whole rebuild avoids.
               </p>
             </div>
             <div class="tmpl-step">
@@ -18688,10 +19632,10 @@
               any per-feature abstraction is dead weight to rip out.
             </p>
             <p>
-              So a single shared read seam plus a feature switch does the job
-              for a fraction of a full layer — and it is the choice a mid-level
-              and junior team can hold. The one hard dependency: that shared
-              seam (and the native foundation behind it) must be
+              So direct reads plus a feature switch do the job for a fraction of
+              a full layer — and it is the choice a mid-level and junior team
+              can hold. The one hard dependency: that shared seam (and the
+              native foundation behind it) must be
               <strong>stood up early, before the bulk of new delivery</strong>.
             </p>
             <p>
@@ -23403,12 +24347,8 @@
               Metadata reversal is near-instant and low-risk because the new
               components are additive and the old ones were never touched — it's
               flipping settings and reassigning, the same admin actions as
-              activation, run backwards. The data replay is the part that grows
-              with time since go-live, which is why the bounded-delta property
-              (and the dated expiry) matter. The one metadata caution: writes
-              replayed <em>into</em> the old package may trigger its hidden
-              logic, so that path is probed in rehearsal (see below), not
-              assumed.
+              activation, run backwards. The data replay is the half that grows
+              with time since go-live.
             </p>
           </div>
           <div class="callout key">
@@ -23446,6 +24386,37 @@
               nail down before it's needed, not during.
             </p>
           </div>
+        </section>
+
+        <section>
+          <p class="section-eyebrow">Rolling back between waves</p>
+          <h2>The wave before the last one is also a state to return to</h2>
+          <p>
+            Rollback above means one move: back to TargetRecruit. The early
+            waves make that incomplete. A component in a wave that cuts over
+            before the shared core has one working form before the core moves
+            and another after. If the second fails, the state to return to is
+            the first.
+          </p>
+          <p>
+            <strong>The component side is a switch.</strong> Each form is its
+            own component and the earlier one keeps running until the later is
+            proven, so reverting is a switch, not a redeployment under pressure.
+            Both exist at once and cannot share an API name, so the later one
+            carries a version marker &mdash; a trade the naming rule accepts,
+            because a weaker way back is the dearer loss.
+          </p>
+          <p>
+            <strong>The data side is not.</strong> Records written through the
+            later form leave the older objects out of date, so flipping back
+            reverts the logic but not the data. A wave rollback is therefore two
+            things: the switch, and a
+            <strong>reconciliation per replaced object</strong>, written as part
+            of the rollback and exercised in the rehearsal that drills the
+            switch. Keeping both models in step instead was refused: a temporary
+            bridge carrying business logic makes two sources of truth in one
+            org.
+          </p>
         </section>
 
         <section>
@@ -23561,11 +24532,8 @@
               </defs>
             </svg>
             <figcaption>
-              Top: the big-bang has one dated moment when ownership hands over —
-              free to reverse before it, bounded after, with the old system
-              known-good on both sides. Bottom: continuous two-way sync has no
-              such point; once the copies diverge there is no known-good state
-              to roll back to.
+              Top: the big-bang has one dated moment when ownership hands over.
+              Bottom: two-way sync has no such point.
             </figcaption>
           </figure>
           <div class="tablewrap">
@@ -23932,11 +24900,6 @@
               the dated fallback expiry are decisions for the programme's
               governance board, not the delivery team — flagged for that
               decision.
-            </li>
-            <li>
-              <strong>The replay path is black-box-dependent</strong> until the
-              probe clears it — the same hidden-package unknown that gates the
-              first slice.
             </li>
             <li>
               <strong
@@ -25896,19 +26859,19 @@
                 New Apex is written on the canonical model behind a plain
                 domain-service layer — no per-feature ACL. Where it needs data
                 still on <code>AVTRRT__</code> objects during coexistence, it
-                reads through the <em>single shared TR-read seam</em>, never a
-                direct package reference and never its own port/adapter/DTO
-                stack (that is reserved for integration edges and any
-                coexistence that survives cutover — see
+                reads those objects <em>directly</em> and re-points that read at
+                cutover, never a direct package reference and never its own
+                port/adapter/DTO stack (that is reserved for integration edges
+                and any coexistence that survives cutover — see
                 <a href="#view-rebuild-approach">Rebuild approach</a>). The
                 paired-component register and the same-change rule are the
                 enforcement mechanism, checked at code review from day one and
                 by the deployment pipeline as it matures (the harness that runs
                 them is on <a href="#view-rehearsal">Rehearsal</a>). Hard
-                prerequisite: the native foundation — model, shared read seam,
-                shared services — must be stood up <em>early</em>, before the
-                bulk of new delivery, or new work has nowhere native to land and
-                reaches for the package by default.
+                prerequisite: the native foundation — model and shared services
+                — must be stood up <em>early</em>, before the bulk of new
+                delivery, or new work has nowhere native to land and reaches for
+                the package by default.
               </div>
             </div>
           </details>
@@ -26147,10 +27110,10 @@
           <ul>
             <li>
               <strong>The native foundation must be early.</strong> Native-first
-              intake assumes there is somewhere native to build — the model, the
-              shared read seam and the shared services stood up before delivery
-              ramps. If the foundation lags, new work reaches for the package by
-              default. This is a hard sequencing prerequisite, not a nicety.
+              intake assumes there is somewhere native to build — the model and
+              the shared services stood up before delivery ramps. If the
+              foundation lags, new work reaches for the package by default. This
+              is a hard sequencing prerequisite, not a nicety.
             </li>
             <li>
               <strong
