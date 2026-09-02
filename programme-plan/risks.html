@@ -268,9 +268,9 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
           <p><b>How it's managed —</b> Use the low-activity August window for a controlled reset: retrieve the full production baseline, promote it back through the shared pre-production branch while protecting live work, then refresh developer environments. After that, every change starts from production and synchronises the components in its own scope before development begins.</p>
         </div>
 <div class="epic" style="--pc:var(--spine)">
-          <div class="eh"><div><span class="en">The matching-and-search engine is bought, not built</span></div></div>
-          <p>The engine that parses CVs and matches candidates to roles is the hardest part to reproduce, so it is licensed rather than rebuilt. The rebuild&#x27;s feasibility depends on that engine plugging in cleanly.</p>
-          <p><b>How it's managed —</b> Treated as a buy decision from the start and assessed early as part of the feasibility work, rather than discovered late in the build.</p>
+          <div class="eh"><div><span class="en">The matching-and-search engine has to be proven, whether built or bought</span></div></div>
+          <p>The engine that parses CVs and matches candidates to roles is the hardest part to reproduce. The direction is now to build it in-house rather than license it, on cost grounds, which is not yet ratified — and that shifts the risk from a vendor plugging in cleanly to a first-attempt build reaching an acceptable quality bar.</p>
+          <p><b>How it's managed —</b> Assessed early as part of the feasibility work rather than discovered late in the build, and gated on a written quality test against real Spanish CVs before anyone commits; licensing a specialist engine remains the fallback if that test fails.</p>
         </div>
 <div class="epic" style="--pc:var(--spine)">
           <div class="eh"><div><span class="en">Parallel tracks the cutover depends on may not be ready in time</span></div></div>

@@ -265,7 +265,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <div class="toc"><div class="th">Jump to</div><div class="toc-grid">
 <a href="#adr-1" data-estado="proposed" title="Marlex-owned canonical model — the real schema in the rebuild, a decoupling layer only during transition"><span class="tid">ADR · Canonical Model (Marlex-owned schema)</span></a>
 <a href="#adr-2" data-estado="proposed" title="Anti-Corruption Layer (ACL) pattern — integration-edge only"><span class="tid">ADR · Anti-Corruption Layer (edge-only)</span></a>
-<a href="#adr-3" data-estado="proposed" title="Data-access seam during coexistence — repository confinement, not full ACL"><span class="tid">ADR · Data-Access Seam during Coexistence</span></a>
+<a href="#adr-3" data-estado="superseded" title="Data-access seam during coexistence — repository confinement, not full ACL"><span class="tid">ADR · Data-Access Seam during Coexistence</span></a>
 <a href="#adr-4" data-estado="superseded" title="Mandatory anti-corruption-layer rule on vendor package objects"><span class="tid">ADR · ACL Entry-Point Rule</span></a>
 <a href="#adr-5" data-estado="proposed" title="API-led integration architecture with a middleware layer"><span class="tid">ADR · API-led Integration with Middleware</span></a>
 <a href="#adr-6" data-estado="proposed" title="Canonical contracts and Salesforce-middleware integration patterns"><span class="tid">ADR · Canonical Integration Contracts</span></a>
@@ -299,7 +299,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <a href="#adr-34" data-estado="proposed" title="Candidate remains on standard Contact"><span class="tid">ADR · Candidate Remains on Standard Contact</span></a>
 <a href="#adr-35" data-estado="proposed" title="Target data model is designed from measured use"><span class="tid">ADR · Measured Target Data-Model Rules</span></a>
 <a href="#adr-36" data-estado="proposed" title="Rollback commitment and a separate uninstall gate"><span class="tid">ADR · Rollback Commitment &amp; Uninstall Gate</span></a>
-<a href="#adr-37" data-estado="proposed" title="Matching and CV parsing engine behind a Marlex-owned port"><span class="tid">ADR · Matching &amp; CV Parsing Engine</span></a>
+<a href="#adr-37" data-estado="deprecated" title="Matching and CV parsing engine behind a Marlex-owned port"><span class="tid">ADR · Matching &amp; CV Parsing Engine</span></a>
 <a href="#adr-38" data-estado="proposed" title="Internal and external recruitment are separated by data, not only by screens"><span class="tid">ADR · Internal-vs-External Record Discriminator</span></a>
 <a href="#adr-39" data-estado="proposed" title="Internal records reuse the platform safely without inheriting external behaviour"><span class="tid">ADR · Logic Boundaries for Internal Records</span></a>
 <a href="#adr-40" data-estado="draft" title="Rebuild build standard"><span class="tid">ADR · Rebuild Build Standard</span></a>
@@ -310,6 +310,8 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <a href="#adr-45" data-estado="proposed" title="Naming while old and new run side by side — two questions, each with its own answer"><span class="tid">ADR · Naming Old and New Side by Side</span></a>
 <a href="#adr-46" data-estado="proposed" title="Field-level security in rebuild code — enforced where a person acts, explicit where automation writes"><span class="tid">ADR · Field-Security Enforcement by Execution Context</span></a>
 <a href="#adr-47" data-estado="proposed" title="Access grants that add nothing are not rebuilt — the test is what a user can actually do"><span class="tid">ADR · Empty Access Grants Are Not Rebuilt</span></a>
+<a href="#adr-48" data-estado="proposed" title="Business rules live on the record, not on the screen"><span class="tid">ADR · Business Rules Live on the Record</span></a>
+<a href="#adr-49" data-estado="proposed" title="Data access during coexistence — direct access, no repository layer"><span class="tid">ADR · Acceso a datos durante la coexistencia</span></a>
 </div></div>
 <div class="dec" id="adr-1" data-estado="proposed">
 <div class="dh">
@@ -331,11 +333,11 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p class="bluf">Where Apex must touch the vendor&#x27;s objects — now only at the integration edges and the transitional read seam while the old system coexists — it goes through an Anti-Corruption Layer (ACL) built from ports (Apex interfaces), adapters (translation classes) and mapping DTOs between the vendor&#x27;s objects and Marlex&#x27;s canonical model. Under the custom-native rebuild the ATS core is built natively on the canonical model, so the ACL is an edge concern, not a pervasive layer over a packaged vendor.</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
-<div class="dec" id="adr-3" data-estado="proposed">
+<div class="dec" id="adr-3" data-estado="superseded">
 <div class="dh">
 <h3>Data-access seam during coexistence — repository confinement, not full ACL</h3>
 <span class="did">ADR · Data-Access Seam during Coexistence</span>
-<span class="badge proposed">Proposed</span>
+<span class="badge superseded">Superseded</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Solution</span></div>
 <p class="bluf">During the months the new native system runs alongside TargetRecruit, rebuilt code still has to read and write the old package&#x27;s objects. This decision sets how: code that touches the package splits into two kinds, treated in opposite ways. Throwaway bridge code — dual-writes and syncs whose only job is to keep the package fed until switch-off — is written directly, kept cheap, and deleted at cutover. Surviving logic — the controllers and services that read jobs, applications and candidate data today and will keep doing so afterwards — has all of its old-package queries penned into one small repository class per business entity, so at cutover that single class is re-pointed at the native object and the business logic above it never moves.</p>
@@ -344,7 +346,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p>The decisive factor is that what makes cutover cheap is confinement, not abstraction: one named place per entity for the package&#x27;s queries means cutover edits that place and stops. The cost accepted is honest — each seam must be tagged correctly, and a bridge mistaken for surviving logic (or the reverse) is coupling debt. A separate, unavoidable item is schema coupling: the lookup fields on new objects that point at package objects cannot be hidden by any code pattern and are re-pointed at cutover as a new field plus data migration, tracked as model work rather than code work. The coupled-code metric is restated as two action lists — delete at cutover, re-point at cutover — so it reads as a runbook.</p>
 <p>For developers, the surviving-logic classes are named after the entity with a Repository suffix and deliberately carry no ACL prefix, keeping them visually distinct from the full translation-layer components that are now reserved for a genuine second vendor only. A repository holds the package SOQL and DML and returns platform records and fields — no wrapper types, no mappers. This is the Selector/Repository pattern used for its intended purpose: isolate the query, not translate the schema.</p>
 <div class="qa"><span class="chip">Maintainability</span><span class="chip">Modifiability</span><span class="chip">Simplicity</span><span class="chip">Testability</span><span class="chip">Cost-Effectiveness</span></div>
-<div class="openbox"><b>Still open:</b> Recorded direction, not yet ratified — pending confirmation with Marlex after the reference-org discussion. The full per-entity assignment of each package touch point to delete-at-cutover or re-point-at-cutover is filled in as capabilities are built; whether a class has confined all its package access with none leaking into callers is a review item.</div>
+<div class="openbox"><b>Still open:</b> Superseded on 2 September 2026 by the direct-access decision. Marlex confirmed the repository pattern is not applied in practice: the surviving-logic half of this decision is withdrawn, while the throwaway-bridge half survives unchanged. This row is kept for the reasoning it established — that with a single native model a translation layer maps a record to a copy of itself — which the successor inherits.</div>
 </div>
 <div class="dec" id="adr-4" data-estado="superseded">
 <div class="dh">
@@ -723,14 +725,14 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p class="bluf">TargetRecruit stays installed and intact, under read-only permissions, for a dated fallback period after cutover. Rollback has written invocation criteria, a named owner, a rehearsed metadata flip-back and bounded data-delta replay. Physical package removal is a later irreversible gate crossed only against written go-criteria and operational evidence.</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
-<div class="dec" id="adr-37" data-estado="proposed">
+<div class="dec" id="adr-37" data-estado="deprecated">
 <div class="dh">
 <h3>Matching and CV parsing engine behind a Marlex-owned port</h3>
 <span class="did">ADR · Matching &amp; CV Parsing Engine</span>
-<span class="badge proposed">Proposed</span>
+<span class="badge deprecated">Deprecated</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Solution</span></div>
-<p class="bluf">The current direction remains to buy a specialist matching and CV-parsing engine behind a Marlex-owned interface, with native search for everyday lookup and the engine for semantic matching. The buy-versus-build choice was reopened because of cost, so an off-platform in-house option is again being evaluated outside the main estimate until an owner and a parity test close it.</p>
+<p class="bluf">This row is kept as the reference argument for buying a specialist engine; it no longer carries the decision. Two things retired it. It sits in the architecture register, but build-versus-buy turns on licence cost, time and commercial risk rather than on quality attributes, which makes it a programme decision. And the direction has since moved to building the engine in-house on cost grounds. What survives from this row is the part that was always architectural and is unaffected by the choice: the engine sits behind a Marlex-owned interface either way, so whichever answer wins can be swapped without rewriting the callers.</p>
 <div class="openbox"><b>Full decision —</b> set out in the <i>recruitment-platform rebuild</i> decision record.</div>
 </div>
 <div class="dec" id="adr-38" data-estado="proposed">
@@ -3120,6 +3122,39 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p>This is deliberately not a redesign. Real differences are still copied faithfully — including the ones that are easy to round off, such as the core recruitment population being able to create and edit jobs and the talent pool but not delete them. The only thing discarded is what is demonstrably empty.</p>
 <div class="qa"><span class="chip">Maintainability</span><span class="chip">Security</span><span class="chip">Operability</span></div>
 <div class="openbox"><b>Still open:</b> Apply the same test to the remaining cross-cutting grants, including the near-universal candidature field filter and a personnel-integration grant held by several hundred users that opens an object without opening any field on it. Owner: the architecture team, during the extension to the remaining objects.</div>
+</div>
+<div class="dec" id="adr-48" data-estado="proposed">
+<div class="dh">
+<h3>Business rules live on the record, not on the screen</h3>
+<span class="did">ADR · Business Rules Live on the Record</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Infrastructure &amp; Governance</span></span><span>·</span><span>Architecture (build standard)</span></div>
+<p class="bluf">A rule that protects a process only governs the people who arrive through the door it was written on. Salesforce record pages let a rule be attached to the screen itself: show this button only once the record is approved, reveal this section only in that state. That is a reasonable way to build when the screen is the only way in.</p>
+<p>Reading the current system shows where those rules were written. The record pages carry a large number of small conditions that decide whether something appears. Most are ordinary housekeeping: they hide a field or a section that is not relevant yet, which is exactly what a screen is for. A meaningful minority are different. They decide whether a button appears, and the button is how work moves forward.</p>
+<p>The clearest case is an offer. Sending it for signature, accepting it, making it current, marking it expired: each is a button, and each button is shown or hidden by a condition on the offer&#x27;s state and its approval. The offer does carry rules of its own, so this is not an unguarded record. But those rules freeze the price and the margin after an offer is approved, and require a bank account before it becomes current. None of them stops an unapproved offer being sent for signature. That protection exists only as a hidden button.</p>
+<p>The screens are no longer the only way in. Applications already arrive from the careers landing pages and the job boards over a direct connection, the payroll and staffing systems exchange records through the integration layer, and the data migration itself writes millions of records without a screen ever opening. None of those are subject to a condition that exists only on a page.</p>
+<p>So the placement of a rule is now decided by what kind of rule it is. Anything that protects the integrity of a process — what must be filled in, which state may follow which, what needs approval before it moves, what may no longer change once closed — is written onto the record, where it applies to a person, an integration and a data load alike. Anything the business calculates and others rely on is derived on the record too. What genuinely belongs on the screen stays there: showing the right fields at the right moment, hiding what is irrelevant, guiding the person through the work. A screen may repeat a rule to make the experience better; what it may not do is be the only place the rule exists.</p>
+<p>Assembling pages from the platform&#x27;s own building blocks remains the right way to build them — that is settled separately and is not reopened here. The change is narrower: the page presents the rule, it no longer holds it.</p>
+<p>The rule binds new work at full strength from the moment it is accepted. Rules carried over from the current system as each capability is rebuilt are recorded as work still to do rather than treated as defects, because deciding what to do with the existing rules is a question of effort and sequence that has not been costed yet. Recording them is what makes that cost visible.</p>
+<div class="qa"><span class="chip">Correctness</span><span class="chip">Interoperability</span><span class="chip">Governability</span></div>
+<div class="openbox"><b>Still open:</b> Size the carried-over rules, grouped by the record they sit on, separating those that collapse into a single shared rule from those needing to be moved one at a time. That figure decides whether the work travels with each rebuilt capability at little extra cost or needs a place of its own in the plan. Owner: the architecture team. Also open: how the historical data move satisfies the new rules or is granted a documented, time-limited exception; and whether a screen condition may ever stand alone when the concern is confidentiality rather than integrity — the starting position is that confidentiality is governed by the access model instead. Owner: the architecture team, with the build team on the data move.</div>
+</div>
+<div class="dec" id="adr-49" data-estado="proposed">
+<div class="dh">
+<h3>Data access during coexistence — direct access, no repository layer</h3>
+<span class="did">ADR · Acceso a datos durante la coexistencia</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Canonical Model</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">While the new native system runs alongside TargetRecruit, new code sometimes has to read the old data because the new objects are not populated yet. This decision settles how, and the answer is the plain one: it reads the old objects directly, and at cutover those reads are re-pointed where they sit. No dedicated layer stands between the new code and the old data.</p>
+<p>A translation layer is kept in exactly one place — a connection to an outside system, where the boundary is real — and even there only until that connection moves to the integration platform, after which the contract lives in the platform and the layer inside Salesforce stops earning its keep. On Marlex’s own objects there is no layer at all.</p>
+<p>This supersedes the earlier seam decision, which asked for every old-system query to be confined to one dedicated class per business object. That earlier rule was itself a reduction of a much heavier translation layer designed when the programme still planned for two recruitment vendors. Once the programme chose a single native build, the heavy layer was removed because it would map a record to a copy of itself; the confinement class survived that pass but is the same ceremony one level down, on code that has to be edited at cutover regardless.</p>
+<p>What settled it was evidence of non-adoption. Not one confinement class was ever built, while fourteen prototype classes from the abandoned two-vendor design sit in the repository untouched since 28 May 2026 — before the move to a single native build. A written rule nobody follows is worse than no rule: it invites divergent readings and hides what the real standard is. Marlex confirmed the position on 2 September 2026.</p>
+<p>Two consequences are accepted. Old-system queries are now spread across new code rather than gathered in one place, so re-pointing them at cutover depends on a reliable inventory of where they are rather than on a single file — and code review becomes the only guard against an old-system read leaking into logic that has to survive the switch.</p>
+<p>A naming corollary follows for the early waves. Placements, interviews and the talent pool cut over before the shared core, but a component in one of those waves usually also reads the candidate and the job, which stay in the old system until the core cutover — so it crosses twice. It stays one component with one name, edited twice; the second edit is an ordinary deployment of Marlex’s own new code, never a change to the untouched legacy component, and never a second or third named version. Reports are the one real exception, because the platform will not re-point a report at another object, so a report spanning both waves is rebuilt in each.</p>
+<div class="qa"><span class="chip">Maintainability</span><span class="chip">Simplicity</span><span class="chip">Portability</span><span class="chip">Cost-Effectiveness</span></div>
+<div class="openbox"><b>Still open:</b> Recorded direction, not yet ratified — confirmed with Marlex on 2 September 2026 but not taken to the governance forum. Three things are open: an inventory of where new code reads the old system, since the cutover re-point now depends on it and no owner or format is set; a decision on the fourteen orphaned prototype classes from the abandoned design, which encode a pattern the programme no longer uses; and the naming corollary for components that cross in two waves, which is not yet reflected in the naming decision it touches.</div>
 </div>
 <script>
 window.__filter=function(f,btn){
