@@ -205,6 +205,9 @@ table{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-
 td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}
 code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
 .muted{color:var(--mut);font-size:12px;white-space:nowrap}
+.dormant{font-size:10px;padding:2px 7px;border-radius:5px;margin-left:7px;
+  background:rgba(178,58,46,.10);color:var(--red);border:1px solid rgba(178,58,46,.22);
+  font-weight:600;white-space:nowrap;cursor:help}
 .branch{font-size:10px;padding:2px 7px;border-radius:5px;margin-left:7px;
   background:var(--sub);color:var(--mut);border:1px solid var(--line);
   font-weight:600;white-space:nowrap;cursor:help;letter-spacing:.01em}
@@ -371,6 +374,9 @@ table{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-
 td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}
 code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
 .muted{color:var(--mut);font-size:12px;white-space:nowrap}
+.dormant{font-size:10px;padding:2px 7px;border-radius:5px;margin-left:7px;
+  background:rgba(178,58,46,.10);color:var(--red);border:1px solid rgba(178,58,46,.22);
+  font-weight:600;white-space:nowrap;cursor:help}
 .branch{font-size:10px;padding:2px 7px;border-radius:5px;margin-left:7px;
   background:var(--sub);color:var(--mut);border:1px solid var(--line);
   font-weight:600;white-space:nowrap;cursor:help;letter-spacing:.01em}
@@ -537,6 +543,9 @@ table{width:100%;border-collapse:collapse;font-size:13px;display:block;overflow-
 td{padding:5px 8px 5px 0;border-bottom:1px solid var(--line);vertical-align:top}
 code{font:12px ui-monospace,SFMono-Regular,Menlo,monospace;word-break:break-word}
 .muted{color:var(--mut);font-size:12px;white-space:nowrap}
+.dormant{font-size:10px;padding:2px 7px;border-radius:5px;margin-left:7px;
+  background:rgba(178,58,46,.10);color:var(--red);border:1px solid rgba(178,58,46,.22);
+  font-weight:600;white-space:nowrap;cursor:help}
 .branch{font-size:10px;padding:2px 7px;border-radius:5px;margin-left:7px;
   background:var(--sub);color:var(--mut);border:1px solid var(--line);
   font-weight:600;white-space:nowrap;cursor:help;letter-spacing:.01em}
@@ -918,6 +927,7 @@ Component counts exclude test classes and test-data flows.</footer>
         <span class="num">1</span>
         <span class="stitle">Track commercial visits
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:9%"></i><b>1</b></span>
@@ -938,6 +948,7 @@ Component counts exclude test classes and test-data flows.</footer>
       <summary>
         <span class="num">2</span>
         <span class="stitle">Convert opportunity to vacancy
+          
           
           </span>
         <span class="kind">Person</span>
@@ -960,6 +971,7 @@ Component counts exclude test classes and test-data flows.</footer>
         <span class="num">3</span>
         <span class="stitle">Assign the client contact &amp; site
           
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:9%"></i><b>1</b></span>
@@ -980,6 +992,7 @@ Component counts exclude test classes and test-data flows.</footer>
       <summary>
         <span class="num">4</span>
         <span class="stitle">Run the weekly client feedback loop
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -1077,6 +1090,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">1</span>
         <span class="stitle">Capture candidate &amp; parse CV
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:57%"></i><b>4</b></span>
@@ -1097,6 +1111,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">2</span>
         <span class="stitle">Convert contact to candidate
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -1119,6 +1134,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">3</span>
         <span class="stitle">Record consent &amp; renew it
           <span class="flag" title="a trigger chains into a handler that emails the candidate, two Flows fire either side of the save, they touch two different objects, and a custom setting can switch the whole branch off">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:71%"></i><b>5</b></span>
@@ -1139,6 +1155,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">4</span>
         <span class="stitle">Screen with killer questions
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -1161,6 +1178,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">5</span>
         <span class="stitle">Geocode &amp; enrich the candidate
           
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:14%"></i><b>1</b></span>
@@ -1181,6 +1199,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">6</span>
         <span class="stitle">Assess with DISC &amp; references
+          
           
           </span>
         <span class="kind">Person</span>
@@ -1203,6 +1222,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">7</span>
         <span class="stitle">Track engagement &amp; comments
           
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:71%"></i><b>5</b></span>
@@ -1224,6 +1244,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">8</span>
         <span class="stitle">Block unsuitable candidates
           
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:14%"></i><b>1</b></span>
@@ -1244,6 +1265,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">9</span>
         <span class="stitle">Push the candidate to the ERP
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -1340,6 +1362,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">1</span>
         <span class="stitle">Create &amp; size the talent pool
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:40%"></i><b>2</b></span>
@@ -1360,6 +1383,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">2</span>
         <span class="stitle">Add candidates to the pool
+          
           
           </span>
         <span class="kind">Person</span>
@@ -1456,6 +1480,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">1</span>
         <span class="stitle">Publish vacancy to InfoJobs
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:84%"></i><b>11</b></span>
@@ -1477,6 +1502,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">2</span>
         <span class="stitle">Receive inbound application
           <span class="flag" title="an external system writes candidate records with no person present, through a webhook, a queueable and a batch">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:100%"></i><b>13</b></span>
@@ -1498,6 +1524,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">3</span>
         <span class="stitle">Expire closed offers
           
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:46%"></i><b>6</b></span>
@@ -1518,6 +1545,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">4</span>
         <span class="stitle">Notify rejected candidates
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -1614,6 +1642,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">1</span>
         <span class="stitle">Add candidate to vacancy
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:100%"></i><b>24</b></span>
@@ -1634,6 +1663,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">2</span>
         <span class="stitle">Assign owner &amp; open stage
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -1656,6 +1686,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">3</span>
         <span class="stitle">Block conflicting applications
           
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:12%"></i><b>3</b></span>
@@ -1676,6 +1707,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">4</span>
         <span class="stitle">Submit candidate to client
+          
           
           </span>
         <span class="kind">Person</span>
@@ -1698,6 +1730,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">5</span>
         <span class="stitle">Advance applicant &amp; vacancy stages
           <span class="flag" title="a trigger and four Flows write the same cascade across the application, the vacancy and the candidate, and a fifth Flow exists only to stop the vacancy stage moving backwards">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:70%"></i><b>17</b></span>
@@ -1718,6 +1751,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">6</span>
         <span class="stitle">Schedule &amp; run interview
+          
           
           </span>
         <span class="kind">Person</span>
@@ -1740,6 +1774,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">7</span>
         <span class="stitle">Sync interview to candidate
           <span class="flag" title="the field-by-field mapping lives in custom metadata rather than in the class, and the sync writes in both directions">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:25%"></i><b>6</b></span>
@@ -1760,6 +1795,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">8</span>
         <span class="stitle">Record offer &amp; rejection reason
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -1858,6 +1894,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">1</span>
         <span class="stitle">Convert applicant to placement
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:100%"></i><b>17</b></span>
@@ -1877,9 +1914,10 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
     <details class="step k-automation">
       <summary>
         <span class="num">2</span>
-        <span class="stitle">Approve placement &amp; set rates
+        <span class="stitle">Set rates from the deal sheet
           
-          </span>
+          
+          <span class="dormant" title="The approval gate on this step is not in use.">part not in use</span></span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:76%"></i><b>13</b></span>
       </summary>
@@ -1899,6 +1937,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">3</span>
         <span class="stitle">Track the contracting paperwork
+          
           
           </span>
         <span class="kind">Person</span>
@@ -1921,6 +1960,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">4</span>
         <span class="stitle">Adjust the start date
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:0%"></i><b>0</b></span>
@@ -1942,7 +1982,8 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">5</span>
         <span class="stitle">Run the fixed-discontinuous cycle
           <span class="flag" title="scheduled batch jobs activate and inactivate the placement over and over across the year, so the record has no single end">complex</span>
-          <span class="branch" title="Interim and fixed-discontinuous placements: no guarantee, no automatic invoice movements, and they do not end on their own.">People</span></span>
+          <span class="branch" title="Interim and fixed-discontinuous placements: no guarantee, no automatic invoice movements, and they do not end on their own.">People</span>
+          </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:23%"></i><b>4</b></span>
       </summary>
@@ -1963,7 +2004,8 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">6</span>
         <span class="stitle">Run the interim cycle
           
-          <span class="branch" title="Interim and fixed-discontinuous placements: no guarantee, no automatic invoice movements, and they do not end on their own.">People</span></span>
+          <span class="branch" title="Interim and fixed-discontinuous placements: no guarantee, no automatic invoice movements, and they do not end on their own.">People</span>
+          </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:52%"></i><b>9</b></span>
       </summary>
@@ -1984,7 +2026,8 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">7</span>
         <span class="stitle">Handle incidents
           
-          <span class="branch" title="Interim and fixed-discontinuous placements: no guarantee, no automatic invoice movements, and they do not end on their own.">People</span></span>
+          <span class="branch" title="Interim and fixed-discontinuous placements: no guarantee, no automatic invoice movements, and they do not end on their own.">People</span>
+          </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:41%"></i><b>7</b></span>
       </summary>
@@ -2005,6 +2048,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">8</span>
         <span class="stitle">Close the placement
           <span class="flag" title="a nightly batch closes the placement, its vacancy and its applicant and updates the candidate, so one job touches four objects">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:35%"></i><b>6</b></span>
@@ -2026,7 +2070,8 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">9</span>
         <span class="stitle">Watch the guarantee period
           
-          <span class="branch" title="Manager, Permanent, Professional and Skilled Professionals placements: these carry a guarantee, automatic invoice movements and a defined end date.">Permanent &amp; Professionals</span></span>
+          <span class="branch" title="Manager, Permanent, Professional and Skilled Professionals placements: these carry a guarantee, automatic invoice movements and a defined end date.">Permanent &amp; Professionals</span>
+          </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:5%"></i><b>1</b></span>
       </summary>
@@ -2122,6 +2167,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">1</span>
         <span class="stitle">Capture identity documents
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:26%"></i><b>4</b></span>
@@ -2142,6 +2188,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">2</span>
         <span class="stitle">Generate compliance tasks
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -2164,6 +2211,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">3</span>
         <span class="stitle">Enrol in required training
           <span class="flag" title="the enrolment leaves Salesforce for the training provider and returns through a callback">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:100%"></i><b>15</b></span>
@@ -2184,6 +2232,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">4</span>
         <span class="stitle">Keep the file audit trail
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -2280,6 +2329,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">1</span>
         <span class="stitle">Generate invoice movements
           <span class="flag" title="this is the money path - a trigger, an invocable action and a Flow decide what the client is billed">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:100%"></i><b>13</b></span>
@@ -2300,6 +2350,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">2</span>
         <span class="stitle">Create movements by hand
+          
           
           </span>
         <span class="kind">Person</span>
@@ -2322,6 +2373,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">3</span>
         <span class="stitle">Re-invoice &amp; issue credit notes
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:7%"></i><b>1</b></span>
@@ -2343,6 +2395,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">4</span>
         <span class="stitle">Recalculate interim job coverage
           <span class="flag" title="the coverage figure is recomputed by a dynamic query spanning a Marlex object and a vendor object">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:69%"></i><b>9</b></span>
@@ -2438,6 +2491,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">1</span>
         <span class="stitle">Render quick views &amp; lists
           
+          
           </span>
         <span class="kind">Person</span>
         <span class="count"><i style="width:90%"></i><b>9</b></span>
@@ -2458,6 +2512,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">2</span>
         <span class="stitle">Produce the branded resume
+          
           
           </span>
         <span class="kind">Person</span>
@@ -2480,6 +2535,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">3</span>
         <span class="stitle">Drive rules from custom metadata
           
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:10%"></i><b>1</b></span>
@@ -2501,6 +2557,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">4</span>
         <span class="stitle">Shield the platform behind the ACL
           <span class="flag" title="vendor coupling is confined to one class, which is the pattern the rest of the rebuild should follow">complex</span>
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:100%"></i><b>10</b></span>
@@ -2521,6 +2578,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">5</span>
         <span class="stitle">Notify on ERP events
+          
           
           </span>
         <span class="kind">Automation</span>
@@ -2543,6 +2601,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
         <span class="num">6</span>
         <span class="stitle">Run cross-domain utility flows
           
+          
           </span>
         <span class="kind">Automation</span>
         <span class="count"><i style="width:10%"></i><b>1</b></span>
@@ -2563,6 +2622,7 @@ Business context is unvalidated until the Product Owner confirms it.</footer>
       <summary>
         <span class="num">7</span>
         <span class="stitle">Build shared test data
+          
           
           </span>
         <span class="kind">Automation</span>
