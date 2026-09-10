@@ -4759,6 +4759,51 @@
                       bearer token.
                     </p>
                     <p>
+                      <strong>Whose interface this is.</strong> That remote site
+                      resolves to <code>https://www3.marlex.net</code> — an
+                      interface authored by <strong>Nivel IV</strong> (a Zvoove
+                      company), the ERP supplier, not by Marlex. Authorship is
+                      evidenced: the specification carries Nivel IV's copyright,
+                      and the vendor's own Postman collection targets the same
+                      host. Salesforce does not reach the ERP any other way
+                      today, and the direct database is not used. The
+                      specification is v04.13 (last updated 13 May 2026), and it
+                      documents eight methods.
+                    </p>
+                    <p>
+                      <strong
+                        >Three things about it are not established, and all
+                        three are questions for the ERP supplier, who sits
+                        outside the programme's responsibility matrix.</strong
+                      >
+                      First, whether the ERP exposes anything
+                      <em>beneath</em> that interface — a product API, a
+                      standard vendor integration module — has never been asked,
+                      so &ldquo;the only way in&rdquo; describes today's
+                      plumbing rather than a proven constraint. Second, the
+                      interface was recorded in May 2026 as batch-only, emitting
+                      no events; that has never been reconfirmed, and it decides
+                      whether the middleware needs an event path at all. Third,
+                      the multi-country reuse assumes the interface accepts a
+                      second country with routing done in the middleware and no
+                      ERP-side change — if that is wrong, it becomes a supplier
+                      dependency with its own timeline and budget. Note also
+                      that the specification's cover page reads v04.11 while the
+                      file is labelled v04.13; confirm which is authoritative
+                      before treating a method signature as settled.
+                    </p>
+                    <p>
+                      <strong>How firmly this is known.</strong> The host and
+                      the OAuth grant are read from the org's own configuration.
+                      The supplier's authorship is evidenced by the
+                      specification and the vendor collection. Everything else
+                      above — what the ERP is, who operates it, and the
+                      batch-only reading — traces to a single discovery session
+                      on 21 May 2026, recorded in one attendee's notes with no
+                      recording behind them. Treat those as assumptions to
+                      confirm, not as measured facts.
+                    </p>
+                    <p>
                       The newer <code>MA_Net4Client</code> family resolves its
                       endpoint through the <code>MA_Net4</code> named
                       credential, but that credential's production endpoint is
@@ -14208,8 +14253,10 @@
                 </h3>
                 <p class="verdict">
                   <strong>MuleSoft</strong>, selected 3 July 2026, commercial
-                  terms since agreed. The working environment arrives September
-                  2026, run by Marlex IT with partner support.
+                  terms since agreed. The platform was provisioned in September
+                  2026 and is run by Marlex IT with partner support — licences
+                  and accounts exist, and configuration begins once Marlex has
+                  answered the organisational questions the setup depends on.
                 </p>
                 <p class="because">
                   Completeness and API-led fit won. Five candidates were
@@ -15079,8 +15126,8 @@
                     but its objects straddle both waves, so it re-points twice
                     or once late by deliberate choice rather than on a forced
                     date. All four are fixed in Marlex's own configuration and
-                    code. Phase 3 builds the ERP interface, the first thing
-                    MuleSoft builds. Phase 4 builds the job-board interface,
+                    code. Phase 3 builds the ERP interface, the first of the two
+                    big interfaces. Phase 4 builds the job-board interface,
                     second because it carries the heaviest traffic. The cutover
                     milestone is where the data moves and every coupled edge
                     must already aim at the new records. Phase 5 points the
@@ -15552,9 +15599,11 @@
                       <td><strong>3</strong></td>
                       <td>The ERP interface</td>
                       <td>
-                        The first thing MuleSoft builds. Finance directions are
-                        preserved; the candidate sync re-points off the retiring
-                        field
+                        The first of the two big interfaces. Finance directions
+                        are preserved; the candidate sync re-points off the
+                        retiring field. A case has since been made for building
+                        the analytics extract ahead of it as a smaller first job
+                        — see what is open
                       </td>
                       <td>
                         First because it has no dependencies and the widest
@@ -15701,15 +15750,60 @@
               <ul class="opens">
                 <li>
                   <b
-                    >The environment date against the two switch-holding
-                    interfaces.</b
+                    >Who changes the Salesforce side once an interface
+                    exists.</b
                   >
-                  The environment is available from September 2026. If it or the
-                  delivery capacity slips, those two edges fall back to
-                  switching inside Salesforce and give up the control the design
-                  was chosen for.
+                  Building an interface is only half of moving an edge onto the
+                  platform: something in Salesforce still calls the old
+                  connection directly, and that call has to be rewritten to go
+                  through the new one. That second half is not the platform
+                  team's work, and it has no owner today and no tickets raised
+                  for it. The working rule is that whoever built a connection
+                  rewrites its call, which puts the delivery partner's edges
+                  with the delivery partner and the product owners' edges with
+                  them — but a preference has also been voiced for concentrating
+                  all of it with the delivery partner, on quality grounds. Until
+                  this is settled, an interface can be finished and the edge
+                  still not be closed.
                   <span class="who"
-                    >Marlex IT · before the ERP interface starts</span
+                    >Marlex IT with the delivery partner and the product owners
+                    · before the first interface is finished</span
+                  >
+                </li>
+                <li>
+                  <b
+                    >Reserving the delivery partner's time for those
+                    rewrites.</b
+                  >
+                  The same team is already carrying continuous improvements and
+                  the whole rebuild, so a rewrite requested when an interface
+                  happens to be ready may come back with weeks of lead time —
+                  and every week of it is a finished interface that still is not
+                  carrying traffic. The remedy is to ask for the estimates early
+                  and book the window at the technical governance meeting,
+                  rather than raise the request at the moment of need.
+                  <span class="who"
+                    >Marlex IT with the delivery partner · ahead of each
+                    interface finishing</span
+                  >
+                </li>
+                <li>
+                  <b>The setup answers the platform is waiting on.</b> The
+                  platform was provisioned in September 2026 — licences and
+                  accounts exist — but nothing is configured yet, and
+                  configuration cannot start until Marlex answers a set of
+                  organisational questions: whether there is an on-premise
+                  footprint alongside the hosted platform, which network type
+                  and tunnel that implies, how the workspaces are divided, and
+                  which region hosts it. The reporting database sits on Marlex's
+                  own infrastructure, so the tunnel and its sign-in mechanism
+                  are a prerequisite for anything that reads it. If the answers
+                  or the delivery capacity slip, the two switch-holding
+                  interfaces fall back to switching inside Salesforce and give
+                  up the control the design was chosen for.
+                  <span class="who"
+                    >Marlex IT, with whoever runs the servers · before
+                    configuration starts</span
                   >
                 </li>
                 <li>
@@ -15760,12 +15854,25 @@
                   >
                 </li>
                 <li>
-                  <b>Whether the analytics extract re-points once or twice.</b>
-                  Its nine coupled objects straddle both waves, so it re-points
-                  twice, or once late with stale reports in between. Cheaper to
-                  decide than to discover.
+                  <b
+                    >Whether the analytics extract is re-pointed at all, or
+                    rebuilt here first.</b
+                  >
+                  Two questions, and the second one reopened the first. Taken as
+                  a re-point, its nine coupled objects straddle both waves, so
+                  it re-points twice, or once late with stale reports in
+                  between. But the case has since been made for rebuilding it on
+                  the platform instead, and making it the <i>first</i> thing
+                  built rather than the ERP interface: what it does today can be
+                  read straight out of the script that does it, nobody outside
+                  the programme touches it, and the work it does can be moved
+                  onto the platform as it stands. That would change both what
+                  kind of job this is and when it happens. It rests on reading
+                  the script and on the tunnel to the on-premise database being
+                  stood up first.
                   <span class="who"
-                    >Reporting owner · before the first early wave</span
+                    >Reporting owner, with the platform lead · before the ERP
+                    interface starts</span
                   >
                 </li>
                 <li>
