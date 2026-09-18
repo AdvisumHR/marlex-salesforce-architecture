@@ -17655,13 +17655,31 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
 
 <section>
   <p class="section-eyebrow">What we are actually removing</p>
-  <h2>TargetRecruit is a family of six packages, not one</h2>
+  <h2>TargetRecruit is a family of eleven packages, not one</h2>
   <p>
-    The org has six TargetRecruit-family managed packages installed. Removing
-    "TargetRecruit" means removing all of them — and because one is data-coupled
-    to the core, order matters. The core is the root of the tree, so it comes
-    out
-    <strong>last</strong>.
+    The org has <strong>eleven</strong> TargetRecruit-family packages installed —
+    counted directly against the live system rather than inferred. Removing
+    "TargetRecruit" means removing all of them, and because several are
+    data-coupled to the core, order matters. The core is the root of the tree, so
+    it comes out <strong>last</strong>.
+  </p>
+  <p>
+    Three of them are easy to miss and each carries its own consequence. The
+    content-management package appears <em>twice</em>, in two generations that
+    coexist — an older one and a newer one, under different names — so a plan
+    that removes "the portal package" removes only half of what is there. And one
+    package, the front-office layer, <strong>installs with no identifying prefix
+    at all</strong>: its components look exactly like components Marlex built
+    itself.
+  </p>
+  <p>
+    That last one matters beyond the count. Every other package announces itself
+    in the name of each component it owns, which is how they can be found and
+    counted. This one does not, so it cannot be searched for — and until someone
+    establishes what it contains, any component believed to be Marlex's own
+    carries a residual doubt that it might belong to the package instead. That is
+    a question for the supplier, not something that can be resolved by looking
+    harder.
   </p>
   <div class="tbl-scroll">
     <table class="dtbl">
