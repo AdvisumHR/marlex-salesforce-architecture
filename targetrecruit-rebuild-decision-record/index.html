@@ -1039,8 +1039,8 @@
         ><h3>The archive</h3>
         <p>
           Where records that don't board the new system live — half a million
-          never-active candidates and seventy thousand finished placements and
-          closed jobs — and the exact path back if one is needed.
+          never-active candidates and the closed vacancies behind them — and the
+          exact path back if one is needed. Finished placements do board.
         </p></span
       >
       <span class="pick">Cold store · keyed recall</span>
@@ -3168,9 +3168,11 @@
             </li>
             <li>
               Execute the <b>archive and retention sweep</b> against the cold
-              store — the 461K never-active candidates and terminal placements
+              store — the 461K never-active candidates and the closed vacancies
               that never boarded the live system, recallable by key (see
-              <a href="#view-archive">The archive</a>).
+              <a href="#view-archive">The archive</a>). Placements are not in this
+              sweep: they all board, and moving the finished ones out later is a
+              separate call.
             </li>
             <li>
               Classify every finished component
@@ -3228,11 +3230,12 @@
           </tr>
           <tr>
             <td>Placements &amp; back office</td>
-            <td class="ap-num">~9.4K live</td>
+            <td class="ap-num">46K (9.4K live)</td>
             <td><span class="ap-route ap-slice">Switch first</span></td>
             <td>
               Switches over early with the other slices (interviews, talent
-              pool) — only ~9,400 live migrate, ~37K terminal archive.
+              pool). All 46K move: only ~9,400 are still live, but rehires,
+              invoicing and the reports read the finished ones.
             </td>
           </tr>
           <tr>
@@ -3418,10 +3421,13 @@
         <span class="ap-owner">Marlex + Nuvolar · decide early</span>
       </div>
       <div class="ap-oq">
-        <h3>Migrate live placements, or run them off</h3>
+        <h3>Do the live placements move in the window, or wind down in place?</h3>
         <p>
-          Whether the ~9,400 live placements move in the window or wind down in
-          the old system. The rehearsal decides.
+          All 46K placement records move either way — that is settled, because
+          rehires, invoicing, seasonal contracts and the reports read the
+          finished ones. What is open is narrower: whether the ~9,400 still-live
+          ones change hands in the window or finish their lifecycle in the old
+          system first. The rehearsal decides.
         </p>
         <span class="ap-owner">Rehearsal outcome</span>
       </div>
@@ -5675,7 +5681,7 @@
       <tr><td><strong>Interview</strong></td><td class="num">125,636</td><td class="num">20</td><td><code>Interview__c</code></td><td>Switch first</td></tr>
       <tr><td><strong>Source_To_Candidate</strong></td><td class="num">86,405</td><td class="num">2</td><td><code>Candidate_Source__c</code></td><td>Migrate</td></tr>
       <tr><td><strong>Job</strong></td><td class="num">57,110</td><td class="num">103</td><td><code>ATS_Job__c</code></td><td>Migrate + archive</td></tr>
-      <tr><td><strong>Placement</strong></td><td class="num">46,719</td><td class="num">48</td><td><code>Placement__c</code></td><td>Switch first + archive closed</td></tr>
+      <tr><td><strong>Placement</strong></td><td class="num">46,719</td><td class="num">48</td><td><code>Placement__c</code></td><td>Switch first — all records move</td></tr>
       <tr><td><strong>Candidate_to_Hotbook</strong></td><td class="num">5,933</td><td class="num">3</td><td><code>Talent_Pool_Member__c</code></td><td>Migrate</td></tr>
       <tr><td><strong>Hotbook</strong></td><td class="num">598</td><td class="num">3</td><td><code>Talent_Pool__c</code></td><td>Switch first</td></tr>
       <tr><td><strong>Source</strong></td><td class="num">46</td><td class="num">3</td><td><code>Source__c</code></td><td>Migrate</td></tr>
@@ -5719,7 +5725,7 @@
       <li><strong>Back-fill in place</strong> — the records already live on a standard Salesforce object (the candidate on the Contact record) and are <em>not</em> copied anywhere; a Marlex record type and the kept fields are simply added onto the rows that are already there.</li>
       <li><strong>Switch first</strong> — the object is cut over to its new native form <em>ahead of</em> the main core cutover, and its live records migrate at that point. Interviews, the talent pool and placements move this way: they are self-contained enough (or bridged) to go early, which de-risks the big cutover by proving the pattern on smaller objects first.</li>
       <li><strong>Switch first &mdash; pending a test</strong> &mdash; the same early move, but not yet settled. The employment and education history move this way <em>if</em> a test confirms it: their content is redundant with the parsed-CV text held on the contact, so cutting them early should cost nothing &mdash; but the package's search engine is closed to inspection, so it is proven by emptying both tables in a full copy of production and checking that search and matching still behave. If they degrade, both objects fall back to the core cutover.</li>
-      <li><strong>Archive</strong> — records for closed, finished work are moved to low-cost storage rather than into the live model, so the new system isn't sized around history it never edits. For placements, the active records migrate while the ~37 thousand terminal ones archive. Where they live is decided on the <a href="#view-archive">archive page</a>.</li>
+      <li><strong>Archive</strong> — records for closed, finished work are moved to low-cost storage rather than into the live model, so the new system isn't sized around history it never edits. It applies to the never-active candidates and the closed vacancies. <strong>Placements are not archived at the switch-over</strong> — all of them move, because rehires, invoicing, seasonal contracts and the reports still read the finished ones. Where the archived records live is decided on the <a href="#view-archive">archive page</a>.</li>
       <li><strong>Rebuild capability</strong> — the object is built fresh because the business needs the feature, but there is no data to move (it is empty in production today).</li>
       <li><strong>Drop — capability unused</strong> — the object holds no records <em>and</em> nothing live depends on it, so the capability is not rebuilt at all. This is a stricter test than "empty": an empty object still earns a rebuild if a feature or a process references it. Two objects were checked against that test on 31 August 2026 and failed it — candidate references, which nothing references and which appears on no Lightning record page, and the deal sheet. The deal sheet is the instructive one: twenty-two components do reference it, which looks like a live dependency until each is read. The three lookups that drive its rate logic hold no rows, so every helper returns before doing any work; two of its three triggers are inactive, and the active one fires on the empty object itself. The configuration flags that would enable it are switched on and gate nothing. It is a packaged capability Marlex never put into use, not a feature waiting for data.</li>
     </ul>
@@ -14326,8 +14332,9 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
           <td class="num">46K</td>
           <td><span class="verdict-mid">No sync</span></td>
           <td>
-            Switches over early with the other slices (only ~9,400 live migrate;
-            ~37K terminal archive). No two-way sync at any point — while both
+            Switches over early with the other slices, and all 46K records move — only
+            ~9,400 are still live, but the finished ones are read by rehires,
+            invoicing and the reports. No two-way sync at any point — while both
             systems overlap, a one-way read-only feed covers reporting.
           </td>
         </tr>
@@ -14560,10 +14567,10 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
         Placements are generated by Marlex's own flow, not by a package trigger,
         so they are <strong>not part of the coupled core</strong> and can be
         <strong>switched over early</strong>, ahead of the full cutover — the
-        same treatment as interviews and the talent pool. Only the roughly nine
-        thousand live placements need migrating, and invoicing already runs on
-        Marlex's own objects, so <strong>finance keeps using one system the
-        whole time</strong>.
+        same treatment as interviews and the talent pool. Only about nine thousand placements are still live, though all of them
+        move — invoicing links to the finished ones and already runs on Marlex's
+        own objects, so <strong>finance keeps using one system the whole
+        time</strong>.
       </p>
       <p>
         The one thing to plan for is that placements reference the candidate and
@@ -15049,8 +15056,8 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
       into a package object as a sync measure.
     </li>
     <li>
-      <strong>Open:</strong> the rehearsal confirms that migrating the ~9,400
-      live placements on the early switch-over is clean at volume. The
+      <strong>Open:</strong> the rehearsal confirms that migrating all 46K
+      placements on the early switch-over is clean at volume. The
       external-caller list has now been measured on the wider test: roughly half
       of the estate's connections need re-pointing, not the one the first pass
       found. What remains is for Marlex to confirm the owner and status of
@@ -15715,7 +15722,7 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
         <tr>
           <td>Placements</td>
           <td class="num">46,345</td>
-          <td>Switch first (migrate live) + archive closed</td>
+          <td>Switch first — all records move</td>
         </tr>
         <tr>
           <td>Employment history</td>
@@ -16441,12 +16448,12 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
         <tr>
           <td>Finalised</td>
           <td class="num">33,465</td>
-          <td>Archive — terminal history</td>
+          <td>Migrate — read by rehires, invoicing and reports</td>
         </tr>
         <tr>
           <td>Cancelled</td>
           <td class="num">3,506</td>
-          <td>Archive — terminal</td>
+          <td>Migrate — read by rehires, invoicing and reports</td>
         </tr>
         <tr>
           <td><strong>Active</strong></td>
@@ -21474,9 +21481,10 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
   <p class="eyebrow">Decision 21 · The archive</p>
   <h1>Where the records that don't board go</h1>
   <p class="subtitle">
-    Half a million never-active candidates and seventy thousand finished
-    placements and closed jobs don't earn a seat in the live system — this page
-    decides where they live instead, and how they come back if needed.
+    Half a million never-active candidates and thirty-five thousand closed
+    vacancies don't earn a seat in the live system — this page decides where they
+    live instead, and how they come back if needed. Finished placements are the
+    exception and do board: four live things still read them.
   </p>
   <p class="dateline">
     Cutover strategy · draft for peer review · 12 July 2026
