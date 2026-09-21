@@ -273,7 +273,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <a href="#adr-8" data-estado="proposed" title="Release and branching strategy for migration"><span class="tid">ADR · Release &amp; Branching Strategy</span></a>
 <a href="#adr-9" data-estado="proposed" title="Swappable adapter pattern to decouple MIG from the middleware platform decision"><span class="tid">ADR · Swappable Adapter Pattern</span></a>
 <a href="#adr-10" data-estado="proposed" title="Integration scope and responsibilities for portals and external systems"><span class="tid">ADR · Portal &amp; External-System Integration Scope</span></a>
-<a href="#adr-11" data-estado="accepted" title="Naming and regionalisation strategy (MA_ = Marlex Standard, MG_ = Group, prefixes optional)"><span class="tid">ADR · Naming &amp; Regionalisation Strategy</span></a>
+<a href="#adr-11" data-estado="accepted" title="Naming and regionalisation strategy (ownership by repository; the naming clause superseded 23 July 2026)"><span class="tid">ADR · Naming &amp; Regionalisation Strategy</span></a>
 <a href="#adr-12" data-estado="proposed" title="Ownership boundary doctrine — governance, naming convention, and business-logic decoupling"><span class="tid">ADR · Ownership-Boundary Doctrine</span></a>
 <a href="#adr-13" data-estado="proposed" title="Sharing model doctrine — data isolation for single-org multi-region operation"><span class="tid">ADR · Sharing Model Doctrine</span></a>
 <a href="#adr-14" data-estado="accepted" title="Capability classification and promotion model (scope ladder)"><span class="tid">ADR · Capability Classification &amp; Promotion (Scope Ladder)</span></a>
@@ -312,6 +312,7 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <a href="#adr-47" data-estado="proposed" title="Access grants that add nothing are not rebuilt — the test is what a user can actually do"><span class="tid">ADR · Empty Access Grants Are Not Rebuilt</span></a>
 <a href="#adr-48" data-estado="proposed" title="Business rules live on the record, not on the screen"><span class="tid">ADR · Business Rules Live on the Record</span></a>
 <a href="#adr-49" data-estado="proposed" title="Data access during coexistence — direct access, no repository layer"><span class="tid">ADR · Acceso a datos durante la coexistencia</span></a>
+<a href="#adr-50" data-estado="proposed" title="Rolling back between waves — a component per wave, plus data reconciliation"><span class="tid">ADR · Rollback entre olas</span></a>
 </div></div>
 <div class="dec" id="adr-1" data-estado="proposed">
 <div class="dh">
@@ -420,17 +421,17 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 </div>
 <div class="dec" id="adr-11" data-estado="accepted">
 <div class="dh">
-<h3>Naming and regionalisation strategy (MA_ = Marlex Standard, MG_ = Group, prefixes optional)</h3>
+<h3>Naming and regionalisation strategy (ownership by repository; the naming clause superseded 23 July 2026)</h3>
 <span class="did">ADR · Naming &amp; Regionalisation Strategy</span>
 <span class="badge accepted">Accepted</span>
 </div>
 <div class="meta"><span>Epic <span class="id">ATS-RB · Foundation — Design Decisions &amp; Requirements</span></span><span>·</span><span>Solution</span></div>
-<p class="bluf">The repository a component lives in (global, marlex, axon, ph) is the source of truth for its scope and ownership; prefixes are optional visual aids, not enforced. MA_ means Marlex Standard (ES/IT/PT) and is optional, with existing MA_ names kept and no mass rename. The only prefix applied actively from now on is MG_ (Marlex Group) on new Group-Shared components, so that when deployed in another org they read as group-owned. Per-country override prefixes are deferred until ES/IT/PT have distinct governance teams.</p>
+<p class="bluf">The repository a component lives in (global, marlex, axon, ph) is the source of truth for its scope and ownership; prefixes are optional visual aids, not enforced. Existing MA_ names are kept and there is no mass rename. The naming half of this decision was superseded on 23 July 2026: every object and field built new for the rebuild now carries a plain English API name with no owner prefix, set out in the prefix-free naming decision. A group prefix (MG_) is applied to a single component only where the Centre of Excellence confirms genuine group-wide scope, so that when it is deployed in another org it reads as group-owned — it is a controlled call taken on evidence, not a marker stamped on everything. What this decision still governs is ownership by repository and the no-mass-rename rule.</p>
 <p>With multiple regions and partners building on the same base, there was no clear way to tell which components are shared and which are region-specific, creating a risk of unauthorised edits to global components. This decision defines the full structural convention for the expansion phase.</p>
 <p>MA_ was chosen to stay Marlex Standard (not Group) because MA_ is already in use for Marlex components today; making MA_ mean Group would have mislabelled existing components and forced a mass rename that breaks integrations querying by API name. Using the repo as the scope source avoids that cost and risk, rather than renaming to a scope prefix (a regression bomb that enforces nothing) or relying on repos alone with no in-org marker.</p>
 <p>The trade-off is inconsistent naming (MA_, unprefixed, and new components coexist) and ownership that is not always readable from the API name, so it depends on the catalogue and code review rather than platform enforcement. In return there is no renaming regression, the scheme is honest about what a prefix does (visibility, not enforcement), MG_ identifies group-owned components in any org, and the cost is minimal.</p>
 <div class="qa"><span class="chip">Understandability</span><span class="chip">Maintainability</span><span class="chip">Portability</span></div>
-<div class="openbox"><b>Still open:</b> The Group prefix letters (MG_) still need confirming with the group, and per-country override prefixes remain deferred until Italy and Portugal arrive.</div>
+<div class="openbox"><b>Still open:</b> Per-country override prefixes remain deferred until Italy and Portugal arrive. The group prefix is no longer an open question: it is applied per component when group-wide scope is confirmed, rather than being agreed in advance.</div>
 </div>
 <div class="dec" id="adr-12" data-estado="proposed">
 <div class="dh">
@@ -3155,6 +3156,22 @@ details.delivs li .dn{color:var(--ink);font-weight:600}
 <p>A naming corollary follows for the early waves. Placements, interviews and the talent pool cut over before the shared core, but a component in one of those waves usually also reads the candidate and the job, which stay in the old system until the core cutover — so it crosses twice. It stays one component with one name, edited twice; the second edit is an ordinary deployment of Marlex’s own new code, never a change to the untouched legacy component, and never a second or third named version. Reports are the one real exception, because the platform will not re-point a report at another object, so a report spanning both waves is rebuilt in each.</p>
 <div class="qa"><span class="chip">Maintainability</span><span class="chip">Simplicity</span><span class="chip">Portability</span><span class="chip">Cost-Effectiveness</span></div>
 <div class="openbox"><b>Still open:</b> Recorded direction, not yet ratified — confirmed with Marlex on 2 September 2026 but not taken to the governance forum. Three things are open: an inventory of where new code reads the old system, since the cutover re-point now depends on it and no owner or format is set; a decision on the fourteen orphaned prototype classes from the abandoned design, which encode a pattern the programme no longer uses; and the naming corollary for components that cross in two waves, which is not yet reflected in the naming decision it touches.</div>
+</div>
+<div class="dec" id="adr-50" data-estado="proposed">
+<div class="dh">
+<h3>Rolling back between waves — a component per wave, plus data reconciliation</h3>
+<span class="did">ADR · Rollback entre olas</span>
+<span class="badge proposed">Proposed</span>
+</div>
+<div class="meta"><span>Epic <span class="id">ATS-RB · Cutover &amp; Hypercare</span></span><span>·</span><span>Solution</span></div>
+<p class="bluf">Capabilities cross to the new system in waves: placements, interviews and the talent pool move before the shared core. A component in one of those early waves usually reads some objects that have already moved and some that have not, so it needs one working form before the core crosses and a different one after. Until now the record described rolling back as a single move — back to the old system — and said nothing about returning to the previous wave, which is the state that actually matters if the second form fails.</p>
+<p>Each form is built as its own component, and the earlier one keeps running until the later one has proved itself. Reverting is then switching one off and the other on, rather than redeploying the version that was working an hour earlier — under go-live pressure a redeployment is the slowest and least certain way back. Because both forms exist at the same time and the platform will not let two components share a name, the later one carries a version marker in its name.</p>
+<p>That marker is a deliberate exception to the rule against version suffixes. It is not decoration: it is a coexisting major version with a deprecation period, on the same footing as publishing version two of an interface while version one is still in use, and it is removed when the superseded form is retired. The judgement is that a slightly uglier name is a far smaller price than a weaker way back.</p>
+<p>The component switch is only half of it. Records written through the later form leave the older objects out of date, so reverting the component reverts the logic and not the data. A wave rollback is therefore two things: the switch, and a reconciliation for each replaced object that brings the older objects up to date with what happened while the newer form was live. These are written as part of the rollback rather than improvised during one, and exercised in the same rehearsal that drills the switch — a procedure that has never been run is not a plan. The list is closed and small, roughly ten objects.</p>
+<p>The alternative was a live bridge keeping both models continuously in step, so no reconciliation would ever be needed. It was refused: the bridge is an extra temporary component carrying real business logic, and it makes two sources of truth inside one environment — if they diverge there is no way to establish which is correct. That is the same pattern already ruled out for the shared core against measured production volumes. A reconciliation that runs only if a rollback happens costs nothing while it sits unused and cannot corrupt the fallback.</p>
+<p>One exception is unavoidable. The platform will not let a report be re-pointed at a different object, so a report that spans two waves is genuinely rebuilt in each of them.</p>
+<div class="qa"><span class="chip">Recoverability</span><span class="chip">Data Integrity</span><span class="chip">Maintainability</span><span class="chip">Simplicity</span></div>
+<div class="openbox"><b>Still open:</b> Recorded direction, not yet ratified — reviewed with the architecture practice on 2 September 2026 but not taken to the governance forum. Open: the exact form of the version marker and the rule for removing it; an inventory of which components span more than one wave, without which the number of duplicated forms is unknown; and writing, sizing and owning the reconciliation procedures, which is real work not yet estimated.</div>
 </div>
 <script>
 window.__filter=function(f,btn){
