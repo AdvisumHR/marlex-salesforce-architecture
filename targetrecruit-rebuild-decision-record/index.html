@@ -540,6 +540,7 @@
   <a class="navlink" data-view="uninstall-surface" href="#view-uninstall-surface"><span class="n">15</span><span>Removing TargetRecruit</span></a>
   <a class="navlink" data-view="testing" href="#view-testing"><span class="n">16</span><span>Testing behaviour parity</span></a>
   <a class="navlink" data-view="rehearsal" href="#view-rehearsal"><span class="n">17</span><span>Rehearsal</span></a>
+  <a class="navlink nonum" data-view="cutover-readiness" href="#view-cutover-readiness">· Cutover readiness checklist</a>
   <p class="grp">Running it</p>
   <a class="navlink" data-view="delivering-while-rebuilding" href="#view-delivering-while-rebuilding"><span class="n">18</span><span>Delivering while rebuilding</span></a>
   <a class="navlink" data-view="operations" href="#view-operations"><span class="n">19</span><span>Operations</span></a>
@@ -19260,6 +19261,373 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
     audit and the closest documented package-replacement programmes.
   </p>
 </footer>
+  </div></section>
+  <section class="page-view" id="view-cutover-readiness"><div class="wrap-inner">
+<header class="masthead">
+  <p class="eyebrow">Procedure · Cutover readiness</p>
+  <h1>Twelve layers a capability must clear before it goes live</h1>
+  <p class="subtitle">
+    Rebuilding a capability is a fraction of the change. This is the checklist
+    that asks what else has to move with it — and it is the same list for every
+    cutover, so it can be reused rather than rediscovered.
+  </p>
+  <p class="dateline">
+    Stated 17 September 2026 · written 21 September 2026 · applies to every
+    rebuild wave
+  </p>
+</header>
+
+<div class="bluf">
+  <p>
+    <strong>The rule.</strong> A capability is not ready to go live until every
+    layer around it carries its own written, owned piece of work — created
+    <em>with</em> the rebuild, not discovered at the switchover. A layer with no
+    answer is the failure, not a layer with the answer "nothing to do here".
+  </p>
+  <p>
+    <strong>Why it exists.</strong> The build is visible, so it gets planned.
+    The things that <em>consume</em> it are invisible, so they do not. They fail
+    quietly: data stops arriving where it used to, and the first person to
+    notice is someone looking at a report weeks later that has been slowly
+    flattening.
+  </p>
+  <p>
+    <strong>How to use it.</strong> At the point a capability is proposed for
+    go-live, walk the twelve layers. Each one is covered, recorded as not
+    applicable, partial, or missing. Only the first two let a date be set.
+  </p>
+  <p>
+    <strong>What blocks the date.</strong> A layer waiting on a business
+    decision is not covered, however complete the engineering is. The decision
+    is part of the layer.
+  </p>
+</div>
+
+<section>
+  <p class="section-eyebrow">The shape of the problem</p>
+  <h2>The visible half is one layer of twelve</h2>
+  <p>
+    Replacing an object changes what the rest of the system points at. The
+    replacement is specified, estimated and built. Everything that reads the old
+    object carries on reading it, and nothing in the process asks who is going to
+    change that.
+  </p>
+  <p>
+    On the first capability to approach a cutover, the reporting extract feeding
+    the analytics database, the report types built on the retiring objects, the
+    old screens and the scheduled jobs all had no planned work while the build
+    itself was ready to ship. Nothing was wrong with the build. What was missing
+    was ownership of its surroundings.
+  </p>
+  <div class="callout key">
+    <span class="lbl">The distinction that makes this checklist work</span>
+    <p>
+      A layer answered "nothing here" is <strong>finished</strong>, as long as
+      somebody measured it and wrote it down. A layer nobody asked about is
+      <strong>open</strong>, and looks identical from the outside. Most of the
+      value of this list is in forcing the second kind into the open.
+    </p>
+  </div>
+</section>
+
+<section>
+  <p class="section-eyebrow">Block A · what points at the retiring objects</p>
+  <h2>Seven layers of things that still hold a reference</h2>
+  <div class="tablewrap">
+    <table class="data">
+      <caption>
+        Each layer is covered when it has a named piece of work with an owner
+        and a way to confirm it is done.
+      </caption>
+      <thead>
+        <tr><th>Layer</th><th>The question to answer</th><th>The failure it prevents</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>1 · Data model and references</strong></td>
+          <td>What replaces the old objects and fields, and what elsewhere still points at them — calculated fields, totals, links between records, record types?</td>
+          <td>A link whose target retires does not report an error. It quietly resolves to nothing, and the screen shows a blank where a name used to be.</td>
+        </tr>
+        <tr>
+          <td><strong>2 · Business logic and configuration</strong></td>
+          <td>Which automations, code, scheduled jobs and background processes act on the retiring records, and what replaces each?</td>
+          <td>Both models run at once. Anything <em>scheduled</em> against the old system stops the moment that system is removed, and it usually stops at night.</td>
+        </tr>
+        <tr>
+          <td><strong>3 · User interface</strong></td>
+          <td>Which tabs, lists, screens, buttons and translations still show the old model?</td>
+          <td>Users see two versions of the same thing and have no way to tell which one counts.</td>
+        </tr>
+        <tr>
+          <td><strong>4 · Analytics</strong></td>
+          <td>Which report definitions, reports, dashboards and external extracts read these records?</td>
+          <td>A report over a retired object keeps opening and keeps drawing. It simply stops counting anything new.</td>
+        </tr>
+        <tr>
+          <td><strong>5 · Integrations and external consumers</strong></td>
+          <td>What reads or writes these records from outside, including tools installed inside the system itself? Is each one re-pointed, routed through the integration platform, or deliberately left as it is for now?</td>
+          <td>An integration nobody owns is an integration nobody re-points. For one class of tool the switch is not ours to flip.</td>
+        </tr>
+        <tr>
+          <td><strong>6 · Access</strong></td>
+          <td>Which permissions grant this, and <strong>who assigns them on the day</strong>?</td>
+          <td>Granting and assigning are two separate jobs. Permissions that ship unassigned lock everyone out on go-live morning.</td>
+        </tr>
+        <tr>
+          <td><strong>7 · Sharing and record ownership</strong></td>
+          <td>What are the visibility defaults and rules, who owns the migrated records, and does visibility need recalculating after the load?</td>
+          <td>Visibility cannot be switched on by a setting. It takes effect in the cutover window, so an error there is discovered live.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section>
+  <p class="section-eyebrow">Block B · moving the data and the old components</p>
+  <h2>Two layers, and the second is the one that gets dropped</h2>
+  <div class="tablewrap">
+    <table class="data">
+      <thead>
+        <tr><th>Layer</th><th>The question to answer</th><th>The failure it prevents</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>8 · Data migration</strong></td>
+          <td>What moves the records — and who runs it, as which user, in what order, verified by whom, signed off by whom?</td>
+          <td>Building the pipeline is half the layer. The other half is the execution: run by whoever is free, with whatever settings their account happens to carry.</td>
+        </tr>
+        <tr>
+          <td><strong>9 · Legacy teardown and temporary code</strong></td>
+          <td>Which components are switched off, in what order, on what date — and which scripts and bridges existed <em>only</em> to perform the move?</td>
+          <td>"Turn it off now, delete it later" becomes "never delete it". Removing code already in production needs its own release and its own window.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="rule-note">
+    The deletion work is written at the same time as the thing it removes. A
+    clean-up planned only once the replacement ships does not get planned —
+    that is the pattern this rule exists to break.
+  </div>
+</section>
+
+<section>
+  <p class="section-eyebrow">Block C · the switch</p>
+  <h2>Three layers about the day itself</h2>
+  <div class="tablewrap">
+    <table class="data">
+      <thead>
+        <tr><th>Layer</th><th>The question to answer</th><th>The failure it prevents</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>10 · Release readiness against the live system</strong></td>
+          <td>Does the release actually install into the live system, rather than only into the staging one?</td>
+          <td>Staging has drifted ahead of live. A release built by copying from staging carries changes nobody intended to ship.</td>
+        </tr>
+        <tr>
+          <td><strong>11 · Cutover runbook</strong></td>
+          <td>What happens on the day, in what order, who says go, and how do we get back?</td>
+          <td>The cutover is improvised, and there is no agreed signal for stopping. A rollback <em>design</em> is not a rollback <em>procedure</em>.</td>
+        </tr>
+        <tr>
+          <td><strong>12 · Verification and adoption</strong></td>
+          <td>How do we know it works, and that people can use it? Tests that genuinely run, business sign-off, training, and monitoring afterwards.</td>
+          <td>Tests that cannot execute are not tests that pass. A capability that changes how people work needs demonstration, not only parity checking.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p>
+    <strong>Layers 9 to 12 are the ones that get skipped.</strong> They are the
+    work with no visible output, so nothing prompts anyone to write them down —
+    and they are where a cutover fails quietly rather than loudly.
+  </p>
+</section>
+
+<section>
+  <p class="section-eyebrow">A worked example</p>
+  <h2>One layer, walked properly: the analytics extract</h2>
+  <p>
+    Layer 5 reads abstractly until it meets a real case. The hardest one in the
+    first wave is the overnight job that copies records out to the analytics
+    database, and it is worth walking because every instinct about it is wrong.
+  </p>
+  <p>
+    <strong>It looks small and is not.</strong> "A report feed" suggests
+    something minor. Measured, it copies roughly eight million records a night
+    across thirty-four objects. Nine of those objects are being retired,
+    including the interview, the talent pool and the membership record that
+    links a candidate to a pool.
+  </p>
+  <p>
+    <strong>It cannot be found by looking at permissions.</strong> Read access
+    to those objects is granted to nearly every profile in the system, which is
+    true and tells you nothing. The job was identified from platform activity
+    logs, which is the only channel that shows which system actually reads what.
+  </p>
+  <p>
+    <strong>It fails in the quietest way available.</strong> It only reads, so
+    nothing errors, nobody is blocked and no alert fires. The analytics database
+    simply keeps serving the previous shape of the business while the real
+    numbers move elsewhere.
+  </p>
+  <p>
+    <strong>Its nine objects cross two waves</strong>, because the interview and
+    the placement move early while the vacancy and the application move with the
+    core. So it is re-pointed twice, or once and late. That is a choice to make
+    deliberately, and the checklist exists to make sure it is made rather than
+    discovered.
+  </p>
+  <div class="callout">
+    <span class="lbl">The general lesson</span>
+    <p>
+      Two other consumers in the same wave have the same shape: a document
+      generator installed <em>inside</em> the system, whose saved queries name
+      the retiring objects and which no network log will ever show, and a
+      sourcing tool that signs in as a named person, so its reads cannot be
+      told apart from that person's own work. Each needs a named owner before
+      the switch, not a deduction from metadata.
+    </p>
+  </div>
+</section>
+
+<section>
+  <p class="section-eyebrow">The rules that hold it together</p>
+  <h2>Four working rules</h2>
+  <p>
+    <strong>A rebuild and its clean-up are written together.</strong> Not the
+    clean-up afterwards. Written later, it is not written at all.
+  </p>
+  <p>
+    <strong>Deferring is fine; leaving it unwritten is not.</strong> If
+    something must happen but not now, it still gets a planned item so it can be
+    scheduled rather than remembered. Migration execution depends on everything
+    being live first — that is a dependency to record, not a reason to skip it.
+  </p>
+  <p>
+    <strong>Measure the live system, not the description.</strong> What runs in
+    production and what the documentation says differ. Active automations,
+    reports, visibility rules and scheduled jobs are established by querying the
+    system. Absence of evidence is not evidence: a report in a personal folder
+    cannot be read at all, and a tool installed inside the system leaves no
+    external trace, so both are recorded as unknown rather than as nothing.
+  </p>
+  <p>
+    <strong>A business decision is part of the layer.</strong> Which historical
+    reports survive, what happens to records the migration cannot classify, how
+    long the old screens stay visible — each of these blocks a layer as
+    effectively as unfinished code.
+  </p>
+</section>
+
+<section>
+  <p class="section-eyebrow">What it found first time out</p>
+  <h2>Both tranches audited the same way, both incomplete in the same places</h2>
+  <p>
+    The checklist was run against the two capabilities in flight. Neither was
+    ready, and the pattern was identical in both: the build layers are
+    specified, the surrounding layers are not. In both cases layers 9 to 12 were
+    missing or partial.
+  </p>
+  <div class="cards">
+    <div class="card">
+      <h3>Interview and talent pool <span class="verdict">Not ready</span></h3>
+      <p>
+        Four layers missing, five partial. The overnight analytics extract reads
+        all three retiring objects with nobody assigned to re-point it.
+      </p>
+      <p class="caveat">
+        The measurement that reframed it: recruiters created over twelve
+        thousand records on the old model in thirty days, across more than three
+        hundred people. This is the live process, not leftovers — which raises
+        what layers 11 and 12 have to deliver.
+      </p>
+    </div>
+    <div class="card">
+      <h3>Placement <span class="verdict">Not ready to schedule</span></h3>
+      <p>
+        Three layers missing, six partial, and the better-specified build of the
+        two. Six scheduled jobs read the retiring object and none is named in
+        any planned work.
+      </p>
+      <p class="caveat">
+        One of them generates invoice movements, so that failure is loud,
+        nightly and financial — the opposite of the silent kind, and easier to
+        catch for exactly that reason.
+      </p>
+    </div>
+  </div>
+</section>
+
+<section>
+  <p class="section-eyebrow">For the people running it</p>
+  <h2>How a layer is judged</h2>
+  <p>
+    Four statuses. Only the first two allow a date to be set.
+  </p>
+  <ul>
+    <li><strong>Covered</strong> — planned work exists, with scope, a way to confirm it is done, and an owner.</li>
+    <li><strong>Recorded as not applicable</strong> — somebody measured a zero and wrote it down somewhere durable.</li>
+    <li><strong>Partial</strong> — mentioned somewhere, but missing scope, confirmation criteria or an owner.</li>
+    <li><strong>Missing</strong> — nothing exists.</li>
+  </ul>
+  <details class="more">
+    <summary>For the developers<span class="cnt">— how each layer is measured</span></summary>
+    <div class="more-body">
+      <div class="tech">
+        <span class="tech-label">For the developers</span>
+        <dl>
+          <dt>Layers 1 and 3</dt>
+          <dd>
+            <code>grep</code> the retiring API name across <code>objects</code>,
+            <code>flexipages</code>, <code>layouts</code>, <code>quickActions</code>,
+            <code>tabs</code> and <code>objectTranslations</code>, excluding the object's
+            own folder. Classify each field hit by <code>&lt;type&gt;</code>: Lookup and
+            MasterDetail become dead pointers, Formula and Summary block the eventual
+            uninstall.
+          </dd>
+          <dt>Layer 2</dt>
+          <dd>
+            Query the org, not the repository: <code>ApexTrigger</code>,
+            <code>FlowDefinitionView</code> where <code>IsActive=true</code>, and
+            <code>CronTrigger</code> where <code>State='WAITING'</code>. Note that
+            <code>FlowDefinitionView</code> is a standard object — querying it with
+            <code>--use-tooling-api</code> returns <code>INVALID_TYPE</code>.
+          </dd>
+          <dt>Layer 4</dt>
+          <dd>
+            <code>Report</code> and <code>Dashboard</code> by name and folder. A report
+            type's base object is immutable, so every report on one is a rebuild rather
+            than a re-point. Personal-folder reports return <code>NOT_FOUND</code> even
+            with View All Data.
+          </dd>
+          <dt>Layer 6</dt>
+          <dd>
+            <code>PermissionSetAssignment</code> per set the release ships. A set with
+            zero assignments and no assignment step in the release notes is the
+            lockout case.
+          </dd>
+          <dt>Layer 7</dt>
+          <dd>
+            <code>EntityDefinition.InternalSharingModel</code> from the org, then the
+            <code>__Share</code> table grouped by <code>RowCause</code> and
+            <code>AccessLevel</code>. Count the shares, then ask whether they grant
+            anything a rule does not already grant — a criteria rule keyed to a field
+            with one value across every record makes an object private in name only.
+          </dd>
+          <dt>Layer 10</dt>
+          <dd>
+            <code>git diff origin/production...&lt;branch&gt;</code> for every
+            pre-existing component the change touches. Never diff against the branch
+            point.
+          </dd>
+        </dl>
+      </div>
+    </div>
+  </details>
+</section>
   </div></section>
   <section class="page-view" id="view-delivering-while-rebuilding"><div class="wrap-inner">
 <header class="masthead">
