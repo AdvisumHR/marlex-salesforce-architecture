@@ -16469,12 +16469,27 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
     </table>
   </div>
   <p>
-    Only <strong>~9,400 placements are actually live</strong>; ~37K are terminal
-    history — an archive load either way. So the early switch-over only has to
-    migrate the live ~9,400 (plus the archive), not all 46K as in-flight
-    records — a small enough set that moving it ahead of the core is realistic,
-    which is exactly why Placement can be decoupled early rather than held for
-    the core cutover.
+    Only <strong>~9,400 placements are actually live</strong>. The other ~37,000 are
+    finished or cancelled. That split decides how much work the switch-over carries,
+    because only the live ones have a lifecycle still running: a small enough set to
+    move ahead of the core, which is why placement can be decoupled early.
+  </p>
+  <p>
+    <strong>All 46,000 records still move.</strong> Deciding where new placements are
+    created is a different decision from deciding whether finished ones are copied,
+    and the two were briefly treated as one. Four things in the live system read
+    finished placements: a rehire points back at the placement it repeats, invoice
+    movements link to the placement they bill, seasonal contracts reactivate against
+    their own earlier periods, and nineteen reports read placement records. Leaving
+    that history outside the new model would leave each of those pointing at
+    something that is about to be removed.
+  </p>
+  <p>
+    Moving finished placements out to the archive later stays available, and it is
+    cheap to do once someone has confirmed no live process reads them. It is not a
+    precondition of the switch-over. The storage pressure that motivates the archive
+    comes from the candidate pool, which is hundreds of thousands of records; thirty-seven
+    thousand placements are not what makes that sizing work.
   </p>
   <h3>Seasonal placements — migrate with the rest</h3>
   <p>
@@ -21146,8 +21161,8 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
     <div class="stat">
       <span class="n">~37K</span
       ><span class="l"
-        >finished or cancelled placements — terminal history, never worked
-        again</span
+        >finished or cancelled placements — a later call, not a cutover one (see
+        below)</span
       >
     </div>
     <div class="stat">
@@ -21167,6 +21182,18 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
     new, empty objects — "archiving" one simply means <em>not loading it</em>,
     and keeping the extract. The second kind is nearly free; the first is a real
     operation with a retention-policy dimension.
+  </p>
+  <p>
+    <strong>Finished placements are the exception, and they are not archived at
+    the switch-over.</strong> "Not loading it" is only free when nothing in the
+    live system points at the record. Four things point at finished placements: a
+    rehire refers back to the placement it repeats, invoice movements link to the
+    placement they bill, seasonal contracts reactivate against their own earlier
+    periods, and nineteen reports read placement records. So all of them are
+    loaded into the new model, and moving them out to the archive becomes a later
+    decision, taken once someone has confirmed no live process still reads them.
+    The headroom argument below is unaffected: it is driven by the candidate pool,
+    which is two orders of magnitude larger.
   </p>
 </section>
 
