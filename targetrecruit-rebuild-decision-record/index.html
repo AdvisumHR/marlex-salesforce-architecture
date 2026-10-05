@@ -2293,9 +2293,9 @@
               <span class="body"
                 ><h3>Removing TargetRecruit</h3>
                 <p>
-                  The measured uninstall surface — six packages, not one; 1,658
-                  references from the org's own components to clear first; and
-                  the dependencies no checker can see, from 111 declarative
+                  The measured uninstall surface — eleven packages, not one;
+                  1,658 references from the org's own components to clear first;
+                  and the dependencies no checker can see, from 111 declarative
                   automations the platform's own tooling missed to 146 reports
                   built on package objects. The counted list the end-game works
                   down.
@@ -22483,10 +22483,10 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
               <ul class="dq-outcomes">
                 <li>
                   <span
-                    >The candidate batch that rewrites ~1M records every 1–2
-                    weeks (<span class="lk meas">measured</span>) re-fires the
-                    sync on hundreds of thousands of records and blows
-                    processing limits.</span
+                    >A bulk candidate rewrite like the one that touched ~1M
+                    records in July 2026 (<span class="lk meas">measured</span>)
+                    re-fires the sync on hundreds of thousands of records and
+                    blows processing limits.</span
                   >
                   <span class="lk bad">almost certain</span>
                 </li>
@@ -22840,23 +22840,33 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
             </summary>
             <div class="more-body">
               <div class="tech">
-                The batch is a TR system/integration user ("Admin Tgt") that
-                modified ~1.05M of the ~1.06M candidate-record-type Contacts in
-                a 7-day window — including a ~600k spike in a single ~3-day
-                stretch (the Contact object holds ~1.09M rows in total). Every
-                Contact shows last-modified ≥ 2025 — no record is older —
-                confirming a recurring bulk rewrite and making
-                <code>LastModifiedDate</code> useless as a delta key (it flags
-                100% of the pool as "fresh"). Ask TR support whether the batch
-                is suspendable for the freeze weekend: if yes, suspend it; if
-                no, time the freeze to open right after a completed cycle.
-                Placement carries a similar signature — a nightly state-machine
-                cascade touches ≈ the whole placement base every 30 days. The
-                freeze list is generated from the component map: every
-                scheduled/async job, every trigger and record-triggered flow on
-                a package object, every inbound endpoint (job-board webhook,
-                ERP, other OAuth callers), and the read-only reshuffle for
-                recruiters — one enumerated set, not four people's memories.
+                The writer is the account "Admin Tgt"
+                — not a TargetRecruit
+                package user, but the shared administrator account that ~40 of
+                Marlex's own scheduled jobs run as (<code>MA_*</code> batches,
+                scheduled flows, the hourly InfoJobs candidate sync; production
+                <code>CronTrigger</code> and <code>AsyncApexJob</code>, read
+                2026-10-04). In July 2026 it modified ~1.05M of the ~1.06M
+                candidate-record-type Contacts in a 7-day window — including a
+                ~600k spike in a single ~3-day stretch (the Contact object holds
+                ~1.09M rows in total) — which makes
+                <code>LastModifiedDate</code> useless as a delta key.
+                Re-measured 2026-10-04, the rewrite is
+                <strong>not</strong> recurring on a 1–2-week cycle: ~508k
+                Contacts still carry a July 2026 last-modified by this account,
+                and since August its monthly volume peaks at ~74k (busiest days
+                2026-09-14, ~42k, and 2026-09-17, ~22k). Because the jobs are
+                Marlex's own, they are suspended with the rest of the freeze
+                list — no vendor request is needed. Still open: which job or
+                one-off load produced the July rewrite, and whether it can recur
+                (to confirm with Marlex IT). Placement carries a similar
+                signature — a nightly state-machine cascade touches ≈ the whole
+                placement base every 30 days. The freeze list is generated from
+                the component map: every scheduled/async job, every trigger and
+                record-triggered flow on a package object, every inbound
+                endpoint (job-board webhook, ERP, other OAuth callers), and the
+                read-only reshuffle for recruiters — one enumerated set, not
+                four people's memories.
               </div>
             </div>
           </details>
@@ -23038,8 +23048,9 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
                 <li>
                   <span
                     >The freeze opens mid-batch, with ~1M candidates just
-                    rewritten (<span class="lk meas">measured</span>, every 1–2
-                    weeks).</span
+                    rewritten (<span class="lk meas">measured</span> in July
+                    2026; not seen recurring since — re-measured
+                    2026-10-04).</span
                   >
                   <span class="lk bad">probably</span>
                 </li>
@@ -23081,14 +23092,17 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
                 is a wasted weekend.</strong
               >
               Both options stop the same four writers — the difference is purely
-              <em>when</em> the window opens. The batch rhythm is a
-              <em>measured</em> production fact — a single system account
-              rewriting essentially the whole candidate pool every one to two
-              weeks — so freezing without regard to it is not a neutral choice,
-              it is a probable delta-explosion. The preference this serves is
+              <em>when</em> the window opens. The bulk rewrite is a
+              <em>measured</em> production fact — one account rewrote
+              essentially the whole candidate pool in a week of July 2026 — so
+              freezing without regard to it is not a neutral choice. Re-measured
+              on 2026-10-04, that rewrite is not recurring every one to two
+              weeks as first read, which makes the timing constraint weaker, not
+              void. The preference this serves is
               <strong>a freeze that starts clean</strong>, so the go/no-go gate
-              means what it says. Better still if the batch proves suspendable
-              for the weekend — an open question to the package vendor.
+              means what it says. The account runs Marlex's own scheduled jobs,
+              so they are suspended with the rest of the freeze list; what
+              remains is confirming what produced the July rewrite.
             </p>
           </div>
         </section>
@@ -23124,9 +23138,11 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
             </li>
             <li>
               <strong>Batch timing.</strong> The freeze date depends on knowing
-              the background batch's cycle — and, better, on whether TR support
-              will confirm the batch can be suspended for the weekend. Both are
-              open questions to close before the window is set.
+              what produced the July 2026 bulk rewrite of the candidate pool and
+              whether it can recur. The account it ran under hosts Marlex's own
+              scheduled jobs, so the question goes to Marlex IT,
+              not to the package vendor. Open until answered, before the window
+              is set.
             </li>
             <li>
               <strong>Freeze length.</strong> How long the window actually needs
@@ -23636,9 +23652,11 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
                 Delta selection: Contact's <code>SystemModstamp</code>/<code
                   >LastModifiedDate</code
                 >
-                are poisoned (an intermittent bulk rewrite of
+                are poisoned (two bulk writers: an intermittent rewrite of
                 <code>MA_Estado_sync_N4__c</code> — an ERP-sync status flag — is
-                the top churner, ~329k writes/30d), so prefer
+                the top churner, ~329k writes/30d; and the July 2026 rewrite of
+                ~1.05M candidates under the account Marlex's scheduled jobs run
+                as — see <a href="#view-the-freeze">The freeze</a>), so prefer
                 <code>ContactHistory</code> filtered to the migrated fields
                 (history is on; ~5.35M rows; but only ~20 fields are tracked, so
                 it covers a subset of the 51 — confirm the migrated fields are
@@ -25919,8 +25937,8 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
           </p>
           <ul>
             <li>
-              <strong>Map all six packages' cross-references</strong> to fix the
-              uninstall order (satellites first, BCST before the core, core
+              <strong>Map all eleven packages' cross-references</strong> to fix
+              the uninstall order (satellites first, BCST before the core, core
               last).
             </li>
             <li>
@@ -27715,6 +27733,24 @@ AVTRRT__Hotbook__c,Object,Talent_Pool__c,rebuild,built,SF-1234,</pre>
             evidence: a report in a personal folder cannot be read at all, and a
             tool installed inside the system leaves no external trace, so both
             are recorded as unknown rather than as nothing.
+          </p>
+          <p>
+            <strong
+              >A gap measured against production may already be closed in the
+              delivery branch.</strong
+            >
+            Production and the backlog are two sources; what the team has
+            already built and merged is a third, and it is the one that makes a
+            finding obsolete rather than wrong. A finding reported five access
+            components as unassigned when a merged change had deliberately
+            retired three of them and folded their content into the one almost
+            every user already holds — a better answer than the finding
+            proposed. Another asked for two components to be placed under
+            version control when they belong to the installed vendor package and
+            cannot be. Both would have been avoided by reading the delivered
+            changes before writing the gap. A finding the team already closed,
+            better than the audit proposed, costs more credibility than the gap
+            was worth.
           </p>
           <p>
             <strong>A business decision is part of the layer.</strong> Which
